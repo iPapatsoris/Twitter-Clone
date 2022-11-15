@@ -1,0 +1,27 @@
+:root {
+	font: 14px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+	--primary-color: rgb(29, 155, 240);
+	--bigger-text: 20px;
+}
+
+a {
+	text-decoration: none;
+}
+
+body {
+	margin: 0;
+	min-width: 320px;
+	min-height: 100vh;
+}
+
+button {
+	cursor: pointer;
+}
+
+.Bold {
+	font-weight: 700;
+}
+
+.BiggerText {
+	font-size: var(--bigger-text);
+}

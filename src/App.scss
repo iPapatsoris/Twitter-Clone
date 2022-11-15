@@ -1,0 +1,7 @@
+.App {
+	display: grid;
+	grid-template:
+		". sidebar-left main ." auto
+		/ 1fr 275px 990px 1fr;
+		grid-column-gap: 1.5em;
+}
