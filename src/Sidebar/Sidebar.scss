@@ -1,4 +1,6 @@
 .Sidebar {
+	display: flex;
+	flex-direction: column;
 	font-size: var(--bigger-text);
 	grid-area: sidebar-left;
 	
