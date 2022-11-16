@@ -5,14 +5,14 @@ import ProfileButton from "./ProfileButton/ProfileButton";
 
 const Sidebar = () => {
 	return (
-		<div className="Sidebar">
+		<header className="Sidebar">
 			<div className="LogoWrapper">
 				<img src={logo} className="Logo" />	
 			</div>
 			<Nav />
 			<button className="TweetButton Bold">Tweet</button>
 			<ProfileButton />
-		</div>
+		</header>
 	)
 }
 
