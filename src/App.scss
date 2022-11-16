@@ -4,4 +4,6 @@
 		". sidebar-left main ." 100vh
 		/ 1fr 275px 990px 1fr;
 		grid-column-gap: 1.5em;
+	/* Required to make sidebar grid item sticky */
+	overflow: auto;
 }

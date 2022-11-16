@@ -1,4 +1,6 @@
 .Sidebar {
+	position: sticky;
+	top: 0;
 	display: flex;
 	flex-direction: column;
 	font-size: var(--bigger-text);
