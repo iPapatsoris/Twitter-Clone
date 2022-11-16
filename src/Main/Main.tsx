@@ -1,4 +1,5 @@
 import HeaderMain from "./HeaderMain/HeaderMain";
+import HeaderRight from "./HeaderRight/HeaderRight";
 import "./Main.scss"
 
 const Main = () => {
@@ -76,6 +77,7 @@ const Main = () => {
 			asdfadsf <br/>
 			asdfadsf <br/>
 			</div>
+			<HeaderRight />
 		</main>
 	)
 }

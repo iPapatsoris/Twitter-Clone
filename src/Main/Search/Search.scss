@@ -1,0 +1,31 @@
+.Search {
+	height: 46px;
+	flex: 1;
+	background-color: rgb(239, 243, 244);
+    display: flex;
+    align-items: center;
+    padding-left: 1rem;
+    border-radius: 40px;
+	
+	// TODO: Fix overlapping borders
+	&:focus-within {
+		background-color: red;
+	}
+
+	img {
+		width: 20px;
+    	height: 20px;
+	}
+
+	input {
+		border: 0;
+		background-color: rgb(239, 243, 244);
+		width: 100%;
+		font-size: 15px;
+		height: 100%;
+
+		&:focus {
+			outline: 0
+		}
+	}
+}
