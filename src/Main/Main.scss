@@ -2,18 +2,15 @@ main {
 	grid-area: main;
 	display: grid;
 	grid-template:
-		"header-main header-right" min-content
+		"header-main header-right" 45px
 		"content-main content-right" auto
 		/ 2fr 1fr;
 		grid-column-gap: 1.5em;
-	padding: 12px;
 	grid-area: main;
-	border-color: rgb(239, 243, 244);
-	border-left-width: 1px;
-	border-right-width: 1px;
-	border-style: solid;
 
 	.ContentMain {
 		grid-area: content-main;
+		border-inline: var(--border);
+		padding-inline: var(--main-content-padding);
 	}
 }

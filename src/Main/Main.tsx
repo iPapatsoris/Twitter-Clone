@@ -1,5 +1,4 @@
-import HeaderMain from "../HeaderMain/HeaderMain";
-import Home from "../Home/Home"
+import HeaderMain from "./HeaderMain/HeaderMain";
 import "./Main.scss"
 
 const Main = () => {

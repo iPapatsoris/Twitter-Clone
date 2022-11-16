@@ -1,0 +1,22 @@
+.HeaderMain {
+	position: sticky;
+	top: 0;
+	background-color: white;
+	grid-area: header-main;
+	display: flex;
+	align-items: center;
+	padding-inline: var(--main-content-padding);
+	border-inline: var(--border);
+
+	img {
+		margin-left: auto;
+		cursor: pointer;
+		align-self: center;
+		width: 18px;
+		height: 18px;
+	}
+	
+	h2 {
+		margin: 0;
+	}
+}
