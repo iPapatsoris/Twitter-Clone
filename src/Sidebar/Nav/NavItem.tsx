@@ -8,7 +8,7 @@ const NavItem = ({icon, title, isActive = false}: NavItemI ) => {
 	const navItemClass = "BiggerTextl " + (isActive && "Bold");
 	return (
 		<a>
-			<div>
+			<div className="IconAndTitleWrapper">
 				<div className="IconAndTitle">
 					<img src={icon} className="Icon"/>
 					<span className={navItemClass}>{title}</span>

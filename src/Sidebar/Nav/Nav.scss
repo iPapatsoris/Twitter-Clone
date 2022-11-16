@@ -1,19 +1,25 @@
 nav {
-	.IconAndTitle {
-		display: flex;
-		gap: 2rem;
-		width: min-content;
-		padding: 12px;
-		border-radius: 40px;
-		border: black;
-		transition-duration: 0.2s;
-	}
+	cursor: pointer;
 
-	div:hover {
-		cursor: pointer;
+	.IconAndTitleWrapper {
+		padding-top: 1rem;
+
+		&:hover {
+			cursor: pointer;
+	
+			.IconAndTitle {
+				background-color: var(--hover-bg)
+			}
+		}
 
 		.IconAndTitle {
-			background-color: rgba(15, 20, 25, 0.1)
+			display: flex;
+			gap: 1.5rem;
+			width: min-content;
+			padding: 1rem;
+			border-radius: 40px;
+			border: black;
+			transition-duration: 0.2s;
 		}
 	}
 
