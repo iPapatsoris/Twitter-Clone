@@ -1,11 +1,84 @@
+import HeaderMain from "../HeaderMain/HeaderMain";
 import Home from "../Home/Home"
+import "./Main.scss"
 
 const Main = () => {
 	return (
 		<main>
-			<Home />
+			<HeaderMain />
+			<div className="ContentMain" >
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			asdfadsf <br/>
+			</div>
 		</main>
 	)
 }
 
-export default Home;
+export default Main;
