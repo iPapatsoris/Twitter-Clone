@@ -4,7 +4,7 @@ const HeaderMain = () => {
 	return (
 		<div className="HeaderMain">
 			<h2>Home</h2>
-				<img src={sparkIcon} />
+			<img src={sparkIcon} />
 		</div>
 	)
 }
