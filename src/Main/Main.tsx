@@ -1,7 +1,7 @@
 import ContentRight from "./ContentRight/ContentRight";
 import HeaderMain from "./HeaderMain/HeaderMain";
 import HeaderRight from "./HeaderRight/HeaderRight";
-import InboxSticky from "./Inbox/InboxSticky/InboxSticky";
+import StickyInbox from "./Inbox/StickyInbox/StickyInbox";
 import "./Main.scss"
 
 const Main = () => {
@@ -81,6 +81,7 @@ const Main = () => {
 			</div>
 			<HeaderRight />
 			<ContentRight />
+			<StickyInbox />
 		</main>
 	)
 }

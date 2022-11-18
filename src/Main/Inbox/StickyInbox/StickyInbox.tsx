@@ -1,4 +1,4 @@
-import "./InboxSticky.scss"
+import "./StickyInbox.scss"
 import newMessageIcon from "../../../assets/icons/new-message.png"
 import expandInbox from "../../../assets/icons/expand-inbox.png"
 

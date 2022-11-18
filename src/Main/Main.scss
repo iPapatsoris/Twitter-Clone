@@ -2,8 +2,9 @@ main {
 	grid-area: main;
 	display: grid;
 	grid-template:
-		"header-main header-right" 51px
+		"header-main  header-right" 51px
 		"content-main content-right" auto
+		".	          sticky-inbox " auto
 		/ 2fr 1fr;
 		grid-column-gap: 1.5em;
 	grid-area: main;
