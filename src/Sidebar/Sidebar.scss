@@ -1,6 +1,7 @@
 .Sidebar {
 	position: sticky;
 	top: 0;
+	height: 100vh;
 	display: flex;
 	flex-direction: column;
 	font-size: var(--bigger-text);
