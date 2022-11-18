@@ -1,5 +1,7 @@
+import ContentRight from "./ContentRight/ContentRight";
 import HeaderMain from "./HeaderMain/HeaderMain";
 import HeaderRight from "./HeaderRight/HeaderRight";
+import InboxSticky from "./Inbox/InboxSticky/InboxSticky";
 import "./Main.scss"
 
 const Main = () => {
@@ -78,6 +80,7 @@ const Main = () => {
 			asdfadsf <br/>
 			</div>
 			<HeaderRight />
+			<ContentRight />
 		</main>
 	)
 }

@@ -1,3 +1,4 @@
+import InboxSticky from '../Inbox/InboxSticky/InboxSticky';
 import Search from '../Search/Search'
 import './HeaderRight.scss'
 const HeaderRight = () => {

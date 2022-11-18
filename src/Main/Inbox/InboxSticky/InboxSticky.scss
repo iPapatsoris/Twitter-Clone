@@ -1,0 +1,23 @@
+.InboxSticky {
+	display: flex;
+	position: sticky;
+	bottom: 0;
+	right: 1rem;
+	box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px,
+			    rgb(101 119 134 / 15%) 0px 0px 3px 1px;
+	border-top-right-radius: 16px;
+	border-top-left-radius: 16px;
+	align-items: center;
+    padding-inline: 1rem;
+
+	.RightAligned {
+		margin-left: auto;
+		display: flex;
+		gap: 1rem;
+		img {
+			cursor: pointer;
+			width: 25px;
+			height: 25px;
+		}
+	}
+}
