@@ -6,7 +6,7 @@ import expandInbox from "../../../assets/icons/expand-inbox.png"
 const InboxSticky = () => {
 	return (
 		<div className="InboxSticky">
-			<h2>Messages</h2>
+			<h3 className="BiggerText">Messages</h3>
 			<div className="RightAligned">
 				<img src={newMessageIcon} />
 				<img src={expandInbox} />
