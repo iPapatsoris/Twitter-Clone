@@ -1,8 +1,9 @@
 .App {
 	display: grid;
 	grid-template:
-		". sidebar-left main ." auto
-		/ 1fr 275px 990px 1fr;
+		". sidebar-left header-main   header-right ." 51px
+		". sidebar-left content-main content-right ." auto
+		". sidebar-left .             sticky-inbox ." auto
+		/ 1fr 275px 660px 330px 1fr; 
 		grid-column-gap: 1.5em;
-	/* Required to make sidebar grid item sticky */
 }
