@@ -10,7 +10,7 @@
 	grid-template:
 		". sidebar-left header-main   header-right ." 51px
 		". sidebar-left content-main content-right ." auto
-		". sidebar-left .             sticky-inbox ." auto
+		". sidebar-left .             sticky-inbox sticky-inbox" auto
 		/ 1fr 250px minmax(375px, 2fr) 1fr 1fr; 
 
 
