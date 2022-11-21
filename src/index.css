@@ -5,6 +5,7 @@
 	--border: 1px solid rgb(239, 243, 244);
 	--main-content-padding: 16px;
 	--bigger-text: 20px;
+	--transition-duration: 0.2s;
 	box-sizing: border-box;
 }
 

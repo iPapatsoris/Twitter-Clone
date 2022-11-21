@@ -4,7 +4,7 @@
 	height: 20px;
 	padding: 8px;
 	border-radius: 40px;
-	transition: 0.2s;
+	transition: var(--transition-duration);
 	&:hover {
 		background-color: var(--hover-bg);
 	}

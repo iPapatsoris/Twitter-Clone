@@ -19,7 +19,7 @@ nav {
 			padding: 1rem;
 			border-radius: 40px;
 			border: black;
-			transition-duration: 0.2s;
+			transition: var(--transition-duration);
 		}
 	}
 
