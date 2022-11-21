@@ -1,10 +1,11 @@
 import './HeaderMain.scss'
+import * as classes from '../../util/Icon/Icon.module.scss'
 import sparkIcon from '../../assets/icons/spark.png'
 const HeaderMain = () => {
 	return (
 		<div className="HeaderMain">
 			<h2>Home</h2>
-			<img src={sparkIcon} />
+			<img src={sparkIcon} className={classes.Icon} />
 		</div>
 	)
 }

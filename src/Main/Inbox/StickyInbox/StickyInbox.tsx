@@ -1,6 +1,7 @@
 import "./StickyInbox.scss"
 import newMessageIcon from "../../../assets/icons/new-message.png"
 import expandInbox from "../../../assets/icons/expand-inbox.png"
+import Icon from "../../../util/Icon/Icon"
 
 
 const InboxSticky = () => {
@@ -9,8 +10,8 @@ const InboxSticky = () => {
 			<div className="InboxStickyContent">
 				<h3 className="BiggerText">Messages</h3>
 				<div className="RightAligned">
-					<img src={newMessageIcon} />
-					<img src={expandInbox} />
+					<Icon src={newMessageIcon} />
+					<Icon src={expandInbox} />
 				</div>
 			</div>
 		</div>

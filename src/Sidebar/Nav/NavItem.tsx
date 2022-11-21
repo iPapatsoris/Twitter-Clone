@@ -10,7 +10,7 @@ const NavItem = ({icon, title, isActive = false}: NavItemI ) => {
 		<a>
 			<div className="IconAndTitleWrapper">
 				<div className="IconAndTitle">
-					<img src={icon} className="Icon"/>
+					<img src={icon} />
 					<span className={navItemClass}>{title}</span>
 				</div>
 			</div>
