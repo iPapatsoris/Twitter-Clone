@@ -1,9 +1,20 @@
+/** 
+ * We make the columns responsive using grid 
+ * fraction units, as opposed to real Twitter which
+ * sets max widths for desktop and uses breakpoints 
+ * for smaller screens. 
+*/
+
 .App {
 	display: grid;
 	grid-template:
 		". sidebar-left header-main   header-right ." 51px
 		". sidebar-left content-main content-right ." auto
 		". sidebar-left .             sticky-inbox ." auto
-		/ 1fr 275px 660px 330px 1fr; 
+		/ 1fr 1fr minmax(375px, 2fr) 1fr 1fr; 
+		// For a similar behavior to the real Twitter, 
+		// use the column specification below:
+		// / 1fr 275px 660px 330px 1fr; 
+
 		grid-column-gap: 1.5em;
 }
