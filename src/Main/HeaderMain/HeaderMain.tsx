@@ -5,7 +5,7 @@ const HeaderMain = () => {
 	return (
 		<div className="HeaderMain">
 			<h2>Home</h2>
-			<img src={sparkIcon} className={classes.Icon} />
+			<img src={sparkIcon} title="Top Tweets" className={classes.Icon} />
 		</div>
 	)
 }

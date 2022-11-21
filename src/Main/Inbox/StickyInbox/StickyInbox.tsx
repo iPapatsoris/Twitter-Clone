@@ -10,8 +10,8 @@ const InboxSticky = () => {
 			<div className="InboxStickyContent">
 				<h3 className="BiggerText">Messages</h3>
 				<div className="RightAligned">
-					<Icon src={newMessageIcon} />
-					<Icon src={expandInbox} />
+					<Icon src={newMessageIcon} title="New message" />
+					<Icon src={expandInbox} title="Expand" />
 				</div>
 			</div>
 		</div>

@@ -1,12 +1,13 @@
 import classes from "./Icon.module.scss"
 
 interface IconProps {
-	src: string
+	src: string;
+	title: string;
 }
 
-const Icon = ({ src }: IconProps) => {
+const Icon = ({ src, title }: IconProps) => {
 	return (
-		<img src={src} className={classes.Icon} />
+		<img src={src} title={title} className={classes.Icon} />
 	);
 }
 
