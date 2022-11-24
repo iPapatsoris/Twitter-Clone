@@ -1,0 +1,22 @@
+.ContentRightSection {
+	background-color: rgb(247, 249, 249);
+	border-radius: 16px;
+	display: flex;
+	flex-direction: column;
+	cursor: pointer;
+
+	h2 {
+		font-weight: 800;
+		margin: 0;
+		cursor: auto;
+	}
+
+	& > * {
+		padding-block: 0.8rem;
+		padding-inline: 1rem;
+	}
+
+	& > :not(:first-child):hover {
+		background-color: rgb(0, 0, 0, 0.03);
+	}
+}

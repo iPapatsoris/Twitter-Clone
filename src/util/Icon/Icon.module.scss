@@ -5,7 +5,12 @@
 	padding: 8px;
 	border-radius: 40px;
 	transition: var(--transition-duration);
-	&:hover {
-		background-color: var(--hover-bg);
-	}
+}
+
+.HoverBgColor:hover {
+	background-color: var(--hover-bg);
+}
+
+.HoverPrimaryColor:hover {
+	background-color: var(--primary-color-transparent);
 }

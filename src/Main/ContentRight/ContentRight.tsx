@@ -1,65 +1,12 @@
 import "./ContentRight.scss";
+import ContentRightSection from "./ContentRightSection/ContentRightSection";
+import Trends from "./Trends/Trends";
 const ContentRight = () => {
 	return (
 		<div className="ContentRight">
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
-			asdfadsf <br/>
+			<ContentRightSection>
+				<Trends />	
+			</ContentRightSection>
 		</div>
 	)
 }

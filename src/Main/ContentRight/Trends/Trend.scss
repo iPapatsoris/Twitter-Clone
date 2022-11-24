@@ -1,0 +1,22 @@
+.Trend {
+	display: flex;
+	
+	.TrendInfo {
+		display: flex;
+		flex-direction: column;
+
+		.Title {
+			font-size: 15px;
+			font-weight: 700;
+		}
+
+		.Subtitle {
+			color: rgb(83, 100, 113);
+			font-size: 13px;
+		}
+	}
+
+	.MoreIcon {
+		margin-left: auto;
+	}
+}
