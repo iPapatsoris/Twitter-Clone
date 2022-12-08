@@ -11,7 +11,7 @@ const Sidebar = () => {
 			</div>
 			<Nav />
 			<button className="TweetButton Bold">Tweet</button>
-			<ProfileButton />
+			<ProfileButton/>
 		</header>
 	)
 }

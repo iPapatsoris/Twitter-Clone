@@ -3,11 +3,14 @@ import * as React from "react";
 
 interface ContentRightSectionPropsI {
 	children: React.ReactNode;
+	title?: string;
 }
 
-const ContentRightSection = ({ children }: ContentRightSectionPropsI) => (
+const ContentRightSection = ({ children, title }: ContentRightSectionPropsI) => (
 	<div className="ContentRightSection">
+		<h2>{title}</h2>
 		{children}
+		<span className="ShowMore">Show more</span>
 	</div>
 ) 
 

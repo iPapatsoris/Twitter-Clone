@@ -1,32 +1,4 @@
-.ProfileButton {
-	margin-top: auto;
-	display: flex;
-	gap: 1rem;
-	padding: 1rem;
-	font-size: 15px;
-	border-radius: 40px;
-	transition: var(--transition-duration);
-	cursor: pointer;
-	
-	&:hover {
-		background-color: var(--hover-bg)
-	}
-
-	.Avatar {
-		object-fit: cover;
-		width: 40px;
-		height: 40px;
-		border-radius: 40px;
-	}
-
-	.Name {
-		font-weight: 600;
-	}
-
-	.Dots {
-		width: 20px;
-		height: 20px;
-		align-self: center;
-		margin-left: auto;
-	}
+.Dots {
+	width: 20px;
+	height: 20px;
 }
