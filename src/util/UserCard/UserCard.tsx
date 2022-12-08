@@ -9,7 +9,6 @@ interface UserCardPropsI extends UserCardDetailsI {
 	children: React.ReactNode;
 }
 
-
 const UserCard = ({ children, username, avatar, name }: UserCardPropsI) => {
 	return (
 		<div className="UserCard">
