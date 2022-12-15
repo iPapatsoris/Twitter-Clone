@@ -1,11 +1,11 @@
 import UserCard, { UserCardDetailsI} from "../../../util/UserCard/UserCard"
-import "./WhoToFollow.scss"
+import "./WhoToFollowItem.scss"
 
 
 const WhoToFollowItem = (props: UserCardDetailsI) => {
 	return (
 		<UserCard {...props}>
-			<button>Follow</button>
+			<button className="WhoToFollowButton">Follow</button>
 		</UserCard>
 	)
 }

@@ -15,6 +15,7 @@
 	& > * {
 		padding-block: 0.8rem;
 		padding-inline: 1rem;
+		transition: var(--transition-duration);
 	}
 
 	& > :not(:first-child):hover {

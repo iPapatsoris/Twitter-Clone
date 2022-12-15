@@ -9,6 +9,7 @@ const ProfileButton = () => (
 			name="Toulouse"
 			username="toulouse-cat"
 			avatar={avatar}
+			isStandalone
 		>		
 			<img src={dots} className="Dots" />
 		</UserCard>

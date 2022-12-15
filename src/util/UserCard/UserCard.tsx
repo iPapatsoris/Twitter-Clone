@@ -7,11 +7,14 @@ export interface UserCardDetailsI {
 }
 interface UserCardPropsI extends UserCardDetailsI {
 	children: React.ReactNode;
+	isStandalone?: boolean;
 }
 
-const UserCard = ({ children, username, avatar, name }: UserCardPropsI) => {
+const UserCard = ({ children, username, avatar, name, isStandalone = false }: UserCardPropsI) => {
+	const extraClass = isStandalone ? "Standalone" : "";  
+	
 	return (
-		<div className="UserCard">
+		<div className={"UserCard " + extraClass}>
 			<img src={avatar} className="Avatar" />
 			<div>
 				<div className="Name">{name}</div>
