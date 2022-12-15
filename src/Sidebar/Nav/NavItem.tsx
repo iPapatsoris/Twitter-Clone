@@ -1,10 +1,10 @@
-interface NavItemI {
+interface NavItem {
 	icon: string; 
 	title: string;
 	isActive?: boolean;
 }
 
-const NavItem = ({icon, title, isActive = false}: NavItemI ) => {
+const NavItem = ({icon, title, isActive = false}: NavItem ) => {
 	const navItemClass = "BiggerTextl " + (isActive && "Bold");
 	return (
 		<a>

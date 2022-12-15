@@ -1,16 +1,16 @@
 import './UserCard.scss'
 
-export interface UserCardDetailsI {
+export interface UserCardDetails {
 	name: string;
 	username: string;
 	avatar: string;
 }
-interface UserCardPropsI extends UserCardDetailsI {
+interface UserCardProps extends UserCardDetails {
 	children: React.ReactNode;
 	isStandalone?: boolean;
 }
 
-const UserCard = ({ children, username, avatar, name, isStandalone = false }: UserCardPropsI) => {
+const UserCard = ({ children, username, avatar, name, isStandalone = false }: UserCardProps) => {
 	const extraClass = isStandalone ? "Standalone" : "";  
 	
 	return (
