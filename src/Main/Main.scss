@@ -1,14 +1,14 @@
 main {
-	// Ignore element so that its children can be taken as grid items of 
-	// parent grid. 
-	// Has no side effects because <main> has no styling purpose, only 
-	// semantic.
-	// Can be changed with "subgrid" when it receives adequate browser support.
-	display: contents;
+  // Ignore element so that its children can be taken as grid items of
+  // parent grid.
+  // Has no side effects because <main> has no styling purpose, only
+  // semantic.
+  // Can be changed with "subgrid" when it receives adequate browser support.
+  display: contents;
 }
 
 .ContentMain {
-	grid-area: content-main;
-	border-inline: var(--border);
-	padding-inline: var(--main-content-padding);
+  grid-area: content-main;
+  border-inline: var(--border);
+  padding-inline: var(--main-content-padding);
 }

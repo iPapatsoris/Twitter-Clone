@@ -1,34 +1,33 @@
 .UserCard {
-	margin-top: auto;
-	display: flex;
-	gap: 1rem;
-	padding-block: 1rem;
-	font-size: 15px;
-	cursor: pointer;
-	transition: var(--transition-duration);
-	
+  margin-top: auto;
+  display: flex;
+  gap: 1rem;
+  padding-block: 1rem;
+  font-size: 15px;
+  cursor: pointer;
+  transition: var(--transition-duration);
 
-	.Avatar {
-		object-fit: cover;
-		width: 40px;
-		height: 40px;
-		border-radius: 40px;
-	}
+  .Avatar {
+    object-fit: cover;
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+  }
 
-	.Name {
-		font-weight: 600;
-	}
+  .Name {
+    font-weight: 600;
+  }
 
-	.Action {
-		align-self: center;
-		margin-left: auto;
-	}
+  .Action {
+    align-self: center;
+    margin-left: auto;
+  }
 
-	&.Standalone {
-		padding-inline: 1rem;
-		border-radius: 40px;
-		&:hover {
-			background-color: var(--hover-bg)
-		}
-	}
+  &.Standalone {
+    padding-inline: 1rem;
+    border-radius: 40px;
+    &:hover {
+      background-color: var(--hover-bg);
+    }
+  }
 }

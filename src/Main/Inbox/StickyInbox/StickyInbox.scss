@@ -1,30 +1,29 @@
 .InboxSticky {
-	grid-area: sticky-inbox;
-	position: sticky;
-	bottom: 0;
-	display: flex;
-	justify-content: center;
-	
-	
-	.InboxStickyContent {
-		flex: 0 1 60%;
-		display: flex;
-		box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px,
-					rgb(101 119 134 / 15%) 0px 0px 3px 1px;
-		border-top-right-radius: 16px;
-		border-top-left-radius: 16px;
-		background-color: white;
-		align-items: center;
-		padding-inline: 1rem;
-				cursor: pointer;
-		h3 {
-			font-weight: 500;
-			margin-block: 1rem;
-		}
+  grid-area: sticky-inbox;
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
 
-		.RightAligned {
-			margin-left: auto;
-			display: flex;
-		}
-	}
+  .InboxStickyContent {
+    flex: 0 1 60%;
+    display: flex;
+    box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px,
+      rgb(101 119 134 / 15%) 0px 0px 3px 1px;
+    border-top-right-radius: 16px;
+    border-top-left-radius: 16px;
+    background-color: white;
+    align-items: center;
+    padding-inline: 1rem;
+    cursor: pointer;
+    h3 {
+      font-weight: 500;
+      margin-block: 1rem;
+    }
+
+    .RightAligned {
+      margin-left: auto;
+      display: flex;
+    }
+  }
 }

@@ -1,16 +1,16 @@
 .Icon {
-	cursor: pointer;
-	width: 20px;
-	height: 20px;
-	padding: 8px;
-	border-radius: 40px;
-	transition: var(--transition-duration);
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  padding: 8px;
+  border-radius: 40px;
+  transition: var(--transition-duration);
 }
 
 .HoverBgColor:hover {
-	background-color: var(--hover-bg);
+  background-color: var(--hover-bg);
 }
 
 .HoverPrimaryColor:hover {
-	background-color: var(--primary-color-transparent);
+  background-color: var(--primary-color-transparent);
 }

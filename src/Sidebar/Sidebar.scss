@@ -1,42 +1,41 @@
 .Sidebar {
-	position: sticky;
-	top: 0;
-	height: 100vh;
-	display: flex;
-	flex-direction: column;
-	font-size: var(--bigger-text);
-	grid-area: sidebar-left;
-	
-	.LogoWrapper {
-		padding: 12px 14px;
-		border-radius: 40px;
-		width: min-content;
-		display: flex;
-		cursor: pointer;
-		
-		&:hover {
-			background-color: rgba(29, 155, 240, 0.1)
-		}
-	
-		.Logo {
-			width: 30px;
-		}
-	}
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-size: var(--bigger-text);
+  grid-area: sidebar-left;
 
-	
-	.TweetButton {
-		width: 90%;
-		background-color: var(--primary-color);
-		border-radius: 40px;
-		border: none;
-		padding: 1rem;
-		color: white;
-		font-size: 17px;
-		transition: var(--transition-duration);
-		margin-top: 1.5rem;
-		
-		&:hover {
-			background-color: rgb(26, 140, 216);
-		}
-	}
-}	
+  .LogoWrapper {
+    padding: 12px 14px;
+    border-radius: 40px;
+    width: min-content;
+    display: flex;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(29, 155, 240, 0.1);
+    }
+
+    .Logo {
+      width: 30px;
+    }
+  }
+
+  .TweetButton {
+    width: 90%;
+    background-color: var(--primary-color);
+    border-radius: 40px;
+    border: none;
+    padding: 1rem;
+    color: white;
+    font-size: 17px;
+    transition: var(--transition-duration);
+    margin-top: 1.5rem;
+
+    &:hover {
+      background-color: rgb(26, 140, 216);
+    }
+  }
+}

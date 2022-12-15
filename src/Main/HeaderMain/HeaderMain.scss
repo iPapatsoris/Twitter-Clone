@@ -1,18 +1,18 @@
 .HeaderMain {
-	position: sticky;
-	top: 0;
-	background-color: white;
-	grid-area: header-main;
-	display: flex;
-	align-items: center;
-	padding-inline: var(--main-content-padding);
-	border-inline: var(--border);
+  position: sticky;
+  top: 0;
+  background-color: white;
+  grid-area: header-main;
+  display: flex;
+  align-items: center;
+  padding-inline: var(--main-content-padding);
+  border-inline: var(--border);
 
-	img {
-		margin-left: auto;
-	}
-	
-	h2 {
-		margin: 0;
-	}
+  img {
+    margin-left: auto;
+  }
+
+  h2 {
+    margin: 0;
+  }
 }

@@ -1,29 +1,29 @@
 .ContentRightSection {
-	margin-bottom: 1rem;
-	background-color: rgb(247, 249, 249);
-	border-radius: 16px;
-	display: flex;
-	flex-direction: column;
-	cursor: pointer;
+  margin-bottom: 1rem;
+  background-color: rgb(247, 249, 249);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
 
-	h2 {
-		font-weight: 800;
-		margin: 0;
-		cursor: auto;
-	}
+  h2 {
+    font-weight: 800;
+    margin: 0;
+    cursor: auto;
+  }
 
-	& > * {
-		padding-block: 0.8rem;
-		padding-inline: 1rem;
-		transition: var(--transition-duration);
-	}
+  & > * {
+    padding-block: 0.8rem;
+    padding-inline: 1rem;
+    transition: var(--transition-duration);
+  }
 
-	& > :not(:first-child):hover {
-		background-color: rgb(0, 0, 0, 0.03);
-	}
+  & > :not(:first-child):hover {
+    background-color: rgb(0, 0, 0, 0.03);
+  }
 
-	.ShowMore {
-		color: var(--primary-color);
-		font-size: 15px;
-	}	
+  .ShowMore {
+    color: var(--primary-color);
+    font-size: 15px;
+  }
 }

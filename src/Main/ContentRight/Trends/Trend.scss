@@ -1,22 +1,22 @@
 .Trend {
-	display: flex;
-	
-	.TrendInfo {
-		display: flex;
-		flex-direction: column;
+  display: flex;
 
-		.Title {
-			font-size: 15px;
-			font-weight: 700;
-		}
+  .TrendInfo {
+    display: flex;
+    flex-direction: column;
 
-		.Subtitle {
-			color: rgb(83, 100, 113);
-			font-size: 13px;
-		}
-	}
+    .Title {
+      font-size: 15px;
+      font-weight: 700;
+    }
 
-	.MoreIcon {
-		margin-left: auto;
-	}
+    .Subtitle {
+      color: rgb(83, 100, 113);
+      font-size: 13px;
+    }
+  }
+
+  .MoreIcon {
+    margin-left: auto;
+  }
 }

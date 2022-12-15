@@ -1,38 +1,38 @@
 .Search {
-	position: sticky;
-	top: 0;
-	height: 46px;
-	flex: 1;
-	background-color: rgb(239, 243, 244);
-    display: flex;
-    align-items: center;
-    padding-left: 1rem;
-    border-radius: 40px;
-	/**  
-	 * Include white border to allow changing its color on focus.
-	 * If we were to have no border and to only introduce it on focus,
-	 * the element would change dimensions and slightly reposition.
-	 */
-	border: 1px solid white; 
-	
-	&:focus-within {
-		border-color: var(--primary-color);
-	}
+  position: sticky;
+  top: 0;
+  height: 46px;
+  flex: 1;
+  background-color: rgb(239, 243, 244);
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  border-radius: 40px;
+  /**  
+	* Include white border to allow changing its color on focus.
+	* If we were to have no border and to only introduce it on focus,
+    * the element would change dimensions and slightly reposition.
+    */
+  border: 1px solid white;
 
-	img {
-		width: 20px;
-    	height: 20px;
-	}
+  &:focus-within {
+    border-color: var(--primary-color);
+  }
 
-	input {
-		border: 0;
-		padding-block: 0;
-		background-color: rgb(239, 243, 244);
-		width: 100%;
-		font-size: 15px; 
+  img {
+    width: 20px;
+    height: 20px;
+  }
 
-		&:focus-visible {
-			outline: 0;
-		}
-	}
+  input {
+    border: 0;
+    padding-block: 0;
+    background-color: rgb(239, 243, 244);
+    width: 100%;
+    font-size: 15px;
+
+    &:focus-visible {
+      outline: 0;
+    }
+  }
 }
