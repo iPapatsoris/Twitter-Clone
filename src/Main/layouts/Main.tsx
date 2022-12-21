@@ -1,7 +1,7 @@
 import ContentRight from "./ContentRight/ContentRight";
-import HeaderMain from "./HeaderMain/HeaderMain";
-import HeaderRight from "./HeaderRight/HeaderRight";
-import StickyInbox from "./Inbox/StickyInbox/StickyInbox";
+import HeaderMain from "./Header/HeaderMain/HeaderMain";
+import HeaderRight from "./Header/HeaderRight/HeaderRight";
+import StickyInbox from "../components/Inbox/StickyInbox/StickyInbox";
 import "./Main.scss";
 
 const Main = () => {

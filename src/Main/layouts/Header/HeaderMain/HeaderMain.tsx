@@ -1,6 +1,6 @@
 import "./HeaderMain.scss";
-import sparkIcon from "../../assets/icons/spark.png";
-import Icon from "../../util/Icon/Icon";
+import sparkIcon from "../../../../assets/icons/spark.png";
+import Icon from "../../../../util/Icon/Icon";
 const HeaderMain = () => {
   return (
     <div className="HeaderMain">

@@ -1,4 +1,4 @@
-import Search from "../Search/Search";
+import Search from "../../../components/Search/Search";
 import "./HeaderRight.scss";
 const HeaderRight = () => {
   return (

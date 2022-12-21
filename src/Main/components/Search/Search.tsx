@@ -1,5 +1,5 @@
 import "./Search.scss";
-import searchIcon from "../../assets/icons/search.png";
+import searchIcon from "../../../assets/icons/search.png";
 import { useRef } from "react";
 
 const Search = () => {
