@@ -16,18 +16,19 @@ import listIcon from "../../assets/icons/nav/list.png";
 import listIconActive from "../../assets/icons/nav/list-active.png";
 
 import NavItem from "./NavItem";
+import paths from "../../util/paths";
 
 const Nav = () => {
   return (
     <nav>
-      <NavItem icon={homeIcon} title="Home" isActive={true} />
-      <NavItem icon={exploreIcon} title="Explore" />
+      <NavItem icon={homeIcon} title="Home" path={paths.home} isActive={true} />
+      <NavItem icon={exploreIcon} title="Explore" path={paths.explore} />
       <NavItem icon={notificationIcon} title="Notifications" />
       <NavItem icon={messageIcon} title="Messages" />
       <NavItem icon={bookmarkIcon} title="Bookmarks" />
       <NavItem icon={listIcon} title="Lists" />
       <NavItem icon={profileIcon} title="Profile" />
-      <NavItem icon={moreIcon} title="More" />
+      <NavItem icon={moreIcon} title="More" isPopup />
     </nav>
   );
 };
