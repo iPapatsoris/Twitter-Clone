@@ -1,3 +1,7 @@
 .ContentRight {
   grid-area: content-right;
+
+  &.TopElement {
+    margin-top: 1rem;
+  }
 }
