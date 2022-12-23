@@ -14,20 +14,61 @@ import profileIcon from "../../assets/icons/nav/user.png";
 import profileIconActive from "../../assets/icons/nav/user-active.png";
 import listIcon from "../../assets/icons/nav/list.png";
 import listIconActive from "../../assets/icons/nav/list-active.png";
+import { useLocation } from "react-router-dom";
 
 import NavItem from "./NavItem";
 import paths from "../../util/paths";
 
 const Nav = () => {
+  const path = useLocation().pathname;
   return (
     <nav>
-      <NavItem icon={homeIcon} title="Home" path={paths.home} isActive={true} />
-      <NavItem icon={exploreIcon} title="Explore" path={paths.explore} />
-      <NavItem icon={notificationIcon} title="Notifications" />
-      <NavItem icon={messageIcon} title="Messages" />
-      <NavItem icon={bookmarkIcon} title="Bookmarks" />
-      <NavItem icon={listIcon} title="Lists" />
-      <NavItem icon={profileIcon} title="Profile" />
+      <NavItem
+        icon={path === paths.home ? homeIconActive : homeIcon}
+        title="Home"
+        path={paths.home}
+        isActive={path === paths.home}
+      />
+      <NavItem
+        icon={path === paths.explore ? exploreIconActive : exploreIcon}
+        title="Explore"
+        path={paths.explore}
+        isActive={path === paths.explore}
+      />
+      <NavItem
+        icon={
+          path === paths.notifications
+            ? notificationIconActive
+            : notificationIcon
+        }
+        title="Notifications"
+        path={paths.notifications}
+        isActive={path === paths.notifications}
+      />
+      <NavItem
+        icon={path === paths.messages ? messageIconActive : messageIcon}
+        title="Messages"
+        path={paths.messages}
+        isActive={path === paths.messages}
+      />
+      <NavItem
+        icon={path === paths.bookmarks ? bookmarkIconActive : bookmarkIcon}
+        title="Bookmarks"
+        path={paths.bookmarks}
+        isActive={path === paths.bookmarks}
+      />
+      <NavItem
+        icon={path === paths.lists ? listIconActive : listIcon}
+        title="Lists"
+        path={paths.lists}
+        isActive={path === paths.lists}
+      />
+      <NavItem
+        icon={path === paths.profile ? profileIconActive : profileIcon}
+        title="Profile"
+        path={paths.profile}
+        isActive={path === paths.profile}
+      />
       <NavItem icon={moreIcon} title="More" isPopup />
     </nav>
   );
