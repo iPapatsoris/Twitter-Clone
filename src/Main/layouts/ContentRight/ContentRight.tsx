@@ -10,7 +10,7 @@ const ContentRight = () => {
 
   return (
     <div className={"ContentRight"}>
-      {path === paths.explore ? null : (
+      {path === paths.explore && (
         <ContentRightSection title="Trends for you">
           <Trends />
         </ContentRightSection>

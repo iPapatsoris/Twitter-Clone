@@ -7,10 +7,10 @@
   transition: var(--transition-duration);
 }
 
-.HoverBgColor:hover {
+.HoverNormal:hover {
   background-color: var(--hover-bg);
 }
 
-.HoverPrimaryColor:hover {
+.HoverPrimary:hover {
   background-color: var(--primary-color-transparent);
 }

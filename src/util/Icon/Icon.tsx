@@ -3,14 +3,17 @@ import classes from "./Icon.module.scss";
 interface IconProps {
   src: string;
   title: string;
-  blueHover?: boolean;
+  hoverBg?: "primary" | "normal" | "none";
 }
 
-const Icon = ({ src, title, blueHover = false }: IconProps) => {
-  const hoverClassname = blueHover
-    ? classes.HoverPrimaryColor
-    : classes.HoverBgColor;
+const Icon = ({ src, title, hoverBg = "normal" }: IconProps) => {
+  let hoverClassname =
+    hoverBg === "normal" ? classes.HoverNormal : classes.HoverPrimary;
+  if (hoverBg === "none") {
+    hoverClassname = "";
+  }
   const styleClasses = classes.Icon + " " + hoverClassname;
+
   return <img src={src} title={title} className={styleClasses} />;
 };
 
