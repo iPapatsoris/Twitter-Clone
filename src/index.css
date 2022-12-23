@@ -43,3 +43,15 @@ button {
 .BiggerText {
   font-size: var(--bigger-text);
 }
+
+.Flex {
+  display: flex;
+}
+
+.CenterAligned {
+  align-items: center;
+}
+
+.PushRight {
+  margin-left: auto;
+}

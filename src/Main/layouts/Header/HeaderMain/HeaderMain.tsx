@@ -1,12 +1,9 @@
 import "./HeaderMain.scss";
-import sparkIcon from "../../../../assets/icons/spark.png";
-import Icon from "../../../../util/Icon/Icon";
-const HeaderMain = () => {
-  return (
-    <div className="HeaderMain">
-      <h2>Home</h2>
-      <Icon src={sparkIcon} title="Top Tweets" />
-    </div>
-  );
+interface HeaderMainProps {
+  children: React.ReactNode;
+}
+
+const HeaderMain = ({ children }: HeaderMainProps) => {
+  return <div className="HeaderMain">{children}</div>;
 };
 export default HeaderMain;

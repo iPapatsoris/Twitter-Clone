@@ -8,7 +8,7 @@ const InboxSticky = () => {
     <div className="InboxSticky">
       <div className="InboxStickyContent">
         <h3 className="BiggerText">Messages</h3>
-        <div className="RightAligned">
+        <div className="PushRight">
           <Icon src={newMessageIcon} title="New message" />
           <Icon src={expandInbox} title="Expand" />
         </div>

@@ -5,10 +5,7 @@
   grid-area: header-main;
   display: flex;
   align-items: center;
-  padding-inline: var(--main-content-padding);
+  padding-left: var(--main-content-padding);
+  padding-right: 0.5rem;
   border-inline: var(--border);
-
-  img {
-    margin-left: auto;
-  }
 }

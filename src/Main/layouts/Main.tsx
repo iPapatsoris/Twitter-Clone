@@ -5,13 +5,18 @@ import StickyInbox from "../components/Inbox/StickyInbox/StickyInbox";
 import { Outlet, useLocation } from "react-router-dom";
 import "./Main.scss";
 import paths from "../../util/paths";
+import HeaderHome from "../routes/Home/HeaderHome/HeaderHome";
+import HeaderExplore from "../routes/Explore/HeaderExplore/HeaderExplore";
 
 const Main = () => {
   const path = useLocation().pathname;
-
+  let header = <HeaderHome />;
+  if (path === paths.explore) {
+    header = <HeaderExplore />;
+  }
   return (
     <main>
-      <HeaderMain />
+      <HeaderMain>{header}</HeaderMain>
       <div className="ContentMain">
         <Outlet />
         asdfadsf <br />

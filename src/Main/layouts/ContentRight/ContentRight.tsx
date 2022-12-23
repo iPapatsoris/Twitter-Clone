@@ -9,9 +9,7 @@ const ContentRight = () => {
   const path = useLocation().pathname;
 
   return (
-    <div
-      className={"ContentRight " + (path === paths.explore ? "TopElement" : "")}
-    >
+    <div className={"ContentRight"}>
       {path === paths.explore ? null : (
         <ContentRightSection title="Trends for you">
           <Trends />
