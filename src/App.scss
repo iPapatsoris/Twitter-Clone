@@ -21,8 +21,15 @@
 
   &.NoHeaderRight {
     grid-template-areas:
-      ". sidebar-left header-main content-right ."
+      ". sidebar-left header-main  content-right ."
       ". sidebar-left content-main content-right ."
       ". sidebar-left .             sticky-inbox sticky-inbox";
+  }
+
+  &.ErrorPage {
+    grid-template-areas:
+      ". sidebar-left error error ."
+      ". sidebar-left error error ."
+      ". sidebar-left error error .";
   }
 }

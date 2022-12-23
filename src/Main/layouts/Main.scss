@@ -12,3 +12,7 @@ main {
   border-inline: var(--border);
   padding-inline: var(--main-content-padding);
 }
+
+.ErrorPage {
+  grid-area: error;
+}

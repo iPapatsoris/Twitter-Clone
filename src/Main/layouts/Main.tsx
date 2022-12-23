@@ -4,113 +4,121 @@ import HeaderRight from "./Header/HeaderRight/HeaderRight";
 import StickyInbox from "../components/Inbox/StickyInbox/StickyInbox";
 import { Outlet, useLocation } from "react-router-dom";
 import "./Main.scss";
-import paths from "../../util/paths";
+import paths, { useRouteMatch } from "../../util/paths";
 import HeaderHome from "../routes/Home/HeaderHome/HeaderHome";
 import HeaderExplore from "../routes/Explore/HeaderExplore/HeaderExplore";
 
 const Main = () => {
+  const isErrorPage = useRouteMatch(paths.error);
   const path = useLocation().pathname;
   let header = <HeaderHome />;
   if (path === paths.explore) {
     header = <HeaderExplore />;
   }
+
+  const placeholderJSX = !isErrorPage && (
+    <>
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+      asdfadsf <br />
+    </>
+  );
+
   return (
     <main>
-      <HeaderMain>{header}</HeaderMain>
-      <div className="ContentMain">
+      {!isErrorPage && <HeaderMain>{header}</HeaderMain>}
+      <div className={isErrorPage ? "ErrorPage" : "ContentMain"}>
         <Outlet />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
-        asdfadsf <br />
+        {placeholderJSX}
       </div>
-      {path === paths.explore ? null : <HeaderRight />}
-      <ContentRight />
-      <StickyInbox />
+      {!isErrorPage && path !== paths.explore && <HeaderRight />}
+      {!isErrorPage && <ContentRight />}
+      {!isErrorPage && <StickyInbox />}
     </main>
   );
 };

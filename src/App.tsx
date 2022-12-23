@@ -2,11 +2,18 @@ import "./App.scss";
 import Main from "./Main/layouts/Main";
 import Sidebar from "./Sidebar/Sidebar";
 import { useLocation } from "react-router-dom";
-import paths from "./util/paths";
+import paths, { useRouteMatch } from "./util/paths";
 
 const App = () => {
+  const isErrorPage = useRouteMatch(paths.error);
   const path = useLocation().pathname;
-  const extraClass = path === paths.explore ? "NoHeaderRight" : "";
+  let extraClass = "";
+  if (isErrorPage) {
+    extraClass = "ErrorPage";
+  } else if (path === paths.explore) {
+    extraClass = "NoHeaderRight";
+  }
+
   return (
     <div className={"App " + extraClass}>
       <Sidebar />
