@@ -25,17 +25,8 @@
 
   .TweetButton {
     width: 90%;
-    background-color: var(--primary-color);
-    border-radius: 40px;
-    border: none;
     padding: 1rem;
-    color: white;
     font-size: 17px;
-    transition: var(--transition-duration);
     margin-top: 1.5rem;
-
-    &:hover {
-      background-color: rgb(26, 140, 216);
-    }
   }
 }

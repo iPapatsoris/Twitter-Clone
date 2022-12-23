@@ -1,10 +1,13 @@
+import Button from "../../../util/Button/Button";
 import UserCard, { UserCardDetails } from "../../../util/UserCard/UserCard";
 import "./WhoToFollowItem.scss";
 
 const WhoToFollowItem = (props: UserCardDetails) => {
   return (
     <UserCard {...props}>
-      <button className="WhoToFollowButton">Follow</button>
+      <Button style="small" color="black">
+        Follow
+      </Button>
     </UserCard>
   );
 };

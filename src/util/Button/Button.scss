@@ -1,0 +1,44 @@
+.Button {
+  font-size: 14px;
+  font-weight: 700;
+  min-width: 6rem;
+  color: white;
+  border-radius: 40px;
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  transition: var(--transition-duration);
+
+  &.Primary {
+    background: var(--primary-color);
+    &:hover {
+      background-color: rgb(26, 140, 216);
+    }
+  }
+
+  &.Black {
+    background: rgb(15, 20, 25);
+    &:hover {
+      background: rgb(39, 44, 48);
+    }
+  }
+
+  &.Small {
+    height: 32px;
+  }
+
+  &.Medium {
+    height: 36px;
+  }
+
+  &.Large {
+    height: 50px;
+  }
+
+  &.Stretch {
+    width: 100%;
+  }
+
+  &.LargeFont {
+    font-size: 17px;
+  }
+}
