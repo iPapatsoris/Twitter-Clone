@@ -4,6 +4,7 @@
   background-color: rgb(239, 243, 244);
   display: flex;
   align-items: center;
+  gap: 1rem;
   padding-left: 1rem;
   border-radius: 40px;
   /**  
@@ -24,10 +25,10 @@
 
   input {
     border: 0;
-    padding-block: 0;
-    background-color: rgb(239, 243, 244);
+    background-color: transparent;
     width: 100%;
     font-size: 15px;
+    padding: 0;
 
     &:focus-visible {
       outline: 0;
