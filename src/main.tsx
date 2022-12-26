@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import App from "./App";
 import Home from "./Home/Home";
-import "./index.css";
+import "./global.css";
 import ErrorPage from "./Main/routes/ErrorPage/ErrorPage";
 import Explore from "./Main/routes/Explore/Explore";
 import paths from "./util/paths";
