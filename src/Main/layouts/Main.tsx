@@ -3,7 +3,7 @@ import HeaderMain from "./Header/HeaderMain/HeaderMain";
 import HeaderRight from "./Header/HeaderRight/HeaderRight";
 import StickyInbox from "../components/Inbox/StickyInbox/StickyInbox";
 import { Outlet, useLocation } from "react-router-dom";
-import "./Main.scss";
+import styles from "./Main.module.scss";
 import paths, { useRouteMatch } from "../../util/paths";
 import HeaderHome from "../routes/Home/HeaderHome/HeaderHome";
 import HeaderExplore from "../routes/Explore/HeaderExplore/HeaderExplore";
@@ -112,7 +112,7 @@ const Main = () => {
   return (
     <main>
       {!isErrorPage && <HeaderMain>{header}</HeaderMain>}
-      <div className={isErrorPage ? "ErrorPage" : "ContentMain"}>
+      <div className={isErrorPage ? styles.ErrorPage : styles.ContentMain}>
         <Outlet />
         {placeholderJSX}
       </div>

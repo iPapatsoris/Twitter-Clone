@@ -1,4 +1,3 @@
-import "./Nav.scss";
 import homeIcon from "../../assets/icons/nav/home.png";
 import homeIconActive from "../../assets/icons/nav/home-active.png";
 import exploreIcon from "../../assets/icons/nav/hashtag.png";

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Icon from "../../util/Icon/Icon";
+import styles from "./Nav.module.scss";
 interface NavItem {
   icon: string;
   title: string;
@@ -15,10 +16,13 @@ const NavItem = ({
   isActive = false,
   isPopup = false,
 }: NavItem) => {
-  const navItemClass = "BiggerText " + (isActive && "Bold");
+  const navItemClass = [styles.BiggerText, isActive ? styles.Bold : ""].join(
+    " "
+  );
+
   const item = (
-    <div className="IconAndTitleWrapper">
-      <div className="IconAndTitle">
+    <div className={styles.IconAndTitleWrapper}>
+      <div className={styles.IconAndTitle}>
         <Icon src={icon} size="large" hoverBg="none" />
         <span className={navItemClass}>{title}</span>
       </div>

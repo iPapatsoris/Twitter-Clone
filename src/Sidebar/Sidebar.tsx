@@ -1,18 +1,18 @@
 import Nav from "./Nav/Nav";
 import logo from "../assets/logo.png";
-import "./Sidebar.scss";
+import styles from "./Sidebar.module.scss";
 import ProfileButton from "./ProfileButton/ProfileButton";
 import Button from "../util/Button/Button";
 import Icon from "../util/Icon/Icon";
 
 const Sidebar = () => {
   return (
-    <header className="Sidebar">
-      <div className="Logo">
+    <header className={styles.Sidebar}>
+      <div className={styles.Logo}>
         <Icon src={logo} hoverBg="primary" size="largeLogo" />
       </div>
       <Nav />
-      <div className="TweetButton Bold">
+      <div className={styles.TweetButton}>
         <Button style="large" largeFont stretch>
           Tweet
         </Button>

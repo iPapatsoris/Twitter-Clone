@@ -1,4 +1,4 @@
-import "./App.scss";
+import styles from "./App.module.scss";
 import Main from "./Main/layouts/Main";
 import Sidebar from "./Sidebar/Sidebar";
 import { useLocation } from "react-router-dom";
@@ -9,13 +9,13 @@ const App = () => {
   const path = useLocation().pathname;
   let extraClass = "";
   if (isErrorPage) {
-    extraClass = "ErrorPage";
+    extraClass = styles.ErrorPage;
   } else if (path === paths.explore) {
-    extraClass = "NoHeaderRight";
+    extraClass = styles.NoHeaderRight;
   }
 
   return (
-    <div className={"App " + extraClass}>
+    <div className={[styles.App, extraClass].join(" ")}>
       <Sidebar />
       <Main />
     </div>

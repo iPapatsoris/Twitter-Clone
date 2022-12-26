@@ -1,9 +1,9 @@
 import Button from "../../../util/Button/Button";
-import "./ErrorPage.scss";
+import style from "./ErrorPage.module.scss";
 
 const ErrorPage = () => {
   return (
-    <div className="ErrorPage">
+    <div className={style.ErrorPage}>
       <p>Hmm...this page doesn’t exist. Try searching for something else.</p>
       <Button style="medium">Search</Button>
     </div>

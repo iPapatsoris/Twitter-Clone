@@ -1,4 +1,4 @@
-import "./ContentRightSection.scss";
+import styles from "./ContentRightSection.module.scss";
 import * as React from "react";
 
 interface ContentRightSectionProps {
@@ -7,10 +7,10 @@ interface ContentRightSectionProps {
 }
 
 const ContentRightSection = ({ children, title }: ContentRightSectionProps) => (
-  <div className="ContentRightSection">
+  <div className={styles.ContentRightSection}>
     <h2>{title}</h2>
     {children}
-    <span className="ShowMore">Show more</span>
+    <span className={styles.ShowMore}>Show more</span>
   </div>
 );
 

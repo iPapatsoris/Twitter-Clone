@@ -1,4 +1,4 @@
-import "./UserCard.scss";
+import styles from "./UserCard.module.scss";
 
 export interface UserCardDetails {
   name: string;
@@ -17,16 +17,16 @@ const UserCard = ({
   name,
   isStandalone = false,
 }: UserCardProps) => {
-  const extraClass = isStandalone ? "Standalone" : "";
+  const extraClass = isStandalone ? styles.Standalone : "";
 
   return (
-    <div className={"UserCard " + extraClass}>
-      <img src={avatar} className="Avatar" />
+    <div className={[styles.UserCard, extraClass].join(" ")}>
+      <img src={avatar} className={styles.Avatar} />
       <div>
-        <div className="Name">{name}</div>
-        <div className="Username">{username}</div>
+        <div className={styles.Name}>{name}</div>
+        <div>@{username}</div>
       </div>
-      <div className="Action">{children}</div>
+      <div className={styles.Action}>{children}</div>
     </div>
   );
 };

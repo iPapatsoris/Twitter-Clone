@@ -1,8 +1,8 @@
 import Search from "../../../components/Search/Search";
-import "./HeaderRight.scss";
+import style from "./HeaderRight.module.scss";
 const HeaderRight = () => {
   return (
-    <div className="HeaderRight">
+    <div className={style.HeaderRight}>
       <Search />
     </div>
   );

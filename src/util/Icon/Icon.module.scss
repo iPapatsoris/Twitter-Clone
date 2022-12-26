@@ -21,6 +21,7 @@
 
   &.HoverNone {
     padding: 0;
+    cursor: inherit;
   }
 
   &.HoverNormal:hover {

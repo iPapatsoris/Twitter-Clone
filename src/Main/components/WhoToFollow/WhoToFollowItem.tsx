@@ -1,6 +1,5 @@
 import Button from "../../../util/Button/Button";
 import UserCard, { UserCardDetails } from "../../../util/UserCard/UserCard";
-import "./WhoToFollowItem.scss";
 
 const WhoToFollowItem = (props: UserCardDetails) => {
   return (

@@ -1,17 +1,17 @@
 import Icon from "../../../util/Icon/Icon";
 import DotsIcon from "../../../assets/icons/dots-gray.png";
-import "./Trend.scss";
+import styles from "./Trend.module.scss";
 
 const Trend = () => {
   return (
-    <div className="Trend">
-      <div className="TrendInfo">
-        <span className="Subtitle">Events · Trending</span>
-        <span className="Title">5 Kim</span>
-        <span className="Subtitle">5,041 Tweets</span>
+    <div className={styles.Trend}>
+      <div className={styles.TrendInfo}>
+        <span className={styles.Subtitle}>Events · Trending</span>
+        <span className={styles.Title}>5 Kim</span>
+        <span className={styles.Subtitle}>5,041 Tweets</span>
       </div>
-      <div className="MoreIcon">
-        <Icon src={DotsIcon} title="More" blueHover />
+      <div className={styles.MoreIcon}>
+        <Icon src={DotsIcon} title="More" hoverBg="primary" />
       </div>
     </div>
   );

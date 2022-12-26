@@ -1,4 +1,4 @@
-import classes from "./Icon.module.scss";
+import styles from "./Icon.module.scss";
 
 interface IconProps {
   src: string;
@@ -13,20 +13,19 @@ const Icon = ({
   hoverBg = "normal",
   size = "normal",
 }: IconProps) => {
-  let hoverClassname = classes.HoverNormal;
+  let hoverClassname: styles.IconNames = styles.HoverNormal;
   if (hoverBg !== "normal") {
     hoverClassname =
-      hoverBg === "primary" ? classes.HoverPrimary : classes.HoverNone;
+      hoverBg === "primary" ? styles.HoverPrimary : styles.HoverNone;
   }
 
-  let sizeClassname = classes.NormalSize;
+  let sizeClassname: styles.IconNames = styles.NormalSize;
   if (size !== "normal") {
-    sizeClassname =
-      size === "large" ? classes.LargeSize : classes.LargeSizeLogo;
+    sizeClassname = size === "large" ? styles.LargeSize : styles.LargeSizeLogo;
   }
-  const styleClasses = [classes.Icon, hoverClassname, sizeClassname].join(" ");
+  const stylestyles = [styles.Icon, hoverClassname, sizeClassname].join(" ");
 
-  return <img src={src} title={title} className={styleClasses} />;
+  return <img src={src} title={title} className={stylestyles} />;
 };
 
 export default Icon;

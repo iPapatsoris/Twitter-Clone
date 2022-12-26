@@ -1,4 +1,4 @@
-import "./ContentRight.scss";
+import styles from "./ContentRight.module.scss";
 import ContentRightSection from "./ContentRightSection/ContentRightSection";
 import Trends from "../../components/Trends/Trends";
 import WhoToFollow from "../../components/WhoToFollow/WhoToFollow";
@@ -9,7 +9,7 @@ const ContentRight = () => {
   const path = useLocation().pathname;
 
   return (
-    <div className={"ContentRight"}>
+    <div className={styles.ContentRight}>
       {path === paths.explore && (
         <ContentRightSection title="Trends for you">
           <Trends />
