@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Icon from "../../util/Icon/Icon";
 interface NavItem {
   icon: string;
   title: string;
@@ -18,7 +19,7 @@ const NavItem = ({
   const item = (
     <div className="IconAndTitleWrapper">
       <div className="IconAndTitle">
-        <img src={icon} />
+        <Icon src={icon} size="large" hoverBg="none" />
         <span className={navItemClass}>{title}</span>
       </div>
     </div>

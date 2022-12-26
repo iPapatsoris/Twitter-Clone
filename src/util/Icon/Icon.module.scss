@@ -1,16 +1,33 @@
 .Icon {
   cursor: pointer;
-  width: 20px;
-  height: 20px;
   padding: 8px;
   border-radius: 40px;
   transition: var(--transition-duration);
-}
 
-.HoverNormal:hover {
-  background-color: var(--hover-bg);
-}
+  &.NormalSize {
+    width: 20px;
+    height: 20px;
+  }
 
-.HoverPrimary:hover {
-  background-color: var(--primary-color-transparent);
+  &.LargeSize {
+    width: 26px;
+    height: 26px;
+  }
+
+  &.LargeSizeLogo {
+    width: 30px;
+    height: 30px;
+  }
+
+  &.HoverNone {
+    padding: 0;
+  }
+
+  &.HoverNormal:hover {
+    background-color: var(--hover-bg);
+  }
+
+  &.HoverPrimary:hover {
+    background-color: var(--primary-color-transparent);
+  }
 }
