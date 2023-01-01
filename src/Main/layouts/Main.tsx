@@ -7,6 +7,9 @@ import styles from "./Main.module.scss";
 import paths, { useRouteMatch } from "../../util/paths";
 import HeaderHome from "../routes/Home/HeaderHome/HeaderHome";
 import HeaderExplore from "../routes/Explore/HeaderExplore/HeaderExplore";
+import HeaderNotifications from "../routes/Notifications/HeaderNotifications/HeaderNotifications";
+import HeaderExtendedNotifications from "../routes/Notifications/HeaderNotifications/HeaderExtendedNotifications/HeaderExtendedNotifications";
+import HeaderMainExtension from "./Header/HeaderMain/HeaderMainExtension/HeaderMainExtension";
 
 const Main = () => {
   const isErrorPage = useRouteMatch(paths.error);
@@ -14,6 +17,18 @@ const Main = () => {
   let header = <HeaderHome />;
   if (path === paths.explore) {
     header = <HeaderExplore />;
+  }
+
+  let headerLayout;
+  if (path === paths.notifications) {
+    headerLayout = (
+      <HeaderMainExtension
+        headerMainChild={<HeaderNotifications />}
+        headerExtendedChild={<HeaderExtendedNotifications />}
+      />
+    );
+  } else {
+    headerLayout = <HeaderMain>{header}</HeaderMain>;
   }
 
   const placeholderJSX = !isErrorPage && (
@@ -111,7 +126,7 @@ const Main = () => {
 
   return (
     <main>
-      {!isErrorPage && <HeaderMain>{header}</HeaderMain>}
+      {!isErrorPage && headerLayout}
       <div className={isErrorPage ? styles.ErrorPage : styles.ContentMain}>
         <Outlet />
         {placeholderJSX}

@@ -1,0 +1,20 @@
+.NotificationCategories {
+  flex-basis: 100%;
+  grid-area: header-main-extension;
+  position: sticky;
+  top: 0;
+  display: flex;
+  text-align: center;
+  align-items: center;
+
+  .NotificationCategory {
+    flex: 1;
+    transition: var(--transition-duration);
+    cursor: pointer;
+    padding: 1rem;
+
+    &:hover {
+      background-color: rgba(15, 20, 25, 0.1);
+    }
+  }
+}

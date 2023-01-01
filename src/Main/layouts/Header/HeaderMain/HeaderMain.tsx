@@ -4,6 +4,16 @@ interface HeaderMainProps {
 }
 
 const HeaderMain = ({ children }: HeaderMainProps) => {
-  return <div className={style.HeaderMain}>{children}</div>;
+  return (
+    <div
+      className={[
+        style.HeaderMain,
+        style.Sticky,
+        style.HeaderMainGridArea,
+      ].join(" ")}
+    >
+      {children}
+    </div>
+  );
 };
 export default HeaderMain;

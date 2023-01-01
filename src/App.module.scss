@@ -26,6 +26,16 @@
       ". sidebar-left .             sticky-inbox sticky-inbox";
   }
 
+  &.ExtendedHeaderMain {
+    grid-template-areas:
+      ". sidebar-left header-main-extension  header-right  ."
+      ". sidebar-left header-main-extension  content-right ."
+      ". sidebar-left content-main content-right ."
+      ". sidebar-left .             sticky-inbox sticky-inbox";
+
+    grid-template-rows: 53px auto auto auto auto;
+  }
+
   &.ErrorPage {
     grid-template-areas:
       ". sidebar-left error error ."

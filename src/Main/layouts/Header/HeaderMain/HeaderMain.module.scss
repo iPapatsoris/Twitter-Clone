@@ -1,11 +1,11 @@
 .HeaderMain {
-  position: sticky;
-  top: 0;
-  background-color: white;
-  grid-area: header-main;
   display: flex;
   align-items: center;
   padding-left: var(--main-content-padding);
   padding-right: 0.5rem;
   border-inline: var(--border);
+}
+
+.HeaderMainGridArea {
+  grid-area: header-main;
 }

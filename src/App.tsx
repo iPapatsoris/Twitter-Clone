@@ -12,6 +12,8 @@ const App = () => {
     extraClass = styles.ErrorPage;
   } else if (path === paths.explore) {
     extraClass = styles.NoHeaderRight;
+  } else if (path === paths.notifications) {
+    extraClass = styles.ExtendedHeaderMain;
   }
 
   return (
