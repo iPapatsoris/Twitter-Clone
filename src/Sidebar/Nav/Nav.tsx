@@ -16,7 +16,7 @@ import listIconActive from "../../assets/icons/nav/list-active.png";
 import { useLocation } from "react-router-dom";
 
 import NavItem from "./NavItem";
-import paths from "../../util/paths";
+import paths, { isNotificationsPage } from "../../util/paths";
 
 const Nav = () => {
   const path = useLocation().pathname;
@@ -36,13 +36,11 @@ const Nav = () => {
       />
       <NavItem
         icon={
-          path === paths.notifications
-            ? notificationIconActive
-            : notificationIcon
+          isNotificationsPage(path) ? notificationIconActive : notificationIcon
         }
         title="Notifications"
-        path={paths.notifications}
-        isActive={path === paths.notifications}
+        path={paths.notifications.self}
+        isActive={isNotificationsPage(path)}
       />
       <NavItem
         icon={path === paths.messages ? messageIconActive : messageIcon}

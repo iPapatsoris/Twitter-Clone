@@ -4,7 +4,7 @@ import HeaderRight from "./Header/HeaderRight/HeaderRight";
 import StickyInbox from "../components/Inbox/StickyInbox/StickyInbox";
 import { Outlet, useLocation } from "react-router-dom";
 import styles from "./Main.module.scss";
-import paths, { useRouteMatch } from "../../util/paths";
+import paths, { isNotificationsPage, useRouteMatch } from "../../util/paths";
 import HeaderHome from "../routes/Home/HeaderHome/HeaderHome";
 import HeaderExplore from "../routes/Explore/HeaderExplore/HeaderExplore";
 import HeaderNotifications from "../routes/Notifications/HeaderNotifications/HeaderNotifications";
@@ -20,7 +20,7 @@ const Main = () => {
   }
 
   let headerLayout;
-  if (path === paths.notifications) {
+  if (isNotificationsPage(path)) {
     headerLayout = (
       <HeaderMainExtension
         headerMainChild={<HeaderNotifications />}

@@ -7,14 +7,34 @@
   text-align: center;
   align-items: center;
 
+  a {
+    display: contents;
+  }
+
   .NotificationCategory {
     flex: 1;
     transition: var(--transition-duration);
     cursor: pointer;
     padding: 1rem;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 15px;
 
     &:hover {
       background-color: rgba(15, 20, 25, 0.1);
+    }
+
+    &::after {
+      height: 1rem;
+      width: 50%;
+      content: "";
+      display: block;
+    }
+
+    &.Active::after {
+      border-bottom: solid var(--primary-color) 4px;
     }
   }
 }

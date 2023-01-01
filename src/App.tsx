@@ -2,7 +2,7 @@ import styles from "./App.module.scss";
 import Main from "./Main/layouts/Main";
 import Sidebar from "./Sidebar/Sidebar";
 import { useLocation } from "react-router-dom";
-import paths, { useRouteMatch } from "./util/paths";
+import paths, { isNotificationsPage, useRouteMatch } from "./util/paths";
 
 const App = () => {
   const isErrorPage = useRouteMatch(paths.error);
@@ -12,7 +12,7 @@ const App = () => {
     extraClass = styles.ErrorPage;
   } else if (path === paths.explore) {
     extraClass = styles.NoHeaderRight;
-  } else if (path === paths.notifications) {
+  } else if (isNotificationsPage(path)) {
     extraClass = styles.ExtendedHeaderMain;
   }
 

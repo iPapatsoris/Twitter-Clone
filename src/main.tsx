@@ -13,13 +13,26 @@ import "./global.css";
 import ErrorPage from "./Main/routes/ErrorPage/ErrorPage";
 import Explore from "./Main/routes/Explore/Explore";
 import paths from "./util/paths";
+import Notifications from "./Main/routes/Notifications/Notifications";
+import NotificationsVerified from "./Main/routes/Notifications/NotificationsVerified";
+import NotificationsMentions from "./Main/routes/Notifications/NotificationsMentions";
+import NotificationsAll from "./Main/routes/Notifications/NotificationsAll";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path={paths.home} element={<Home />} />
       <Route path={paths.explore} element={<Explore />} />
-      <Route path={paths.notifications} />
+      <Route path={paths.notifications.self} element={<Notifications />} />
+      <Route
+        path={paths.notifications.verified}
+        element={<NotificationsVerified />}
+      />
+      <Route
+        path={paths.notifications.mentions}
+        element={<NotificationsMentions />}
+      />
+      {/* <Route index element={<Navigate to={paths.notifications.self} />} /> */}
       <Route path={paths.messages} />
       <Route path={paths.bookmarks} />
       <Route path={paths.lists} />

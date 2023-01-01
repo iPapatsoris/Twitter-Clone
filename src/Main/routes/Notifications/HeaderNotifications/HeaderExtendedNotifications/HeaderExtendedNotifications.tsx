@@ -1,13 +1,43 @@
+import { Link, useLocation } from "react-router-dom";
+import paths from "../../../../../util/paths";
 import styles from "./HeaderExtendedNotifications.module.scss";
 
 interface HeaderExtendedNotificationsProps {}
 
 const HeaderExtendedNotifications = ({}: HeaderExtendedNotificationsProps) => {
+  const path = useLocation().pathname;
   return (
     <div className={styles.NotificationCategories}>
-      <div className={styles.NotificationCategory}>All</div>
-      <div className={styles.NotificationCategory}>Verified</div>
-      <div className={styles.NotificationCategory}>Mentions</div>
+      <Link to={paths.notifications.self}>
+        <div
+          className={[
+            styles.NotificationCategory,
+            path === paths.notifications.self ? styles.Active : "",
+          ].join(" ")}
+        >
+          All
+        </div>
+      </Link>
+      <Link to={paths.notifications.verified}>
+        <div
+          className={[
+            styles.NotificationCategory,
+            path === paths.notifications.verified ? styles.Active : "",
+          ].join(" ")}
+        >
+          Verified
+        </div>
+      </Link>
+      <Link to={paths.notifications.mentions}>
+        <div
+          className={[
+            styles.NotificationCategory,
+            path === paths.notifications.mentions ? styles.Active : "",
+          ].join(" ")}
+        >
+          Mentions
+        </div>
+      </Link>
     </div>
   );
 };

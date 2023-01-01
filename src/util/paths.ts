@@ -3,7 +3,11 @@ import { useMatches } from "react-router-dom";
 const paths: {
   home: string;
   explore: string;
-  notifications: string;
+  notifications: {
+    self: string;
+    verified: string;
+    mentions: string;
+  };
   messages: string;
   bookmarks: string;
   lists: string;
@@ -12,7 +16,11 @@ const paths: {
 } = {
   home: "/home",
   explore: "/explore",
-  notifications: "/notifications",
+  notifications: {
+    self: "/notifications",
+    verified: "/notifications/verified",
+    mentions: "/notifications/mentions",
+  },
   messages: "/messages",
   bookmarks: "/i/bookmarks",
   lists: "/:username/lists",
@@ -30,5 +38,10 @@ export const useRouteMatch = (idToMatch: string) => {
 
   return false;
 };
+
+export const isNotificationsPage = (path: string) =>
+  path === paths.notifications.self ||
+  path === paths.notifications.verified ||
+  path === paths.notifications.mentions;
 
 export default paths;
