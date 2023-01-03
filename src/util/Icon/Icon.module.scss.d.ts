@@ -6,6 +6,7 @@ declare const classNames: typeof globalClassNames & {
   readonly NormalSize: "NormalSize";
   readonly LargeSize: "LargeSize";
   readonly LargeSizeLogo: "LargeSizeLogo";
+  readonly TinySizeLogo: "TinySizeLogo";
   readonly HoverNone: "HoverNone";
   readonly HoverNormal: "HoverNormal";
   readonly HoverPrimary: "HoverPrimary";
@@ -16,6 +17,7 @@ export type IconNames =
   | "NormalSize"
   | "LargeSize"
   | "LargeSizeLogo"
+  | "TinySizeLogo"
   | "HoverNone"
   | "HoverNormal"
   | "HoverPrimary"

@@ -35,6 +35,7 @@
 
     &:not(.Active) {
       color: var(--light-color);
+      font-weight: 500;
     }
 
     &.Active {

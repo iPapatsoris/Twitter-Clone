@@ -11,7 +11,7 @@
     ". sidebar-left header-main   header-right ." var(--header-height)
     ". sidebar-left content-main content-right ." auto
     ". sidebar-left .             sticky-inbox sticky-inbox" auto
-    / 1fr 250px minmax(375px, 2fr) minmax(185px, 1.5fr) 1fr;
+    / 1fr 250px minmax(375px, 2fr) minmax(285px, 1.5fr) 1fr;
 
   // For a similar behavior to the real Twitter,
   // use the column specification below:
