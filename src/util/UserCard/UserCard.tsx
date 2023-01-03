@@ -24,7 +24,7 @@ const UserCard = ({
       <img src={avatar} className={styles.Avatar} />
       <div>
         <div className={styles.Name}>{name}</div>
-        <div>@{username}</div>
+        <div className={styles.Username}>@{username}</div>
       </div>
       <div className={styles.Action}>{children}</div>
     </div>

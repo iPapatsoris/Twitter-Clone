@@ -3,6 +3,7 @@
     Arial, sans-serif;
   --primary-color: rgb(29, 155, 240);
   --primary-color-transparent: rgb(29, 155, 240, 0.1);
+  --light-color: rgb(83, 100, 113);
   --hover-bg: rgba(15, 20, 25, 0.1);
   --section-bg: rgb(239, 243, 244);
   --border: 1px solid var(--section-bg);
