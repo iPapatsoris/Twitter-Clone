@@ -5,4 +5,6 @@
   position: sticky;
   top: 0;
   background-color: white;
+  // For letting it stay above ContentRight during scrolling
+  z-index: 1;
 }

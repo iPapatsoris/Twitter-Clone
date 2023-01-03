@@ -7,6 +7,27 @@ const WhoToFollow = () => {
       <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
       <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
       <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      {/* <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} />
+      <WhoToFollowItem name="Other Cat" username="other-cat" avatar={avatar} /> */}
     </>
   );
 };

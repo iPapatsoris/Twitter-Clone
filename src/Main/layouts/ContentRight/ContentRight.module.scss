@@ -1,4 +1,6 @@
 .ContentRight {
   grid-area: content-right;
   margin-top: 1rem;
+  position: sticky;
+  align-self: start;
 }
