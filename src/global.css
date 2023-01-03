@@ -9,6 +9,7 @@
   --main-content-padding: 16px;
   --bigger-text: 20px;
   --transition-duration: 0.2s;
+  --header-height: 53px;
   box-sizing: border-box;
 }
 
