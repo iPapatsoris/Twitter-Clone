@@ -1,0 +1,15 @@
+.OptionsPopup {
+  box-shadow: var(--box-shadow);
+  border-radius: 16px;
+}
+
+.Option {
+  font-weight: 700;
+  font-size: 15px;
+  padding: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgb(247, 249, 249);
+  }
+}

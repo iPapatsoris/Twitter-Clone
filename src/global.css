@@ -11,6 +11,8 @@
   --bigger-text: 20px;
   --transition-duration: 0.2s;
   --header-height: 53px;
+  --box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px,
+    rgb(101 119 134 / 15%) 0px 0px 3px 1px;
   box-sizing: border-box;
 }
 
