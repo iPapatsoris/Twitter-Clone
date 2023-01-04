@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Icon from "../../util/Icon/Icon";
+import Icon from "../../util/components/Icon/Icon";
 import styles from "./Nav.module.scss";
 interface NavItem {
   icon: string;

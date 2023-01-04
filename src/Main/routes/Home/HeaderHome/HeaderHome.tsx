@@ -1,4 +1,4 @@
-import Icon from "../../../../util/Icon/Icon";
+import Icon from "../../../../util/components/Icon/Icon";
 import sparkIcon from "../../../../assets/icons/spark.png";
 
 const HeaderHome = () => {

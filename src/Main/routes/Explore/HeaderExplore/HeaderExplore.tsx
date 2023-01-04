@@ -1,4 +1,4 @@
-import Icon from "../../../../util/Icon/Icon";
+import Icon from "../../../../util/components/Icon/Icon";
 import Search from "../../../components/Search/Search";
 import styles from "./HeaderExplore.module.scss";
 import settingsIcon from "../../../../assets/icons/settings.png";

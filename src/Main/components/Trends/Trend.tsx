@@ -1,4 +1,4 @@
-import Icon from "../../../util/Icon/Icon";
+import Icon from "../../../util/components/Icon/Icon";
 import DotsIcon from "../../../assets/icons/dots-gray.png";
 import styles from "./Trend.module.scss";
 

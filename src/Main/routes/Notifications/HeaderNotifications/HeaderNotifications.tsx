@@ -1,4 +1,4 @@
-import Icon from "../../../../util/Icon/Icon";
+import Icon from "../../../../util/components/Icon/Icon";
 import settingsIcon from "../../../../assets/icons/settings.png";
 import styles from "./HeaderNotifications.module.scss";
 import stylesHeaderMain from "../../../layouts/Header/HeaderMain/HeaderMain.module.scss";

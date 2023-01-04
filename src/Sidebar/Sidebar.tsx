@@ -2,8 +2,8 @@ import Nav from "./Nav/Nav";
 import logo from "../assets/logo.png";
 import styles from "./Sidebar.module.scss";
 import ProfileButton from "./ProfileButton/ProfileButton";
-import Button from "../util/Button/Button";
-import Icon from "../util/Icon/Icon";
+import Button from "../util/components/Button/Button";
+import Icon from "../util/components/Icon/Icon";
 
 const Sidebar = () => {
   return (

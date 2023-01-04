@@ -1,7 +1,7 @@
 import styles from "./StickyInbox.module.scss";
 import newMessageIcon from "../../../../assets/icons/new-message.png";
 import expandInbox from "../../../../assets/icons/expand-inbox.png";
-import Icon from "../../../../util/Icon/Icon";
+import Icon from "../../../../util/components/Icon/Icon";
 
 const InboxSticky = () => {
   return (

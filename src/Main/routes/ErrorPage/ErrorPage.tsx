@@ -1,4 +1,4 @@
-import Button from "../../../util/Button/Button";
+import Button from "../../../util/components/Button/Button";
 import style from "./ErrorPage.module.scss";
 
 const ErrorPage = () => {

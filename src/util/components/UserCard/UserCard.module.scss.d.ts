@@ -1,6 +1,6 @@
 import globalClassNames, {
   ClassNames as GlobalClassNames,
-} from "../../style.d";
+} from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly UserCard: "UserCard";
   readonly Avatar: "Avatar";

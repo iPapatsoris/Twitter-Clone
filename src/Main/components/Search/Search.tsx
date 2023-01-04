@@ -1,7 +1,7 @@
 import styles from "./Search.module.scss";
 import searchIcon from "../../../assets/icons/search.png";
 import { useRef } from "react";
-import Icon from "../../../util/Icon/Icon";
+import Icon from "../../../util/components/Icon/Icon";
 
 const Search = () => {
   const inputRef = useRef<HTMLInputElement>(null);

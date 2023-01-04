@@ -1,6 +1,6 @@
 import styles from "./SiteInfo.module.scss";
 import { Link } from "react-router-dom";
-import Icon from "../../../util/Icon/Icon";
+import Icon from "../../../util/components/Icon/Icon";
 import dotsIcon from "../../../assets/icons/dots-gray.png";
 
 interface SiteInfoProps {}

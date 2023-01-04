@@ -1,5 +1,7 @@
-import Button from "../../../util/Button/Button";
-import UserCard, { UserCardDetails } from "../../../util/UserCard/UserCard";
+import Button from "../../../util/components/Button/Button";
+import UserCard, {
+  UserCardDetails,
+} from "../../../util/components/UserCard/UserCard";
 
 const WhoToFollowItem = (props: UserCardDetails) => {
   return (
