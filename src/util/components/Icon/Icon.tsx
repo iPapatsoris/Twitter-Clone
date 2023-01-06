@@ -27,7 +27,12 @@ const Icon = ({
   } else if (size === "tiny") {
     sizeClassname = styles.TinySizeLogo;
   }
-  const stylestyles = [styles.Icon, hoverClassname, sizeClassname].join(" ");
+  const stylestyles = [
+    styles.Icon,
+    hoverClassname,
+    sizeClassname,
+    styles.NoHighlighting,
+  ].join(" ");
 
   return <img src={src} title={title} className={stylestyles} />;
 };
