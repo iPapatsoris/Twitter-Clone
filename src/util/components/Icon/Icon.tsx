@@ -1,10 +1,11 @@
 import styles from "./Icon.module.scss";
 
-interface IconProps {
+export interface IconProps {
   src: string;
   title?: string;
   hoverBg?: "normal" | "primary" | "none";
   size?: "normal" | "large" | "largeLogo" | "tiny";
+  onClick?: React.MouseEventHandler<HTMLImageElement>;
 }
 
 const Icon = ({
@@ -12,6 +13,7 @@ const Icon = ({
   title = "",
   hoverBg = "normal",
   size = "normal",
+  onClick = () => {},
 }: IconProps) => {
   let hoverClassname: styles.IconNames = styles.HoverNormal;
   if (hoverBg !== "normal") {
@@ -34,7 +36,9 @@ const Icon = ({
     styles.NoHighlighting,
   ].join(" ");
 
-  return <img src={src} title={title} className={stylestyles} />;
+  return (
+    <img src={src} title={title} onClick={onClick} className={stylestyles} />
+  );
 };
 
 export default Icon;

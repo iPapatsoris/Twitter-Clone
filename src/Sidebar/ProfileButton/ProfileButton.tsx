@@ -3,15 +3,24 @@ import styles from "./ProfileButton.module.scss";
 import avatar from "../../assets/cats/cat2.jpg";
 import dots from "../../assets/icons/dots.png";
 import Icon from "../../util/components/Icon/Icon";
-import OptionsPopup from "../../util/components/OptionsPopup/OptionsPopup";
-import { useState } from "react";
+import OptionsPopup, {
+  activatePopupHandler,
+} from "../../util/components/OptionsPopup/OptionsPopup";
+import { useContext, useRef, useState } from "react";
 import { OptionProps } from "../../util/components/OptionsPopup/Option";
+import { PopupContext } from "../../App";
 
 const ProfileButton = () => {
   const [showOptions, setShowOptions] = useState(false);
-
-  const onClick = () => {
-    setShowOptions(!showOptions);
+  const { setDisableOuterPointerEvents } = useContext(PopupContext);
+  // TODO: Correct TS for event
+  const onClick = (e: any) => {
+    activatePopupHandler({
+      e,
+      isActivePopup: showOptions,
+      setIsActivePopup: setShowOptions,
+      setDisableOuterPointerEvents,
+    });
   };
 
   const options: Array<OptionProps> = [
@@ -23,12 +32,19 @@ const ProfileButton = () => {
     },
   ];
 
+  const ref = useRef(null);
+
   return (
     <div
+      ref={ref}
       onClick={onClick}
       className={[styles.ProfileButton, styles.NoHighlighting].join(" ")}
     >
-      <OptionsPopup options={options} isVisible={showOptions} />
+      {showOptions && (
+        <div>
+          <OptionsPopup options={options} setIsActive={setShowOptions} />
+        </div>
+      )}
       <UserCard
         name="Toulouse"
         username="toulouse-cat"

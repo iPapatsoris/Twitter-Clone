@@ -1,3 +1,10 @@
+// Needed so that popup doesn't push other flex items below it
+.NoFlexItem {
+  height: 0;
+  padding: 0;
+  z-index: 10;
+}
+
 .Trend {
   display: flex;
 

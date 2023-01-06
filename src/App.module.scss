@@ -42,4 +42,8 @@
       ". sidebar-left error error ."
       ". sidebar-left error error .";
   }
+
+  &.DisablePointerEvents {
+    pointer-events: none;
+  }
 }
