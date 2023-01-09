@@ -24,12 +24,11 @@ const Trend = () => {
     });
   };
 
-  const sadFaceIconComp = <Icon src={sadFaceIcon} hoverBg="none" />;
   const options: Array<OptionProps> = [
     {
       mainOption: {
         component: (
-          <IconAndTitle icon={sadFaceIconComp} title="Not interested in this" />
+          <IconAndTitle icon={sadFaceIcon} title="Not interested in this" />
         ),
         id: "notInterested",
       },
@@ -38,7 +37,7 @@ const Trend = () => {
       mainOption: {
         component: (
           <IconAndTitle
-            icon={sadFaceIconComp}
+            icon={sadFaceIcon}
             title="This trend is harmful or spammy"
           />
         ),
