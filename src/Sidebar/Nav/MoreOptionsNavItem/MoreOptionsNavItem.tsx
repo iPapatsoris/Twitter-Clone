@@ -28,10 +28,12 @@ const MoreOptionsNavItem = ({ navItem }: MoreOptionsNavItemProps) => {
       <div onClick={onClick}>{navItem}</div>
       {showOptions && (
         <div className={styles.NoFlexItem}>
-          <OptionsPopup
-            options={navMoreOptionsList}
-            setIsActive={setShowOptions}
-          />
+          <div className={styles.Wrapper}>
+            <OptionsPopup
+              options={navMoreOptionsList}
+              setIsActive={setShowOptions}
+            />
+          </div>
         </div>
       )}
     </>
