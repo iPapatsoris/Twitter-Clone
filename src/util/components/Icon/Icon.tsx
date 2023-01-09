@@ -4,7 +4,7 @@ export interface IconProps {
   src: string;
   title?: string;
   hoverBg?: "normal" | "primary" | "none";
-  size?: "normal" | "large" | "largeLogo" | "tiny";
+  size?: "normal" | "large" | "largeMoreOptions" | "largeLogo" | "tiny";
   onClick?: React.MouseEventHandler<HTMLImageElement>;
 }
 
@@ -26,6 +26,8 @@ const Icon = ({
     sizeClassname = styles.LargeSize;
   } else if (size === "largeLogo") {
     sizeClassname = styles.LargeSizeLogo;
+  } else if (size === "largeMoreOptions") {
+    sizeClassname = styles.LargeSizeMoreOption;
   } else if (size === "tiny") {
     sizeClassname = styles.TinySizeLogo;
   }

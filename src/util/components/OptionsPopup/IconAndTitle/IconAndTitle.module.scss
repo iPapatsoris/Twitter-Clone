@@ -2,4 +2,14 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
+
+  &.Large {
+    font-size: 20px;
+    gap: 1.5rem;
+  }
+
+  &.Small {
+    font-weight: 500;
+    gap: 1rem;
+  }
 }

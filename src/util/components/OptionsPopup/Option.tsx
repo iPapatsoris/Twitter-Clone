@@ -1,3 +1,5 @@
+import Icon from "../Icon/Icon";
+import downArrowIcon from "../../../assets/icons/options/down-arrow.png";
 import styles from "./OptionsPopup.module.scss";
 
 interface SimpleOption {
@@ -5,13 +7,29 @@ interface SimpleOption {
   id: string;
 }
 
-export interface OptionProps {
+export interface OptionType {
   mainOption: SimpleOption;
   nestedOptions?: Array<SimpleOption>;
+  showNestedOptions?: boolean;
 }
 
-const Option = ({ mainOption, nestedOptions }: OptionProps) => {
-  return <div className={styles.Option}>{mainOption.component}</div>;
+export interface OptionProps extends OptionType {
+  onClick?: React.MouseEventHandler;
+}
+
+const Option = ({ mainOption, nestedOptions, onClick }: OptionProps) => {
+  const hasNestedOptions = nestedOptions && nestedOptions.length;
+
+  return (
+    <div className={styles.Option} onClick={onClick}>
+      {mainOption.component}
+      {hasNestedOptions && (
+        <div className={styles.PushRight}>
+          <Icon src={downArrowIcon} hoverBg="none" />
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Option;

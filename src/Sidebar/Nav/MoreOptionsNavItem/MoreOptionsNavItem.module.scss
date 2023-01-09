@@ -1,0 +1,8 @@
+// Used as a phantom container for popup, to place it where we want
+// in the navigation bar, but without making it a flex item
+// (thus not pushing items around)
+.NoFlexItem {
+  height: 0;
+  z-index: 10;
+  order: 4 !important;
+}

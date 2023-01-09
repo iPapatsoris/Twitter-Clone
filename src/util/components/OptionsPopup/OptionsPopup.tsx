@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import useClickOutsidePopup from "../../hooks/useClickOutsidePopup";
-import Option, { OptionProps } from "./Option";
+import Option, { OptionProps, OptionType } from "./Option";
 import styles from "./OptionsPopup.module.scss";
 
 interface OptionsPopupProps {
@@ -8,12 +8,48 @@ interface OptionsPopupProps {
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const OptionsPopup = ({ options, setIsActive }: OptionsPopupProps) => {
+const OptionsPopup = ({
+  options: optionProps,
+  setIsActive,
+}: OptionsPopupProps) => {
+  const initialOptions = optionProps.map((option) => ({
+    ...option,
+    showNestedOptions: false,
+  }));
+  const [options, setOptions] = useState<Array<OptionType>>(initialOptions);
   const popupRef = useRef<HTMLDivElement>(null);
   useClickOutsidePopup({ popupRef, setIsActive });
 
+  const handleOptionClick = (id: string) => {
+    const index = options.findIndex((option) => option.mainOption.id === id);
+    const option = options[index];
+    if (option.nestedOptions) {
+      const newOptions = [...options];
+      newOptions[index].showNestedOptions =
+        !newOptions[index].showNestedOptions;
+      setOptions(newOptions);
+    }
+  };
+
   const optionsJSX = options.map((option) => {
-    return <Option key={option.mainOption.id} {...option} />;
+    let nestedOptionsJSX: Array<React.ReactElement> = [];
+    if (option.nestedOptions && option.showNestedOptions) {
+      nestedOptionsJSX = option.nestedOptions?.map((nested) => (
+        <Option
+          mainOption={{ component: nested.component, id: nested.id }}
+          key={nested.id}
+        />
+      ));
+    }
+
+    return [
+      <Option
+        {...option}
+        key={option.mainOption.id}
+        onClick={() => handleOptionClick(option.mainOption.id)}
+      />,
+      ...nestedOptionsJSX,
+    ];
   });
 
   return (

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Icon from "../../util/components/Icon/Icon";
+import MoreOptionsNavItem from "./MoreOptionsNavItem/MoreOptionsNavItem";
 import styles from "./Nav.module.scss";
 interface NavItem {
   icon: string;
@@ -21,7 +22,7 @@ const NavItem = ({
   );
 
   const item = (
-    <div className={styles.IconAndTitleWrapper}>
+    <div className={styles.NavItem}>
       <div className={styles.IconAndTitle}>
         <Icon src={icon} size="large" hoverBg="none" />
         <span className={navItemClass}>{title}</span>
@@ -29,7 +30,11 @@ const NavItem = ({
     </div>
   );
 
-  return isPopup ? <div>{item}</div> : <Link to={path}>{item}</Link>;
+  return isPopup ? (
+    <MoreOptionsNavItem navItem={item} />
+  ) : (
+    <Link to={path}>{item}</Link>
+  );
 };
 
 export default NavItem;
