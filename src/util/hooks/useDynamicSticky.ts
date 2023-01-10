@@ -6,9 +6,13 @@ const useDynamicSticky = (ref: RefObject<HTMLDivElement>) => {
       return;
     }
 
-    const height = ref.current.offsetHeight;
-    ref.current.style.top = (-1 * height + 825).toString() + "px";
-  }, []);
+    const elementHeight = ref.current.offsetHeight;
+    const windowHeight = window.innerHeight;
+    const whitespaceBottom = 100;
+    ref.current.style.top =
+      (-1 * elementHeight + (windowHeight - whitespaceBottom)).toString() +
+      "px";
+  }, [ref]);
 };
 
 export default useDynamicSticky;
