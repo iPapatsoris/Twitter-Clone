@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { PopupContext } from "../../App";
 import { OptionsPopupProps } from "../components/OptionsPopup/OptionsPopup";
 import useWindowDimensions from "./useWindowDimensions";
@@ -18,9 +18,13 @@ const usePopup = (
   } = params;
   console.log("usePopup");
 
+  // Listen to window height updates to handle resizing
   const { height: windowHeight } = useWindowDimensions(autoMaxHeight);
   const { setDisableOuterPointerEvents } = useContext(PopupContext);
-
+  // Used to fire effect of dynamic max-height calculation after
+  // effect of popup placement has occured
+  const [popupIsPlaced, setPopupIsPlaced] = useState(false);
+  console.log("popupIsPlaced is ", popupIsPlaced);
   // Place popup in relation to targetAreaRef according to position
   useEffect(() => {
     console.log("useEffect to place popup B4 condition");
@@ -37,12 +41,14 @@ const usePopup = (
         popupRef.current.style.top = targetTop;
       } else if (position === "top") {
         // popupRef.current.style.bottom = targetTop;
+        console.log(popupRef.current.getBoundingClientRect().height);
         popupRef.current.style.top =
           (
             targetAreaRef.current.offsetTop -
             popupRef.current.getBoundingClientRect().height
           ).toString() + "px";
       }
+      setPopupIsPlaced(true);
     }
   }, [isActive, popupRef, targetAreaRef, position]);
 
@@ -50,7 +56,13 @@ const usePopup = (
   // off screen. Adjust on window resizing.
   useEffect(() => {
     console.log("useEffect for max-height TEST condition");
-    if (autoMaxHeight && isActive && popupRef && popupRef.current) {
+    if (
+      autoMaxHeight &&
+      popupIsPlaced &&
+      isActive &&
+      popupRef &&
+      popupRef.current
+    ) {
       console.log("useEffect for max-height AFTER condition");
       console.log(windowHeight);
       console.log(popupRef.current.getBoundingClientRect().top);
@@ -59,7 +71,7 @@ const usePopup = (
           windowHeight - popupRef.current.getBoundingClientRect().top
         ).toString() + "px";
     }
-  }, [isActive, windowHeight, autoMaxHeight, popupRef]);
+  }, [popupIsPlaced, isActive, windowHeight, autoMaxHeight, popupRef]);
 
   // Detect clicking outside of popup area to disable it
   useEffect(() => {
