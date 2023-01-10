@@ -18,7 +18,7 @@ const usePopup = (
   } = params;
   console.log("usePopup");
 
-  const { height: windowHeight } = useWindowDimensions(autoMaxHeight); // come later?
+  const { height: windowHeight } = useWindowDimensions(autoMaxHeight);
   const { setDisableOuterPointerEvents } = useContext(PopupContext);
 
   // Place popup in relation to targetAreaRef according to position

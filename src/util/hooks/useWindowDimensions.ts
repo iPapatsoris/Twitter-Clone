@@ -1,25 +1,25 @@
 import { useState, useEffect } from "react";
 
-function getWindowDimensions() {
+const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
   return {
     width,
     height,
   };
-}
+};
 
 // Retrieve window size
-export default function useWindowDimensions(doListen: boolean) {
+const useWindowDimensions = (doListen: boolean) => {
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
   );
 
   useEffect(() => {
-    console.log("resize hook");
+    console.log("useWindowDimension");
     if (doListen) {
-      function handleResize() {
+      const handleResize = () => {
         setWindowDimensions(getWindowDimensions());
-      }
+      };
 
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
@@ -27,4 +27,6 @@ export default function useWindowDimensions(doListen: boolean) {
   }, [doListen]);
 
   return windowDimensions;
-}
+};
+
+export default useWindowDimensions;
