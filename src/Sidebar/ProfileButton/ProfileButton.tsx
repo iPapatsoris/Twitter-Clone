@@ -32,18 +32,23 @@ const ProfileButton = () => {
     },
   ];
 
-  const ref = useRef(null);
+  const profileButtonRef = useRef(null);
 
   return (
     <div
-      ref={ref}
+      ref={profileButtonRef}
       onClick={onClick}
       className={[styles.ProfileButton, styles.NoHighlighting].join(" ")}
     >
       {showOptions && (
-        <div>
-          <OptionsPopup options={options} setIsActive={setShowOptions} />
-        </div>
+        <OptionsPopup
+          options={options}
+          setIsActive={setShowOptions}
+          isActive={showOptions}
+          targetAreaRef={profileButtonRef}
+          position="top"
+          extraStyles={[styles.PopupStyles]}
+        />
       )}
       <UserCard
         name="Toulouse"

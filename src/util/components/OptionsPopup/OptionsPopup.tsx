@@ -1,25 +1,46 @@
 import React, { useRef, useState } from "react";
-import useClickOutsidePopup from "../../hooks/useClickOutsidePopup";
+import usePopup, { PopupPosition } from "../../hooks/usePopup";
 import Option, { OptionProps, OptionType } from "./Option";
 import styles from "./OptionsPopup.module.scss";
 
+// TODO: document usage
 interface OptionsPopupProps {
   options: Array<OptionProps>;
+  isActive: boolean;
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
+  targetAreaRef: React.RefObject<HTMLDivElement>;
+  position?: PopupPosition;
+  autoMaxHeight?: boolean;
+  extraStyles?: Array<string>;
 }
 
 const OptionsPopup = ({
   options: optionProps,
+  isActive,
   setIsActive,
+  targetAreaRef,
+  position = "middle",
+  autoMaxHeight = false,
+  extraStyles = [],
 }: OptionsPopupProps) => {
   const initialOptions = optionProps.map((option) => ({
     ...option,
+    targetAreaRef,
     showNestedOptions: false,
   }));
   const [options, setOptions] = useState<Array<OptionType>>(initialOptions);
   const popupRef = useRef<HTMLDivElement>(null);
-  useClickOutsidePopup({ popupRef, setIsActive });
 
+  usePopup({
+    popupRef,
+    targetAreaRef,
+    position,
+    isActive,
+    setIsActive,
+    autoMaxHeight,
+  });
+
+  // Toggle nested options visibility for clicked option
   const handleOptionClick = (id: string) => {
     const index = options.findIndex((option) => option.mainOption.id === id);
     const option = options[index];
@@ -53,7 +74,11 @@ const OptionsPopup = ({
   });
 
   return (
-    <div ref={popupRef} className={styles.OptionsPopup}>
+    <div
+      id="popup"
+      ref={popupRef}
+      className={[styles.OptionsPopup, ...extraStyles].join(" ")}
+    >
       {optionsJSX}
     </div>
   );

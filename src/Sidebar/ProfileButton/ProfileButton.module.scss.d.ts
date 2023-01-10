@@ -3,6 +3,10 @@ import globalClassNames, {
 } from "../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly ProfileButton: "ProfileButton";
+  readonly PopupStyles: "PopupStyles";
 };
 export = classNames;
-export type ProfileButtonNames = "ProfileButton" | GlobalClassNames;
+export type ProfileButtonNames =
+  | "ProfileButton"
+  | "PopupStyles"
+  | GlobalClassNames;

@@ -31,7 +31,7 @@ const NavItem = ({
   );
 
   return isPopup ? (
-    <MoreOptionsNavItem navItem={item} />
+    <MoreOptionsNavItem>{item}</MoreOptionsNavItem>
   ) : (
     <Link to={path}>{item}</Link>
   );

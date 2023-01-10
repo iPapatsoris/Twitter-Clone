@@ -17,9 +17,11 @@ import { useLocation } from "react-router-dom";
 
 import NavItem from "./NavItem";
 import paths, { isNotificationsPage } from "../../util/paths";
+import { useRef } from "react";
 
 const Nav = () => {
   const path = useLocation().pathname;
+
   return (
     <nav>
       <NavItem

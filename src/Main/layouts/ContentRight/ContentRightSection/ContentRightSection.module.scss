@@ -12,13 +12,13 @@
     cursor: auto;
   }
 
-  & > * {
+  & > :not(:global(#popup)) {
     padding-block: 0.8rem;
     padding-inline: 1rem;
     transition: var(--transition-duration);
   }
 
-  & > :not(:first-child):hover {
+  & > :not(:first-child):not(:global(#popup)):hover {
     background-color: rgb(0, 0, 0, 0.03);
   }
 

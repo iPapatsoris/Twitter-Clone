@@ -28,15 +28,4 @@ nav {
     width: 26px;
     height: 26px;
   }
-
-  display: flex;
-  flex-direction: column;
-
-  // Give an order to flex items, to be able to place popup where we want
-  // in the flex list
-  @for $i from 1 through 10 {
-    & > :nth-child(#{$i}) {
-      order: $i;
-    }
-  }
 }
