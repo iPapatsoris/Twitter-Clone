@@ -1,16 +1,23 @@
 import React, { useRef, useState } from "react";
-import usePopup, { PopupPosition } from "../../hooks/usePopup";
+import usePopup from "../../hooks/usePopup";
 import Option, { OptionProps, OptionType } from "./Option";
 import styles from "./OptionsPopup.module.scss";
 
-// TODO: document usage
-interface OptionsPopupProps {
+export interface OptionsPopupProps {
+  // Options for the popup. Nested options are supported that expand it
   options: Array<OptionProps>;
+  // State controlled by outer components
   isActive: boolean;
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
+  // Where to place popup
   targetAreaRef: React.RefObject<HTMLDivElement>;
-  position?: PopupPosition;
+  // Fine tuning of position (above, below, etc)
+  position?: "middle" | "top";
+  // If true, max-height property is set dynamically so that a scroll bar is
+  // introduced if popup exceeds beyond the viewport. Useful when popup is
+  // positioned under a sticky or fixed context.
   autoMaxHeight?: boolean;
+  // Allow custom styling
   extraStyles?: Array<string>;
 }
 
