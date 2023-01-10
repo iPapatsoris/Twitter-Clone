@@ -1,17 +1,13 @@
 import React, { useContext, useEffect } from "react";
 import { PopupContext } from "../../App";
+import { OptionsPopupProps } from "../components/OptionsPopup/OptionsPopup";
 import useWindowDimensions from "./useWindowDimensions";
 
-export type PopupPosition = "middle" | "top";
-
-const usePopup = (params: {
-  popupRef: React.RefObject<HTMLDivElement>;
-  targetAreaRef: React.RefObject<HTMLDivElement>;
-  position?: PopupPosition;
-  isActive: boolean;
-  setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
-  autoMaxHeight?: boolean;
-}) => {
+const usePopup = (
+  params: Omit<OptionsPopupProps, "options" | "extraStyles"> & {
+    popupRef: React.RefObject<HTMLDivElement>;
+  }
+) => {
   const {
     popupRef,
     targetAreaRef,
@@ -22,7 +18,7 @@ const usePopup = (params: {
   } = params;
   console.log("usePopup");
 
-  const { height: windowHeight } = useWindowDimensions(autoMaxHeight);
+  const { height: windowHeight } = useWindowDimensions(autoMaxHeight); // come later?
   const { setDisableOuterPointerEvents } = useContext(PopupContext);
 
   // Place popup in relation to targetAreaRef according to position
@@ -48,7 +44,7 @@ const usePopup = (params: {
           ).toString() + "px";
       }
     }
-  }, [isActive]);
+  }, [isActive, popupRef, targetAreaRef, position]);
 
   // Limit popup's max-height to the max available space just before it goes
   // off screen. Adjust on window resizing.
@@ -63,7 +59,7 @@ const usePopup = (params: {
           windowHeight - popupRef.current.getBoundingClientRect().top
         ).toString() + "px";
     }
-  }, [isActive, windowHeight]);
+  }, [isActive, windowHeight, autoMaxHeight, popupRef]);
 
   // Detect clicking outside of popup area to disable it
   useEffect(() => {
@@ -82,8 +78,8 @@ const usePopup = (params: {
     };
 
     window.addEventListener("click", handleClick);
-    return () => removeEventListener("click", handleClick);
-  }, []);
+    return () => window.removeEventListener("click", handleClick);
+  }, [popupRef, setDisableOuterPointerEvents, setIsActive]);
 };
 
 export default usePopup;

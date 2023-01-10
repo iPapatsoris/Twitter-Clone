@@ -8,15 +8,14 @@ function getWindowDimensions() {
   };
 }
 
+// Retrieve window size
 export default function useWindowDimensions(doListen: boolean) {
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
   );
 
-  // Do not listen to resizing events if doListen is false.
-  // Do not start listening if doListen becomes true.
-  // Only listen if doListen is true from the beginning.
   useEffect(() => {
+    console.log("resize hook");
     if (doListen) {
       function handleResize() {
         setWindowDimensions(getWindowDimensions());
@@ -25,7 +24,7 @@ export default function useWindowDimensions(doListen: boolean) {
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
     }
-  }, []);
+  }, [doListen]);
 
   return windowDimensions;
 }
