@@ -15,8 +15,10 @@ const useDynamicSticky = (ref: RefObject<HTMLDivElement>) => {
     const elementHeight = ref.current.offsetHeight;
     const whitespaceBottom = 100;
     ref.current.style.top =
-      (-1 * elementHeight + (windowHeight - whitespaceBottom)).toString() +
-      "px";
+      elementHeight <= windowHeight
+        ? "0"
+        : (-1 * elementHeight + (windowHeight - whitespaceBottom)).toString() +
+          "px";
   }, [ref, windowHeight]);
 };
 

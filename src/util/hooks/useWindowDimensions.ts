@@ -15,7 +15,6 @@ const useWindowDimensions = (doListen: boolean) => {
   );
 
   useEffect(() => {
-    console.log("useWindowDimension");
     if (doListen) {
       const handleResize = () => {
         setWindowDimensions(getWindowDimensions());
