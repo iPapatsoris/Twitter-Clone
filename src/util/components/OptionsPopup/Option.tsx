@@ -25,7 +25,7 @@ const Option = ({ mainOption, nestedOptions, onClick }: OptionProps) => {
       {mainOption.component}
       {hasNestedOptions && (
         <div className={styles.PushRight}>
-          <Icon src={downArrowIcon} hoverBg="none" />
+          <Icon src={downArrowIcon} hoverBg="none" alt="Expand option" />
         </div>
       )}
     </div>

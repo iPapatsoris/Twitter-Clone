@@ -2,9 +2,10 @@ import { Link } from "react-router-dom";
 import Icon from "../../util/components/Icon/Icon";
 import MoreOptionsNavItem from "./MoreOptionsNavItem/MoreOptionsNavItem";
 import styles from "./Nav.module.scss";
-interface NavItem {
+interface NavItemProps {
   icon: string;
   title: string;
+  alt: string;
   path?: string;
   isActive?: boolean;
   isPopup?: boolean;
@@ -13,10 +14,11 @@ interface NavItem {
 const NavItem = ({
   icon,
   title,
+  alt,
   path = "/error",
   isActive = false,
   isPopup = false,
-}: NavItem) => {
+}: NavItemProps) => {
   const navItemClass = [styles.BiggerText, isActive ? styles.Bold : ""].join(
     " "
   );
@@ -24,7 +26,7 @@ const NavItem = ({
   const item = (
     <div className={styles.NavItem}>
       <div className={styles.IconAndTitle}>
-        <Icon src={icon} size="large" hoverBg="none" />
+        <Icon src={icon} size="large" hoverBg="none" alt={alt} />
         <span className={navItemClass}>{title}</span>
       </div>
     </div>

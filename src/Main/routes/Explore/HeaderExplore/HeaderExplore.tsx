@@ -12,7 +12,7 @@ const HeaderExplore = (props: HeaderExploreProps) => {
         <Search />
       </div>
       <div className={styles.PushRight}>
-        <Icon src={settingsIcon} title="Settings" />
+        <Icon src={settingsIcon} title="Settings" alt="Settings" />
       </div>
     </>
   );

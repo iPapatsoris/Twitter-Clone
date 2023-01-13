@@ -14,7 +14,7 @@ const HeaderNotifications = (props: HeaderNotificationsProps) => {
     >
       <h2>Notifications</h2>
       <div className="PushRight">
-        <Icon src={settingsIcon} title="Settings" />
+        <Icon src={settingsIcon} title="Settings" alt="Settings" />
       </div>
     </div>
   );

@@ -9,11 +9,16 @@ const Sidebar = () => {
   return (
     <header className={styles.Sidebar}>
       <div className={styles.Logo}>
-        <Icon src={logo} hoverBg="primary" size="largeLogo" />
+        <Icon
+          src={logo}
+          hoverBg="primary"
+          size="largeLogo"
+          alt="Twitter logo"
+        />
       </div>
       <Nav />
       <div className={styles.TweetButton}>
-        <Button style="large" largeFont stretch>
+        <Button size="large" largeFont stretch>
           Tweet
         </Button>
       </div>

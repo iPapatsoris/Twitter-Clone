@@ -3,6 +3,7 @@ import styles from "./Icon.module.scss";
 export interface IconProps {
   src: string;
   title?: string;
+  alt?: string;
   hoverBg?: "normal" | "primary" | "none";
   size?: "normal" | "large" | "largeMoreOptions" | "largeLogo" | "tiny";
   onClick?: React.MouseEventHandler<HTMLImageElement>;
@@ -11,6 +12,7 @@ export interface IconProps {
 const Icon = ({
   src,
   title = "",
+  alt = "",
   hoverBg = "normal",
   size = "normal",
   onClick = () => {},
@@ -39,7 +41,13 @@ const Icon = ({
   ].join(" ");
 
   return (
-    <img src={src} title={title} onClick={onClick} className={stylestyles} />
+    <img
+      src={src}
+      title={title}
+      alt={alt}
+      onClick={onClick}
+      className={stylestyles}
+    />
   );
 };
 

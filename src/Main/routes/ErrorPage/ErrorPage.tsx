@@ -5,7 +5,7 @@ const ErrorPage = () => {
   return (
     <div className={style.ErrorPage}>
       <p>Hmm...this page doesn’t exist. Try searching for something else.</p>
-      <Button style="medium">Search</Button>
+      <Button size="medium">Search</Button>
     </div>
   );
 };

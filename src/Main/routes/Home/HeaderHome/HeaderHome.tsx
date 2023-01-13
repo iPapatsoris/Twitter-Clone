@@ -6,7 +6,7 @@ const HeaderHome = () => {
     <>
       <h2>Home</h2>
       <div className="PushRight">
-        <Icon src={sparkIcon} title="Top Tweets" />
+        <Icon src={sparkIcon} title="Top Tweets" alt="Top tweets" />
       </div>
     </>
   );

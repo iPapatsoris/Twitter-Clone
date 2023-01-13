@@ -9,8 +9,12 @@ const InboxSticky = () => {
       <div className={styles.InboxStickyContent}>
         <h3 className={styles.BiggerText}>Messages</h3>
         <div className={styles.PushRight}>
-          <Icon src={newMessageIcon} title="New message" />
-          <Icon src={expandInbox} title="Expand" />
+          <Icon
+            src={newMessageIcon}
+            title="New message"
+            alt="Compose message"
+          />
+          <Icon src={expandInbox} title="Expand" alt="Inbox options" />
         </div>
       </div>
     </div>

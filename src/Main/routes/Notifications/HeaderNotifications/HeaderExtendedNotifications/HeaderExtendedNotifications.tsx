@@ -2,9 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import paths from "../../../../../util/paths";
 import styles from "./HeaderExtendedNotifications.module.scss";
 
-interface HeaderExtendedNotificationsProps {}
-
-const HeaderExtendedNotifications = ({}: HeaderExtendedNotificationsProps) => {
+const HeaderExtendedNotifications = () => {
   const path = useLocation().pathname;
   return (
     <div className={styles.NotificationCategories}>

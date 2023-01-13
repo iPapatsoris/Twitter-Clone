@@ -21,7 +21,7 @@ const UserCard = ({
 
   return (
     <div className={[styles.UserCard, extraClass].join(" ")}>
-      <img src={avatar} className={styles.Avatar} />
+      <img src={avatar} className={styles.Avatar} alt="User avatar" />
       <div>
         <div className={styles.Name}>{name}</div>
         <div className={styles.Username}>@{username}</div>

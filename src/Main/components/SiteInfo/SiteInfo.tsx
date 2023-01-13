@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 import Icon from "../../../util/components/Icon/Icon";
 import dotsIcon from "../../../assets/icons/dots-gray.png";
 
-interface SiteInfoProps {}
-
-const SiteInfo = ({}: SiteInfoProps) => {
+const SiteInfo = () => {
   return (
     <div className={styles.SiteInfo}>
       <Link to={""}>
@@ -26,7 +24,7 @@ const SiteInfo = ({}: SiteInfoProps) => {
       </Link>
       <span className={styles.More}>
         More
-        <Icon src={dotsIcon} hoverBg="none" size="tiny" />
+        <Icon src={dotsIcon} hoverBg="none" size="tiny" alt="More options" />
       </span>
       <br />
       <span className={styles.Copyright}>© 2023 Twitter, Inc.</span>

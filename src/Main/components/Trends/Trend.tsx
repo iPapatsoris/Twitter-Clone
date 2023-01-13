@@ -67,6 +67,7 @@ const Trend = () => {
           <Icon
             src={DotsIcon}
             title="More"
+            alt="More options"
             hoverBg="primary"
             onClick={onClick}
           />

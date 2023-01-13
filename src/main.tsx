@@ -16,7 +16,6 @@ import paths from "./util/paths";
 import Notifications from "./Main/routes/Notifications/Notifications";
 import NotificationsVerified from "./Main/routes/Notifications/NotificationsVerified";
 import NotificationsMentions from "./Main/routes/Notifications/NotificationsMentions";
-import NotificationsAll from "./Main/routes/Notifications/NotificationsAll";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
