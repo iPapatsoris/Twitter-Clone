@@ -4,6 +4,7 @@ import Sidebar from "./Sidebar/Sidebar";
 import { useLocation } from "react-router-dom";
 import paths, { isNotificationsPage, useRouteMatch } from "./util/paths";
 import React, { createContext, SetStateAction, useMemo, useState } from "react";
+import useScrollToTop from "./util/hooks/useScrollToTop";
 
 export const PopupContext = createContext<{
   disableOuterPointerEvents: boolean;
@@ -16,6 +17,7 @@ export const PopupContext = createContext<{
 const App = () => {
   const isErrorPage = useRouteMatch(paths.error);
   const path = useLocation().pathname;
+  useScrollToTop();
 
   // To use when a popup becomes active
   const [disableOuterPointerEvents, setDisableOuterPointerEvents] =
