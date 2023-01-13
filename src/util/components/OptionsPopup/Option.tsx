@@ -17,7 +17,12 @@ export interface OptionProps extends OptionType {
   onClick?: React.MouseEventHandler;
 }
 
-const Option = ({ mainOption, nestedOptions, onClick }: OptionProps) => {
+const Option = ({
+  mainOption,
+  nestedOptions,
+  showNestedOptions,
+  onClick,
+}: OptionProps) => {
   const hasNestedOptions = nestedOptions && nestedOptions.length;
 
   return (
@@ -25,7 +30,15 @@ const Option = ({ mainOption, nestedOptions, onClick }: OptionProps) => {
       {mainOption.component}
       {hasNestedOptions && (
         <div className={styles.PushRight}>
-          <Icon src={downArrowIcon} hover="none" alt="Expand option" />
+          <Icon
+            src={downArrowIcon}
+            hover="none"
+            alt="Expand option"
+            extraStyles={[
+              styles.Icon,
+              showNestedOptions ? styles.RotateIcon : "",
+            ]}
+          />
         </div>
       )}
     </div>

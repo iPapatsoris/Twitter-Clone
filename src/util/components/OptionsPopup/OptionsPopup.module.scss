@@ -15,6 +15,14 @@
   cursor: pointer;
   display: flex;
 
+  .Icon {
+    transition-duration: 100ms;
+  }
+
+  .RotateIcon {
+    transform: rotate(-180deg);
+  }
+
   &:hover {
     background-color: rgb(247, 249, 249);
   }

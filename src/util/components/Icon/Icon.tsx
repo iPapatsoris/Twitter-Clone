@@ -35,7 +35,7 @@ const Icon = ({
           styles.Icon,
           styles.NoHighlighting,
           hoverClassname,
-          extraStyles,
+          ...extraStyles,
         ].join(" ")}
       />
     </div>

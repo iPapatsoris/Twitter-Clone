@@ -4,6 +4,13 @@ import globalClassNames, {
 declare const classNames: typeof globalClassNames & {
   readonly OptionsPopup: "OptionsPopup";
   readonly Option: "Option";
+  readonly Icon: "Icon";
+  readonly RotateIcon: "RotateIcon";
 };
 export = classNames;
-export type OptionsPopupNames = "OptionsPopup" | "Option" | GlobalClassNames;
+export type OptionsPopupNames =
+  | "OptionsPopup"
+  | "Option"
+  | "Icon"
+  | "RotateIcon"
+  | GlobalClassNames;
