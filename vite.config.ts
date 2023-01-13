@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import sassDts from "vite-plugin-sass-dts";
 import path from "path";
+import eslint from "vite-plugin-eslint";
 
 export default defineConfig({
   css: {
@@ -34,6 +35,9 @@ export default defineConfig({
           return `${spilittedFileName[0]}Names`;
         },
       },
+    }),
+    eslint({
+      // failOnWarning: true,
     }),
   ],
 });
