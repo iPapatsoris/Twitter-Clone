@@ -9,20 +9,20 @@ const getWindowDimensions = () => {
 };
 
 // Retrieve window size
-const useWindowDimensions = (doListen: boolean) => {
+const useWindowDimensions = (doListen: boolean = true) => {
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
   );
 
   useEffect(() => {
+    const handleResize = () => {
+      setWindowDimensions(getWindowDimensions());
+    };
     if (doListen) {
-      const handleResize = () => {
-        setWindowDimensions(getWindowDimensions());
-      };
-
       window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
     }
+
+    return () => window.removeEventListener("resize", handleResize);
   }, [doListen]);
 
   return windowDimensions;

@@ -24,7 +24,11 @@ const usePopup = (
   // effect of popup placement has occured.
   const [justPlacedPopup, setJustPlacedPopup] = useState(false);
 
-  // Place popup in relation to targetAreaRef according to position
+  // Place popup in relation to targetAreaRef according to position.
+  // This is needed because we place with absolute positioning, to allow the
+  // programmer to put it where they want in relation to another element,
+  // without disrupting the content flow when it appears
+  // (e.g. pushing other content down)
   useEffect(() => {
     if (
       isActive &&
@@ -90,6 +94,7 @@ const usePopup = (
     };
 
     window.addEventListener("click", handleClick);
+
     return () => window.removeEventListener("click", handleClick);
   }, [popupRef, setDisableOuterPointerEvents, setIsActive]);
 };
