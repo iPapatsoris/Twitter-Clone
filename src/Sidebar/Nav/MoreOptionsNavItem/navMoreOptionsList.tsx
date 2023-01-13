@@ -15,7 +15,14 @@ import { OptionType } from "../../../util/components/OptionsPopup/Option";
 export const navMoreOptionsList: Array<OptionType> = [
   {
     mainOption: {
-      component: <IconAndTitle title="Topics" icon={topicsIcon} size="large" />,
+      component: (
+        <IconAndTitle
+          title="Topics"
+          alt="Topics"
+          icon={topicsIcon}
+          size="large"
+        />
+      ),
       id: "topics",
     },
   },
@@ -24,6 +31,7 @@ export const navMoreOptionsList: Array<OptionType> = [
       component: (
         <IconAndTitle
           title="Twitter Circle"
+          alt="Twitter circle"
           icon={twitterCircleIcon}
           size="large"
         />
@@ -38,11 +46,23 @@ export const navMoreOptionsList: Array<OptionType> = [
     },
     nestedOptions: [
       {
-        component: <IconAndTitle title="Newsletters" icon={newslettersIcon} />,
+        component: (
+          <IconAndTitle
+            title="Newsletters"
+            alt="Newsletters"
+            icon={newslettersIcon}
+          />
+        ),
         id: "newsletters",
       },
       {
-        component: <IconAndTitle title="Analytics" icon={analyticsIcon} />,
+        component: (
+          <IconAndTitle
+            title="Analytics"
+            alt="Analytics"
+            icon={analyticsIcon}
+          />
+        ),
         id: "analytics",
       },
     ],
@@ -55,17 +75,27 @@ export const navMoreOptionsList: Array<OptionType> = [
     nestedOptions: [
       {
         component: (
-          <IconAndTitle title="Twitter for Professionals" icon={rocketIcon} />
+          <IconAndTitle
+            title="Twitter for Professionals"
+            alt="Twitter for professionals"
+            icon={rocketIcon}
+          />
         ),
         id: "pros",
       },
       {
-        component: <IconAndTitle title="Twitter Ads" icon={adsIcon} />,
+        component: (
+          <IconAndTitle title="Twitter Ads" alt="Twitter ads" icon={adsIcon} />
+        ),
         id: "ads",
       },
       {
         component: (
-          <IconAndTitle title="Monetization" icon={monetizationIcon} />
+          <IconAndTitle
+            title="Monetization"
+            alt="Monetization"
+            icon={monetizationIcon}
+          />
         ),
         id: "monetization",
       },
@@ -79,21 +109,33 @@ export const navMoreOptionsList: Array<OptionType> = [
     nestedOptions: [
       {
         component: (
-          <IconAndTitle title="Settings and Privacy" icon={settingsIcon} />
+          <IconAndTitle
+            title="Settings and Privacy"
+            alt="Settings and Privacy"
+            icon={settingsIcon}
+          />
         ),
         id: "settings",
       },
       {
-        component: <IconAndTitle title="Help Center" icon={helpIcon} />,
+        component: (
+          <IconAndTitle title="Help Center" alt="Help center" icon={helpIcon} />
+        ),
         id: "help",
       },
       {
-        component: <IconAndTitle title="Display" icon={displayIcon} />,
+        component: (
+          <IconAndTitle title="Display" alt="Display" icon={displayIcon} />
+        ),
         id: "display",
       },
       {
         component: (
-          <IconAndTitle title="Keyboard Shortcuts" icon={shortcutsIcon} />
+          <IconAndTitle
+            title="Keyboard Shortcuts"
+            alt="Keyboard shortcuts"
+            icon={shortcutsIcon}
+          />
         ),
         id: "shortcuts",
       },
