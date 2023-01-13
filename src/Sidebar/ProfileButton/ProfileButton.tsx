@@ -56,7 +56,7 @@ const ProfileButton = () => {
         avatar={avatar}
         isStandalone
       >
-        <Icon src={dots} title="" hoverBg="none" alt="Account options" />
+        <Icon src={dots} title="" hover="none" alt="Account options" />
       </UserCard>
     </div>
   );

@@ -11,8 +11,8 @@ const Sidebar = () => {
       <div className={styles.Logo}>
         <Icon
           src={logo}
-          hoverBg="primary"
-          size="largeLogo"
+          hover="primary"
+          extraStyles={[styles.Icon]}
           alt="Twitter logo"
         />
       </div>

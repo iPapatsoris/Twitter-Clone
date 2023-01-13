@@ -29,7 +29,11 @@ const Trend = () => {
     {
       mainOption: {
         component: (
-          <IconAndTitle icon={sadFaceIcon} title="Not interested in this" />
+          <IconAndTitle
+            icon={sadFaceIcon}
+            title="Not interested in this"
+            alt="Not interested in trend"
+          />
         ),
         id: "notInterested",
       },
@@ -39,6 +43,7 @@ const Trend = () => {
         component: (
           <IconAndTitle
             icon={sadFaceIcon}
+            alt="Spammy trend"
             title="This trend is harmful or spammy"
           />
         ),
@@ -68,7 +73,7 @@ const Trend = () => {
             src={DotsIcon}
             title="More"
             alt="More options"
-            hoverBg="primary"
+            hover="primary"
             onClick={onClick}
           />
         </div>

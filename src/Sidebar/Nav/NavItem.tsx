@@ -26,7 +26,7 @@ const NavItem = ({
   const item = (
     <div className={styles.NavItem}>
       <div className={styles.IconAndTitle}>
-        <Icon src={icon} size="large" hoverBg="none" alt={alt} />
+        <Icon src={icon} extraStyles={[styles.Icon]} hover="none" alt={alt} />
         <span className={navItemClass}>{title}</span>
       </div>
     </div>

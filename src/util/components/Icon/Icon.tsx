@@ -4,8 +4,8 @@ export interface IconProps {
   src: string;
   title?: string;
   alt?: string;
-  hoverBg?: "normal" | "primary" | "none";
-  size?: "normal" | "large" | "largeMoreOptions" | "largeLogo" | "tiny";
+  hover?: "normal" | "primary" | "none";
+  extraStyles?: Array<string>;
   onClick?: React.MouseEventHandler<HTMLImageElement>;
 }
 
@@ -13,32 +13,16 @@ const Icon = ({
   src,
   title = "",
   alt = "",
-  hoverBg = "normal",
-  size = "normal",
+  hover = "normal",
+  extraStyles = [],
   onClick = () => {},
 }: IconProps) => {
-  let hoverClassname: styles.IconNames = styles.HoverNormal;
-  if (hoverBg !== "normal") {
-    hoverClassname =
-      hoverBg === "primary" ? styles.HoverPrimary : styles.HoverNone;
+  let hoverClassname: styles.IconNames = styles.Hover;
+  if (hover === "primary") {
+    hoverClassname = styles.HoverPrimary;
+  } else if (hover === "none") {
+    hoverClassname = styles.NoHover;
   }
-
-  let sizeClassname: styles.IconNames = styles.NormalSize;
-  if (size === "large") {
-    sizeClassname = styles.LargeSize;
-  } else if (size === "largeLogo") {
-    sizeClassname = styles.LargeSizeLogo;
-  } else if (size === "largeMoreOptions") {
-    sizeClassname = styles.LargeSizeMoreOption;
-  } else if (size === "tiny") {
-    sizeClassname = styles.TinySizeLogo;
-  }
-  const stylestyles = [
-    styles.Icon,
-    hoverClassname,
-    sizeClassname,
-    styles.NoHighlighting,
-  ].join(" ");
 
   return (
     <img
@@ -46,7 +30,12 @@ const Icon = ({
       title={title}
       alt={alt}
       onClick={onClick}
-      className={stylestyles}
+      className={[
+        styles.Icon,
+        styles.NoHighlighting,
+        hoverClassname,
+        extraStyles,
+      ].join(" ")}
     />
   );
 };

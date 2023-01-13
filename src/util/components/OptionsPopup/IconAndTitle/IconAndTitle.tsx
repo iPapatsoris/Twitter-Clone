@@ -1,5 +1,5 @@
-import styles from "./IconAndTitle.module.scss";
-import Icon, { IconProps } from "../../Icon/Icon";
+import styles, { IconAndTitleNames } from "./IconAndTitle.module.scss";
+import Icon from "../../Icon/Icon";
 
 interface IconAndTitleProps {
   icon: string;
@@ -15,12 +15,12 @@ const IconAndTitle = ({
   alt,
 }: IconAndTitleProps) => {
   const wrapperStyle = size === "large" ? styles.Large : styles.Small;
-  const iconSize: IconProps["size"] =
-    size === "large" ? "largeMoreOptions" : "normal";
+  const iconSize: IconAndTitleNames | "" =
+    size === "large" ? styles.LargeIcon : "";
 
   return (
     <div className={[styles.IconAndTitle, wrapperStyle].join(" ")}>
-      <Icon src={icon} hoverBg="none" size={iconSize} alt={alt} />
+      <Icon src={icon} hover="none" extraClasses={[iconSize]} alt={alt} />
       {title}
     </div>
   );

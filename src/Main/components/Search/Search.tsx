@@ -14,7 +14,7 @@ const Search = () => {
 
   return (
     <div className={styles.Search} onClick={handleClick}>
-      <Icon src={searchIcon} hoverBg="none" alt="Search" />
+      <Icon src={searchIcon} noHover alt="Search" />
       <input ref={inputRef} type="text" placeholder="Search Twitter" />
     </div>
   );

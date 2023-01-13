@@ -8,6 +8,11 @@
     gap: 1.5rem;
   }
 
+  &.LargeIcon {
+    width: 24px;
+    height: 24px;
+  }
+
   &.Small {
     font-weight: 500;
     gap: 1rem;
