@@ -2,15 +2,17 @@ import globalClassNames, {
   ClassNames as GlobalClassNames,
 } from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Icon: "Icon";
-  readonly NoHover: "NoHover";
+  readonly IconWrapper: "IconWrapper";
   readonly Hover: "Hover";
   readonly HoverPrimary: "HoverPrimary";
+  readonly NoHover: "NoHover";
+  readonly Icon: "Icon";
 };
 export = classNames;
 export type IconNames =
-  | "Icon"
-  | "NoHover"
+  | "IconWrapper"
   | "Hover"
   | "HoverPrimary"
+  | "NoHover"
+  | "Icon"
   | GlobalClassNames;

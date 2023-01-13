@@ -25,18 +25,20 @@ const Icon = ({
   }
 
   return (
-    <img
-      src={src}
-      title={title}
-      alt={alt}
-      onClick={onClick}
-      className={[
-        styles.Icon,
-        styles.NoHighlighting,
-        hoverClassname,
-        extraStyles,
-      ].join(" ")}
-    />
+    <div className={[hoverClassname, styles.IconWrapper].join(" ")}>
+      <img
+        src={src}
+        title={title}
+        alt={alt}
+        onClick={onClick}
+        className={[
+          styles.Icon,
+          styles.NoHighlighting,
+          hoverClassname,
+          extraStyles,
+        ].join(" ")}
+      />
+    </div>
   );
 };
 

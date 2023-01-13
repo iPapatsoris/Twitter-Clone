@@ -1,15 +1,10 @@
-.Icon {
-  cursor: pointer;
+.IconWrapper {
   padding: 8px;
   border-radius: 40px;
   transition: var(--transition-duration);
-  width: 20px;
-  height: 20px;
-
-  &.NoHover {
-    padding: 0;
-    cursor: inherit;
-  }
+  display: flex;
+  align-items: center;
+  width: min-content;
 
   &.Hover:hover {
     background-color: var(--hover-bg);
@@ -17,5 +12,19 @@
 
   &.HoverPrimary:hover {
     background-color: var(--primary-color-transparent);
+  }
+
+  &.NoHover {
+    padding: 0;
+
+    .Icon {
+      cursor: inherit;
+    }
+  }
+
+  .Icon {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
   }
 }

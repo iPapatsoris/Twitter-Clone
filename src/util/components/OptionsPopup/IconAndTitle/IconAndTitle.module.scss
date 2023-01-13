@@ -6,11 +6,11 @@
   &.Large {
     font-size: 20px;
     gap: 1.5rem;
-  }
 
-  &.LargeIcon {
-    width: 24px;
-    height: 24px;
+    & .Icon {
+      width: 24px;
+      height: 24px;
+    }
   }
 
   &.Small {
