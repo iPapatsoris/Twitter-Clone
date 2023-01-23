@@ -27,6 +27,22 @@ con.connect((err) => {
   console.log("Connected!");
 });
 
+/**
+ *
+ * Disclaimer: This is a quick and simplified back-end mainly made to support
+ * the front-end work, and does not necessarily follow correct guidelines for
+ * security, performance and maintainability.
+ *
+ * GET requests can include "fields" query params to request only specific
+ * fields from an entity.
+ *
+ * TODO:
+ *  - Make SQL queries also take into account the filters; currently
+ *    all fields are selected, and the filters apply only for the response
+ *    over the network.
+ *  - Secure endpoints; currently everyone can access everything
+ */
+
 app.post(
   "/user",
   (
