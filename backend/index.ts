@@ -3,14 +3,9 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import mysql from "mysql";
 import { sha256 } from "js-sha256";
-import { CreateUser, GetUser, UpdateUser, UserFields } from "./api/user";
+import { CreateUser, GetUser, UserFields } from "./api/user";
 import ErrorCodes from "./api/errorCodes.js";
-import {
-  checkPermissions,
-  filterResults,
-  printError,
-  TypedRequestQuery,
-} from "./api/util.js";
+import { checkPermissions, printError, TypedRequestQuery } from "./api/util.js";
 import { Fields } from "./api/common";
 
 const app = express();
@@ -100,10 +95,8 @@ app.get(
       ? req.query.fields
       : [req.query.fields];
 
-    // Don't allow forbidden fields
-    // TODO: it's safer to whitelist instead of blacklist
-    const forbiddenFields: Array<UserFields> = ["password"];
-    if (!checkPermissions(forbiddenFields, fields)) {
+    // Allow only whitelisted fields
+    if (!checkPermissions("GetUser", fields)) {
       console.log("Failed permissions test");
       res.send({ ok: false });
       return;
@@ -120,6 +113,7 @@ app.get(
         }
         // const filtered = filterResults(fields, result[0]);
         // res.send(filtered);
+        console.log("GET ", result[0]);
         res.send(result[0]);
       }
     );
