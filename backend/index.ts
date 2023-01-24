@@ -3,9 +3,14 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import mysql from "mysql";
 import { sha256 } from "js-sha256";
-import { CreateUser, UserFields } from "./api/user";
+import { CreateUser, GetUser, UpdateUser, UserFields } from "./api/user";
 import ErrorCodes from "./api/errorCodes.js";
-import { filterResults, printError, TypedRequestQuery } from "./api/util.js";
+import {
+  checkPermissions,
+  filterResults,
+  printError,
+  TypedRequestQuery,
+} from "./api/util.js";
 import { Fields } from "./api/common";
 
 const app = express();
@@ -40,7 +45,9 @@ con.connect((err) => {
  *  - Make SQL queries also take into account the filters; currently
  *    all fields are selected, and the filters apply only for the response
  *    over the network.
- *  - Secure endpoints; currently everyone can access everything
+ *  - Secure endpoints; currently all users can see and modify private data,
+ *    including data of others, or data that they own but should not be exposed
+ *    outside of the database.
  */
 
 app.post(
@@ -77,17 +84,43 @@ app.post(
 
 app.get(
   "/user/:id",
-  (req: TypedRequestQuery<{ id: string }, Fields<UserFields>>, res) => {
+  (
+    req: TypedRequestQuery<{ id: string }, Fields<UserFields>>,
+    res: Response<GetUser["response"]>
+  ) => {
+    // Make sure request has included some fields to query about
+    if (!req.query.fields) {
+      res.send({ ok: false, errorCode: ErrorCodes.NoFieldsSpecified });
+      return;
+    }
+
+    // If only a single field in included, it will not be an array by default,
+    // so transform it into one
+    const fields = Array.isArray(req.query.fields)
+      ? req.query.fields
+      : [req.query.fields];
+
+    // Don't allow forbidden fields
+    // TODO: it's safer to whitelist instead of blacklist
+    const forbiddenFields: Array<UserFields> = ["password"];
+    if (!checkPermissions(forbiddenFields, fields)) {
+      console.log("Failed permissions test");
+      res.send({ ok: false });
+      return;
+    }
+
+    // Adjust query fields to select
+    const views = fields.map((f) => "," + f);
     con.query(
-      "SELECT * FROM user WHERE id = ?",
+      "SELECT id" + views.join("") + " FROM user WHERE id = ?",
       [req.params.id],
       (err, result) => {
         if (err) {
           throw err;
         }
-        console.log(result[0].name);
-        const filtered = filterResults(req.query.fields, result[0]);
-        res.send(filtered);
+        // const filtered = filterResults(fields, result[0]);
+        // res.send(filtered);
+        res.send(result[0]);
       }
     );
   }

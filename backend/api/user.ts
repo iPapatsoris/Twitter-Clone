@@ -13,8 +13,18 @@ export type CreateUser = {
     website?: string;
     birthDate: string;
     joinedDate: string;
+    phone: string;
   };
   response: Response;
+};
+
+export type UpdateUser = {
+  request: Omit<CreateUser["request"], "username" | "password" | "joinedDate">;
+  response: Response;
+};
+
+export type GetUser = {
+  response: Response | Partial<UserFields>;
 };
 
 export type UserFields = keyof CreateUser["request"];

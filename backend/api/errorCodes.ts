@@ -1,5 +1,6 @@
 const ErrorCodes = {
-  UsernameAlreadyExists: 100,
+  NoFieldsSpecified: 100,
+  UsernameAlreadyExists: 200,
 };
 
 export default ErrorCodes;

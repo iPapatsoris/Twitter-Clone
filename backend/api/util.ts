@@ -17,3 +17,12 @@ export const filterResults = (filter: string[], res: any) => {
   }
   return filtered;
 };
+
+export const checkPermissions = (
+  forbiddenFields: string[],
+  fields: string[]
+) => {
+  return !forbiddenFields.some(
+    (forb) => fields.findIndex((f) => f === forb) !== -1
+  );
+};
