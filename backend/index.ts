@@ -3,10 +3,21 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import mysql from "mysql";
 import { sha256 } from "js-sha256";
-import { CreateUser, GetUser, UserFields } from "./api/user";
+import {
+  CreateUser,
+  GetUser,
+  GetUserFields,
+  UpdateUser,
+  UpdateUserFields,
+} from "./api/user";
 import ErrorCodes from "./api/errorCodes.js";
-import { checkPermissions, printError, TypedRequestQuery } from "./api/util.js";
-import { Fields } from "./api/common";
+import {
+  Fields,
+  isEmptyObject,
+  printError,
+  TypedRequestQuery,
+} from "./api/util.js";
+import { checkPermissions } from "./api/permissions.js";
 
 const app = express();
 const port = 3000;
@@ -61,12 +72,14 @@ app.post(
       (error) => {
         if (error) {
           printError(error);
+          let errorCode: number | undefined;
           if (error.code === "ER_DUP_ENTRY") {
-            res.send({
-              ok: false,
-              errorCode: ErrorCodes.UsernameAlreadyExists,
-            });
+            errorCode = ErrorCodes.UsernameAlreadyExists;
           }
+          res.send({
+            ok: false,
+            errorCode,
+          });
         } else {
           console.log("Added ", user);
           res.send({ ok: true });
@@ -77,10 +90,58 @@ app.post(
   }
 );
 
+app.patch(
+  "/user/:id",
+  (
+    req: TypedRequestQuery<
+      { id: string },
+      Fields<UpdateUserFields>,
+      UpdateUser["request"]
+    >,
+    res: Response<UpdateUser["response"]>
+  ) => {
+    // Make sure request has included some fields to query about
+    if (isEmptyObject(req.body)) {
+      res.send({ ok: false, errorCode: ErrorCodes.NoFieldsSpecified });
+      return;
+    }
+
+    // Allow only whitelisted fields
+    const fields = Object.keys(req.body);
+    if (!checkPermissions("UpdateUser", fields)) {
+      console.log("Failed permissions test");
+      res.send({ ok: false, errorCode: ErrorCodes.PermissionDenied });
+      return;
+    }
+
+    const preparedFields = fields.map((f, index) => {
+      return f + " = ?" + (index !== fields.length - 1 ? "," : "");
+    });
+    const user = req.body;
+    const values = Object.values(req.body);
+    con.query(
+      "UPDATE user SET " + preparedFields.join("") + " WHERE id = ?",
+      [...values, req.params.id],
+      (error) => {
+        if (error) {
+          printError(error);
+          res.send({
+            ok: false,
+          });
+        } else {
+          console.log("Updated ", user);
+          res.send({ ok: true, ...user });
+        }
+      }
+    );
+    return;
+  }
+);
+
 app.get(
   "/user/:id",
   (
-    req: TypedRequestQuery<{ id: string }, Fields<UserFields>>,
+    req: TypedRequestQuery<{ id: string }, Fields<GetUserFields>>,
     res: Response<GetUser["response"]>
   ) => {
     // Make sure request has included some fields to query about
@@ -98,7 +159,7 @@ app.get(
     // Allow only whitelisted fields
     if (!checkPermissions("GetUser", fields)) {
       console.log("Failed permissions test");
-      res.send({ ok: false });
+      res.send({ ok: false, errorCode: ErrorCodes.PermissionDenied });
       return;
     }
 

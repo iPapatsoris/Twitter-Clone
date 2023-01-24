@@ -1,15 +1,20 @@
 import { MysqlError } from "mysql";
 import { Query } from "express-serve-static-core";
-import { UserFields } from "./user";
+
+export interface TypedRequestQuery<P, Q extends Query, B = {}>
+  extends Express.Request {
+  query: Q;
+  params: P;
+  body: B;
+}
+
+export type Fields<T> = {
+  fields: T[];
+};
 
 export const printError = (error: MysqlError) => {
   console.log(error.code + "\n" + error.sqlMessage + "\n" + error.sql + "\n");
 };
-
-export interface TypedRequestQuery<P, Q extends Query> extends Express.Request {
-  query: Q;
-  params: P;
-}
 
 export const filterResults = (filter: string[], res: any) => {
   const filtered: any = {};
@@ -19,24 +24,7 @@ export const filterResults = (filter: string[], res: any) => {
   return filtered;
 };
 
-export const checkPermissions = (endpoint: "GetUser", fields: string[]) => {
-  let fieldWhitelist: Array<UserFields>;
-  if (endpoint === "GetUser") {
-    fieldWhitelist = [
-      "username",
-      "name",
-      "avatar",
-      "coverPic",
-      "isVerified",
-      "bio",
-      "location",
-      "website",
-      "birthDate",
-      "joinedDate",
-      "email",
-      "phone",
-    ];
-  }
-
-  return fields.every((f) => fieldWhitelist.findIndex((w) => w === f) !== -1);
-};
+export const isEmptyObject = (obj: Object) =>
+  obj &&
+  Object.keys(obj).length === 0 &&
+  Object.getPrototypeOf(obj) === Object.prototype;
