@@ -1,4 +1,4 @@
-import { CreateUserFields } from "./user";
+import { CreateUserFields } from "../../api/user.js";
 
 export const checkPermissions = (
   endpoint: "GetUser" | "UpdateUser",

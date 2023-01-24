@@ -9,15 +9,15 @@ import {
   GetUserFields,
   UpdateUser,
   UpdateUserFields,
-} from "./api/user";
-import ErrorCodes from "./api/errorCodes.js";
+} from "../../api/user";
+import ErrorCodes from "../..//api/errorCodes.js";
 import {
   Fields,
   isEmptyObject,
   printError,
   TypedRequestQuery,
-} from "./api/util.js";
-import { checkPermissions } from "./api/permissions.js";
+} from "./util.js";
+import { checkPermissions } from "./permissions.js";
 
 const app = express();
 const port = 3000;
