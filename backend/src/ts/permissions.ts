@@ -1,10 +1,11 @@
-import { CreateUserFields } from "../../api/user.js";
+import { GetUserFields, UpdateUserFields } from "../../api/user.js";
 
+// TODO: Add more specific type safety than Union
 export const checkPermissions = (
   endpoint: "GetUser" | "UpdateUser",
   fields: string[]
 ) => {
-  let fieldWhitelist: Array<CreateUserFields>;
+  let fieldWhitelist: Array<GetUserFields | UpdateUserFields>;
   if (endpoint === "GetUser") {
     fieldWhitelist = [
       "username",
@@ -19,6 +20,8 @@ export const checkPermissions = (
       "joinedDate",
       "email",
       "phone",
+      "totalFollowees",
+      "totalFollowers",
     ];
   } else if (endpoint === "UpdateUser") {
     fieldWhitelist = [
