@@ -1,4 +1,4 @@
-import mysql from "mysql";
+import mysql, { MysqlError } from "mysql";
 import { Query } from "express-serve-static-core";
 import { Response } from "express";
 import { Response as NormalResponse } from "../../api/common.js";
@@ -51,30 +51,14 @@ export const simpleQuery = <T>(
   res: Response<T | NormalResponse>,
   query: string,
   values: any[],
-  sendResponse: (result: any) => void = () => res.send({ ok: true })
+  sendResponse: (result: any) => void = () => res.send({ ok: true }),
+  handleError: (error: MysqlError) => void = () => res.send({ ok: false })
 ) =>
-  db.query(query, values, (err, result) => {
-    if (err) {
-      printError(err);
-      res.send({ ok: false });
+  db.query(query, values, (error, result) => {
+    if (error) {
+      printError(error);
+      handleError(error);
       return;
     }
-    console.log(result);
-    console.log({ ...result });
     sendResponse(result);
-  });
-
-export const simpleQueryArray = (
-  db: mysql.Connection,
-  res: Response<any>,
-  query: string,
-  values: any[]
-) =>
-  db.query(query, values, (err, result) => {
-    if (err) {
-      printError(err);
-      res.send({ ok: false });
-      return;
-    }
-    res.send({ ok: true, users: result });
   });

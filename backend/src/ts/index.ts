@@ -19,7 +19,6 @@ import {
   printError,
   removeArrayFields,
   simpleQuery,
-  simpleQueryArray,
   TypedRequestQuery,
 } from "./util.js";
 import { Response as NormalResponse } from "../../api/common.js";
@@ -73,29 +72,27 @@ app.post(
   ) => {
     const user = req.body;
     const hash = sha256(user.password);
-    db.query(
+    const query =
       "INSERT INTO user \
       (username, password, email, name, birthDate, joinedDate)\
-      VALUES (?, ?, ?, ?, ?, NOW())",
+      VALUES (?, ?, ?, ?, ?, NOW())";
+    simpleQuery(
+      db,
+      res,
+      query,
       [user.username, hash, user.email, user.name, user.birthDate],
+      undefined,
       (error) => {
-        if (error) {
-          printError(error);
-          let errorCode: number | undefined;
-          if (error.code === "ER_DUP_ENTRY") {
-            errorCode = ErrorCodes.UsernameAlreadyExists;
-          }
-          res.send({
-            ok: false,
-            errorCode,
-          });
-        } else {
-          console.log("Added ", user);
-          res.send({ ok: true });
+        let errorCode: number | undefined;
+        if (error.code === "ER_DUP_ENTRY") {
+          errorCode = ErrorCodes.UsernameAlreadyExists;
         }
+        res.send({
+          ok: false,
+          errorCode,
+        });
       }
     );
-    return;
   }
 );
 
