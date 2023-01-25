@@ -17,7 +17,11 @@ export type UpdateUser = {
       | "totalFollowees"
     >
   >;
-  response: Response & UpdateUser["request"];
+  response:
+    | Response
+    | {
+        user: UpdateUser["request"];
+      };
 };
 
 export type GetUser = {

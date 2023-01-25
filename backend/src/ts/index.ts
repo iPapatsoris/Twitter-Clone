@@ -100,13 +100,9 @@ app.post(
 );
 
 app.patch(
-  "/user/:id",
+  "/user/",
   (
-    req: TypedRequestQuery<
-      { id: string },
-      Fields<UpdateUserFields>,
-      UpdateUser["request"]
-    >,
+    req: TypedRequestQuery<{}, Fields<UpdateUserFields>, UpdateUser["request"]>,
     res: Response<UpdateUser["response"]>
   ) => {
     // Make sure request has included some fields to query about
@@ -128,22 +124,12 @@ app.patch(
     });
     const user = req.body;
     const values = Object.values(req.body);
-    db.query(
-      "UPDATE user SET " + preparedFields.join("") + " WHERE id = ?",
-      [...values, req.params.id],
-      (error) => {
-        if (error) {
-          printError(error);
-          res.send({
-            ok: false,
-          });
-        } else {
-          console.log("Updated ", user);
-          res.send({ ok: true, ...user });
-        }
-      }
+
+    const query =
+      "UPDATE user SET " + preparedFields.join("") + " WHERE id = ?";
+    simpleQuery(db, res, query, [...values, currentUserID], () =>
+      res.send({ ok: true, user: user })
     );
-    return;
   }
 );
 
