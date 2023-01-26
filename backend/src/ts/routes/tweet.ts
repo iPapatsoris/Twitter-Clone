@@ -62,4 +62,21 @@ router.get(
   }
 );
 
+router.get(
+  "/:tweetID/retweets",
+  (
+    req: TypedRequestQuery<{ tweetID: string }>,
+    res: Response<GetTweets["response"]>
+  ) => {
+    const { tweetID } = req.params;
+    const query =
+      "SELECT * \
+       FROM tweet \
+       WHERE isRetweet = true AND referencedTweetID = ?";
+    const sendResult = (result: any) => {
+      res.send({ ok: true, tweets: result });
+    };
+    simpleQuery(db, res, query, [tweetID], sendResult);
+  }
+);
 export default router;
