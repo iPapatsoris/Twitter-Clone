@@ -48,17 +48,17 @@ export const removeArrayFields = <T>(array: T[], fields: T[]) => {
 
 export const simpleQuery = <T>(
   db: mysql.Connection,
-  res: Response<T | NormalResponse>,
+  resp: Response<T | NormalResponse>,
   query: string,
-  values: any[],
-  sendResponse: (result: any) => void = () => res.send({ ok: true }),
-  handleError: (error: MysqlError) => void = () => res.send({ ok: false })
+  queryEscapedValues: any[],
+  handleSuccess: (result: any) => void = () => resp.send({ ok: true }),
+  handleError: (error: MysqlError) => void = () => resp.send({ ok: false })
 ) =>
-  db.query(query, values, (error, result) => {
+  db.query(query, queryEscapedValues, (error, result) => {
     if (error) {
       printError(error);
       handleError(error);
       return;
     }
-    sendResponse(result);
+    handleSuccess(result);
   });

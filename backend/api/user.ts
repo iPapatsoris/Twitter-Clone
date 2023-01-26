@@ -2,21 +2,23 @@ import { User } from "../entities/user";
 import { Response } from "./common";
 
 export type CreateUser = {
-  request: Omit<User, "id" | "totalFollowers" | "totalFollowees">;
+  request: { user: Omit<User, "id" | "totalFollowers" | "totalFollowees"> };
   response: Response;
 };
 
 export type UpdateUser = {
-  request: Partial<
-    Omit<
-      User,
-      | "username"
-      | "password"
-      | "joinedDate"
-      | "totalFollowers"
-      | "totalFollowees"
-    >
-  >;
+  request: {
+    user: Partial<
+      Omit<
+        User,
+        | "username"
+        | "password"
+        | "joinedDate"
+        | "totalFollowers"
+        | "totalFollowees"
+      >
+    >;
+  };
   response:
     | Response
     | {
@@ -24,13 +26,18 @@ export type UpdateUser = {
       };
 };
 
+type GetUserParams = Partial<Omit<User, "password">>;
 export type GetUser = {
-  response: Response & Partial<Omit<User, "password">>;
+  response:
+    | Response
+    | {
+        user: GetUserParams;
+      };
 };
 
 export type CreateUserFields = keyof CreateUser["request"];
 export type UpdateUserFields = keyof UpdateUser["request"];
-export type GetUserFields = keyof GetUser["response"];
+export type GetUserFields = keyof GetUserParams;
 
 type MiniUserInfo = Pick<
   User,

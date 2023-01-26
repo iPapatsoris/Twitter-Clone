@@ -16,7 +16,6 @@ import ErrorCodes from "../../api/errorCodes.js";
 import {
   Fields,
   isEmptyObject,
-  printError,
   removeArrayFields,
   simpleQuery,
   TypedRequestQuery,
@@ -70,7 +69,7 @@ app.post(
     req: Request<{}, {}, CreateUser["request"]>,
     res: Response<CreateUser["response"]>
   ) => {
-    const user = req.body;
+    const { user } = req.body;
     const hash = sha256(user.password);
     const query =
       "INSERT INTO user \
@@ -136,17 +135,12 @@ app.get(
     req: TypedRequestQuery<{ id: string }, Fields<GetUserFields>>,
     res: Response<GetUser["response"]>
   ) => {
+    const fields = Object.keys(req.query);
     // Make sure request has included some fields to query about
-    if (!req.query.fields) {
+    if (!fields.length) {
       res.send({ ok: false, errorCode: ErrorCodes.NoFieldsSpecified });
       return;
     }
-
-    // If only a single field in included, it will not be an array by default,
-    // so transform it into one
-    const fields = Array.isArray(req.query.fields)
-      ? req.query.fields
-      : [req.query.fields];
 
     // Allow only whitelisted fields
     if (!checkPermissions("GetUser", fields)) {
@@ -177,19 +171,17 @@ app.get(
     const userID = req.params.id;
 
     let finalResult = {};
+
     // Query regular fields
-    db.query(
+    simpleQuery(
+      db,
+      res,
       "SELECT id" + views.join("") + " FROM user WHERE id = ?",
       [userID],
-      (err, result) => {
-        if (err) {
-          printError(err);
-          res.send({ ok: false });
-          return;
-        }
+      (result: any) => {
         finalResult = result[0];
         if (!getTotalFollowers && !getTotalFollowees) {
-          res.send({ ok: true, ...finalResult });
+          res.send({ ok: true, user: finalResult });
           return;
         }
 
@@ -203,36 +195,36 @@ app.get(
          FROM user_follows as friendship \
          WHERE friendship.followerID = ?";
 
-        const query = (q: string) =>
-          db.query(q, [userID], (err, result) => {
-            if (err) {
-              printError(err);
-              res.send({ ok: false });
-              return;
-            }
-            finalResult = {
-              ...finalResult,
-              ...JSON.parse(JSON.stringify(result[0])),
-            };
-            res.send({ ok: true, ...finalResult });
-          });
         if (getTotalFollowers && getTotalFollowees) {
           // Query both followers and followees
-          db.query(totalFollowersQuery, [userID], (err, result) => {
-            if (err) {
-              printError(err);
-              res.send({ ok: false });
-              return;
-            }
+          simpleQuery(db, res, totalFollowersQuery, [userID], (result) => {
             finalResult = {
               ...finalResult,
-              ...JSON.parse(JSON.stringify(result[0])),
+              ...result[0],
             };
-            query(totalFolloweesQuery);
+            simpleQuery(db, res, totalFolloweesQuery, [userID], (result) => {
+              finalResult = {
+                ...finalResult,
+                ...result[0],
+              };
+              res.send({ ok: true, user: finalResult });
+            });
           });
         } else if (getTotalFollowers || getTotalFollowees) {
-          // Query just followers or followees
-          query(getTotalFollowees ? totalFolloweesQuery : totalFollowersQuery);
+          // Query followers or followees
+          simpleQuery(
+            db,
+            res,
+            getTotalFollowers ? totalFollowersQuery : totalFolloweesQuery,
+            [userID],
+            (result) => {
+              finalResult = {
+                ...finalResult,
+                ...result[0],
+              };
+              res.send({ ok: true, user: finalResult });
+            }
+          );
         }
       }
     );
