@@ -337,6 +337,21 @@ app.post(
   }
 );
 
+app.patch(
+  "/tweet/:tweetID/view",
+  (
+    req: TypedRequestQuery<{ tweetID: string }>,
+    res: Response<NormalResponse>
+  ) => {
+    const { tweetID } = req.params;
+    const query =
+      "UPDATE tweet \
+       SET views = views + 1\
+       WHERE id = ?";
+    simpleQuery(db, res, query, [tweetID]);
+  }
+);
+
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
