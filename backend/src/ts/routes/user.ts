@@ -4,7 +4,7 @@ import { sha256 } from "js-sha256";
 import { currentUserID } from "../index.js";
 import { NormalResponse } from "../../../api/common.js";
 import ErrorCodes from "../../../api/errorCodes.js";
-import { GetUserTweets } from "../../../api/tweet.js";
+import { GetTweets } from "../../../api/tweet.js";
 import {
   CreateUser,
   GetUser,
@@ -265,7 +265,7 @@ router.get(
   "/:userID/tweets",
   (
     req: TypedRequestQuery<{ userID: string }>,
-    res: Response<GetUserTweets["response"]>
+    res: Response<GetTweets["response"]>
   ) => {
     const { userID } = req.params;
     const query =
@@ -273,7 +273,7 @@ router.get(
        FROM tweet \
        WHERE tweet.authorID = ?";
     const sendResult = (result: any) => {
-      res.send({ ok: true, userTweets: result });
+      res.send({ ok: true, tweets: result });
     };
     simpleQuery(db, res, query, [userID], sendResult);
   }

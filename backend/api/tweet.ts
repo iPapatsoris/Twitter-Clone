@@ -8,11 +8,11 @@ export type CreateTweet = {
   response: NormalResponse;
 };
 
-export type GetUserTweets = {
+export type GetTweets = {
   response:
     | NormalResponse
     | {
-        userTweets: Tweet[];
+        tweets: Tweet[];
       };
 };
 

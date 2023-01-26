@@ -2,7 +2,7 @@
 import express, { Request, Response } from "express";
 import { currentUserID } from "../index.js";
 import { NormalResponse } from "../../../api/common.js";
-import { CreateTweet } from "../../../api/tweet.js";
+import { CreateTweet, GetTweets } from "../../../api/tweet.js";
 import db from "../connection.js";
 import { simpleQuery, TypedRequestQuery } from "../util.js";
 
@@ -30,7 +30,7 @@ router.post(
 );
 
 router.patch(
-  "/:tweetID/view",
+  "/:tweetID/addView",
   (
     req: TypedRequestQuery<{ tweetID: string }>,
     res: Response<NormalResponse>
@@ -41,6 +41,24 @@ router.patch(
        SET views = views + 1\
        WHERE id = ?";
     simpleQuery(db, res, query, [tweetID]);
+  }
+);
+
+router.get(
+  "/:tweetID/replies",
+  (
+    req: TypedRequestQuery<{ tweetID: string }>,
+    res: Response<GetTweets["response"]>
+  ) => {
+    const { tweetID } = req.params;
+    const query =
+      "SELECT * \
+       FROM tweet \
+       WHERE isReply = true AND referencedTweetID = ?";
+    const sendResult = (result: any) => {
+      res.send({ ok: true, tweets: result });
+    };
+    simpleQuery(db, res, query, [tweetID], sendResult);
   }
 );
 
