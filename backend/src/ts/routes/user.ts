@@ -261,6 +261,7 @@ router.get(
   }
 );
 
+// Returns user's tweets and retweets
 router.get(
   "/:userID/tweets",
   (
@@ -271,7 +272,8 @@ router.get(
     const query =
       "SELECT * \
        FROM tweet \
-       WHERE tweet.authorID = ?";
+       WHERE tweet.authorID = ? AND isReply = false \
+       ORDER BY creationDate DESC";
     const sendResult = (result: any) => {
       res.send({ ok: true, tweets: result });
     };
@@ -279,4 +281,23 @@ router.get(
   }
 );
 
+// Returns user's replies and retweets
+router.get(
+  "/:userID/replies",
+  (
+    req: TypedRequestQuery<{ userID: string }>,
+    res: Response<GetTweets["response"]>
+  ) => {
+    const { userID } = req.params;
+    const query =
+      "SELECT * \
+       FROM tweet \
+       WHERE tweet.authorID = ? AND (isReply = true OR isRetweet = true)\
+       ORDER BY creationDate DESC";
+    const sendResult = (result: any) => {
+      res.send({ ok: true, tweets: result });
+    };
+    simpleQuery(db, res, query, [userID], sendResult);
+  }
+);
 export default router;
