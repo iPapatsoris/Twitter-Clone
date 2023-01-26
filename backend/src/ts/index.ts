@@ -22,6 +22,7 @@ import {
 } from "./util.js";
 import { NormalResponse } from "../../api/common.js";
 import { checkPermissions } from "./permissions.js";
+import { CreateTweet, GetUserTweets } from "../../api/tweet";
 
 const app = express();
 const port = 3000;
@@ -294,6 +295,45 @@ app.get(
       res.send({ ok: true, followees: result });
     };
     simpleQuery(db, res, query, [userID], sendResult);
+  }
+);
+
+app.get(
+  "/user/:userID/tweets",
+  (
+    req: TypedRequestQuery<{ userID: string }>,
+    res: Response<GetUserTweets["response"]>
+  ) => {
+    const { userID } = req.params;
+    const query =
+      "SELECT * \
+       FROM tweet \
+       WHERE tweet.authorID = ?";
+    const sendResult = (result: any) => {
+      res.send({ ok: true, userTweets: result });
+    };
+    simpleQuery(db, res, query, [userID], sendResult);
+  }
+);
+
+app.post(
+  "/tweet",
+  (
+    req: Request<{}, {}, CreateTweet["request"]>,
+    res: Response<CreateTweet["response"]>
+  ) => {
+    const { tweet } = req.body;
+    const query =
+      "INSERT INTO tweet \
+      (authorID, text, isReply, isRetweet, referencedTweetID, views, creationDate)\
+      VALUES (?, ?, ?, ?, ?, 0, NOW())";
+    simpleQuery(db, res, query, [
+      currentUserID,
+      tweet.text,
+      tweet.isReply,
+      tweet.isRetweet,
+      tweet.referencedTweetID,
+    ]);
   }
 );
 
