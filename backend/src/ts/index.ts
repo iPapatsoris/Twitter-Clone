@@ -20,7 +20,7 @@ import {
   simpleQuery,
   TypedRequestQuery,
 } from "./util.js";
-import { Response as NormalResponse } from "../../api/common.js";
+import { NormalResponse } from "../../api/common.js";
 import { checkPermissions } from "./permissions.js";
 
 const app = express();

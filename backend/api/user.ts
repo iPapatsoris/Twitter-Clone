@@ -1,9 +1,11 @@
 import { User } from "../entities/user";
-import { Response } from "./common";
+import { NormalResponse } from "./common";
 
 export type CreateUser = {
-  request: { user: Omit<User, "id" | "totalFollowers" | "totalFollowees"> };
-  response: Response;
+  request: {
+    user: Omit<User, "id" | "totalFollowers" | "totalFollowees">;
+  };
+  response: NormalResponse;
 };
 
 export type UpdateUser = {
@@ -20,7 +22,7 @@ export type UpdateUser = {
     >;
   };
   response:
-    | Response
+    | NormalResponse
     | {
         user: UpdateUser["request"];
       };
@@ -29,7 +31,7 @@ export type UpdateUser = {
 type GetUserParams = Partial<Omit<User, "password">>;
 export type GetUser = {
   response:
-    | Response
+    | NormalResponse
     | {
         user: GetUserParams;
       };
@@ -46,7 +48,7 @@ type MiniUserInfo = Pick<
 
 export type GetUserFollowees = {
   response:
-    | Response
+    | NormalResponse
     | {
         followees: MiniUserInfo[];
       };
@@ -54,7 +56,7 @@ export type GetUserFollowees = {
 
 export type GetUserFollowers = {
   response:
-    | Response
+    | NormalResponse
     | {
         followers: MiniUserInfo[];
       };

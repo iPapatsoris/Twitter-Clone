@@ -1,7 +1,7 @@
 import mysql, { MysqlError } from "mysql";
 import { Query } from "express-serve-static-core";
 import { Response } from "express";
-import { Response as NormalResponse } from "../../api/common.js";
+import { NormalResponse } from "../../api/common.js";
 
 export interface TypedRequestQuery<P, Q extends Query = {}, B = {}>
   extends Express.Request {

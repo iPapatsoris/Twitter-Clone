@@ -1,4 +1,4 @@
-export type Response = {
+export type NormalResponse = {
   ok: boolean;
   errorCode?: number;
 };
