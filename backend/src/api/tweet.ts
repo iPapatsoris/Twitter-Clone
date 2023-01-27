@@ -16,4 +16,17 @@ export type GetTweets = {
       };
 };
 
+export type TweetWithNestedReplies = Tweet & {
+  nestedReplies: Tweet[];
+  hasMoreNestedReplies: boolean;
+};
+
+export type GetTweet = {
+  response:
+    | NormalResponse
+    | {
+        tweet: Tweet;
+        replies: TweetWithNestedReplies[];
+      };
+};
 export type CreateTweetFields = keyof CreateTweet["request"]["tweet"];

@@ -7,4 +7,5 @@ export type Tweet = {
   referencedTweetID?: number;
   views: number;
   creationDate: string;
+  replyDepth: number;
 };
