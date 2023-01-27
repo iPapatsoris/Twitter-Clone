@@ -4,7 +4,7 @@ import { currentUserID } from "../index.js";
 import { NormalResponse } from "../api/common.js";
 import { CreateTweet, GetTweets } from "../api/tweet.js";
 import db from "../connection.js";
-import { simpleQuery, TypedRequestQuery } from "../util.js";
+import { printError, simpleQuery, TypedRequestQuery } from "../util.js";
 
 const router = express.Router();
 
@@ -17,15 +17,27 @@ router.post(
     const { tweet } = req.body;
     const query =
       "INSERT INTO tweet \
-      (authorID, text, isReply, isRetweet, referencedTweetID, views, creationDate)\
-      VALUES (?, ?, ?, ?, ?, 0, NOW())";
-    simpleQuery(db, res, query, [
-      currentUserID,
-      tweet.text,
-      tweet.isReply,
-      tweet.isRetweet,
-      tweet.referencedTweetID,
-    ]);
+      (authorID, text, isReply, isRetweet, referencedTweetID, views, \
+      replyDepth, creationDate)\
+      VALUES (?, ?, ?, ?, ?, 0, 0, NOW())";
+    simpleQuery(
+      db,
+      res,
+      query,
+      [
+        currentUserID,
+        tweet.text,
+        tweet.isReply,
+        tweet.isRetweet,
+        tweet.referencedTweetID,
+      ],
+      () => {
+        if (tweet.isReply && tweet.referencedTweetID !== undefined) {
+          updateParentTweetReplyDepth(tweet.referencedTweetID, 1);
+        }
+        res.send({ ok: true });
+      }
+    );
   }
 );
 
@@ -79,4 +91,34 @@ router.get(
     simpleQuery(db, res, query, [tweetID], sendResult);
   }
 );
+
+const updateParentTweetReplyDepth = (parentID: number, newDepth: number) => {
+  db.query(
+    "SELECT isReply, replyDepth, referencedTweetID FROM tweet WHERE id = ?",
+    [parentID],
+    (error, result) => {
+      if (error) {
+        printError(error);
+        return;
+      }
+      const { isReply, replyDepth, referencedTweetID } = result[0];
+      if (newDepth > replyDepth) {
+        db.query(
+          "UPDATE tweet SET replyDepth = ? WHERE id = ?",
+          [newDepth, parentID],
+          (error, result) => {
+            if (error) {
+              printError(error);
+              return;
+            }
+            if (isReply) {
+              updateParentTweetReplyDepth(referencedTweetID, newDepth + 1);
+            }
+          }
+        );
+      }
+    }
+  );
+};
+
 export default router;
