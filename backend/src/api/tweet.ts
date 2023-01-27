@@ -1,4 +1,4 @@
-import { Tweet } from "../entities/tweet";
+import { Tweet } from "../entities/tweet.js";
 import { NormalResponse } from "./common";
 
 export type CreateTweet = {

@@ -1,8 +1,8 @@
 /* eslint-disable no-multi-str */
 import express, { Request, Response } from "express";
 import { currentUserID } from "../index.js";
-import { NormalResponse } from "../../../api/common.js";
-import { CreateTweet, GetTweets } from "../../../api/tweet.js";
+import { NormalResponse } from "../api/common.js";
+import { CreateTweet, GetTweets } from "../api/tweet.js";
 import db from "../connection.js";
 import { simpleQuery, TypedRequestQuery } from "../util.js";
 

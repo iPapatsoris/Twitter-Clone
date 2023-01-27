@@ -1,5 +1,5 @@
-import { User } from "../entities/user";
-import { NormalResponse } from "./common";
+import { User } from "../entities/user.js";
+import { NormalResponse } from "./common.js";
 
 export type CreateUser = {
   request: {

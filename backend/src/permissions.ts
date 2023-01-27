@@ -1,4 +1,4 @@
-import { GetUserFields, UpdateUserFields } from "../../api/user.js";
+import { GetUserFields, UpdateUserFields } from "./api/user.js";
 
 // TODO: Add more specific type safety than Union
 export const checkPermissions = (

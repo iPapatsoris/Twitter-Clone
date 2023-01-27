@@ -2,9 +2,9 @@
 import express, { Request, Response } from "express";
 import { sha256 } from "js-sha256";
 import { currentUserID } from "../index.js";
-import { NormalResponse } from "../../../api/common.js";
-import ErrorCodes from "../../../api/errorCodes.js";
-import { GetTweets } from "../../../api/tweet.js";
+import { NormalResponse } from "../api/common.js";
+import ErrorCodes from "../api/errorCodes.js";
+import { GetTweets } from "../api/tweet.js";
 import {
   CreateUser,
   GetUser,
@@ -13,7 +13,7 @@ import {
   GetUserFollowers,
   UpdateUser,
   UpdateUserFields,
-} from "../../../api/user.js";
+} from "../api/user.js";
 import db from "../connection.js";
 import { checkPermissions } from "../permissions.js";
 import {
