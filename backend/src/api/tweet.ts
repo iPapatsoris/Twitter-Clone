@@ -29,4 +29,9 @@ export type GetTweet = {
         replies: TweetWithNestedReplies[];
       };
 };
+
+export type ExpandTweetReplies = {
+  response: NormalResponse | { replies: TweetWithNestedReplies };
+};
+
 export type CreateTweetFields = keyof CreateTweet["request"]["tweet"];

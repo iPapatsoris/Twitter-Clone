@@ -4,6 +4,7 @@ import { currentUserID } from "../index.js";
 import { NormalResponse } from "../api/common.js";
 import {
   CreateTweet,
+  ExpandTweetReplies,
   GetTweet,
   GetTweets,
   TweetWithNestedReplies,
@@ -113,6 +114,10 @@ router.get(
     // Get tweet information
     const query = "SELECT * FROM tweet WHERE id = ?";
     simpleQuery(db, res, query, [tweetID], (result: any) => {
+      if (!result.length) {
+        res.send({ ok: false });
+        return;
+      }
       tweet = result[0];
 
       // Get tweet direct replies
@@ -123,34 +128,19 @@ router.get(
         const replies: Tweet[] = result;
 
         // Get nested replies of each reply, in parallel
-        const promises: Promise<void>[] = [];
-        // For each reply, hold an array of replies to be filled
-        const promiseResults: Tweet[][] = [];
-        for (let i = 0; i < replies.length; i++) {
-          promiseResults.push([]);
-        }
+        const promises: Promise<Tweet[]>[] = [];
         for (const replyIndex in replies) {
           const reply = replies[replyIndex];
-          promises.push(
-            // Each Promise writes at the pos of the promiseResults array
-            // that belongs to it
-            new Promise<void>((resolve, reject) => {
-              if (reply.replyDepth) {
-                // Retrieve nested replies
-                getTweetNestedReplies(reply.id, promiseResults[replyIndex], {
-                  resolve,
-                  reject,
-                });
-              } else {
-                // Reply has no replies
-                promiseResults[replyIndex] = [];
-                resolve();
-              }
-            })
-          );
+          promises.push(getTweetNestedReplies(reply.id, reply.replyDepth, 1));
         }
 
-        await Promise.all(promises);
+        let promiseResults: Tweet[][] = [];
+        try {
+          promiseResults = await Promise.all<Tweet[]>(promises);
+        } catch (error) {
+          res.send({ ok: false });
+          return;
+        }
 
         // Prepare response
         const finalNestedReplies: TweetWithNestedReplies[] = [];
@@ -170,6 +160,47 @@ router.get(
   }
 );
 
+router.get(
+  "/:tweetID/expandReplies",
+  (
+    req: TypedRequestQuery<{ tweetID: string }>,
+    res: Response<ExpandTweetReplies["response"]>
+  ) => {
+    const { tweetID } = req.params;
+    let tweet = {} as Tweet;
+
+    // Get tweet information
+    const query = "SELECT * FROM tweet WHERE id = ?";
+    simpleQuery(db, res, query, [tweetID], async (result: any) => {
+      if (!result.length) {
+        res.send({ ok: false });
+        return;
+      }
+      tweet = result[0];
+
+      // Retrieve all nested replies
+      let replies: Tweet[];
+      try {
+        replies = await getTweetNestedReplies(tweet.id, tweet.replyDepth, 0);
+      } catch (error) {
+        res.send({ ok: false });
+        return;
+      }
+
+      // Prepare response
+      res.send({
+        ok: true,
+        replies: {
+          ...tweet,
+          hasMoreNestedReplies: false,
+          nestedReplies: replies,
+        },
+      });
+      return;
+    });
+  }
+);
+
 /**
  * Get tweet replies with a depth-first strategy (replies of replies).
  * If a tweet/reply has multiple direct replies, always choose to expand the one
@@ -182,30 +213,45 @@ router.get(
  */
 const getTweetNestedReplies = (
   tweetID: number,
-  accumulator: Tweet[],
-  promise: {
-    resolve: (value: void | PromiseLike<void>) => void;
-    reject: (reason?: any) => void;
-  }
+  // Tweet's actual reply depth
+  tweetReplyDepth: number,
+  // Max reply depth to look into
+  maxDepth: number,
+  accumulator: Tweet[] = []
 ) => {
-  db.query(
-    "SELECT * FROM tweet WHERE isReply = true AND referencedTweetID = ? \
-     ORDER BY replyDepth DESC LIMIT 1",
-    [tweetID],
-    (error, result) => {
-      if (error) {
-        printError(error);
-        promise.reject();
-      }
-      accumulator.push(result[0]);
-      const { replyDepth, id } = result[0];
-      if (replyDepth > 0) {
-        getTweetNestedReplies(id, accumulator, { ...promise });
-      } else {
-        promise.resolve();
-      }
+  return new Promise<Tweet[]>((resolve, reject) => {
+    // Skip query if we already know that tweet has no replies
+    if (!tweetReplyDepth) {
+      return resolve(accumulator);
     }
-  );
+
+    db.query(
+      "SELECT * FROM tweet WHERE isReply = true AND referencedTweetID = ? \
+     ORDER BY replyDepth DESC LIMIT 1",
+      [tweetID],
+      (error, result) => {
+        if (error) {
+          printError(error);
+          reject();
+          return;
+        }
+        accumulator.push(result[0]);
+        const { replyDepth, id } = result[0];
+        if (maxDepth !== 1) {
+          resolve(
+            getTweetNestedReplies(
+              id,
+              replyDepth,
+              !maxDepth ? 0 : maxDepth - 1,
+              accumulator
+            )
+          );
+        } else {
+          resolve(accumulator);
+        }
+      }
+    );
+  });
 };
 
 // Recursively update the replyDepth field of a tweet reply thread, to take
@@ -224,7 +270,7 @@ const updateParentTweetReplyDepth = (parentID: number, newDepth: number) => {
         db.query(
           "UPDATE tweet SET replyDepth = ? WHERE id = ?",
           [newDepth, parentID],
-          (error, result) => {
+          (error) => {
             if (error) {
               printError(error);
               return;
