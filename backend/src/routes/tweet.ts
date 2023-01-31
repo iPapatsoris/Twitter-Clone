@@ -11,7 +11,11 @@ import {
 } from "../api/tweet.js";
 import db from "../connection.js";
 import { printError, simpleQuery, TypedRequestQuery } from "../util.js";
-import { Tweet } from "../entities/tweet.js";
+import {
+  convertQueryResultToTweet,
+  convertQueryResultToTweetArray,
+  Tweet,
+} from "../entities/tweet.js";
 
 const router = express.Router();
 
@@ -99,9 +103,12 @@ router.get(
   }
 );
 
-// Get tweet along with its direct responses, and for each response,
-// include nested responses in a depth first manner, according to the strategy
-// described in getTweetNestedReplies
+/**
+ * Get tweet along with its direct responses, and for each response,
+ * include nested responses in a depth first manner, according to the strategy
+ * described in getTweetNestedReplies. In addition, get past reply thread
+ * that the tweet responds to, until the conversation starter tweet.
+ */
 router.get(
   "/:tweetID",
   (
@@ -109,22 +116,48 @@ router.get(
     res: Response<GetTweet["response"]>
   ) => {
     const { tweetID } = req.params;
-    let tweet = {} as Tweet;
+    let middleTweet = {} as Tweet;
 
     // Get tweet information
-    const query = "SELECT * FROM tweet WHERE id = ?";
-    simpleQuery(db, res, query, [tweetID], (result: any) => {
+    const query =
+      "SELECT tweet.*, name, username, avatar, isVerified FROM tweet, user WHERE tweet.id = ? AND authorID = user.id";
+    simpleQuery(db, res, query, [tweetID], async (result: any) => {
       if (!result.length) {
         res.send({ ok: false });
         return;
       }
-      tweet = result[0];
+      middleTweet = convertQueryResultToTweet(result[0]);
+
+      // Get previous replies from the original tweet until the middle one
+      const previousReplies: Array<Tweet> = await getTweetPreviousReplies(
+        middleTweet.isReply,
+        middleTweet.referencedTweetID
+      );
+
+      // Reverse previous replies to have them in chronological order, and
+      // accumulate username tags along the way, for each response
+      const previousRepliesWithTags: Array<Tweet & { usernameTags: string[] }> =
+        [];
+      const usernameTagsSet = new Set<string>();
+      for (let i = previousReplies.length - 1; i >= 0; i--) {
+        const reply = previousReplies[i];
+
+        previousRepliesWithTags.push({
+          ...reply,
+          usernameTags: Array.from(usernameTagsSet),
+        });
+        usernameTagsSet.add(reply.author.username);
+      }
+
+      middleTweet.usernameTags = Array.from(usernameTagsSet);
+      usernameTagsSet.add(middleTweet.author.username);
 
       // Get tweet direct replies
       const query =
-        "SELECT * FROM tweet WHERE \
-         isReply = true AND referencedTweetID = ?";
-      simpleQuery(db, res, query, [tweetID], async (result) => {
+        "SELECT tweet.*, username, name, avatar, isVerified FROM tweet, user WHERE \
+         isReply = true AND referencedTweetID = ? AND authorID = user.id";
+      simpleQuery(db, res, query, [tweetID], async (dbResult) => {
+        const result = convertQueryResultToTweetArray(dbResult);
         const replies: Tweet[] = result;
 
         // Get nested replies of each reply, in parallel
@@ -142,6 +175,20 @@ router.get(
           return;
         }
 
+        // Accumulate username tags for replies and nested replies
+        // Also include past conversation tags (initialize with usernameTagsSet)
+        for (let i = 0; i < replies.length; i++) {
+          // Tags specific to this subtree of replies.
+          const localUsernameTagsSet: Set<string> = new Set(usernameTagsSet);
+          const reply = replies[i];
+          reply.usernameTags = Array.from(localUsernameTagsSet);
+          localUsernameTagsSet.add(reply.author.username);
+          for (const nestedReply of promiseResults[i]) {
+            nestedReply.usernameTags = Array.from(localUsernameTagsSet);
+            localUsernameTagsSet.add(nestedReply.author.username);
+          }
+        }
+
         // Prepare response
         const finalNestedReplies: TweetWithNestedReplies[] = [];
         for (const replyIndex in replies) {
@@ -153,7 +200,13 @@ router.get(
             hasMoreNestedReplies: promiseResult.length < reply.replyDepth,
           });
         }
-        res.send({ ok: true, tweet, replies: finalNestedReplies });
+
+        res.send({
+          ok: true,
+          tweet: middleTweet,
+          replies: finalNestedReplies,
+          previousReplies: previousRepliesWithTags,
+        });
         return;
       });
     });
@@ -181,7 +234,7 @@ router.get(
       // Retrieve all nested replies
       let replies: Tweet[];
       try {
-        replies = await getTweetNestedReplies(tweet.id, tweet.replyDepth, 0);
+        replies = await getTweetNestedReplies(tweet.id, tweet.replyDepth, -1);
       } catch (error) {
         res.send({ ok: false });
         return;
@@ -201,6 +254,40 @@ router.get(
   }
 );
 
+// Get past thread conversation that current tweet responds to
+const getTweetPreviousReplies = (
+  isReply: boolean,
+  referencedTweetID?: number,
+  accumulator: Tweet[] = []
+) => {
+  return new Promise<Tweet[]>((resolve, reject) => {
+    if (!isReply) {
+      resolve(accumulator);
+      return;
+    }
+
+    db.query(
+      "SELECT tweet.*, username, name, isVerified, avatar FROM tweet, user \
+       WHERE tweet.id = ? AND authorID = user.id",
+      [referencedTweetID],
+      (error, dbResult) => {
+        if (error) {
+          printError(error);
+          reject();
+          return;
+        }
+        const result = convertQueryResultToTweet(dbResult[0]);
+
+        accumulator.push(result);
+        const { isReply, referencedTweetID } = result;
+        resolve(
+          getTweetPreviousReplies(isReply, referencedTweetID, accumulator)
+        );
+      }
+    );
+  });
+};
+
 /**
  * Get tweet replies with a depth-first strategy (replies of replies).
  * If a tweet/reply has multiple direct replies, always choose to expand the one
@@ -215,40 +302,40 @@ const getTweetNestedReplies = (
   tweetID: number,
   // Tweet's actual reply depth
   tweetReplyDepth: number,
-  // Max reply depth to look into
+  // Max reply depth to look into.
+  // Pass -1 to look until the end
   maxDepth: number,
   accumulator: Tweet[] = []
 ) => {
   return new Promise<Tweet[]>((resolve, reject) => {
     // Skip query if we already know that tweet has no replies
-    if (!tweetReplyDepth) {
+    // or if we have reached the max reply depth specified for this query
+    if (tweetReplyDepth === 0 || maxDepth === 0) {
       return resolve(accumulator);
     }
 
     db.query(
-      "SELECT * FROM tweet WHERE isReply = true AND referencedTweetID = ? \
-     ORDER BY replyDepth DESC LIMIT 1",
+      "SELECT tweet.*, username, name, isVerified, avatar FROM tweet, user \
+       WHERE isReply = true AND referencedTweetID = ? AND user.id = authorID \
+       ORDER BY replyDepth DESC LIMIT 1",
       [tweetID],
-      (error, result) => {
+      (error, dbResult) => {
         if (error) {
           printError(error);
           reject();
           return;
         }
-        accumulator.push(result[0]);
-        const { replyDepth, id } = result[0];
-        if (maxDepth !== 1) {
-          resolve(
-            getTweetNestedReplies(
-              id,
-              replyDepth,
-              !maxDepth ? 0 : maxDepth - 1,
-              accumulator
-            )
-          );
-        } else {
-          resolve(accumulator);
-        }
+        const result = convertQueryResultToTweet(dbResult[0]);
+        accumulator.push(result);
+        const { replyDepth, id } = result;
+        resolve(
+          getTweetNestedReplies(
+            id,
+            replyDepth,
+            maxDepth === -1 ? -1 : maxDepth - 1,
+            accumulator
+          )
+        );
       }
     );
   });
