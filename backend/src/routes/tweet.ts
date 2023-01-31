@@ -32,7 +32,6 @@ router.post(
       replyDepth, creationDate)\
       VALUES (?, ?, ?, ?, ?, 0, 0, NOW())";
     simpleQuery(
-      db,
       res,
       query,
       [
@@ -63,7 +62,7 @@ router.patch(
       "UPDATE tweet \
        SET views = views + 1\
        WHERE id = ?";
-    simpleQuery(db, res, query, [tweetID]);
+    simpleQuery(res, query, [tweetID]);
   }
 );
 
@@ -81,7 +80,7 @@ router.get(
     const sendResult = (result: any) => {
       res.send({ ok: true, tweets: result });
     };
-    simpleQuery(db, res, query, [tweetID], sendResult);
+    simpleQuery(res, query, [tweetID], sendResult);
   }
 );
 
@@ -99,7 +98,7 @@ router.get(
     const sendResult = (result: any) => {
       res.send({ ok: true, tweets: result });
     };
-    simpleQuery(db, res, query, [tweetID], sendResult);
+    simpleQuery(res, query, [tweetID], sendResult);
   }
 );
 
@@ -121,7 +120,7 @@ router.get(
     // Get tweet information
     const query =
       "SELECT tweet.*, name, username, avatar, isVerified FROM tweet, user WHERE tweet.id = ? AND authorID = user.id";
-    simpleQuery(db, res, query, [tweetID], async (result: any) => {
+    simpleQuery(res, query, [tweetID], async (result: any) => {
       if (!result.length) {
         res.send({ ok: false });
         return;
@@ -156,7 +155,7 @@ router.get(
       const query =
         "SELECT tweet.*, username, name, avatar, isVerified FROM tweet, user WHERE \
          isReply = true AND referencedTweetID = ? AND authorID = user.id";
-      simpleQuery(db, res, query, [tweetID], async (dbResult) => {
+      simpleQuery(res, query, [tweetID], async (dbResult) => {
         const result = convertQueryResultToTweetArray(dbResult);
         const replies: Tweet[] = result;
 
@@ -224,7 +223,7 @@ router.get(
 
     // Get tweet information
     const query = "SELECT * FROM tweet WHERE id = ?";
-    simpleQuery(db, res, query, [tweetID], async (result: any) => {
+    simpleQuery(res, query, [tweetID], async (result: any) => {
       if (!result.length) {
         res.send({ ok: false });
         return;

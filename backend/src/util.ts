@@ -2,6 +2,7 @@ import mysql, { MysqlError } from "mysql";
 import { Query } from "express-serve-static-core";
 import { Response } from "express";
 import { NormalResponse } from "./api/common.js";
+import db from "./connection.js";
 
 export interface TypedRequestQuery<P, Q extends Query = {}, B = {}>
   extends Express.Request {
@@ -47,7 +48,6 @@ export const removeArrayFields = <T>(array: T[], fields: T[]) => {
 };
 
 export const simpleQuery = <T>(
-  db: mysql.Connection,
   resp: Response<T | NormalResponse>,
   query: string,
   queryEscapedValues: any[],

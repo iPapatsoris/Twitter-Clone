@@ -39,7 +39,6 @@ router
       (username, password, email, name, birthDate, joinedDate)\
       VALUES (?, ?, ?, ?, ?, NOW())";
       simpleQuery(
-        db,
         res,
         query,
         [user.username, hash, user.email, user.name, user.birthDate],
@@ -88,7 +87,7 @@ router
 
       const query =
         "UPDATE user SET " + preparedFields.join("") + " WHERE id = ?";
-      simpleQuery(db, res, query, [...values, currentUserID], () =>
+      simpleQuery(res, query, [...values, currentUserID], () =>
         res.send({ ok: true, user: user })
       );
     }
@@ -139,7 +138,6 @@ router.get(
 
     // Query regular fields
     simpleQuery(
-      db,
       res,
       "SELECT id" + views.join("") + " FROM user WHERE id = ?",
       [userID],
@@ -162,12 +160,12 @@ router.get(
 
         if (getTotalFollowers && getTotalFollowees) {
           // Query both followers and followees
-          simpleQuery(db, res, totalFollowersQuery, [userID], (result) => {
+          simpleQuery(res, totalFollowersQuery, [userID], (result) => {
             finalResult = {
               ...finalResult,
               ...result[0],
             };
-            simpleQuery(db, res, totalFolloweesQuery, [userID], (result) => {
+            simpleQuery(res, totalFolloweesQuery, [userID], (result) => {
               finalResult = {
                 ...finalResult,
                 ...result[0],
@@ -178,7 +176,6 @@ router.get(
         } else if (getTotalFollowers || getTotalFollowees) {
           // Query followers or followees
           simpleQuery(
-            db,
             res,
             getTotalFollowers ? totalFollowersQuery : totalFolloweesQuery,
             [userID],
@@ -204,7 +201,6 @@ router
       res: Response<NormalResponse>
     ) => {
       simpleQuery(
-        db,
         res,
         "INSERT INTO user_follows (followerID, followeeID) VALUES (?, ?)",
         [currentUserID, req.params.userID]
@@ -217,7 +213,6 @@ router
       res: Response<NormalResponse>
     ) => {
       simpleQuery(
-        db,
         res,
         "DELETE FROM user_follows WHERE followerID = ? AND followeeID = ?",
         [currentUserID, req.params.userID]
@@ -239,7 +234,7 @@ router.get(
     const sendResult = (result: any) => {
       res.send({ ok: true, followers: result });
     };
-    simpleQuery(db, res, query, [userID], sendResult);
+    simpleQuery(res, query, [userID], sendResult);
   }
 );
 
@@ -257,7 +252,7 @@ router.get(
     const sendResult = (result: any) => {
       res.send({ ok: true, followees: result });
     };
-    simpleQuery(db, res, query, [userID], sendResult);
+    simpleQuery(res, query, [userID], sendResult);
   }
 );
 
@@ -277,7 +272,7 @@ router.get(
     const sendResult = (result: any) => {
       res.send({ ok: true, tweets: result });
     };
-    simpleQuery(db, res, query, [userID], sendResult);
+    simpleQuery(res, query, [userID], sendResult);
   }
 );
 
@@ -297,7 +292,7 @@ router.get(
     const sendResult = (result: any) => {
       res.send({ ok: true, tweets: result });
     };
-    simpleQuery(db, res, query, [userID], sendResult);
+    simpleQuery(res, query, [userID], sendResult);
   }
 );
 
@@ -317,7 +312,7 @@ router.get(
     const sendResult = (result: any) => {
       res.send({ ok: true, tweets: result });
     };
-    simpleQuery(db, res, query, [userID], sendResult);
+    simpleQuery(res, query, [userID], sendResult);
   }
 );
 
