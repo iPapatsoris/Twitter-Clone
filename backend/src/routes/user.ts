@@ -14,7 +14,6 @@ import {
   UpdateUser,
   UpdateUserFields,
 } from "../api/user.js";
-import db from "../connection.js";
 import { checkPermissions } from "../permissions.js";
 import {
   Fields,
@@ -265,9 +264,9 @@ router.get(
   ) => {
     const { userID } = req.params;
     const query =
-      "SELECT * \
-       FROM tweet \
-       WHERE tweet.authorID = ? AND isReply = false \
+      "SELECT tweet.*, name, username, id, avatar, isVerified \
+       FROM tweet, user \
+       WHERE tweet.authorID = ? AND isReply = false AND user.id = authorID \
        ORDER BY creationDate DESC";
     const sendResult = (result: any) => {
       res.send({ ok: true, tweets: result });
@@ -285,9 +284,10 @@ router.get(
   ) => {
     const { userID } = req.params;
     const query =
-      "SELECT * \
-       FROM tweet \
-       WHERE tweet.authorID = ? AND (isReply = true OR isRetweet = true) \
+      "SELECT tweet.*, name, username, id, avatar, isVerified \
+       FROM tweet, user \
+       WHERE authorID = ? AND (isReply = true OR isRetweet = true) \
+       AND authorID = user.id \
        ORDER BY creationDate DESC";
     const sendResult = (result: any) => {
       res.send({ ok: true, tweets: result });
@@ -304,10 +304,9 @@ router.get(
   ) => {
     const { userID } = req.params;
     const query =
-      "SELECT tweet.id, authorID, text, isReply, isRetweet, \
-              referencedTweetID, views, creationDate \
-       FROM tweet, user_likes_tweet \
-       WHERE userID = ? AND tweetID = tweet.id \
+      "SELECT tweet.*, name, username, id, avatar, isVerified \
+       FROM tweet, user_likes_tweet, user \
+       WHERE userID = ? AND tweetID = tweet.id AND user.id = authorID \
        ORDER BY creationDate DESC";
     const sendResult = (result: any) => {
       res.send({ ok: true, tweets: result });
