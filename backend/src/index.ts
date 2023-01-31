@@ -14,7 +14,7 @@ export const currentUserID = 1;
  *
  * Disclaimer: This is a quick and simplified back-end mainly made to support
  * the front-end work, and does not necessarily follow correct guidelines for
- * security, performance and maintainability.
+ * security, performance, maintainability and structure for back-end apps.
  *
  * TODO: auth and secure routes
  */

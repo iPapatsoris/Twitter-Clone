@@ -103,6 +103,27 @@ router.get(
 );
 
 /**
+ * Get all tweets from all followees of logged in user.
+ * This is an extremely simplified timeline, for testing purposes with trivial
+ * datasets.
+ * There is not even pagination, ALL tweets are retrieved.
+ * In a real world scenario, tweet selection is fine tuned to optimize
+ * engagement and is tailored to user's preferences.
+ */
+router.get(
+  "/timeline",
+  (req: TypedRequestQuery<{}>, res: Response<GetTweets["response"]>) => {
+    const query =
+      "SELECT tweet.*, name, username, avatar, isVerified \
+       FROM tweet, user, user_follows as friendship \
+       WHERE authorID = user.id AND authorID = followeeID AND followerID = ?";
+    simpleQuery(res, query, [currentUserID], async (result: any) => {
+      res.send({ ok: true, tweets: convertQueryResultToTweetArray(result) });
+    });
+  }
+);
+
+/**
  * Get tweet along with its direct responses, and for each response,
  * include nested responses in a depth first manner, according to the strategy
  * described in getTweetNestedReplies. In addition, get past reply thread
