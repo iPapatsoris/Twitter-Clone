@@ -18,6 +18,7 @@ import {
 import {
   getTweetNestedReplies,
   getTweetPreviousReplies,
+  getTweetTags,
   updateParentTweetReplyDepth,
 } from "../services/tweet.js";
 
@@ -131,42 +132,6 @@ router.patch(
   }
 );
 
-router.get(
-  "/:tweetID/replies",
-  (
-    req: TypedRequestQuery<{ tweetID: string }>,
-    res: Response<GetTweets["response"]>
-  ) => {
-    const { tweetID } = req.params;
-    const query =
-      "SELECT * \
-       FROM tweet \
-       WHERE isReply = true AND referencedTweetID = ?";
-    const sendResult = (result: any) => {
-      res.send({ ok: true, tweets: result });
-    };
-    simpleQuery(res, query, [tweetID], sendResult);
-  }
-);
-
-router.get(
-  "/:tweetID/retweets",
-  (
-    req: TypedRequestQuery<{ tweetID: string }>,
-    res: Response<GetTweets["response"]>
-  ) => {
-    const { tweetID } = req.params;
-    const query =
-      "SELECT * \
-       FROM tweet \
-       WHERE isRetweet = true AND referencedTweetID = ?";
-    const sendResult = (result: any) => {
-      res.send({ ok: true, tweets: result });
-    };
-    simpleQuery(res, query, [tweetID], sendResult);
-  }
-);
-
 /**
  * Get all tweets from all followees of logged in user.
  * This is an extremely simplified timeline, for testing purposes with trivial
@@ -181,7 +146,8 @@ router.get(
     const query =
       "SELECT tweet.*, name, username, avatar, isVerified \
        FROM tweet, user, user_follows as friendship \
-       WHERE authorID = user.id AND authorID = followeeID AND followerID = ?";
+       WHERE authorID = user.id AND authorID = followeeID AND followerID = ? \
+       AND isReply = false";
     simpleQuery(res, query, [currentUserID], async (result: any) => {
       res.send({ ok: true, tweets: convertQueryResultToTweetArray(result) });
     });
@@ -205,7 +171,8 @@ router.get(
 
     // Get tweet information
     const query =
-      "SELECT tweet.*, name, username, avatar, isVerified FROM tweet, user WHERE tweet.id = ? AND authorID = user.id";
+      "SELECT tweet.*, name, username, avatar, isVerified FROM tweet, user \
+       WHERE tweet.id = ? AND authorID = user.id";
     simpleQuery(res, query, [tweetID], async (result: any) => {
       if (!result.length) {
         res.send({ ok: false });
@@ -219,28 +186,21 @@ router.get(
         middleTweet.referencedTweetID
       );
 
-      // Reverse previous replies to have them in chronological order, and
-      // accumulate username tags along the way, for each response
-      const previousRepliesWithTags: Array<Tweet & { usernameTags: string[] }> =
-        [];
-      const usernameTagsSet = new Set<string>();
-      for (let i = previousReplies.length - 1; i >= 0; i--) {
-        const reply = previousReplies[i];
+      // Reverse previous replies to have them in chronological order
+      previousReplies.reverse();
 
-        previousRepliesWithTags.push({
-          ...reply,
-          usernameTags: Array.from(usernameTagsSet),
-        });
-        usernameTagsSet.add(reply.author.username);
+      // Get replies user tags
+      for (const previousReply of previousReplies) {
+        previousReply.usernameTags = await getTweetTags(previousReply.id);
       }
 
-      middleTweet.usernameTags = Array.from(usernameTagsSet);
-      usernameTagsSet.add(middleTweet.author.username);
+      // Get middle tweet's user tags
+      middleTweet.usernameTags = await getTweetTags(middleTweet.id);
 
       // Get tweet direct replies
       const query =
-        "SELECT tweet.*, username, name, avatar, isVerified FROM tweet, user WHERE \
-         isReply = true AND referencedTweetID = ? AND authorID = user.id";
+        "SELECT tweet.*, username, name, avatar, isVerified FROM tweet, user \
+         WHERE isReply = true AND referencedTweetID = ? AND authorID = user.id";
       simpleQuery(res, query, [tweetID], async (dbResult) => {
         const result = convertQueryResultToTweetArray(dbResult);
         const replies: Tweet[] = result;
@@ -261,16 +221,12 @@ router.get(
         }
 
         // Accumulate username tags for replies and nested replies
-        // Also include past conversation tags (initialize with usernameTagsSet)
         for (let i = 0; i < replies.length; i++) {
           // Tags specific to this subtree of replies.
-          const localUsernameTagsSet: Set<string> = new Set(usernameTagsSet);
           const reply = replies[i];
-          reply.usernameTags = Array.from(localUsernameTagsSet);
-          localUsernameTagsSet.add(reply.author.username);
+          reply.usernameTags = await getTweetTags(reply.id);
           for (const nestedReply of promiseResults[i]) {
-            nestedReply.usernameTags = Array.from(localUsernameTagsSet);
-            localUsernameTagsSet.add(nestedReply.author.username);
+            nestedReply.usernameTags = await getTweetTags(nestedReply.id);
           }
         }
 
@@ -290,7 +246,7 @@ router.get(
           ok: true,
           tweet: middleTweet,
           replies: finalNestedReplies,
-          previousReplies: previousRepliesWithTags,
+          previousReplies: previousReplies,
         });
         return;
       });
@@ -325,6 +281,12 @@ router.get(
       } catch (error) {
         res.send({ ok: false });
         return;
+      }
+
+      // Get tweet and replies user tags
+      tweet.usernameTags = await getTweetTags(tweet.id);
+      for (const reply of replies) {
+        reply.usernameTags = await getTweetTags(reply.id);
       }
 
       // Prepare response
@@ -369,10 +331,19 @@ router.get(
         return;
       }
 
+      // Put them in chronological order
+      replies.reverse();
+
+      // Get tweet and replies user tags
+      tweet.usernameTags = await getTweetTags(tweet.id);
+      for (const reply of replies) {
+        reply.usernameTags = await getTweetTags(reply.id);
+      }
+
       // Prepare response
       res.send({
         ok: true,
-        replies: [...replies.reverse(), tweet],
+        replies: [...replies, tweet],
       });
       return;
     });

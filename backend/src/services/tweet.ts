@@ -1,6 +1,6 @@
 /* eslint-disable no-multi-str */
 import db from "../connection.js";
-import { printError } from "../util.js";
+import { printError, simpleQuery } from "../util.js";
 import { convertQueryResultToTweet, Tweet } from "../entities/tweet.js";
 
 // Get past thread conversation that current tweet responds to
@@ -122,4 +122,20 @@ export const updateParentTweetReplyDepth = (
       }
     }
   );
+};
+
+type Tags = Array<{ id: number; username: string }>;
+export const getTweetTags = async (tweetID: number) => {
+  return new Promise<Tags>((resolve, reject) => {
+    const query =
+      "SELECT username, userID FROM tweet_tags_user, user \
+                 WHERE tweetID = ? AND user.id = userID";
+    db.query(query, [tweetID], (error, result: Tags) => {
+      if (error) {
+        printError(error);
+        reject();
+      }
+      resolve(result);
+    });
+  });
 };

@@ -28,6 +28,7 @@ import {
   convertQueryResultToTweetArray,
   Tweet,
 } from "../entities/tweet.js";
+import { getTweetTags } from "../services/tweet.js";
 
 const router = express.Router();
 
@@ -309,8 +310,8 @@ router.get(
               simpleQuery(
                 res,
                 "SELECT tweet.*, name, username, avatar, isVerified \
-       FROM tweet, user \
-       WHERE authorID = user.id AND tweet.id = ?",
+                 FROM tweet, user \
+                 WHERE authorID = user.id AND tweet.id = ?",
                 [referencedTweetID],
                 handleSuccess,
                 (error) => {
@@ -322,12 +323,12 @@ router.get(
               res.send({ ok: false });
               return;
             }
-            getTweet(reply.referencedTweetID, (result) => {
+            getTweet(reply.referencedTweetID, async (result) => {
               const previousReply = convertQueryResultToTweet(result[0]);
               let originalTweet: Tweet | null = null;
               let hasMoreNestedReplies = false;
               if (previousReply.isReply && previousReply.referencedTweetID) {
-                getTweet(previousReply.referencedTweetID, (result) => {
+                getTweet(previousReply.referencedTweetID, async (result) => {
                   originalTweet = convertQueryResultToTweet(result[0]);
                   if (originalTweet.isReply) {
                     hasMoreNestedReplies = true;
@@ -339,16 +340,24 @@ router.get(
                       res,
                       query,
                       [originalTweet.rootTweetID],
-                      (result) => {
+                      async (result) => {
                         originalTweet = convertQueryResultToTweet(result[0]);
 
+                        const thread = [originalTweet, previousReply, reply];
+                        for (const reply of thread) {
+                          reply.usernameTags = await getTweetTags(reply.id);
+                        }
                         resolve({
-                          nestedReplies: [originalTweet, previousReply, reply],
+                          nestedReplies: thread,
                           hasMoreNestedReplies,
                         });
                       }
                     );
                   } else {
+                    const thread = [originalTweet, previousReply, reply];
+                    for (const reply of thread) {
+                      reply.usernameTags = await getTweetTags(reply.id);
+                    }
                     resolve({
                       nestedReplies: [originalTweet, previousReply, reply],
                       hasMoreNestedReplies,
@@ -356,6 +365,10 @@ router.get(
                   }
                 });
               } else {
+                const thread = [previousReply, reply];
+                for (const reply of thread) {
+                  reply.usernameTags = await getTweetTags(reply.id);
+                }
                 resolve({
                   nestedReplies: [previousReply, reply],
                   hasMoreNestedReplies,

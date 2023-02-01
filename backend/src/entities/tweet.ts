@@ -10,7 +10,10 @@ export type Tweet = {
   creationDate: string;
   replyDepth: number;
   rootTweetID: number;
-  usernameTags?: string[];
+  usernameTags?: Array<{
+    username: string;
+    id: number;
+  }>;
   author: Pick<User, "id" | "name" | "username" | "isVerified" | "avatar">;
 };
 
