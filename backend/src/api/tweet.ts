@@ -33,7 +33,7 @@ export type GetTweet = {
 };
 
 export type ExpandTweetReplies = {
-  response: NormalResponse | { replies: NestedReplies };
+  response: NormalResponse | { replies: Tweet[] };
 };
 
 export type CreateTweetFields = keyof CreateTweet["request"]["tweet"];

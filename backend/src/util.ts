@@ -54,7 +54,7 @@ export const simpleQuery = <T>(
   handleSuccess: (result: any) => void = () => resp.send({ ok: true }),
   handleError: (error: MysqlError) => void = () => resp.send({ ok: false })
 ) =>
-  db.query(query, queryEscapedValues, (error, result) => {
+  db.query(query, queryEscapedValues, (error, result, fields) => {
     if (error) {
       printError(error);
       handleError(error);

@@ -1,5 +1,5 @@
 /* eslint-disable no-multi-str */
-import express, { Request, Response } from "express";
+import express, { Request, response, Response } from "express";
 import { currentUserID } from "../index.js";
 import { NormalResponse } from "../api/common.js";
 import {
@@ -25,16 +25,36 @@ const router = express.Router();
 
 router.post(
   "/",
-  (
+  async (
     req: Request<{}, {}, CreateTweet["request"]>,
     res: Response<CreateTweet["response"]>
   ) => {
     const { tweet } = req.body;
+    let rootTweetID: number | null = null;
+    if (tweet.isReply) {
+      rootTweetID = await new Promise<number>((resolve, reject) => {
+        const query = "SELECT rootTweetID FROM tweet WHERE id = ?";
+        simpleQuery(
+          res,
+          query,
+          [tweet.referencedTweetID],
+          (result) => {
+            if (result[0].rootTweetID) {
+              resolve(result[0].rootTweetID);
+            } else if (tweet.referencedTweetID !== undefined) {
+              resolve(tweet.referencedTweetID);
+            }
+          },
+          () => reject()
+        );
+      });
+    }
+
     const query =
       "INSERT INTO tweet \
       (authorID, text, isReply, isRetweet, referencedTweetID, views, \
-      replyDepth, creationDate)\
-      VALUES (?, ?, ?, ?, ?, 0, 0, NOW())";
+      replyDepth, rootTweetID, creationDate)\
+      VALUES (?, ?, ?, ?, ?, 0, 0, ?, NOW())";
     simpleQuery(
       res,
       query,
@@ -44,10 +64,51 @@ router.post(
         tweet.isReply,
         tweet.isRetweet,
         tweet.referencedTweetID,
+        rootTweetID,
       ],
-      () => {
+      (result) => {
         if (tweet.isReply && tweet.referencedTweetID !== undefined) {
+          const tweetID = result.insertId;
+
           updateParentTweetReplyDepth(tweet.referencedTweetID, 1);
+          const query = "SELECT authorID FROM tweet WHERE id = ?";
+          simpleQuery(response, query, [tweet.referencedTweetID], (result) => {
+            const previousReplyAuthorID: number = result[0].authorID;
+            const query =
+              "SELECT user.id \
+               FROM tweet_tags_user, user \
+               WHERE tweetID = ? AND userID = user.id";
+            simpleQuery(
+              res,
+              query,
+              [tweet.referencedTweetID],
+              async (taggedUsers: { id: number }[]) => {
+                if (
+                  taggedUsers.findIndex(
+                    (user) => user.id === previousReplyAuthorID
+                  ) === -1
+                ) {
+                  taggedUsers.push({ id: previousReplyAuthorID });
+                }
+                await Promise.all(
+                  taggedUsers.map(
+                    (taggedUser) =>
+                      new Promise<void>((resolve, reject) => {
+                        const query =
+                          "INSERT INTO tweet_tags_user (tweetID, userID) VALUES (?, ?)";
+                        simpleQuery(
+                          response,
+                          query,
+                          [tweetID, taggedUser.id],
+                          () => resolve(),
+                          () => reject()
+                        );
+                      })
+                  )
+                );
+              }
+            );
+          });
         }
         res.send({ ok: true });
       }
@@ -238,7 +299,7 @@ router.get(
 );
 
 router.get(
-  "/:tweetID/expandReplies",
+  "/:tweetID/expandRepliesDownward",
   (
     req: TypedRequestQuery<{ tweetID: string }>,
     res: Response<ExpandTweetReplies["response"]>
@@ -247,7 +308,9 @@ router.get(
     let tweet = {} as Tweet;
 
     // Get tweet information
-    const query = "SELECT * FROM tweet WHERE id = ?";
+    const query =
+      "SELECT tweet.*, username, name, avatar, isVerified \
+       FROM tweet, user WHERE tweet.id = ? AND user.id = authorID";
     simpleQuery(res, query, [tweetID], async (result: any) => {
       if (!result.length) {
         res.send({ ok: false });
@@ -267,11 +330,49 @@ router.get(
       // Prepare response
       res.send({
         ok: true,
-        replies: {
-          ...tweet,
-          hasMoreNestedReplies: false,
-          nestedReplies: replies,
-        },
+        replies: [tweet, ...replies],
+      });
+      return;
+    });
+  }
+);
+
+router.get(
+  "/:tweetID/expandRepliesUpward",
+  (
+    req: TypedRequestQuery<{ tweetID: string }>,
+    res: Response<ExpandTweetReplies["response"]>
+  ) => {
+    const { tweetID } = req.params;
+    let tweet = {} as Tweet;
+
+    // Get tweet information
+    const query =
+      "SELECT tweet.*, username, name, avatar, isVerified \
+       FROM tweet, user WHERE tweet.id = ? AND user.id = authorID";
+    simpleQuery(res, query, [tweetID], async (result: any) => {
+      if (!result.length) {
+        res.send({ ok: false });
+        return;
+      }
+      tweet = convertQueryResultToTweet(result[0]);
+
+      // Retrieve previous replis
+      let replies: Tweet[];
+      try {
+        replies = await getTweetPreviousReplies(
+          tweet.isReply,
+          tweet.referencedTweetID
+        );
+      } catch (error) {
+        res.send({ ok: false });
+        return;
+      }
+
+      // Prepare response
+      res.send({
+        ok: true,
+        replies: [...replies.reverse(), tweet],
       });
       return;
     });
