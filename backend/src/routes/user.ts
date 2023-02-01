@@ -4,11 +4,7 @@ import { sha256 } from "js-sha256";
 import { currentUserID } from "../index.js";
 import { NormalResponse } from "../api/common.js";
 import ErrorCodes from "../api/errorCodes.js";
-import {
-  GetTweets,
-  NestedReplies,
-  TweetWithNestedReplies,
-} from "../api/tweet.js";
+import { GetTweets, NestedReplies } from "../api/tweet.js";
 import {
   CreateUser,
   GetUser,
