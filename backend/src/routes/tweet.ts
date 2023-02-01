@@ -249,7 +249,7 @@ router.get(
         res.send({ ok: false });
         return;
       }
-      tweet = result[0];
+      tweet = convertQueryResultToTweet(result[0]);
 
       // Retrieve all nested replies
       let replies: Tweet[];

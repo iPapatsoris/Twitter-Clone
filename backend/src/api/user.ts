@@ -1,5 +1,6 @@
 import { User } from "../entities/user.js";
 import { NormalResponse } from "./common.js";
+import { NestedReplies } from "./tweet.js";
 
 export type CreateUser = {
   request: {
@@ -59,5 +60,13 @@ export type GetUserFollowers = {
     | NormalResponse
     | {
         followers: MiniUserInfo[];
+      };
+};
+
+export type GetUserReplies = {
+  response:
+    | NormalResponse
+    | {
+        replies: NestedReplies[];
       };
 };

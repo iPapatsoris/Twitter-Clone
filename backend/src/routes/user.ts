@@ -4,23 +4,34 @@ import { sha256 } from "js-sha256";
 import { currentUserID } from "../index.js";
 import { NormalResponse } from "../api/common.js";
 import ErrorCodes from "../api/errorCodes.js";
-import { GetTweets } from "../api/tweet.js";
+import {
+  GetTweets,
+  NestedReplies,
+  TweetWithNestedReplies,
+} from "../api/tweet.js";
 import {
   CreateUser,
   GetUser,
   GetUserFields,
   GetUserFollowees,
   GetUserFollowers,
+  GetUserReplies,
   UpdateUser,
   UpdateUserFields,
 } from "../api/user.js";
 import { checkPermissions } from "../permissions.js";
 import {
   Fields,
+  printError,
   removeArrayFields,
   simpleQuery,
   TypedRequestQuery,
 } from "../util.js";
+import {
+  convertQueryResultToTweet,
+  convertQueryResultToTweetArray,
+  Tweet,
+} from "../entities/tweet.js";
 
 const router = express.Router();
 
@@ -264,7 +275,7 @@ router.get(
   ) => {
     const { userID } = req.params;
     const query =
-      "SELECT tweet.*, name, username, id, avatar, isVerified \
+      "SELECT tweet.*, name, username, avatar, isVerified \
        FROM tweet, user \
        WHERE tweet.authorID = ? AND isReply = false AND user.id = authorID \
        ORDER BY creationDate DESC";
@@ -276,21 +287,90 @@ router.get(
 );
 
 // Returns user's replies and retweets
+// TODO: fix retweets
 router.get(
   "/:userID/replies",
   (
     req: TypedRequestQuery<{ userID: string }>,
-    res: Response<GetTweets["response"]>
+    res: Response<GetUserReplies["response"]>
   ) => {
     const { userID } = req.params;
     const query =
-      "SELECT tweet.*, name, username, id, avatar, isVerified \
+      "SELECT tweet.*, name, username, avatar, isVerified \
        FROM tweet, user \
        WHERE authorID = ? AND (isReply = true OR isRetweet = true) \
        AND authorID = user.id \
        ORDER BY creationDate DESC";
-    const sendResult = (result: any) => {
-      res.send({ ok: true, tweets: result });
+    const sendResult = async (result: any) => {
+      const replies = convertQueryResultToTweetArray(result);
+      const promises: Array<Promise<NestedReplies>> = replies.map(
+        (reply) =>
+          new Promise((resolve, reject) => {
+            const getTweet = (
+              referencedTweetID: number,
+              handleSuccess: (result: any) => void
+            ) =>
+              simpleQuery(
+                res,
+                "SELECT tweet.*, name, username, avatar, isVerified \
+       FROM tweet, user \
+       WHERE authorID = user.id AND tweet.id = ?",
+                [referencedTweetID],
+                handleSuccess,
+                (error) => {
+                  printError(error);
+                  reject();
+                }
+              );
+            if (!reply.referencedTweetID) {
+              res.send({ ok: false });
+              return;
+            }
+            getTweet(reply.referencedTweetID, (result) => {
+              const previousReply = convertQueryResultToTweet(result[0]);
+              let originalTweet: Tweet | null = null;
+              let hasMoreNestedReplies = false;
+              if (previousReply.isReply && previousReply.referencedTweetID) {
+                getTweet(previousReply.referencedTweetID, (result) => {
+                  originalTweet = convertQueryResultToTweet(result[0]);
+                  if (originalTweet.isReply) {
+                    hasMoreNestedReplies = true;
+                    const query =
+                      "SELECT tweet.*, name, username, avatar, isVerified \
+                       FROM tweet, user \
+                       WHERE tweet.id = ? AND authorID = user.id";
+                    simpleQuery(
+                      res,
+                      query,
+                      [originalTweet.rootTweetID],
+                      (result) => {
+                        originalTweet = convertQueryResultToTweet(result[0]);
+
+                        resolve({
+                          nestedReplies: [originalTweet, previousReply, reply],
+                          hasMoreNestedReplies,
+                        });
+                      }
+                    );
+                  } else {
+                    resolve({
+                      nestedReplies: [originalTweet, previousReply, reply],
+                      hasMoreNestedReplies,
+                    });
+                  }
+                });
+              } else {
+                resolve({
+                  nestedReplies: [previousReply, reply],
+                  hasMoreNestedReplies,
+                });
+              }
+            });
+          })
+      );
+      const promiseResults = await Promise.all(promises);
+
+      res.send({ ok: true, replies: promiseResults });
     };
     simpleQuery(res, query, [userID], sendResult);
   }
@@ -304,7 +384,7 @@ router.get(
   ) => {
     const { userID } = req.params;
     const query =
-      "SELECT tweet.*, name, username, id, avatar, isVerified \
+      "SELECT tweet.*, name, username, avatar, isVerified \
        FROM tweet, user_likes_tweet, user \
        WHERE userID = ? AND tweetID = tweet.id AND user.id = authorID \
        ORDER BY creationDate DESC";

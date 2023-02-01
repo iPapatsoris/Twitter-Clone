@@ -9,6 +9,7 @@ export type Tweet = {
   views: number;
   creationDate: string;
   replyDepth: number;
+  rootTweetID: number;
   usernameTags?: string[];
   author: Pick<User, "id" | "name" | "username" | "isVerified" | "avatar">;
 };
@@ -23,6 +24,7 @@ export const convertQueryResultToTweet = (result: any): Tweet => {
     views: result.views,
     creationDate: result.creationDate,
     replyDepth: result.replyDepth,
+    rootTweetID: result.rootTweetID,
     usernameTags: result.usernameTags,
     author: {
       id: result.authorID,
