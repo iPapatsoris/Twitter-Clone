@@ -4,7 +4,6 @@ export type Tweet = {
   id: number;
   text: string;
   isReply: boolean;
-  isRetweet: boolean;
   referencedTweetID?: number;
   views: number;
   creationDate: string;
@@ -17,12 +16,18 @@ export type Tweet = {
   author: Pick<User, "id" | "name" | "username" | "isVerified" | "avatar">;
 };
 
+export type Retweet = {
+  id: number;
+  retweetDate: string;
+  tweet: Tweet;
+  retweeter: Pick<User, "id" | "name">;
+};
+
 export const convertQueryResultToTweet = (result: any): Tweet => {
   return {
     id: result.id,
     text: result.text,
     isReply: result.isReply,
-    isRetweet: result.isRetweet,
     referencedTweetID: result.referencedTweetID,
     views: result.views,
     creationDate: result.creationDate,

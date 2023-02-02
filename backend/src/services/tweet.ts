@@ -1,7 +1,11 @@
 /* eslint-disable no-multi-str */
 import db from "../connection.js";
 import { printError, simpleQuery } from "../util.js";
-import { convertQueryResultToTweet, Tweet } from "../entities/tweet.js";
+import {
+  convertQueryResultToTweet,
+  Retweet,
+  Tweet,
+} from "../entities/tweet.js";
 
 // Get past thread conversation that current tweet responds to
 export const getTweetPreviousReplies = (
@@ -135,7 +139,48 @@ export const getTweetTags = async (tweetID: number) => {
         printError(error);
         reject();
       }
+      console.log(result);
+
       resolve(result);
+    });
+  });
+};
+
+// TODO: catch inner rejected promise
+export const getUserRetweets = (userID: number) => {
+  const query =
+    "SELECT tweet.*, retweetDate, username, name, isVerified, avatar \
+       FROM tweet, user, user_retweets \
+       WHERE authorID = user.id AND tweet.id = tweetID AND userID = ?";
+  return new Promise<Retweet[]>((resolve, reject) => {
+    db.query(query, [userID], async (error, result) => {
+      if (!result || !result.length) {
+        return [];
+      }
+      const retweeter: Retweet["retweeter"] = await new Promise(
+        (resolve, reject) => {
+          const query = "SELECT id, name FROM user WHERE id = ?";
+          db.query(query, [userID], (error, result) => {
+            if (error) {
+              printError(error);
+              reject();
+            } else if (result) {
+              resolve(result[0].id);
+            }
+          });
+        }
+      );
+
+      const retweets: Retweet[] = result.map((retweet: any) => ({
+        retweeter,
+        retweetDate: retweet.retweetDate,
+        tweet: convertQueryResultToTweet(retweet),
+      }));
+      for (const retweet of retweets) {
+        retweet.tweet.usernameTags = await getTweetTags(retweet.tweet.id);
+      }
+      console.log(retweets);
+      resolve(retweets);
     });
   });
 };

@@ -53,9 +53,9 @@ router.post(
 
     const query =
       "INSERT INTO tweet \
-      (authorID, text, isReply, isRetweet, referencedTweetID, views, \
+      (authorID, text, isReply, referencedTweetID, views, \
       replyDepth, rootTweetID, creationDate)\
-      VALUES (?, ?, ?, ?, ?, 0, 0, ?, NOW())";
+      VALUES (?, ?, ?, ?, 0, 0, ?, NOW())";
     simpleQuery(
       res,
       query,
@@ -63,7 +63,6 @@ router.post(
         currentUserID,
         tweet.text,
         tweet.isReply,
-        tweet.isRetweet,
         tweet.referencedTweetID,
         rootTweetID,
       ],
@@ -129,6 +128,19 @@ router.patch(
        SET views = views + 1\
        WHERE id = ?";
     simpleQuery(res, query, [tweetID]);
+  }
+);
+
+router.post(
+  "/:tweetID/retweet",
+  (
+    req: TypedRequestQuery<{ tweetID: string }>,
+    res: Response<NormalResponse>
+  ) => {
+    const query =
+      "INSERT INTO user_retweets (tweetID, userID, retweetDATE) \
+       VALUES (?, ?, NOW())";
+    simpleQuery(res, query, [req.params.tweetID, currentUserID]);
   }
 );
 
@@ -320,7 +332,7 @@ router.get(
       }
       tweet = convertQueryResultToTweet(result[0]);
 
-      // Retrieve previous replis
+      // Retrieve previous replies
       let replies: Tweet[];
       try {
         replies = await getTweetPreviousReplies(
