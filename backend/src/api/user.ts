@@ -1,3 +1,4 @@
+import { Tweet } from "../entities/tweet.js";
 import { User } from "../entities/user.js";
 import { NormalResponse } from "./common.js";
 import { NestedReplies } from "./tweet.js";
@@ -63,10 +64,12 @@ export type GetUserFollowers = {
       };
 };
 
-export type GetUserReplies = {
+export type GetUserRepliesAndRetweets = {
   response:
-    | NormalResponse
-    | {
-        replies: NestedReplies[];
+    | NormalResponse & {
+        repliesAndRetweets?: Array<{
+          reply?: NestedReplies;
+          retweet?: Tweet;
+        }>;
       };
 };

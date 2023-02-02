@@ -11,7 +11,7 @@ import {
   GetUserFields,
   GetUserFollowees,
   GetUserFollowers,
-  GetUserReplies,
+  GetUserRepliesAndRetweets,
   UpdateUser,
   UpdateUserFields,
 } from "../api/user.js";
@@ -263,7 +263,8 @@ router.get(
   }
 );
 
-// Returns user's tweets and retweets
+// Return user's tweets and retweets
+// TODO: include retweets and sort
 router.get(
   "/:userID/tweets",
   (
@@ -283,19 +284,19 @@ router.get(
   }
 );
 
-// Returns user's replies and retweets
+// Return user's replies and retweets
 // TODO: fix retweets
 router.get(
   "/:userID/replies",
   (
     req: TypedRequestQuery<{ userID: string }>,
-    res: Response<GetUserReplies["response"]>
+    res: Response<GetUserRepliesAndRetweets["response"]>
   ) => {
     const { userID } = req.params;
     const query =
       "SELECT tweet.*, name, username, avatar, isVerified \
        FROM tweet, user \
-       WHERE authorID = ? AND (isReply = true OR isRetweet = true) \
+       WHERE authorID = ? AND isReply = true \
        AND authorID = user.id \
        ORDER BY creationDate DESC";
     const sendResult = async (result: any) => {
@@ -379,7 +380,41 @@ router.get(
       );
       const promiseResults = await Promise.all(promises);
 
-      res.send({ ok: true, replies: promiseResults });
+      const query =
+        "SELECT tweet.*, user.id, username, name, isVerified, avatar \
+       FROM tweet, user \
+       WHERE authorID = user.id AND isRetweet = true AND authorID = ? \
+       ORDER BY creationDate DESC";
+      simpleQuery(res, query, [userID], (retweets: Tweet[]) => {
+        const repliesAndRetweets: GetUserRepliesAndRetweets["response"]["repliesAndRetweets"] =
+          promiseResults.map((reply) => ({
+            reply,
+          }));
+        repliesAndRetweets.concat(retweets.map((retweet) => ({ retweet })));
+
+        const getMostRecentReplyDate = (thread: NestedReplies) =>
+          thread.nestedReplies[thread.nestedReplies.length - 1].creationDate;
+
+        repliesAndRetweets.sort((a, b) => {
+          const aDate = a.reply
+            ? getMostRecentReplyDate(a.reply)
+            : a.retweet?.creationDate;
+          const bDate = b.reply
+            ? getMostRecentReplyDate(b.reply)
+            : b.retweet?.creationDate;
+          console.log(aDate, " vs ", bDate);
+
+          if (aDate && bDate) {
+            if (new Date(aDate) > new Date(bDate)) {
+              return -1;
+            } else {
+              return 1;
+            }
+          }
+          return 0;
+        });
+        res.send({ ok: true, repliesAndRetweets });
+      });
     };
     simpleQuery(res, query, [userID], sendResult);
   }

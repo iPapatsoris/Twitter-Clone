@@ -140,6 +140,7 @@ router.patch(
  * In a real world scenario, tweet selection is fine tuned to optimize
  * engagement and is tailored to user's preferences.
  */
+// TODO: get tweets and retweets in chronological order, no replies
 router.get(
   "/timeline",
   (req: TypedRequestQuery<{}>, res: Response<GetTweets["response"]>) => {
