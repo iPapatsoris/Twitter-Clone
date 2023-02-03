@@ -255,6 +255,8 @@ router.get(
           });
         }
 
+        // Accumulate total number of retweets
+
         res.send({
           ok: true,
           tweet: middleTweet,

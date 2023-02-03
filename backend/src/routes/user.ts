@@ -31,6 +31,7 @@ import {
 } from "../entities/tweet.js";
 import {
   getTotalUserTweets,
+  getTweetStats,
   getTweetTags,
   getUserRetweets,
 } from "../services/tweet.js";
@@ -285,13 +286,15 @@ router.get(
     const query =
       "SELECT tweet.*, name, username, avatar, isVerified \
        FROM tweet, user \
-       WHERE tweet.authorID = ? AND isReply = false AND user.id = authorID \
-       ORDER BY creationDate DESC";
+       WHERE tweet.authorID = ? AND isReply = false AND user.id = authorID";
     const sendResult = async (tweets: Array<Tweet & Partial<User>>) => {
       const retweets = await getUserRetweets(Number(userID));
       const finalTweets: GetUserTweetsAndRetweets["response"]["tweetsAndRetweets"] =
         tweets.map((tweet) => ({
-          tweet,
+          tweet: {
+            ...convertQueryResultToTweet(tweet),
+            ...getTweetStats(tweet.id),
+          },
         }));
       const tweetsAndRetweets = finalTweets.concat(
         retweets.map((retweet) => ({ retweet: retweet }))
@@ -318,6 +321,7 @@ router.get(
 );
 
 // Return user's replies and retweets
+// TODO: get also tweet stats
 router.get(
   "/:userID/replies",
   (
@@ -450,6 +454,7 @@ router.get(
   }
 );
 
+// TODO: get tweet stats
 router.get(
   "/:userID/likes",
   (

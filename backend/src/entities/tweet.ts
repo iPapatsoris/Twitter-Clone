@@ -14,6 +14,8 @@ export type Tweet = {
     id: number;
   }>;
   author: Pick<User, "id" | "name" | "username" | "isVerified" | "avatar">;
+  totalRetweets?: number;
+  totalLikes?: number;
 };
 
 export type Retweet = {
