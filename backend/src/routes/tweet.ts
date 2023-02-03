@@ -144,6 +144,19 @@ router.post(
   }
 );
 
+router.post(
+  "/:tweetID/like",
+  (
+    req: TypedRequestQuery<{ tweetID: string }>,
+    res: Response<NormalResponse>
+  ) => {
+    const query =
+      "INSERT INTO user_likes_tweet (tweetID, userID, likeDate) \
+       VALUES (?, ?, NOW())";
+    simpleQuery(res, query, [req.params.tweetID, currentUserID]);
+  }
+);
+
 /**
  * Get all tweets from all followees of logged in user.
  * This is an extremely simplified timeline, for testing purposes with trivial
