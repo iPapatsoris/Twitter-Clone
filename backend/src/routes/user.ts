@@ -464,9 +464,10 @@ router.get(
     const { userID } = req.params;
     const query =
       "SELECT tweet.*, name, username, avatar, isVerified \
-       FROM tweet, user_likes_tweet, user \
+       FROM tweet, user_reacts_to_tweet, user \
        WHERE userID = ? AND tweetID = tweet.id AND user.id = authorID \
-       ORDER BY creationDate DESC";
+       AND isLike = true \
+       ORDER BY reactionDate DESC";
     const sendResult = (result: any) => {
       res.send({ ok: true, tweets: result });
     };

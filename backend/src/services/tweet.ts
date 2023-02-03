@@ -150,8 +150,9 @@ export const getTweetTags = async (tweetID: number) => {
 export const getUserRetweets = (userID: number) => {
   const query =
     "SELECT tweet.*, retweetDate, username, name, isVerified, avatar \
-       FROM tweet, user, user_retweets \
-       WHERE authorID = user.id AND tweet.id = tweetID AND userID = ?";
+       FROM tweet, user, user_reacts_to_tweet \
+       WHERE authorID = user.id AND tweet.id = tweetID AND userID = ? \
+       AND isRetweet = true";
   return new Promise<Retweet[]>((resolve, reject) => {
     db.query(query, [userID], async (error, result) => {
       if (!result || !result.length) {
