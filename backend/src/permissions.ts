@@ -22,6 +22,7 @@ export const checkPermissions = (
       "phone",
       "totalFollowees",
       "totalFollowers",
+      "totalTweets",
     ];
   } else if (endpoint === "UpdateUser") {
     fieldWhitelist = [

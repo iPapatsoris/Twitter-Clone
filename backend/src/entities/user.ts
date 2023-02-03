@@ -15,4 +15,5 @@ export type User = {
   phone: string;
   totalFollowers: number;
   totalFollowees: number;
+  totalTweets: number;
 };

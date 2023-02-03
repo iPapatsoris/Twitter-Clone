@@ -32,11 +32,9 @@ export type UpdateUser = {
 
 type GetUserParams = Partial<Omit<User, "password">>;
 export type GetUser = {
-  response:
-    | NormalResponse
-    | {
-        user: GetUserParams;
-      };
+  response: NormalResponse & {
+    user?: GetUserParams;
+  };
 };
 
 export type CreateUserFields = keyof CreateUser["request"];
@@ -69,6 +67,16 @@ export type GetUserRepliesAndRetweets = {
     | NormalResponse & {
         repliesAndRetweets?: Array<{
           reply?: NestedReplies;
+          retweet?: Retweet;
+        }>;
+      };
+};
+
+export type GetUserTweetsAndRetweets = {
+  response:
+    | NormalResponse & {
+        tweetsAndRetweets?: Array<{
+          tweet?: Tweet;
           retweet?: Retweet;
         }>;
       };

@@ -12,6 +12,7 @@ import {
   GetUserFollowees,
   GetUserFollowers,
   GetUserRepliesAndRetweets,
+  GetUserTweetsAndRetweets,
   UpdateUser,
   UpdateUserFields,
 } from "../api/user.js";
@@ -26,10 +27,13 @@ import {
 import {
   convertQueryResultToTweet,
   convertQueryResultToTweetArray,
-  Retweet,
   Tweet,
 } from "../entities/tweet.js";
-import { getTweetTags, getUserRetweets } from "../services/tweet.js";
+import {
+  getTotalUserTweets,
+  getTweetTags,
+  getUserRetweets,
+} from "../services/tweet.js";
 import { User } from "../entities/user.js";
 
 const router = express.Router();
@@ -123,19 +127,23 @@ router.get(
     }
 
     // Frienship fields will be handled on a seperate queries, so remove them
-    const friendshipFields = removeArrayFields<typeof fields[0]>(fields, [
+    const seperateFields = removeArrayFields<typeof fields[0]>(fields, [
       "totalFollowees",
       "totalFollowers",
+      "totalTweets",
     ]);
 
-    // Set flags for friendship fields to query
+    // Set flags for seperate fields to query
     let getTotalFollowees = false;
     let getTotalFollowers = false;
-    friendshipFields.forEach((field) => {
+    let getTotalTweets = false;
+    seperateFields.forEach((field) => {
       if (field === "totalFollowees") {
         getTotalFollowees = true;
       } else if (field === "totalFollowers") {
         getTotalFollowers = true;
+      } else if (field === "totalTweets") {
+        getTotalTweets = true;
       }
     });
 
@@ -143,15 +151,16 @@ router.get(
     const views = fields.map((f) => "," + f);
     const userID = req.params.id;
 
-    let finalResult = {};
-
     // Query regular fields
     simpleQuery(
       res,
       "SELECT id" + views.join("") + " FROM user WHERE id = ?",
       [userID],
-      (result: any) => {
-        finalResult = result[0];
+      async (result: any) => {
+        let finalResult: GetUser["response"]["user"] = result[0];
+        if (finalResult && getTotalTweets) {
+          finalResult.totalTweets = await getTotalUserTweets(Number(userID));
+        }
         if (!getTotalFollowers && !getTotalFollowees) {
           res.send({ ok: true, user: finalResult });
           return;
@@ -266,12 +275,11 @@ router.get(
 );
 
 // Return user's tweets and retweets
-// TODO: include retweets and sort
 router.get(
   "/:userID/tweets",
   (
     req: TypedRequestQuery<{ userID: string }>,
-    res: Response<GetTweets["response"]>
+    res: Response<GetUserTweetsAndRetweets["response"]>
   ) => {
     const { userID } = req.params;
     const query =
@@ -279,8 +287,31 @@ router.get(
        FROM tweet, user \
        WHERE tweet.authorID = ? AND isReply = false AND user.id = authorID \
        ORDER BY creationDate DESC";
-    const sendResult = (result: any) => {
-      res.send({ ok: true, tweets: result });
+    const sendResult = async (tweets: Array<Tweet & Partial<User>>) => {
+      const retweets = await getUserRetweets(Number(userID));
+      const finalTweets: GetUserTweetsAndRetweets["response"]["tweetsAndRetweets"] =
+        tweets.map((tweet) => ({
+          tweet,
+        }));
+      const tweetsAndRetweets = finalTweets.concat(
+        retweets.map((retweet) => ({ retweet: retweet }))
+      );
+      tweetsAndRetweets.sort((a, b) => {
+        const aDate = a.tweet ? a.tweet.creationDate : a.retweet?.retweetDate;
+        const bDate = b.tweet ? b.tweet.creationDate : b.retweet?.retweetDate;
+        console.log(aDate, " vs ", bDate);
+
+        if (aDate && bDate) {
+          if (new Date(aDate) > new Date(bDate)) {
+            return -1;
+          } else {
+            return 1;
+          }
+        }
+        return 0;
+      });
+
+      res.send({ ok: true, tweetsAndRetweets });
     };
     simpleQuery(res, query, [userID], sendResult);
   }
