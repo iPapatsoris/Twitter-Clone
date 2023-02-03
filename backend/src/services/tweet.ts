@@ -1,8 +1,8 @@
 /* eslint-disable no-multi-str */
 import db from "../connection.js";
-import { printError, simpleQuery } from "../util.js";
+import { printError, runQuery } from "../util.js";
 import {
-  convertQueryResultToTweet,
+  convertQueryResultToTweets,
   Retweet,
   Tweet,
 } from "../entities/tweet.js";
@@ -29,7 +29,7 @@ export const getTweetPreviousReplies = (
           reject();
           return;
         }
-        const result = convertQueryResultToTweet(dbResult[0]);
+        const result = convertQueryResultToTweets(dbResult)[0];
 
         accumulator.push(result);
         const { isReply, referencedTweetID } = result;
@@ -78,7 +78,7 @@ export const getTweetNestedReplies = (
           reject();
           return;
         }
-        const result = convertQueryResultToTweet(dbResult[0]);
+        const result = convertQueryResultToTweets(dbResult)[0];
         accumulator.push(result);
         const { replyDepth, id } = result;
         resolve(
@@ -128,22 +128,13 @@ export const updateParentTweetReplyDepth = (
   );
 };
 
-type Tags = Array<{ id: number; username: string }>;
+type Tags = { id: number; username: string };
 export const getTweetTags = async (tweetID: number) => {
-  return new Promise<Tags>((resolve, reject) => {
-    const query =
-      "SELECT username, userID FROM tweet_tags_user, user \
-                 WHERE tweetID = ? AND user.id = userID";
-    db.query(query, [tweetID], (error, result: Tags) => {
-      if (error) {
-        printError(error);
-        reject();
-      }
-      console.log(result);
-
-      resolve(result);
-    });
-  });
+  return await runQuery<Tags>(
+    "SELECT username, userID FROM tweet_tags_user, user \
+                 WHERE tweetID = ? AND user.id = userID",
+    [tweetID]
+  );
 };
 
 // TODO: catch inner rejected promise
@@ -176,7 +167,7 @@ export const getUserRetweets = (userID: number) => {
         retweeter,
         retweetDate: retweet.retweetDate,
         tweet: {
-          ...convertQueryResultToTweet(retweet),
+          ...convertQueryResultToTweets(retweet)[0],
           ...getTweetStats(retweet),
         },
       }));
@@ -190,59 +181,69 @@ export const getUserRetweets = (userID: number) => {
 };
 
 export const getTweetStats = async (tweetID: number) => {
-  const query =
-    "SELECT count(*) as totalRetweets FROM user_retweets WHERE tweetID = ?";
-  const totalRetweets = await new Promise<number>((resolve, reject) => {
-    db.query(query, [tweetID], async (error, result) => {
-      if (error) {
-        printError(error);
-        reject();
-      } else {
-        resolve(result[0].totalRetweets);
-      }
-    });
-  });
-  const totalLikes = await new Promise<number>((resolve, reject) => {
-    const query =
-      "SELECT count(*) as totalLikes FROM user_likes_tweet WHERE tweetID = ?";
-    db.query(query, [tweetID], (error, result) => {
-      if (error) {
-        printError(error);
-        reject();
-      } else {
-        resolve(result[0].totalLikes);
-      }
-    });
-  });
-
-  const totalReplies = await new Promise<number>((resolve, reject) => {
-    const query =
-      "SELECT count(*) as totalReplies FROM tweet \
-       WHERE referencedTweetID = ? AND isReply = true";
-    db.query(query, [tweetID], (error, result) => {
-      if (error) {
-        printError(error);
-        reject();
-      } else {
-        resolve(result[0].totalReplies);
-      }
-    });
-  });
+  const [[{ totalRetweets }], [{ totalLikes }], [{ totalReplies }]] =
+    await Promise.all([
+      runQuery<{ totalRetweets: number }>(
+        "SELECT count(*) as totalRetweets FROM user_reacts_to_tweet \
+         WHERE tweetID = ? AND isRetweet = true",
+        [tweetID]
+      ),
+      runQuery<{ totalLikes: number }>(
+        "SELECT count(*) as totalLikes FROM user_reacts_to_tweet \
+         WHERE tweetID = ? AND isLike = true",
+        [tweetID]
+      ),
+      runQuery<{ totalReplies: number }>(
+        "SELECT count(*) as totalReplies FROM tweet \
+         WHERE referencedTweetID = ? AND isReply = true",
+        [tweetID]
+      ),
+    ]);
 
   return { totalRetweets, totalLikes, totalReplies };
 };
 
 export const getTotalUserTweets = async (userID: number) => {
-  return await new Promise<number>((resolve, reject) => {
-    const query =
-      "SELECT count(*) as totalTweets FROM tweet WHERE authorID = ?";
-    db.query(query, [userID], (error, result) => {
-      if (error) {
-        printError(error);
-        reject();
-      } else {
-        resolve(result[0].totalTweets);
-      }
-    });
-  });
+  return (
+    await runQuery<{ totalTweets: number }>(
+      "SELECT count(*) as totalTweets FROM tweet WHERE authorID = ?",
+      [userID]
+    )
+  )[0].totalTweets;
 };
+
+export const getTweets = async (
+  whereClause: string,
+  queryEscapedValues: any[]
+) => {
+  let query =
+    "SELECT tweet.*, username, name, avatar, isVerified \
+     FROM tweet, user \
+     WHERE authorID = user.id";
+  if (whereClause !== "") {
+    query += " AND " + whereClause;
+  }
+
+  const result = await runQuery(query, queryEscapedValues);
+  const tweets = convertQueryResultToTweets(result);
+
+  const tagsPromises: Promise<[Tags]>[] = [];
+  const statsPromises: Promise<Omit<Tweet["stats"], "views">>[] = [];
+  for (const tweet of tweets) {
+    tagsPromises.push(getTweetTags(tweet.id));
+    statsPromises.push(getTweetStats(tweet.id));
+  }
+  const tags = await Promise.all(tagsPromises);
+  const stats = await Promise.all(statsPromises);
+
+  for (const tweetIndex in tweets) {
+    const tweet = tweets[tweetIndex];
+    tweet.usernameTags = tags[tweetIndex];
+    tweet.stats = { ...tweet.stats, ...stats[tweetIndex] };
+  }
+
+  return tweets;
+};
+
+// const res = await getTweets("tweet.id = ?", [11]);
+// console.log(res);

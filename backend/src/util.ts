@@ -54,11 +54,23 @@ export const simpleQuery = <T>(
   handleSuccess: (result: any) => void = () => resp.send({ ok: true }),
   handleError: (error: MysqlError) => void = () => resp.send({ ok: false })
 ) =>
-  db.query(query, queryEscapedValues, (error, result, fields) => {
+  db.query(query, queryEscapedValues, (error, result) => {
     if (error) {
       printError(error);
       handleError(error);
       return;
     }
     handleSuccess(result);
+  });
+
+export const runQuery = <T>(query: string, queryEscapedValues: any[]) =>
+  new Promise<[T]>((resolve, reject) => {
+    db.query(query, queryEscapedValues, (error, result) => {
+      if (error) {
+        printError(error);
+        reject(error);
+        return;
+      }
+      resolve(result);
+    });
   });

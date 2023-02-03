@@ -10,11 +10,7 @@ import {
   TweetWithNestedReplies,
 } from "../api/tweet.js";
 import { simpleQuery, TypedRequestQuery } from "../util.js";
-import {
-  convertQueryResultToTweet,
-  convertQueryResultToTweetArray,
-  Tweet,
-} from "../entities/tweet.js";
+import { convertQueryResultToTweets, Tweet } from "../entities/tweet.js";
 import {
   getTweetNestedReplies,
   getTweetPreviousReplies,
@@ -138,8 +134,9 @@ router.post(
     res: Response<NormalResponse>
   ) => {
     const query =
-      "INSERT INTO user_retweets (tweetID, userID, retweetDATE) \
-       VALUES (?, ?, NOW())";
+      "INSERT INTO user_reacts_to_tweet \
+      (tweetID, userID, reactionDate, isRetweet, isLike) \
+       VALUES (?, ?, NOW(), true, false)";
     simpleQuery(res, query, [req.params.tweetID, currentUserID]);
   }
 );
@@ -151,8 +148,9 @@ router.post(
     res: Response<NormalResponse>
   ) => {
     const query =
-      "INSERT INTO user_likes_tweet (tweetID, userID, likeDate) \
-       VALUES (?, ?, NOW())";
+      "INSERT INTO user_reacts_to_tweet \
+      (tweetID, userID, reactionDate, isRetweet, isLike) \
+       VALUES (?, ?, NOW(), false, true)";
     simpleQuery(res, query, [req.params.tweetID, currentUserID]);
   }
 );
@@ -175,7 +173,7 @@ router.get(
        WHERE authorID = user.id AND authorID = followeeID AND followerID = ? \
        AND isReply = false";
     simpleQuery(res, query, [currentUserID], async (result: any) => {
-      res.send({ ok: true, tweets: convertQueryResultToTweetArray(result) });
+      res.send({ ok: true, tweets: convertQueryResultToTweets(result) });
     });
   }
 );
@@ -204,7 +202,7 @@ router.get(
         res.send({ ok: false });
         return;
       }
-      middleTweet = convertQueryResultToTweet(result[0]);
+      middleTweet = convertQueryResultToTweets(result)[0];
 
       // Get previous replies from the original tweet until the middle one
       const previousReplies: Array<Tweet> = await getTweetPreviousReplies(
@@ -228,7 +226,7 @@ router.get(
         "SELECT tweet.*, username, name, avatar, isVerified FROM tweet, user \
          WHERE isReply = true AND referencedTweetID = ? AND authorID = user.id";
       simpleQuery(res, query, [tweetID], async (dbResult) => {
-        const result = convertQueryResultToTweetArray(dbResult);
+        const result = convertQueryResultToTweets(dbResult);
         const replies: Tweet[] = result;
 
         // Get nested replies of each reply, in parallel
@@ -300,7 +298,7 @@ router.get(
         res.send({ ok: false });
         return;
       }
-      tweet = convertQueryResultToTweet(result[0]);
+      tweet = convertQueryResultToTweets(result)[0];
 
       // Retrieve all nested replies
       let replies: Tweet[];
@@ -345,7 +343,7 @@ router.get(
         res.send({ ok: false });
         return;
       }
-      tweet = convertQueryResultToTweet(result[0]);
+      tweet = convertQueryResultToTweets(result)[0];
 
       // Retrieve previous replies
       let replies: Tweet[];

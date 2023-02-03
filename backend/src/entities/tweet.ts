@@ -5,7 +5,6 @@ export type Tweet = {
   text: string;
   isReply: boolean;
   referencedTweetID?: number;
-  views: number;
   creationDate: string;
   replyDepth: number;
   rootTweetID: number;
@@ -14,8 +13,12 @@ export type Tweet = {
     id: number;
   }>;
   author: Pick<User, "id" | "name" | "username" | "isVerified" | "avatar">;
-  totalRetweets?: number;
-  totalLikes?: number;
+  stats: {
+    views: number;
+    totalRetweets: number;
+    totalLikes: number;
+    totalReplies: number;
+  };
 };
 
 export type Retweet = {
@@ -25,13 +28,12 @@ export type Retweet = {
   retweeter: Pick<User, "id" | "name">;
 };
 
-export const convertQueryResultToTweet = (result: any): Tweet => {
-  return {
+export const convertQueryResultToTweets = (resultArray: any[]): Tweet[] => {
+  return resultArray.map((result) => ({
     id: result.id,
     text: result.text,
     isReply: result.isReply,
     referencedTweetID: result.referencedTweetID,
-    views: result.views,
     creationDate: result.creationDate,
     replyDepth: result.replyDepth,
     rootTweetID: result.rootTweetID,
@@ -43,9 +45,11 @@ export const convertQueryResultToTweet = (result: any): Tweet => {
       isVerified: result.isVerified,
       avatar: result.avatar,
     },
-  };
-};
-
-export const convertQueryResultToTweetArray = (resultArray: any[]): Tweet[] => {
-  return resultArray.map((result) => convertQueryResultToTweet(result));
+    stats: {
+      views: result.views,
+      totalRetweets: -1,
+      totalLikes: -1,
+      totalReplies: -1,
+    },
+  }));
 };

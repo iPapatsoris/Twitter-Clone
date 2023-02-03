@@ -24,11 +24,7 @@ import {
   simpleQuery,
   TypedRequestQuery,
 } from "../util.js";
-import {
-  convertQueryResultToTweet,
-  convertQueryResultToTweetArray,
-  Tweet,
-} from "../entities/tweet.js";
+import { convertQueryResultToTweets, Tweet } from "../entities/tweet.js";
 import {
   getTotalUserTweets,
   getTweetStats,
@@ -161,6 +157,7 @@ router.get(
         let finalResult: GetUser["response"]["user"] = result[0];
         if (finalResult && getTotalTweets) {
           finalResult.totalTweets = await getTotalUserTweets(Number(userID));
+          console.log("its ", finalResult.totalTweets);
         }
         if (!getTotalFollowers && !getTotalFollowees) {
           res.send({ ok: true, user: finalResult });
@@ -292,7 +289,7 @@ router.get(
       const finalTweets: GetUserTweetsAndRetweets["response"]["tweetsAndRetweets"] =
         tweets.map((tweet) => ({
           tweet: {
-            ...convertQueryResultToTweet(tweet),
+            ...convertQueryResultToTweets([tweet])[0],
             ...getTweetStats(tweet.id),
           },
         }));
@@ -335,7 +332,7 @@ router.get(
        WHERE authorID = ? AND isReply = true \
        AND authorID = user.id";
     const sendResult = async (result: any) => {
-      const replies = convertQueryResultToTweetArray(result);
+      const replies = convertQueryResultToTweets(result);
       const promises: Array<Promise<NestedReplies>> = replies.map(
         (reply) =>
           new Promise((resolve, reject) => {
@@ -360,12 +357,12 @@ router.get(
               return;
             }
             getTweet(reply.referencedTweetID, async (result) => {
-              const previousReply = convertQueryResultToTweet(result[0]);
+              const previousReply = convertQueryResultToTweets(result)[0];
               let originalTweet: Tweet | null = null;
               let hasMoreNestedReplies = false;
               if (previousReply.isReply && previousReply.referencedTweetID) {
                 getTweet(previousReply.referencedTweetID, async (result) => {
-                  originalTweet = convertQueryResultToTweet(result[0]);
+                  originalTweet = convertQueryResultToTweets(result)[0];
                   if (originalTweet.isReply) {
                     hasMoreNestedReplies = true;
                     const query =
@@ -377,7 +374,7 @@ router.get(
                       query,
                       [originalTweet.rootTweetID],
                       async (result) => {
-                        originalTweet = convertQueryResultToTweet(result[0]);
+                        originalTweet = convertQueryResultToTweets(result)[0];
 
                         const thread = [originalTweet, previousReply, reply];
                         for (const reply of thread) {
