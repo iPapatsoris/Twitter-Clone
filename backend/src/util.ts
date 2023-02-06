@@ -64,7 +64,7 @@ export const simpleQuery = <T>(
   });
 
 export const runQuery = <T>(query: string, queryEscapedValues: any[]) =>
-  new Promise<[T]>((resolve, reject) => {
+  new Promise<T[]>((resolve, reject) => {
     db.query(query, queryEscapedValues, (error, result) => {
       if (error) {
         printError(error);

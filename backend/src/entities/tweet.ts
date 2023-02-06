@@ -19,10 +19,11 @@ export type Tweet = {
     totalLikes: number;
     totalReplies: number;
   };
+  isLiked: boolean;
+  isRetweeted: boolean;
 };
 
 export type Retweet = {
-  id: number;
   retweetDate: string;
   tweet: Tweet;
   retweeter: Pick<User, "id" | "name">;
@@ -51,5 +52,7 @@ export const convertQueryResultToTweets = (resultArray: any[]): Tweet[] => {
       totalLikes: -1,
       totalReplies: -1,
     },
+    isLiked: false,
+    isRetweeted: false,
   }));
 };

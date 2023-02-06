@@ -19,55 +19,53 @@ import {
 import { checkPermissions } from "../permissions.js";
 import {
   Fields,
-  printError,
   removeArrayFields,
+  runQuery,
   simpleQuery,
   TypedRequestQuery,
 } from "../util.js";
-import { convertQueryResultToTweets, Tweet } from "../entities/tweet.js";
+import { Tweet } from "../entities/tweet.js";
 import {
   getTotalUserTweets,
-  getTweetStats,
-  getTweetTags,
+  getTweet,
+  getTweets,
   getUserRetweets,
+  mergeTweetsAndRetweets,
 } from "../services/tweet.js";
-import { User } from "../entities/user.js";
 
 const router = express.Router();
 
 router
   .route("/")
   .post(
-    (
+    async (
       req: Request<{}, {}, CreateUser["request"]>,
       res: Response<CreateUser["response"]>
     ) => {
       const { user } = req.body;
       const hash = sha256(user.password);
-      const query =
+      await runQuery(
         "INSERT INTO user \
-      (username, password, email, name, birthDate, joinedDate)\
-      VALUES (?, ?, ?, ?, ?, NOW())";
-      simpleQuery(
-        res,
-        query,
-        [user.username, hash, user.email, user.name, user.birthDate],
-        undefined,
-        (error) => {
-          let errorCode: number | undefined;
-          if (error.code === "ER_DUP_ENTRY") {
-            errorCode = ErrorCodes.UsernameAlreadyExists;
-          }
-          res.send({
-            ok: false,
-            errorCode,
-          });
+         (username, password, email, name, birthDate, joinedDate)\
+         VALUES (?, ?, ?, ?, ?, NOW())",
+        [user.username, hash, user.email, user.name, user.birthDate]
+      ).catch((error) => {
+        let errorCode: number | undefined;
+        if (error.code === "ER_DUP_ENTRY") {
+          errorCode = ErrorCodes.UsernameAlreadyExists;
         }
-      );
+        res.send({
+          ok: false,
+          errorCode,
+        });
+      });
+      res.send({
+        ok: true,
+      });
     }
   )
   .patch(
-    (
+    async (
       req: TypedRequestQuery<
         {},
         Fields<UpdateUserFields>,
@@ -95,17 +93,17 @@ router
       const user = req.body;
       const values = Object.values(req.body);
 
-      const query =
-        "UPDATE user SET " + preparedFields.join("") + " WHERE id = ?";
-      simpleQuery(res, query, [...values, currentUserID], () =>
-        res.send({ ok: true, user: user })
+      await runQuery(
+        "UPDATE user SET " + preparedFields.join("") + " WHERE id = ?",
+        [...values, currentUserID]
       );
+      res.send({ ok: true, user: user });
     }
   );
 
 router.get(
   "/:id",
-  (
+  async (
     req: TypedRequestQuery<{ id: string }, Fields<GetUserFields>>,
     res: Response<GetUser["response"]>
   ) => {
@@ -149,63 +147,50 @@ router.get(
     const userID = req.params.id;
 
     // Query regular fields
-    simpleQuery(
-      res,
+    const [user] = await runQuery<GetUser["response"]["user"]>(
       "SELECT id" + views.join("") + " FROM user WHERE id = ?",
-      [userID],
-      async (result: any) => {
-        let finalResult: GetUser["response"]["user"] = result[0];
-        if (finalResult && getTotalTweets) {
-          finalResult.totalTweets = await getTotalUserTweets(Number(userID));
-          console.log("its ", finalResult.totalTweets);
-        }
-        if (!getTotalFollowers && !getTotalFollowees) {
-          res.send({ ok: true, user: finalResult });
-          return;
-        }
+      [userID]
+    );
 
-        // Query friendship fields
-        const totalFollowersQuery =
-          "SELECT COUNT(*) as totalFollowers \
+    if (!user) {
+      res.send({ ok: false });
+      return;
+    }
+
+    if (getTotalTweets) {
+      user.totalTweets = await getTotalUserTweets(Number(userID));
+    }
+    if (!getTotalFollowers && !getTotalFollowees) {
+      res.send({ ok: true, user });
+      return;
+    }
+
+    // Query friendship fields
+    const totalFollowersQuery =
+      "SELECT COUNT(*) as totalFollowers \
          FROM user_follows as friendship \
          WHERE friendship.followeeID = ?";
-        const totalFolloweesQuery =
-          "SELECT COUNT(*) as totalFollowees \
+    const totalFolloweesQuery =
+      "SELECT COUNT(*) as totalFollowees \
          FROM user_follows as friendship \
          WHERE friendship.followerID = ?";
 
-        if (getTotalFollowers && getTotalFollowees) {
-          // Query both followers and followees
-          simpleQuery(res, totalFollowersQuery, [userID], (result) => {
-            finalResult = {
-              ...finalResult,
-              ...result[0],
-            };
-            simpleQuery(res, totalFolloweesQuery, [userID], (result) => {
-              finalResult = {
-                ...finalResult,
-                ...result[0],
-              };
-              res.send({ ok: true, user: finalResult });
-            });
-          });
-        } else if (getTotalFollowers || getTotalFollowees) {
-          // Query followers or followees
-          simpleQuery(
-            res,
-            getTotalFollowers ? totalFollowersQuery : totalFolloweesQuery,
-            [userID],
-            (result) => {
-              finalResult = {
-                ...finalResult,
-                ...result[0],
-              };
-              res.send({ ok: true, user: finalResult });
-            }
-          );
-        }
-      }
-    );
+    if (getTotalFollowees) {
+      user.totalFollowees = (
+        await runQuery<{ totalFollowees: number }>(totalFolloweesQuery, [
+          userID,
+        ])
+      )[0].totalFollowees;
+    }
+
+    if (getTotalFollowers) {
+      user.totalFollowers = (
+        await runQuery<{ totalFollowers: number }>(totalFollowersQuery, [
+          userID,
+        ])
+      )[0].totalFollowers;
+    }
+    res.send({ ok: true, user });
   }
 );
 
@@ -275,200 +260,135 @@ router.get(
 // Return user's tweets and retweets
 router.get(
   "/:userID/tweets",
-  (
+  async (
     req: TypedRequestQuery<{ userID: string }>,
     res: Response<GetUserTweetsAndRetweets["response"]>
   ) => {
     const { userID } = req.params;
-    const query =
-      "SELECT tweet.*, name, username, avatar, isVerified \
-       FROM tweet, user \
-       WHERE tweet.authorID = ? AND isReply = false AND user.id = authorID";
-    const sendResult = async (tweets: Array<Tweet & Partial<User>>) => {
-      const retweets = await getUserRetweets(Number(userID));
-      const finalTweets: GetUserTweetsAndRetweets["response"]["tweetsAndRetweets"] =
-        tweets.map((tweet) => ({
-          tweet: {
-            ...convertQueryResultToTweets([tweet])[0],
-            ...getTweetStats(tweet.id),
-          },
-        }));
-      const tweetsAndRetweets = finalTweets.concat(
-        retweets.map((retweet) => ({ retweet: retweet }))
-      );
-      tweetsAndRetweets.sort((a, b) => {
-        const aDate = a.tweet ? a.tweet.creationDate : a.retweet?.retweetDate;
-        const bDate = b.tweet ? b.tweet.creationDate : b.retweet?.retweetDate;
-        console.log(aDate, " vs ", bDate);
+    const tweetIDs = await runQuery<{ id: number }>(
+      "SELECT id \
+       FROM tweet \
+       WHERE tweet.authorID = ? AND isReply = false",
+      [userID]
+    );
+    const tweets = await Promise.all(
+      tweetIDs.map(async ({ id }) => getTweet(id))
+    );
 
-        if (aDate && bDate) {
-          if (new Date(aDate) > new Date(bDate)) {
-            return -1;
-          } else {
-            return 1;
-          }
-        }
-        return 0;
-      });
-
-      res.send({ ok: true, tweetsAndRetweets });
-    };
-    simpleQuery(res, query, [userID], sendResult);
+    const retweets = await getUserRetweets(Number(userID));
+    res.send({
+      ok: true,
+      tweetsAndRetweets: await mergeTweetsAndRetweets(tweets, retweets),
+    });
   }
 );
 
 // Return user's replies and retweets
-// TODO: get also tweet stats
 router.get(
   "/:userID/replies",
-  (
+  async (
     req: TypedRequestQuery<{ userID: string }>,
     res: Response<GetUserRepliesAndRetweets["response"]>
   ) => {
     const { userID } = req.params;
-    const query =
-      "SELECT tweet.*, name, username, avatar, isVerified \
-       FROM tweet, user \
-       WHERE authorID = ? AND isReply = true \
-       AND authorID = user.id";
-    const sendResult = async (result: any) => {
-      const replies = convertQueryResultToTweets(result);
-      const promises: Array<Promise<NestedReplies>> = replies.map(
-        (reply) =>
-          new Promise((resolve, reject) => {
-            const getTweet = (
-              referencedTweetID: number,
-              handleSuccess: (result: any) => void
-            ) =>
-              simpleQuery(
-                res,
-                "SELECT tweet.*, name, username, avatar, isVerified \
-                 FROM tweet, user \
-                 WHERE authorID = user.id AND tweet.id = ?",
-                [referencedTweetID],
-                handleSuccess,
-                (error) => {
-                  printError(error);
-                  reject();
-                }
-              );
-            if (!reply.referencedTweetID) {
-              res.send({ ok: false });
-              return;
-            }
-            getTweet(reply.referencedTweetID, async (result) => {
-              const previousReply = convertQueryResultToTweets(result)[0];
-              let originalTweet: Tweet | null = null;
-              let hasMoreNestedReplies = false;
-              if (previousReply.isReply && previousReply.referencedTweetID) {
-                getTweet(previousReply.referencedTweetID, async (result) => {
-                  originalTweet = convertQueryResultToTweets(result)[0];
-                  if (originalTweet.isReply) {
-                    hasMoreNestedReplies = true;
-                    const query =
-                      "SELECT tweet.*, name, username, avatar, isVerified \
-                       FROM tweet, user \
-                       WHERE tweet.id = ? AND authorID = user.id";
-                    simpleQuery(
-                      res,
-                      query,
-                      [originalTweet.rootTweetID],
-                      async (result) => {
-                        originalTweet = convertQueryResultToTweets(result)[0];
+    const replyIDs = await runQuery<{ id: number }>(
+      "SELECT id \
+       FROM tweet \
+       WHERE authorID = ? AND isReply = true",
+      [userID]
+    );
 
-                        const thread = [originalTweet, previousReply, reply];
-                        for (const reply of thread) {
-                          reply.usernameTags = await getTweetTags(reply.id);
-                        }
-                        resolve({
-                          nestedReplies: thread,
-                          hasMoreNestedReplies,
-                        });
-                      }
-                    );
-                  } else {
-                    const thread = [originalTweet, previousReply, reply];
-                    for (const reply of thread) {
-                      reply.usernameTags = await getTweetTags(reply.id);
-                    }
-                    resolve({
-                      nestedReplies: [originalTweet, previousReply, reply],
-                      hasMoreNestedReplies,
-                    });
-                  }
-                });
-              } else {
-                const thread = [previousReply, reply];
-                for (const reply of thread) {
-                  reply.usernameTags = await getTweetTags(reply.id);
-                }
-                resolve({
-                  nestedReplies: [previousReply, reply],
-                  hasMoreNestedReplies,
-                });
-              }
-            });
-          })
-      );
-      const promiseResults = await Promise.all(promises);
+    const replies = await getTweets(replyIDs.map(({ id }) => id));
 
-      const retweets = await getUserRetweets(Number(req.params.userID));
-
-      const finalReplies: GetUserRepliesAndRetweets["response"]["repliesAndRetweets"] =
-        promiseResults.map((reply) => ({
-          reply,
-        }));
-      const repliesAndRetweets = finalReplies.concat(
-        retweets.map((retweet) => ({ retweet: retweet }))
-      );
-
-      console.log(repliesAndRetweets);
-
-      const getMostRecentReplyDate = (thread: NestedReplies) =>
-        thread.nestedReplies[thread.nestedReplies.length - 1].creationDate;
-
-      repliesAndRetweets.sort((a, b) => {
-        const aDate = a.reply
-          ? getMostRecentReplyDate(a.reply)
-          : a.retweet?.retweetDate;
-        const bDate = b.reply
-          ? getMostRecentReplyDate(b.reply)
-          : b.retweet?.retweetDate;
-        console.log(aDate, " vs ", bDate);
-
-        if (aDate && bDate) {
-          if (new Date(aDate) > new Date(bDate)) {
-            return -1;
-          } else {
-            return 1;
+    const promises: Array<Promise<NestedReplies>> = replies.map(
+      (reply) =>
+        new Promise(async (resolve, reject) => {
+          if (!reply.referencedTweetID) {
+            res.send({ ok: false });
+            return;
           }
+          const previousReply = await getTweet(reply.referencedTweetID);
+          let originalTweet: Tweet | null = null;
+          let hasMoreNestedReplies = false;
+          if (previousReply.isReply && previousReply.referencedTweetID) {
+            originalTweet = await getTweet(previousReply.referencedTweetID);
+            if (originalTweet.isReply) {
+              originalTweet = await getTweet(originalTweet.rootTweetID);
+              const thread = [originalTweet, previousReply, reply];
+              resolve({
+                nestedReplies: thread,
+                hasMoreNestedReplies,
+              });
+            } else {
+              resolve({
+                nestedReplies: [originalTweet, previousReply, reply],
+                hasMoreNestedReplies,
+              });
+            }
+          } else {
+            resolve({
+              nestedReplies: [previousReply, reply],
+              hasMoreNestedReplies,
+            });
+          }
+        })
+    );
+    const promiseResults = await Promise.all(promises);
+    const retweets = await getUserRetweets(Number(req.params.userID));
+
+    const finalReplies: GetUserRepliesAndRetweets["response"]["repliesAndRetweets"] =
+      promiseResults.map((reply) => ({
+        reply,
+      }));
+    const repliesAndRetweets = finalReplies.concat(
+      retweets.map((retweet) => ({ retweet: retweet }))
+    );
+
+    console.log(repliesAndRetweets);
+
+    const getMostRecentReplyDate = (thread: NestedReplies) =>
+      thread.nestedReplies[thread.nestedReplies.length - 1].creationDate;
+
+    repliesAndRetweets.sort((a, b) => {
+      const aDate = a.reply
+        ? getMostRecentReplyDate(a.reply)
+        : a.retweet?.retweetDate;
+      const bDate = b.reply
+        ? getMostRecentReplyDate(b.reply)
+        : b.retweet?.retweetDate;
+      console.log(aDate, " vs ", bDate);
+
+      if (aDate && bDate) {
+        if (new Date(aDate) > new Date(bDate)) {
+          return -1;
+        } else {
+          return 1;
         }
-        return 0;
-      });
-      res.send({ ok: true, repliesAndRetweets });
-    };
-    simpleQuery(res, query, [userID], sendResult);
+      }
+      return 0;
+    });
+    res.send({ ok: true, repliesAndRetweets });
   }
 );
 
-// TODO: get tweet stats, convert tweet
 router.get(
   "/:userID/likes",
-  (
+  async (
     req: TypedRequestQuery<{ userID: string }>,
     res: Response<GetTweets["response"]>
   ) => {
     const { userID } = req.params;
-    const query =
-      "SELECT tweet.*, name, username, avatar, isVerified \
-       FROM tweet, user_reacts_to_tweet, user \
-       WHERE userID = ? AND tweetID = tweet.id AND user.id = authorID \
-       AND isLike = true \
-       ORDER BY reactionDate DESC";
-    const sendResult = (result: any) => {
-      res.send({ ok: true, tweets: result });
-    };
-    simpleQuery(res, query, [userID], sendResult);
+    const tweetIDs = await runQuery<{ id: number }>(
+      "SELECT id \
+       FROM tweet \
+       WHERE authorID = ? AND isLike = true \
+       ORDER BY reactionDate DESC",
+      [userID]
+    );
+    res.send({
+      ok: true,
+      tweets: await getTweets(tweetIDs.map(({ id }) => id)),
+    });
   }
 );
 

@@ -1,44 +1,33 @@
 /* eslint-disable no-multi-str */
-import db from "../connection.js";
-import { printError, runQuery } from "../util.js";
+import { runQuery } from "../util.js";
 import {
   convertQueryResultToTweets,
   Retweet,
   Tweet,
 } from "../entities/tweet.js";
+import { currentUserID } from "../index.js";
+import { GetUserTweetsAndRetweets } from "../api/user.js";
 
 // Get past thread conversation that current tweet responds to
-export const getTweetPreviousReplies = (
+export const getTweetPreviousReplies = async (
   isReply: boolean,
   referencedTweetID?: number,
   accumulator: Tweet[] = []
 ) => {
-  return new Promise<Tweet[]>((resolve, reject) => {
-    if (!isReply) {
-      resolve(accumulator);
-      return;
-    }
+  if (!isReply || !referencedTweetID) {
+    return accumulator;
+  }
 
-    db.query(
-      "SELECT tweet.*, username, name, isVerified, avatar FROM tweet, user \
-       WHERE tweet.id = ? AND authorID = user.id",
-      [referencedTweetID],
-      (error, dbResult) => {
-        if (error) {
-          printError(error);
-          reject();
-          return;
-        }
-        const result = convertQueryResultToTweets(dbResult)[0];
+  const parentTweet = await getTweet(referencedTweetID);
+  accumulator.push(parentTweet);
+  const { isReply: parentIsReply, referencedTweetID: parentReferencedTweetID } =
+    parentTweet;
 
-        accumulator.push(result);
-        const { isReply, referencedTweetID } = result;
-        resolve(
-          getTweetPreviousReplies(isReply, referencedTweetID, accumulator)
-        );
-      }
-    );
-  });
+  return getTweetPreviousReplies(
+    parentIsReply,
+    parentReferencedTweetID,
+    accumulator
+  );
 };
 
 /**
@@ -51,7 +40,7 @@ export const getTweetPreviousReplies = (
  * prioritizing replies with many impressions, of users with many followers,
  * or responses of the original tweet creator.
  */
-export const getTweetNestedReplies = (
+export const getTweetNestedReplies = async (
   tweetID: number,
   // Tweet's actual reply depth
   tweetReplyDepth: number,
@@ -60,124 +49,92 @@ export const getTweetNestedReplies = (
   maxDepth: number,
   accumulator: Tweet[] = []
 ) => {
-  return new Promise<Tweet[]>((resolve, reject) => {
-    // Skip query if we already know that tweet has no replies
-    // or if we have reached the max reply depth specified for this query
-    if (tweetReplyDepth === 0 || maxDepth === 0) {
-      return resolve(accumulator);
-    }
+  // Skip query if we already know that tweet has no replies
+  // or if we have reached the max reply depth specified for this query
+  if (tweetReplyDepth === 0 || maxDepth === 0) {
+    return accumulator;
+  }
 
-    db.query(
-      "SELECT tweet.*, username, name, isVerified, avatar FROM tweet, user \
-       WHERE isReply = true AND referencedTweetID = ? AND user.id = authorID \
-       ORDER BY replyDepth DESC LIMIT 1",
-      [tweetID],
-      (error, dbResult) => {
-        if (error) {
-          printError(error);
-          reject();
-          return;
-        }
-        const result = convertQueryResultToTweets(dbResult)[0];
-        accumulator.push(result);
-        const { replyDepth, id } = result;
-        resolve(
-          getTweetNestedReplies(
-            id,
-            replyDepth,
-            maxDepth === -1 ? -1 : maxDepth - 1,
-            accumulator
-          )
-        );
-      }
-    );
-  });
+  const [{ parentTweetID, parentReplyDepth }] = await runQuery<{
+    parentTweetID: number;
+    parentReplyDepth: number;
+  }>(
+    "SELECT id as parentTweetID, replyDepth as parentReplyDepth FROM tweet \
+     WHERE isReply = true AND referencedTweetID = ? \
+     ORDER BY replyDepth DESC LIMIT 1",
+    [tweetID]
+  );
+
+  const parentTweet = await getTweet(parentTweetID);
+  accumulator.push(parentTweet);
+
+  return getTweetNestedReplies(
+    parentTweetID,
+    parentReplyDepth,
+    maxDepth === -1 ? -1 : maxDepth - 1,
+    accumulator
+  );
 };
 
 // Recursively update the replyDepth field of a tweet reply thread, to take
 // into account a newly posted reply at the bottom of the tree
-export const updateParentTweetReplyDepth = (
+export const updateParentTweetReplyDepth = async (
   parentID: number,
   newDepth: number
 ) => {
-  db.query(
-    "SELECT isReply, replyDepth, referencedTweetID FROM tweet WHERE id = ?",
-    [parentID],
-    (error, result) => {
-      if (error) {
-        printError(error);
-        return;
-      }
-      const { isReply, replyDepth, referencedTweetID } = result[0];
-      if (newDepth > replyDepth) {
-        db.query(
-          "UPDATE tweet SET replyDepth = ? WHERE id = ?",
-          [newDepth, parentID],
-          (error) => {
-            if (error) {
-              printError(error);
-              return;
-            }
-            if (isReply) {
-              updateParentTweetReplyDepth(referencedTweetID, newDepth + 1);
-            }
-          }
-        );
-      }
+  const [{ isReply, replyDepth, referencedTweetID }] = await runQuery<{
+    isReply: boolean;
+    replyDepth: number;
+    referencedTweetID: number;
+  }>("SELECT isReply, replyDepth, referencedTweetID FROM tweet WHERE id = ?", [
+    parentID,
+  ]);
+
+  if (newDepth > replyDepth) {
+    await runQuery("UPDATE tweet SET replyDepth = ? WHERE id = ?", [
+      newDepth,
+      parentID,
+    ]);
+    if (isReply) {
+      updateParentTweetReplyDepth(referencedTweetID, newDepth + 1);
     }
-  );
+  }
 };
 
 type Tags = { id: number; username: string };
 export const getTweetTags = async (tweetID: number) => {
   return await runQuery<Tags>(
     "SELECT username, userID FROM tweet_tags_user, user \
-                 WHERE tweetID = ? AND user.id = userID",
+     WHERE tweetID = ? AND user.id = userID",
     [tweetID]
   );
 };
 
-// TODO: catch inner rejected promise
-export const getUserRetweets = (userID: number) => {
+export const getUserRetweets = async (userID: number): Promise<Retweet[]> => {
   const query =
-    "SELECT tweet.*, retweetDate, username, name, isVerified, avatar \
-       FROM tweet, user, user_reacts_to_tweet \
-       WHERE authorID = user.id AND tweet.id = tweetID AND userID = ? \
-       AND isRetweet = true";
-  return new Promise<Retweet[]>((resolve, reject) => {
-    db.query(query, [userID], async (error, result) => {
-      if (!result || !result.length) {
-        resolve([]);
-      }
-      const retweeter: Retweet["retweeter"] = await new Promise(
-        (resolve, reject) => {
-          const query = "SELECT id, name FROM user WHERE id = ?";
-          db.query(query, [userID], (error, result) => {
-            if (error) {
-              printError(error);
-              reject();
-            } else if (result) {
-              resolve(result[0].id);
-            }
-          });
-        }
-      );
+    "SELECT tweetID, retweetDate \
+     FROM user_reacts_to_tweet \
+     WHERE userID = ? AND isRetweet = true";
+  const retweets = await runQuery<{ tweetID: number; retweetDate: string }>(
+    query,
+    [userID]
+  );
+  if (!retweets || !retweets.length) {
+    return [];
+  }
+  const [retweeter] = await runQuery<Retweet["retweeter"]>(
+    "SELECT id, name FROM user WHERE id = ?",
+    [userID]
+  );
+  const tweets = await Promise.all(
+    retweets.map((retweet) => getTweet(retweet.tweetID))
+  );
 
-      const retweets: Retweet[] = result.map((retweet: any) => ({
-        retweeter,
-        retweetDate: retweet.retweetDate,
-        tweet: {
-          ...convertQueryResultToTweets(retweet)[0],
-          ...getTweetStats(retweet),
-        },
-      }));
-      for (const retweet of retweets) {
-        retweet.tweet.usernameTags = await getTweetTags(retweet.tweet.id);
-      }
-      console.log(retweets);
-      resolve(retweets);
-    });
-  });
+  return retweets.map((retweet, index) => ({
+    retweeter,
+    retweetDate: retweet.retweetDate,
+    tweet: tweets[index],
+  }));
 };
 
 export const getTweetStats = async (tweetID: number) => {
@@ -212,38 +169,66 @@ export const getTotalUserTweets = async (userID: number) => {
   )[0].totalTweets;
 };
 
-export const getTweets = async (
-  whereClause: string,
-  queryEscapedValues: any[]
-) => {
-  let query =
-    "SELECT tweet.*, username, name, avatar, isVerified \
-     FROM tweet, user \
-     WHERE authorID = user.id";
-  if (whereClause !== "") {
-    query += " AND " + whereClause;
-  }
-
-  const result = await runQuery(query, queryEscapedValues);
-  const tweets = convertQueryResultToTweets(result);
-
-  const tagsPromises: Promise<[Tags]>[] = [];
-  const statsPromises: Promise<Omit<Tweet["stats"], "views">>[] = [];
-  for (const tweet of tweets) {
-    tagsPromises.push(getTweetTags(tweet.id));
-    statsPromises.push(getTweetStats(tweet.id));
-  }
-  const tags = await Promise.all(tagsPromises);
-  const stats = await Promise.all(statsPromises);
-
-  for (const tweetIndex in tweets) {
-    const tweet = tweets[tweetIndex];
-    tweet.usernameTags = tags[tweetIndex];
-    tweet.stats = { ...tweet.stats, ...stats[tweetIndex] };
-  }
-
-  return tweets;
+const getUserReactionsToTweet = async (tweetID: number) => {
+  const [{ isRetweet, isLike }] = await runQuery<{
+    isRetweet: boolean;
+    isLike: boolean;
+  }>(
+    "SELECT isRetweet, isLike FROM user_reacts_to_tweet \
+     WHERE tweetID = ? AND userID = ?",
+    [tweetID, currentUserID]
+  );
+  return { isRetweet, isLike };
 };
 
-// const res = await getTweets("tweet.id = ?", [11]);
-// console.log(res);
+export const getTweets = async (tweetIDs: number[]) =>
+  await Promise.all(tweetIDs.map((tweetID) => getTweet(tweetID)));
+
+export const getTweet = async (tweetID: number) => {
+  const result = await runQuery<Tweet>(
+    "SELECT tweet.*, username, name, avatar, isVerified \
+         FROM tweet, user \
+         WHERE authorID = user.id, tweet.id = ?",
+    [tweetID]
+  );
+
+  const [tweet] = convertQueryResultToTweets(result);
+
+  const reactions = await getUserReactionsToTweet(tweet.id);
+
+  tweet.usernameTags = await getTweetTags(tweet.id);
+  tweet.stats = { ...tweet.stats, ...(await getTweetStats(tweet.id)) };
+  tweet.isRetweeted = reactions.isRetweet;
+  tweet.isLiked = reactions.isLike;
+
+  return tweet;
+};
+
+export const mergeTweetsAndRetweets = (
+  tweets: Tweet[],
+  retweets: Retweet[]
+) => {
+  const wrappedTweets: GetUserTweetsAndRetweets["response"]["tweetsAndRetweets"] =
+    tweets.map((tweet) => ({
+      tweet,
+    }));
+
+  const tweetsAndRetweets = wrappedTweets.concat(
+    retweets.map((retweet) => ({ retweet: retweet }))
+  );
+
+  return tweetsAndRetweets.sort((a, b) => {
+    const aDate = a.tweet ? a.tweet.creationDate : a.retweet?.retweetDate;
+    const bDate = b.tweet ? b.tweet.creationDate : b.retweet?.retweetDate;
+    console.log(aDate, " vs ", bDate);
+
+    if (aDate && bDate) {
+      if (new Date(aDate) > new Date(bDate)) {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
+    return 0;
+  });
+};
