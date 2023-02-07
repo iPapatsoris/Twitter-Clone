@@ -1,11 +1,14 @@
 import { Retweet, Tweet } from "../entities/tweet.js";
 import { User } from "../entities/user.js";
 import { NormalResponse } from "./common.js";
-import { NestedReplies, Thread } from "./tweet.js";
+import { Thread } from "./tweet.js";
 
 export type CreateUser = {
   request: {
-    user: Omit<User, "id" | "totalFollowers" | "totalFollowees">;
+    user: Omit<
+      User,
+      "id" | "totalFollowers" | "totalFollowees" | "totalTweets"
+    >;
   };
   response: NormalResponse;
 };
@@ -23,18 +26,16 @@ export type UpdateUser = {
       >
     >;
   };
-  response:
-    | NormalResponse
-    | {
-        user: UpdateUser["request"];
-      };
+  response: NormalResponse<{
+    user: UpdateUser["request"];
+  }>;
 };
 
-type GetUserParams = Partial<Omit<User, "password">>;
+export type GetUserParams = Partial<Omit<User, "password">>;
 export type GetUser = {
-  response: NormalResponse & {
-    user?: GetUserParams;
-  };
+  response: NormalResponse<{
+    user: GetUserParams;
+  }>;
 };
 
 export type CreateUserFields = keyof CreateUser["request"];
@@ -47,37 +48,31 @@ type MiniUserInfo = Pick<
 >;
 
 export type GetUserFollowees = {
-  response:
-    | NormalResponse
-    | {
-        followees: MiniUserInfo[];
-      };
+  response: NormalResponse<{
+    followees: MiniUserInfo[];
+  }>;
 };
 
 export type GetUserFollowers = {
-  response:
-    | NormalResponse
-    | {
-        followers: MiniUserInfo[];
-      };
+  response: NormalResponse<{
+    followers: MiniUserInfo[];
+  }>;
 };
 
 export type GetUserThreadsAndRetweets = {
-  response:
-    | NormalResponse & {
-        threadsAndRetweets?: Array<{
-          thread?: Thread;
-          retweet?: Retweet;
-        }>;
-      };
+  response: NormalResponse<{
+    threadsAndRetweets: Array<{
+      thread?: Thread;
+      retweet?: Retweet;
+    }>;
+  }>;
 };
 
 export type GetUserTweetsAndRetweets = {
-  response:
-    | NormalResponse & {
-        tweetsAndRetweets?: Array<{
-          tweet?: Tweet;
-          retweet?: Retweet;
-        }>;
-      };
+  response: NormalResponse<{
+    tweetsAndRetweets: Array<{
+      tweet?: Tweet;
+      retweet?: Retweet;
+    }>;
+  }>;
 };

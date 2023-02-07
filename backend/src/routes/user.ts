@@ -11,6 +11,7 @@ import {
   GetUserFields,
   GetUserFollowees,
   GetUserFollowers,
+  GetUserParams,
   GetUserThreadsAndRetweets,
   GetUserTweetsAndRetweets,
   UpdateUser,
@@ -100,7 +101,7 @@ router
         "UPDATE user SET " + preparedFields.join("") + " WHERE id = ?",
         [...values, currentUserID]
       );
-      res.send({ ok: true, user: user });
+      res.send({ ok: true, data: { user: user } });
     }
   );
 
@@ -150,7 +151,7 @@ router.get(
     const userID = req.params.id;
 
     // Query regular fields
-    const [user] = await runQuery<GetUser["response"]["user"]>(
+    const [user] = await runQuery<GetUserParams>(
       "SELECT id" + views.join("") + " FROM user WHERE id = ?",
       [userID]
     );
@@ -164,7 +165,7 @@ router.get(
       user.totalTweets = await getTotalUserTweets(Number(userID));
     }
     if (!getTotalFollowers && !getTotalFollowees) {
-      res.send({ ok: true, user });
+      res.send({ ok: true, data: { user } });
       return;
     }
 
@@ -193,7 +194,7 @@ router.get(
         ])
       )[0].totalFollowers;
     }
-    res.send({ ok: true, user });
+    res.send({ ok: true, data: { user } });
   }
 );
 
@@ -236,7 +237,7 @@ router.get(
        FROM user_follows, user \
        WHERE followeeID = ? AND followerID = user.id";
     const sendResult = (result: any) => {
-      res.send({ ok: true, followers: result });
+      res.send({ ok: true, data: { followers: result } });
     };
     simpleQuery(res, query, [userID], sendResult);
   }
@@ -254,7 +255,7 @@ router.get(
        FROM user_follows, user \
        WHERE followerID = ? AND followeeID = user.id";
     const sendResult = (result: any) => {
-      res.send({ ok: true, followees: result });
+      res.send({ ok: true, data: { followees: result } });
     };
     simpleQuery(res, query, [userID], sendResult);
   }
@@ -282,7 +283,9 @@ router.get(
     const retweets = await getUserRetweets(Number(userID));
     res.send({
       ok: true,
-      tweetsAndRetweets: await mergeTweetsAndRetweets(tweets, retweets),
+      data: {
+        tweetsAndRetweets: mergeTweetsAndRetweets(tweets, retweets),
+      },
     });
   }
 );
@@ -349,10 +352,12 @@ router.get(
 
     res.send({
       ok: true,
-      threadsAndRetweets: mergeThreadsAndRetweets(
-        tweetsAndRepliesWithNested,
-        retweets
-      ),
+      data: {
+        threadsAndRetweets: mergeThreadsAndRetweets(
+          tweetsAndRepliesWithNested,
+          retweets
+        ),
+      },
     });
   }
 );
@@ -373,7 +378,7 @@ router.get(
     );
     res.send({
       ok: true,
-      tweets: await getTweets(tweetIDs.map(({ id }) => id)),
+      data: { tweets: await getTweets(tweetIDs.map(({ id }) => id)) },
     });
   }
 );

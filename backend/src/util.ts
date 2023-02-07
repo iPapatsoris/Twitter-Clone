@@ -19,19 +19,6 @@ export const printError = (error: mysql.MysqlError) => {
   console.log(error.code + "\n" + error.sqlMessage + "\n" + error.sql + "\n");
 };
 
-export const filterResults = (filter: string[], res: any) => {
-  const filtered: any = {};
-  for (const fieldName of filter) {
-    filtered[fieldName] = res[fieldName];
-  }
-  return filtered;
-};
-
-export const isEmptyObject = (obj: Object) =>
-  obj &&
-  Object.keys(obj).length === 0 &&
-  Object.getPrototypeOf(obj) === Object.prototype;
-
 // Remove specific fields from an array if they exist, and return the ones
 // removed in a new array
 export const removeArrayFields = <T>(array: T[], fields: T[]) => {
@@ -47,8 +34,8 @@ export const removeArrayFields = <T>(array: T[], fields: T[]) => {
   return removed;
 };
 
-export const simpleQuery = <T>(
-  resp: Response<T | NormalResponse>,
+export const simpleQuery = <T = {}>(
+  resp: Response<NormalResponse<T>>,
   query: string,
   queryEscapedValues: any[],
   handleSuccess: (result: any) => void = () => resp.send({ ok: true }),

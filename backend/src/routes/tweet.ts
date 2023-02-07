@@ -6,7 +6,7 @@ import {
   CreateTweet,
   ExpandTweetReplies,
   GetTweet,
-  TweetWithNestedReplies,
+  Thread,
 } from "../api/tweet.js";
 import { runQuery, simpleQuery, TypedRequestQuery } from "../util.js";
 import { Tweet } from "../entities/tweet.js";
@@ -161,7 +161,7 @@ router.get(
 
     res.send({
       ok: true,
-      tweetsAndRetweets: mergeTweetsAndRetweets(tweets, retweets),
+      data: { tweetsAndRetweets: mergeTweetsAndRetweets(tweets, retweets) },
     });
   }
 );
@@ -213,31 +213,32 @@ router.get(
       promises.push(getTweetNestedReplies(reply.id, reply.replyDepth, 1));
     }
 
-    let promiseResults: Tweet[][];
+    let nestedRepliesOfReplies: Tweet[][];
     try {
-      promiseResults = await Promise.all<Tweet[]>(promises);
+      nestedRepliesOfReplies = await Promise.all<Tweet[]>(promises);
     } catch (error) {
       res.send({ ok: false });
       return;
     }
 
     // Prepare response
-    const finalNestedReplies: TweetWithNestedReplies[] = [];
+    const threads: Thread[] = [];
     for (const replyIndex in replies) {
       const reply = replies[replyIndex];
-      const promiseResult = promiseResults[replyIndex];
-      finalNestedReplies.push({
-        ...reply,
-        nestedReplies: promiseResult,
-        hasMoreNestedReplies: promiseResult.length < reply.replyDepth,
+      const nestedReplies = nestedRepliesOfReplies[replyIndex];
+      threads.push({
+        tweets: [reply, ...nestedReplies],
+        hasMoreNestedReplies: nestedReplies.length < reply.replyDepth,
       });
     }
 
     res.send({
       ok: true,
-      tweet: middleTweet,
-      replies: finalNestedReplies,
-      previousReplies: previousReplies,
+      data: {
+        tweet: middleTweet,
+        replies: threads,
+        previousReplies: previousReplies,
+      },
     });
     return;
   }
@@ -271,7 +272,7 @@ router.get(
     // Prepare response
     res.send({
       ok: true,
-      replies: [tweet, ...replies],
+      data: { replies: [tweet, ...replies] },
     });
     return;
   }
@@ -311,7 +312,7 @@ router.get(
     // Prepare response
     res.send({
       ok: true,
-      replies: [...replies, tweet],
+      data: { replies: [...replies, tweet] },
     });
     return;
   }

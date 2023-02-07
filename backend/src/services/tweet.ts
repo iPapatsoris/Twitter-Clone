@@ -6,11 +6,7 @@ import {
   Tweet,
 } from "../entities/tweet.js";
 import { currentUserID } from "../index.js";
-import {
-  GetUserThreadsAndRetweets,
-  GetUserTweetsAndRetweets,
-} from "../api/user.js";
-import { NestedReplies, Thread } from "../api/tweet.js";
+import { Thread } from "../api/tweet.js";
 
 // Get past thread conversation that current tweet responds to
 export const getTweetPreviousReplies = async (
@@ -211,14 +207,17 @@ export const getTweet = async (tweetID: number) => {
   return tweet;
 };
 
+// Merge tweets and retweets and sort by most recent first
 export const mergeTweetsAndRetweets = (
   tweets: Tweet[],
   retweets: Retweet[]
 ) => {
-  const wrappedTweets: GetUserTweetsAndRetweets["response"]["tweetsAndRetweets"] =
-    tweets.map((tweet) => ({
-      tweet,
-    }));
+  const wrappedTweets: Array<{
+    tweet?: Tweet;
+    retweet?: Retweet;
+  }> = tweets.map((tweet) => ({
+    tweet,
+  }));
 
   const tweetsAndRetweets = wrappedTweets.concat(
     retweets.map((retweet) => ({ retweet: retweet }))
@@ -227,7 +226,6 @@ export const mergeTweetsAndRetweets = (
   return tweetsAndRetweets.sort((a, b) => {
     const aDate = a.tweet ? a.tweet.creationDate : a.retweet?.retweetDate;
     const bDate = b.tweet ? b.tweet.creationDate : b.retweet?.retweetDate;
-    console.log(aDate, " vs ", bDate);
 
     if (aDate && bDate) {
       if (new Date(aDate) > new Date(bDate)) {
@@ -240,14 +238,17 @@ export const mergeTweetsAndRetweets = (
   });
 };
 
+// Merge tweets, replies and retweets and sort by most recent first
 export const mergeThreadsAndRetweets = (
   threads: Thread[],
   retweets: Retweet[]
 ) => {
-  const wrappedThreads: GetUserThreadsAndRetweets["response"]["threadsAndRetweets"] =
-    threads.map((thread) => ({
-      thread,
-    }));
+  const wrappedThreads: Array<{
+    thread?: Thread;
+    retweet?: Retweet;
+  }> = threads.map((thread) => ({
+    thread,
+  }));
   const threadsAndRetweets = wrappedThreads.concat(
     retweets.map((retweet) => ({ retweet: retweet }))
   );

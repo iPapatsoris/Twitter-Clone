@@ -1,6 +1,7 @@
 import { Tweet } from "../entities/tweet.js";
 import { NormalResponse } from "./common";
 
+export type CreateTweetFields = keyof CreateTweet["request"]["tweet"];
 export type CreateTweet = {
   request: {
     tweet: Omit<Tweet, "id" | "authorID" | "views" | "creationDate">;
@@ -9,36 +10,24 @@ export type CreateTweet = {
 };
 
 export type GetTweets = {
-  response:
-    | NormalResponse
-    | {
-        tweets: Tweet[];
-      };
-};
-
-export type NestedReplies = {
-  nestedReplies: Tweet[];
-  hasMoreNestedReplies: boolean;
+  response: NormalResponse<{
+    tweets: Tweet[];
+  }>;
 };
 
 export type Thread = {
   hasMoreNestedReplies: boolean;
   tweets: Tweet[];
 };
-export type TweetWithNestedReplies = Tweet & NestedReplies;
 
 export type GetTweet = {
-  response:
-    | NormalResponse
-    | {
-        tweet: Tweet;
-        replies: TweetWithNestedReplies[];
-        previousReplies: Tweet[];
-      };
+  response: NormalResponse<{
+    tweet: Tweet;
+    replies: Thread[];
+    previousReplies: Tweet[];
+  }>;
 };
 
 export type ExpandTweetReplies = {
-  response: NormalResponse | { replies: Tweet[] };
+  response: NormalResponse<{ replies: Tweet[] }>;
 };
-
-export type CreateTweetFields = keyof CreateTweet["request"]["tweet"];
