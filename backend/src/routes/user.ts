@@ -30,6 +30,7 @@ import {
   getTotalUserTweets,
   getTweet,
   getTweets,
+  getUniqueThreads,
   getUserRetweets,
   mergeThreadsAndRetweets,
   mergeTweetsAndRetweets,
@@ -296,6 +297,10 @@ router.get(
  * tweets per thread. Mark if thread has more than 3 tweets in
  * hasMoreNestedReplies. If it has more than 3, instead of returning the 3rd
  * most recent nested reply, return the thread root tweet.
+ *
+ * If a thread has multiple tweets by the user, include it only
+ * once. The featured tweet will be the one closest to the root tweet of the
+ * thread.
  */
 router.get(
   "/:userID/replies",
@@ -313,8 +318,12 @@ router.get(
 
     const tweetsAndReplies = await getTweets(replyIDs.map(({ id }) => id));
 
+    // Don't show a thread multiple times, if the user has multiple responses
+    // within the thread
+    const uniqueTweetsAndReplies = getUniqueThreads(tweetsAndReplies);
+
     const tweetsAndRepliesWithNested: Thread[] = await Promise.all(
-      tweetsAndReplies.map(async (tweet) => {
+      uniqueTweetsAndReplies.map(async (tweet) => {
         if (!tweet.isReply || !tweet.referencedTweetID) {
           // Tweet is not a reply; return 1 tweet
           return {

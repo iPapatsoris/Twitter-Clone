@@ -275,3 +275,17 @@ export const mergeThreadsAndRetweets = (
     return 0;
   });
 };
+
+// From tweets/replies that have the same root thread ID,
+// keep only one, the shallowest in the thread tree
+export const getUniqueThreads = (tweets: Tweet[]) => {
+  const rootTweetToLeastRecent = new Map<number, Tweet>();
+  for (const tweet of tweets) {
+    const rootID = tweet.isReply ? tweet.rootTweetID : tweet.id;
+    const res = rootTweetToLeastRecent.get(rootID);
+    if (!res || tweet.replyDepth < res.replyDepth) {
+      rootTweetToLeastRecent.set(rootID, tweet);
+    }
+  }
+  return Array.from(rootTweetToLeastRecent.values());
+};
