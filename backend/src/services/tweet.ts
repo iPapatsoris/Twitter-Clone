@@ -263,7 +263,6 @@ export const mergeThreadsAndRetweets = (
     const bDate = b.thread
       ? getMostRecentReplyDate(b.thread)
       : b.retweet?.retweetDate;
-    console.log(aDate, " vs ", bDate);
 
     if (aDate && bDate) {
       if (new Date(aDate) > new Date(bDate)) {
