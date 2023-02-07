@@ -32,7 +32,7 @@ router.post(
     const { tweet } = req.body;
     let rootTweetID: number | null = null;
     if (tweet.isReply) {
-      [{ rootTweetID }] = await runQuery<{ rootTweetID }>(
+      [{ rootTweetID }] = await runQuery<{ rootTweetID: number }>(
         "SELECT rootTweetID FROM tweet WHERE id = ?",
         [tweet.referencedTweetID]
       );
@@ -213,12 +213,13 @@ router.get(
       promises.push(getTweetNestedReplies(reply.id, reply.replyDepth, 1));
     }
 
-    const promiseResults = await Promise.all<Tweet[]>(promises).catch(
-      (error) => {
-        res.send({ ok: false });
-        return;
-      }
-    );
+    let promiseResults: Tweet[][];
+    try {
+      promiseResults = await Promise.all<Tweet[]>(promises);
+    } catch (error) {
+      res.send({ ok: false });
+      return;
+    }
 
     // Prepare response
     const finalNestedReplies: TweetWithNestedReplies[] = [];
@@ -260,12 +261,12 @@ router.get(
 
     // Retrieve all nested replies
     let replies: Tweet[];
-    replies = await getTweetNestedReplies(tweet.id, tweet.replyDepth, -1).catch(
-      () => {
-        res.send({ ok: false });
-        return;
-      }
-    );
+    try {
+      replies = await getTweetNestedReplies(tweet.id, tweet.replyDepth, -1);
+    } catch (error) {
+      res.send({ ok: false });
+      return;
+    }
 
     // Prepare response
     res.send({
@@ -294,13 +295,15 @@ router.get(
 
     // Retrieve previous replies
     let replies: Tweet[];
-    replies = await getTweetPreviousReplies(
-      tweet.isReply,
-      tweet.referencedTweetID
-    ).catch(() => {
+    try {
+      replies = await getTweetPreviousReplies(
+        tweet.isReply,
+        tweet.referencedTweetID
+      );
+    } catch (error) {
       res.send({ ok: false });
       return;
-    });
+    }
 
     // Put them in chronological order
     replies.reverse();

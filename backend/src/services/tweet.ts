@@ -6,14 +6,18 @@ import {
   Tweet,
 } from "../entities/tweet.js";
 import { currentUserID } from "../index.js";
-import { GetUserTweetsAndRetweets } from "../api/user.js";
+import {
+  GetUserThreadsAndRetweets,
+  GetUserTweetsAndRetweets,
+} from "../api/user.js";
+import { NestedReplies, Thread } from "../api/tweet.js";
 
 // Get past thread conversation that current tweet responds to
 export const getTweetPreviousReplies = async (
   isReply: boolean,
   referencedTweetID?: number,
   accumulator: Tweet[] = []
-) => {
+): Promise<Tweet[]> => {
   if (!isReply || !referencedTweetID) {
     return accumulator;
   }
@@ -48,7 +52,7 @@ export const getTweetNestedReplies = async (
   // Pass -1 to look until the end
   maxDepth: number,
   accumulator: Tweet[] = []
-) => {
+): Promise<Tweet[]> => {
   // Skip query if we already know that tweet has no replies
   // or if we have reached the max reply depth specified for this query
   if (tweetReplyDepth === 0 || maxDepth === 0) {
@@ -112,7 +116,7 @@ export const getTweetTags = async (tweetID: number) => {
 
 export const getUserRetweets = async (userID: number): Promise<Retweet[]> => {
   const query =
-    "SELECT tweetID, retweetDate \
+    "SELECT tweetID, reactionDate as retweetDate \
      FROM user_reacts_to_tweet \
      WHERE userID = ? AND isRetweet = true";
   const retweets = await runQuery<{ tweetID: number; retweetDate: string }>(
@@ -170,7 +174,7 @@ export const getTotalUserTweets = async (userID: number) => {
 };
 
 const getUserReactionsToTweet = async (tweetID: number) => {
-  const [{ isRetweet, isLike }] = await runQuery<{
+  const [reaction] = await runQuery<{
     isRetweet: boolean;
     isLike: boolean;
   }>(
@@ -178,7 +182,10 @@ const getUserReactionsToTweet = async (tweetID: number) => {
      WHERE tweetID = ? AND userID = ?",
     [tweetID, currentUserID]
   );
-  return { isRetweet, isLike };
+  return {
+    isRetweet: reaction && reaction.isRetweet,
+    isLike: reaction && reaction.isLike,
+  };
 };
 
 export const getTweets = async (tweetIDs: number[]) =>
@@ -188,7 +195,7 @@ export const getTweet = async (tweetID: number) => {
   const result = await runQuery<Tweet>(
     "SELECT tweet.*, username, name, avatar, isVerified \
          FROM tweet, user \
-         WHERE authorID = user.id, tweet.id = ?",
+         WHERE authorID = user.id AND tweet.id = ?",
     [tweetID]
   );
 
@@ -220,6 +227,41 @@ export const mergeTweetsAndRetweets = (
   return tweetsAndRetweets.sort((a, b) => {
     const aDate = a.tweet ? a.tweet.creationDate : a.retweet?.retweetDate;
     const bDate = b.tweet ? b.tweet.creationDate : b.retweet?.retweetDate;
+    console.log(aDate, " vs ", bDate);
+
+    if (aDate && bDate) {
+      if (new Date(aDate) > new Date(bDate)) {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
+    return 0;
+  });
+};
+
+export const mergeThreadsAndRetweets = (
+  threads: Thread[],
+  retweets: Retweet[]
+) => {
+  const wrappedThreads: GetUserThreadsAndRetweets["response"]["threadsAndRetweets"] =
+    threads.map((thread) => ({
+      thread,
+    }));
+  const threadsAndRetweets = wrappedThreads.concat(
+    retweets.map((retweet) => ({ retweet: retweet }))
+  );
+
+  const getMostRecentReplyDate = (thread: Thread) =>
+    thread.tweets[thread.tweets.length - 1].creationDate;
+
+  return threadsAndRetweets.sort((a, b) => {
+    const aDate = a.thread
+      ? getMostRecentReplyDate(a.thread)
+      : a.retweet?.retweetDate;
+    const bDate = b.thread
+      ? getMostRecentReplyDate(b.thread)
+      : b.retweet?.retweetDate;
     console.log(aDate, " vs ", bDate);
 
     if (aDate && bDate) {

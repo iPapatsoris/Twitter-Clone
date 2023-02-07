@@ -20,6 +20,11 @@ export type NestedReplies = {
   nestedReplies: Tweet[];
   hasMoreNestedReplies: boolean;
 };
+
+export type Thread = {
+  hasMoreNestedReplies: boolean;
+  tweets: Tweet[];
+};
 export type TweetWithNestedReplies = Tweet & NestedReplies;
 
 export type GetTweet = {

@@ -4,14 +4,14 @@ import { sha256 } from "js-sha256";
 import { currentUserID } from "../index.js";
 import { NormalResponse } from "../api/common.js";
 import ErrorCodes from "../api/errorCodes.js";
-import { GetTweets, NestedReplies } from "../api/tweet.js";
+import { GetTweets, Thread } from "../api/tweet.js";
 import {
   CreateUser,
   GetUser,
   GetUserFields,
   GetUserFollowees,
   GetUserFollowers,
-  GetUserRepliesAndRetweets,
+  GetUserThreadsAndRetweets,
   GetUserTweetsAndRetweets,
   UpdateUser,
   UpdateUserFields,
@@ -30,6 +30,7 @@ import {
   getTweet,
   getTweets,
   getUserRetweets,
+  mergeThreadsAndRetweets,
   mergeTweetsAndRetweets,
 } from "../services/tweet.js";
 
@@ -37,6 +38,7 @@ const router = express.Router();
 
 router
   .route("/")
+  // Add new user
   .post(
     async (
       req: Request<{}, {}, CreateUser["request"]>,
@@ -65,6 +67,7 @@ router
     }
   )
   .patch(
+    // Update user info
     async (
       req: TypedRequestQuery<
         {},
@@ -258,6 +261,7 @@ router.get(
 );
 
 // Return user's tweets and retweets
+// Don't include replies
 router.get(
   "/:userID/tweets",
   async (
@@ -283,91 +287,73 @@ router.get(
   }
 );
 
-// Return user's replies and retweets
+/**
+ * Return user's tweets, retweets and replies.
+ * For a reply, include the referenced tweets recursively, until a maximum of 3
+ * tweets per thread. Mark if thread has more than 3 tweets in
+ * hasMoreNestedReplies. If it has more than 3, instead of returning the 3rd
+ * most recent nested reply, return the thread root tweet.
+ */
 router.get(
   "/:userID/replies",
   async (
     req: TypedRequestQuery<{ userID: string }>,
-    res: Response<GetUserRepliesAndRetweets["response"]>
+    res: Response<GetUserThreadsAndRetweets["response"]>
   ) => {
     const { userID } = req.params;
     const replyIDs = await runQuery<{ id: number }>(
       "SELECT id \
        FROM tweet \
-       WHERE authorID = ? AND isReply = true",
+       WHERE authorID = ?",
       [userID]
     );
 
-    const replies = await getTweets(replyIDs.map(({ id }) => id));
+    const tweetsAndReplies = await getTweets(replyIDs.map(({ id }) => id));
 
-    const promises: Array<Promise<NestedReplies>> = replies.map(
-      (reply) =>
-        new Promise(async (resolve, reject) => {
-          if (!reply.referencedTweetID) {
-            res.send({ ok: false });
-            return;
-          }
-          const previousReply = await getTweet(reply.referencedTweetID);
-          let originalTweet: Tweet | null = null;
-          let hasMoreNestedReplies = false;
-          if (previousReply.isReply && previousReply.referencedTweetID) {
-            originalTweet = await getTweet(previousReply.referencedTweetID);
-            if (originalTweet.isReply) {
-              originalTweet = await getTweet(originalTweet.rootTweetID);
-              const thread = [originalTweet, previousReply, reply];
-              resolve({
-                nestedReplies: thread,
-                hasMoreNestedReplies,
-              });
-            } else {
-              resolve({
-                nestedReplies: [originalTweet, previousReply, reply],
-                hasMoreNestedReplies,
-              });
-            }
-          } else {
-            resolve({
-              nestedReplies: [previousReply, reply],
-              hasMoreNestedReplies,
-            });
-          }
-        })
+    const tweetsAndRepliesWithNested: Thread[] = await Promise.all(
+      tweetsAndReplies.map(async (tweet) => {
+        if (!tweet.isReply || !tweet.referencedTweetID) {
+          // Tweet is not a reply; return 1 tweet
+          return {
+            tweets: [tweet],
+            hasMoreNestedReplies: false,
+          };
+        }
+        // Tweet is a reply; get referenced tweet
+        const previousReply = await getTweet(tweet.referencedTweetID);
+        let originalTweet: Tweet | null = null;
+        let hasMoreNestedReplies = false;
+        if (!previousReply.isReply || !previousReply.referencedTweetID) {
+          // Referenced tweet is not a reply; return 2 tweets
+          return {
+            tweets: [previousReply, tweet],
+            hasMoreNestedReplies,
+          };
+        }
+        // Referenced tweet is a reply; get referenced tweet of referenced tweet
+        originalTweet = await getTweet(previousReply.referencedTweetID);
+        if (originalTweet.isReply) {
+          // Thread has more than 3 levels of reply depth; get thread root tweet
+          originalTweet = await getTweet(originalTweet.rootTweetID);
+          hasMoreNestedReplies = true;
+        }
+        // Return 3 tweets, and whether there exist more or not
+        return {
+          tweets: [originalTweet, previousReply, tweet],
+          hasMoreNestedReplies,
+        };
+      })
     );
-    const promiseResults = await Promise.all(promises);
+
     const retweets = await getUserRetweets(Number(req.params.userID));
 
-    const finalReplies: GetUserRepliesAndRetweets["response"]["repliesAndRetweets"] =
-      promiseResults.map((reply) => ({
-        reply,
-      }));
-    const repliesAndRetweets = finalReplies.concat(
-      retweets.map((retweet) => ({ retweet: retweet }))
-    );
-
-    console.log(repliesAndRetweets);
-
-    const getMostRecentReplyDate = (thread: NestedReplies) =>
-      thread.nestedReplies[thread.nestedReplies.length - 1].creationDate;
-
-    repliesAndRetweets.sort((a, b) => {
-      const aDate = a.reply
-        ? getMostRecentReplyDate(a.reply)
-        : a.retweet?.retweetDate;
-      const bDate = b.reply
-        ? getMostRecentReplyDate(b.reply)
-        : b.retweet?.retweetDate;
-      console.log(aDate, " vs ", bDate);
-
-      if (aDate && bDate) {
-        if (new Date(aDate) > new Date(bDate)) {
-          return -1;
-        } else {
-          return 1;
-        }
-      }
-      return 0;
+    res.send({
+      ok: true,
+      threadsAndRetweets: mergeThreadsAndRetweets(
+        tweetsAndRepliesWithNested,
+        retweets
+      ),
     });
-    res.send({ ok: true, repliesAndRetweets });
   }
 );
 

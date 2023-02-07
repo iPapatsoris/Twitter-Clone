@@ -1,7 +1,7 @@
 import { Retweet, Tweet } from "../entities/tweet.js";
 import { User } from "../entities/user.js";
 import { NormalResponse } from "./common.js";
-import { NestedReplies } from "./tweet.js";
+import { NestedReplies, Thread } from "./tweet.js";
 
 export type CreateUser = {
   request: {
@@ -62,11 +62,11 @@ export type GetUserFollowers = {
       };
 };
 
-export type GetUserRepliesAndRetweets = {
+export type GetUserThreadsAndRetweets = {
   response:
     | NormalResponse & {
-        repliesAndRetweets?: Array<{
-          reply?: NestedReplies;
+        threadsAndRetweets?: Array<{
+          thread?: Thread;
           retweet?: Retweet;
         }>;
       };
