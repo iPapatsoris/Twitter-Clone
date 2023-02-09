@@ -5,14 +5,16 @@ declare const classNames: typeof globalClassNames & {
   readonly Wrapper: "Wrapper";
   readonly Focused: "Focused";
   readonly Placeholder: "Placeholder";
-  readonly Typing: "Typing";
+  readonly TypingArea: "TypingArea";
   readonly Info: "Info";
+  readonly Color: "Color";
 };
 export = classNames;
 export type InputNames =
   | "Wrapper"
   | "Focused"
   | "Placeholder"
-  | "Typing"
+  | "TypingArea"
   | "Info"
+  | "Color"
   | GlobalClassNames;

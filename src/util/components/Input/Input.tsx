@@ -11,7 +11,7 @@ const Input = ({ placeholder, characterLimit }: InputProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isFocused, setIsFocused] = useState(false);
-  const [name, setName] = useState("");
+  const [value, setValue] = useState("");
 
   useClickOutside(wrapperRef, () => setIsFocused(false));
 
@@ -23,10 +23,14 @@ const Input = ({ placeholder, characterLimit }: InputProps) => {
   };
 
   const wrapperStyles: styles.InputNames[] = [styles.Wrapper];
-  const typingStyles: styles.InputNames[] = [styles.Typing];
-  if (isFocused) {
-    wrapperStyles.push(styles.Focused);
-    typingStyles.push(styles.ShowOpacity);
+  const typingAreaStyles: styles.InputNames[] = [styles.TypingArea];
+  const labelStyles: styles.InputNames[] = [];
+  if (isFocused || value.length) {
+    typingAreaStyles.push(styles.ShowOpacity);
+    if (isFocused) {
+      wrapperStyles.push(styles.Focused);
+      labelStyles.push(styles.Color);
+    }
   }
 
   return (
@@ -35,24 +39,26 @@ const Input = ({ placeholder, characterLimit }: InputProps) => {
       className={wrapperStyles.join(" ")}
       onClick={handleClick}
     >
-      {!isFocused && (
+      {!isFocused && !value.length && (
         <div className={styles.Placeholder}>
           <span>{placeholder}</span>
         </div>
       )}
-      <div className={typingStyles.join(" ")}>
+      <div className={typingAreaStyles.join(" ")}>
         <div className={styles.Info}>
-          <label htmlFor="input">{placeholder}</label>
+          <label htmlFor="input" className={labelStyles.join(" ")}>
+            {placeholder}
+          </label>
           {characterLimit && (
             <span>
-              {name.length} / {characterLimit}
+              {value.length} / {characterLimit}
             </span>
           )}
         </div>
         <input
           id="input"
           ref={inputRef}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setValue(e.target.value)}
         />
       </div>
     </div>

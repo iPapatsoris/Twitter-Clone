@@ -17,10 +17,10 @@ const Signup = ({}: SignupProps) => {
           </div>
           <div>
             <h4>Date of birth</h4>
-            <span>
+            <div className={styles.DateOfBirth}>
               This will not be shown publicly. Confirm your own age, even if
               this account is for a business, a pet, or something else.
-            </span>
+            </div>
           </div>
         </div>
         <Button
