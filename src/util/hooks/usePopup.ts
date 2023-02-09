@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { PopupContext } from "../../App";
 import { OptionsPopupProps } from "../components/OptionsPopup/OptionsPopup";
+import useClickOutside from "./useClickOutside";
 import useWindowDimensions from "./useWindowDimensions";
 
 const usePopup = (
@@ -81,22 +82,10 @@ const usePopup = (
   }, [justPlacedPopup, isActive, windowHeight, autoMaxHeight, popupRef]);
 
   // Detect clicking outside of popup area to disable it
-  useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      if (
-        e.target instanceof Node &&
-        popupRef &&
-        !popupRef.current?.contains(e.target)
-      ) {
-        setIsActive(false);
-        setDisableOuterPointerEvents(false);
-      }
-    };
-
-    window.addEventListener("click", handleClick);
-
-    return () => window.removeEventListener("click", handleClick);
-  }, [popupRef, setDisableOuterPointerEvents, setIsActive]);
+  useClickOutside(popupRef, () => {
+    setIsActive(false);
+    setDisableOuterPointerEvents(false);
+  });
 };
 
 export default usePopup;

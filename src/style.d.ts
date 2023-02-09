@@ -5,6 +5,7 @@ declare const classNames: {
   readonly Flex: "Flex";
   readonly CenterAligned: "CenterAligned";
   readonly PushRight: "PushRight";
+  readonly ShowOpacity: "ShowOpacity";
   readonly NoHighlighting: "NoHighlighting";
 };
 export = classNames;
@@ -15,4 +16,5 @@ export type ClassNames =
   | "Flex"
   | "CenterAligned"
   | "PushRight"
+  | "ShowOpacity"
   | "NoHighlighting";

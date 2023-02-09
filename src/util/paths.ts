@@ -13,6 +13,7 @@ const paths: {
   lists: string;
   profile: string;
   error: string;
+  signup: string;
 } = {
   home: "/home",
   explore: "/explore",
@@ -26,6 +27,7 @@ const paths: {
   lists: "/:username/lists",
   profile: "/:username",
   error: "/error",
+  signup: "/signup",
 };
 
 export const useRouteMatch = (idToMatch: string) => {

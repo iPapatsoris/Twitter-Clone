@@ -6,6 +6,7 @@ interface ButtonProps {
   size?: "small" | "medium" | "large";
   largeFont?: boolean;
   stretch?: boolean;
+  extraClasses?: string[];
 }
 
 const Button = ({
@@ -14,6 +15,7 @@ const Button = ({
   size = "medium",
   largeFont = false,
   stretch = false,
+  extraClasses = [],
 }: ButtonProps) => {
   const colorStyle = color === "primary" ? styles.Primary : styles.Black;
   let sizeStyle: styles.ButtonNames = styles.Medium;
@@ -29,6 +31,7 @@ const Button = ({
     sizeStyle,
     largeFont ? styles.LargeFont : "",
     stretch ? styles.Stretch : "",
+    ...extraClasses,
   ].join(" ");
 
   return <button className={classes}>{children}</button>;

@@ -24,6 +24,10 @@
   margin-left: auto;
 }
 
+.ShowOpacity {
+  opacity: 1 !important;
+}
+
 .NoHighlighting {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */

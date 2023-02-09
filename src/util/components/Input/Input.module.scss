@@ -1,0 +1,44 @@
+.Wrapper {
+  padding: 0.5rem;
+  font-size: 17px;
+  color: rgb(83, 100, 113);
+  border-radius: 4px;
+  border: 1px solid rgb(207, 217, 222);
+  cursor: pointer;
+  position: relative;
+
+  &.Focused {
+    border-color: var(--primary-color);
+    box-shadow: var(--primary-color) 0 0 0 1px;
+  }
+
+  .Placeholder {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .Typing {
+    opacity: 0;
+
+    .Info {
+      font-size: 12px;
+      color: var(--primary-color);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    input {
+      border: 0;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
