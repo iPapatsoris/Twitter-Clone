@@ -34,7 +34,7 @@
       display: flex;
       justify-content: space-between;
 
-      &.Color {
+      .Color {
         color: var(--primary-color);
       }
     }

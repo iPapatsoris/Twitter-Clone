@@ -1,10 +1,16 @@
 import Button from "../util/components/Button/Button";
+import Dropdown from "../util/components/Dropdown/Dropdown";
 import Input from "../util/components/Input/Input";
 import styles from "./Signup.module.scss";
 
 interface SignupProps {}
 
 const Signup = ({}: SignupProps) => {
+  // TODO: use moment.js
+  const months: React.ComponentProps<typeof Dropdown>["options"] = [
+    { value: "1", text: "January" },
+    { value: "2", text: "February" },
+  ];
   return (
     <div className={styles.Center}>
       <div className={styles.Signup}>
@@ -21,6 +27,7 @@ const Signup = ({}: SignupProps) => {
               This will not be shown publicly. Confirm your own age, even if
               this account is for a business, a pet, or something else.
             </div>
+            <Dropdown name="Month" options={months} />
           </div>
         </div>
         <Button
