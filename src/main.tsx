@@ -17,6 +17,9 @@ import Notifications from "./Main/routes/Notifications/Notifications";
 import NotificationsVerified from "./Main/routes/Notifications/NotificationsVerified";
 import NotificationsMentions from "./Main/routes/Notifications/NotificationsMentions";
 import Signup from "./Signup/Signup";
+import Modal from "./util/components/Modal/Modal";
+import SignupHeader from "./Signup/SingupHeader/SignupHeader";
+import TestSignup from "./Signup/TestSignup";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,7 +41,7 @@ const router = createBrowserRouter(
         <Route path={paths.bookmarks} />
         <Route path={paths.lists} />
         <Route path={paths.profile} />
-        <Route path={paths.signup} element={<Signup />} />
+        <Route path={paths.signup} element={<TestSignup />} />
         <Route index element={<Navigate to={paths.home} />} />
         <Route path="*" id={paths.error} element={<ErrorPage />} />
       </Route>

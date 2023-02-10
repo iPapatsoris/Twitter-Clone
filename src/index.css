@@ -32,6 +32,10 @@
   color: var(--primary-color);
 }
 
+.LightColor {
+  color: var(--light-color);
+}
+
 .NoHighlighting {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
