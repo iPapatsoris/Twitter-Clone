@@ -28,12 +28,16 @@ const Signup = ({}: SignupProps) => {
               this account is for a business, a pet, or something else.
             </div>
             <div className={styles.Dropdowns}>
-              <div className={styles.Dropdown}>
-                <Dropdown name="Month" options={months} />
-              </div>
-              <div className={styles.Dropdown}>
-                <Dropdown name="Month" options={months} />
-              </div>
+              <Dropdown
+                name="Month"
+                options={months}
+                extraStyles={[styles.Dropdown]}
+              />
+              <Dropdown
+                name="Month"
+                options={months}
+                extraStyles={[styles.Dropdown]}
+              />
             </div>
           </div>
         </div>

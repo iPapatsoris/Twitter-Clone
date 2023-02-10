@@ -1,6 +1,5 @@
 import React, { useContext, useRef, useState } from "react";
 import { PopupContext } from "../../../App";
-import Dropdown2 from "../Input/Dropdown";
 import { OptionProps, OptionType } from "../OptionsPopup/Option";
 import OptionsPopup, {
   activatePopupHandler,
@@ -16,10 +15,11 @@ interface DropdownProps {
     value: string;
     text: string;
   }>;
+  extraStyles: string[];
 }
 
 const Dropdown = (props: DropdownProps) => {
-  const { name } = props;
+  const { name, extraStyles } = props;
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { setDisableOuterPointerEvents } = useContext(PopupContext);
   const [isActive, setIsActive] = useState(false);
@@ -58,7 +58,7 @@ const Dropdown = (props: DropdownProps) => {
     labelStyles.push(styles.Blue);
   }
   return (
-    <>
+    <div className={extraStyles.join(" ")}>
       <div
         ref={wrapperRef}
         className={wrapperStyles.join(" ")}
@@ -85,7 +85,7 @@ const Dropdown = (props: DropdownProps) => {
           disableByClickingAnywhere
         />
       )}
-    </>
+    </div>
   );
 };
 
