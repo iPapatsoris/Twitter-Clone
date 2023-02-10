@@ -28,6 +28,10 @@
   opacity: 1 !important;
 }
 
+.Blue {
+  color: var(--primary-color);
+}
+
 .NoHighlighting {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */

@@ -35,6 +35,16 @@
     h1 {
       font-size: 31px;
     }
+
+    .Dropdowns {
+      display: flex;
+      .Dropdown:nth-child(1) {
+        flex: 1;
+      }
+      .Dropdown:nth-child(2) {
+        flex: 0.5;
+      }
+    }
   }
 
   .Button {

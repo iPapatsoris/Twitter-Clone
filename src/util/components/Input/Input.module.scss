@@ -1,53 +1,33 @@
-.Wrapper {
-  padding: 0.5rem;
-  font-size: 17px;
-  color: rgb(83, 100, 113);
-  border-radius: 4px;
-  border: 1px solid rgb(207, 217, 222);
-  cursor: pointer;
-  position: relative;
+.Placeholder {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
 
-  &.Focused {
-    border-color: var(--primary-color);
-    box-shadow: var(--primary-color) 0 0 0 1px;
-  }
-
-  .Placeholder {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    display: flex;
-    align-items: center;
-  }
-
-  .TypingArea {
-    /* Use opacity to hide element instead of visiblity, because we want to 
+.TypingArea {
+  /* Use opacity to hide element instead of visiblity, because we want to 
        show it and focus on it at the same time. With visibility: hidden, 
        we would have to first wait for the css property change to render,
        and then trigger another render where we would focus on the element.
        This is because it is not possible to focus on a hidden element. 
     */
-    opacity: 0;
+  opacity: 0;
+}
 
-    .Info {
-      font-size: 12px;
-      display: flex;
-      justify-content: space-between;
+.Info {
+  display: flex;
+  justify-content: space-between;
+}
 
-      .Color {
-        color: var(--primary-color);
-      }
-    }
+input {
+  border: 0;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
 
-    input {
-      border: 0;
-      width: 100%;
-      font-size: 16px;
-      cursor: pointer;
-
-      &:focus {
-        outline: none;
-      }
-    }
+  &:focus {
+    outline: none;
   }
 }

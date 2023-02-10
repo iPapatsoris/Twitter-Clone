@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import usePopup from "../../hooks/usePopup";
-import Option, { OptionProps, OptionType } from "./Option";
+import Option, { OptionProps } from "./Option";
 import styles from "./OptionsPopup.module.scss";
 
 export interface OptionsPopupProps {
@@ -19,6 +19,9 @@ export interface OptionsPopupProps {
   autoMaxHeight?: boolean;
   // Allow custom styling
   extraStyles?: Array<string>;
+  // Disables the popup by clicking anywhere.
+  // By default, cliking inside the popup will not disable it.
+  disableByClickingAnywhere?: boolean;
 }
 
 const OptionsPopup = ({
@@ -29,13 +32,14 @@ const OptionsPopup = ({
   position = "middle",
   autoMaxHeight = false,
   extraStyles = [],
+  disableByClickingAnywhere = false,
 }: OptionsPopupProps) => {
   const initialOptions = optionProps.map((option) => ({
     ...option,
     targetAreaRef,
     showNestedOptions: false,
   }));
-  const [options, setOptions] = useState<Array<OptionType>>(initialOptions);
+  const [options, setOptions] = useState<Array<OptionProps>>(initialOptions);
   const popupRef = useRef<HTMLDivElement>(null);
 
   usePopup({
@@ -45,6 +49,7 @@ const OptionsPopup = ({
     isActive,
     setIsActive,
     autoMaxHeight,
+    disableByClickingAnywhere,
   });
 
   // Toggle nested options visibility for clicked option
@@ -57,6 +62,7 @@ const OptionsPopup = ({
         !newOptions[index].showNestedOptions;
       setOptions(newOptions);
     }
+    option.onClick && option.onClick();
   };
 
   const optionsJSX = options.map((option) => {

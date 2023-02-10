@@ -7,6 +7,7 @@ import useWindowDimensions from "./useWindowDimensions";
 const usePopup = (
   params: Omit<OptionsPopupProps, "options" | "extraStyles"> & {
     popupRef: React.RefObject<HTMLDivElement>;
+    disableByClickingAnywhere: boolean;
   }
 ) => {
   const {
@@ -16,6 +17,7 @@ const usePopup = (
     isActive,
     setIsActive,
     autoMaxHeight = false,
+    disableByClickingAnywhere = false,
   } = params;
 
   // Listen to window height updates to handle resizing
@@ -82,9 +84,14 @@ const usePopup = (
   }, [justPlacedPopup, isActive, windowHeight, autoMaxHeight, popupRef]);
 
   // Detect clicking outside of popup area to disable it
-  useClickOutside(popupRef, () => {
-    setIsActive(false);
-    setDisableOuterPointerEvents(false);
+  useClickOutside({
+    ref: popupRef,
+    callback: () => {
+      setIsActive(false);
+      console.log("enabling pointer events");
+      setDisableOuterPointerEvents(false);
+    },
+    clickAnywhere: disableByClickingAnywhere,
   });
 };
 

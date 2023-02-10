@@ -27,7 +27,14 @@ const Signup = ({}: SignupProps) => {
               This will not be shown publicly. Confirm your own age, even if
               this account is for a business, a pet, or something else.
             </div>
-            <Dropdown name="Month" options={months} />
+            <div className={styles.Dropdowns}>
+              <div className={styles.Dropdown}>
+                <Dropdown name="Month" options={months} />
+              </div>
+              <div className={styles.Dropdown}>
+                <Dropdown name="Month" options={months} />
+              </div>
+            </div>
           </div>
         </div>
         <Button

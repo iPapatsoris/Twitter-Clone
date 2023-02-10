@@ -1,7 +1,9 @@
-.Dropdown {
-  height: 40px;
+.Wrapper {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid blue;
+  justify-content: space-between;
+}
+
+.Value {
+  height: 1.5rem;
+  color: initial;
 }

@@ -6,6 +6,8 @@ declare const classNames: typeof globalClassNames & {
   readonly NameEmail: "NameEmail";
   readonly DateOfBirth: "DateOfBirth";
   readonly Form: "Form";
+  readonly Dropdowns: "Dropdowns";
+  readonly Dropdown: "Dropdown";
   readonly Button: "Button";
 };
 export = classNames;
@@ -16,5 +18,7 @@ export type SignupNames =
   | "NameEmail"
   | "DateOfBirth"
   | "Form"
+  | "Dropdowns"
+  | "Dropdown"
   | "Button"
   | GlobalClassNames;

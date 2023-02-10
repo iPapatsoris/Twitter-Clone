@@ -1,10 +1,14 @@
 import React, { useContext, useRef, useState } from "react";
 import { PopupContext } from "../../../App";
-import { OptionProps } from "../OptionsPopup/Option";
+import Dropdown2 from "../Input/Dropdown";
+import { OptionProps, OptionType } from "../OptionsPopup/Option";
 import OptionsPopup, {
   activatePopupHandler,
 } from "../OptionsPopup/OptionsPopup";
-import styles from "./Dropdown.module.scss";
+import styles from "../Input/InputWrapper.module.scss";
+import dropdownStyles from "./Dropdown.module.scss";
+import Icon from "../Icon/Icon";
+import downArrowIcon from "../../../assets/icons/options/down-arrow.png";
 
 interface DropdownProps {
   name: string;
@@ -19,6 +23,7 @@ const Dropdown = (props: DropdownProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { setDisableOuterPointerEvents } = useContext(PopupContext);
   const [isActive, setIsActive] = useState(false);
+  const [option, setOption] = useState<OptionType["mainOption"] | null>(null);
 
   const handleClick = (e: any) => {
     activatePopupHandler({
@@ -29,21 +34,47 @@ const Dropdown = (props: DropdownProps) => {
     });
   };
 
-  // const optionsJSX = props.options.map(({ value, text }) => (
-  //   <option value={value}>{text}</option>
-  // ));
-  const options: OptionProps[] = props.options.map((option) => ({
-    mainOption: {
+  const options: OptionProps[] = props.options.map((option) => {
+    const mainOption = {
       id: option.value,
       component: <span>{option.text}</span>,
-    },
-  }));
-  // return <select name={name}>{optionsJSX}</select>;
+    };
+    return {
+      mainOption,
+      onClick: () => {
+        setOption(mainOption);
+      },
+    };
+  });
 
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const wrapperStyles: styles.InputWrapperNames[] = [
+    styles.Wrapper,
+    dropdownStyles.Wrapper,
+  ];
+  const labelStyles: styles.InputWrapperNames[] = [];
+  if (isActive) {
+    wrapperStyles.push(styles.Focused);
+    labelStyles.push(styles.Blue);
+  }
   return (
     <>
-      <div className={styles.Dropdown} ref={dropdownRef} onClick={handleClick}>
-        {name}
+      <div
+        ref={wrapperRef}
+        className={wrapperStyles.join(" ")}
+        onClick={handleClick}
+      >
+        <div>
+          <div className={styles.Info}>
+            <label htmlFor="dropdown" className={labelStyles.join(" ")}>
+              {name}
+            </label>
+          </div>
+          <div className={dropdownStyles.Value}>
+            {option && option.component}
+          </div>
+        </div>
+        <Icon src={downArrowIcon} hover={"none"} />
       </div>
       {isActive && dropdownRef && (
         <OptionsPopup
@@ -51,6 +82,7 @@ const Dropdown = (props: DropdownProps) => {
           isActive
           setIsActive={setIsActive}
           targetAreaRef={dropdownRef}
+          disableByClickingAnywhere
         />
       )}
     </>

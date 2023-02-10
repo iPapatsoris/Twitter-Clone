@@ -38,10 +38,10 @@ const router = createBrowserRouter(
         <Route path={paths.bookmarks} />
         <Route path={paths.lists} />
         <Route path={paths.profile} />
+        <Route path={paths.signup} element={<Signup />} />
         <Route index element={<Navigate to={paths.home} />} />
         <Route path="*" id={paths.error} element={<ErrorPage />} />
       </Route>
-      <Route path={paths.signup} element={<Signup />} />
     </>
   )
 );

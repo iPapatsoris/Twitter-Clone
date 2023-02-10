@@ -14,7 +14,7 @@ export interface OptionType {
 }
 
 export interface OptionProps extends OptionType {
-  onClick?: React.MouseEventHandler;
+  onClick?: () => void;
 }
 
 const Option = ({

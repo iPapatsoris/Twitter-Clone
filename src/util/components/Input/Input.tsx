@@ -1,10 +1,12 @@
 import { useRef, useState } from "react";
 import useClickOutside from "../../hooks/useClickOutside";
-import styles from "./Input.module.scss";
+import styles from "./InputWrapper.module.scss";
+import inputStyles from "./Input.module.scss";
 
 interface InputProps {
   placeholder: string;
   characterLimit?: number;
+  // type: "input" | "dropdown";
 }
 
 const Input = ({ placeholder, characterLimit }: InputProps) => {
@@ -13,7 +15,10 @@ const Input = ({ placeholder, characterLimit }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState("");
 
-  useClickOutside(wrapperRef, () => setIsFocused(false));
+  useClickOutside({
+    ref: wrapperRef,
+    callback: () => setIsFocused(false),
+  });
 
   const handleClick = () => {
     if (inputRef.current) {
@@ -22,14 +27,14 @@ const Input = ({ placeholder, characterLimit }: InputProps) => {
     }
   };
 
-  const wrapperStyles: styles.InputNames[] = [styles.Wrapper];
-  const typingAreaStyles: styles.InputNames[] = [styles.TypingArea];
-  const labelStyles: styles.InputNames[] = [];
+  const wrapperStyles: styles.InputWrapperNames[] = [styles.Wrapper];
+  const typingAreaStyles: inputStyles.InputNames[] = [inputStyles.TypingArea];
+  const labelStyles: string[] = [];
   if (isFocused || value.length) {
     typingAreaStyles.push(styles.ShowOpacity);
     if (isFocused) {
       wrapperStyles.push(styles.Focused);
-      labelStyles.push(styles.Color);
+      labelStyles.push(styles.Blue);
     }
   }
 
@@ -40,12 +45,12 @@ const Input = ({ placeholder, characterLimit }: InputProps) => {
       onClick={handleClick}
     >
       {!isFocused && !value.length && (
-        <div className={styles.Placeholder}>
+        <div className={inputStyles.Placeholder}>
           <span>{placeholder}</span>
         </div>
       )}
       <div className={typingAreaStyles.join(" ")}>
-        <div className={styles.Info}>
+        <div className={[styles.Info, inputStyles.Info].join(" ")}>
           <label htmlFor="input" className={labelStyles.join(" ")}>
             {placeholder}
           </label>
