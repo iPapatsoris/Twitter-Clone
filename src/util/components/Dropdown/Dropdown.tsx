@@ -1,6 +1,5 @@
-import React, { useContext, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { PopupContext } from "../../../App";
-import { OptionProps, OptionType } from "../OptionsPopup/Option";
 import OptionsPopup, {
   activatePopupHandler,
 } from "../OptionsPopup/OptionsPopup";
@@ -8,13 +7,12 @@ import styles from "../Input/InputWrapper.module.scss";
 import dropdownStyles from "./Dropdown.module.scss";
 import Icon from "../Icon/Icon";
 import downArrowIcon from "../../../assets/icons/options/down-arrow.png";
+import { SimpleOption } from "../OptionsPopup/Option";
 
 interface DropdownProps {
   name: string;
-  options: Array<{
-    value: string;
-    text: string;
-  }>;
+  selectedOptionID: number;
+  options: SimpleOption[];
   extraStyles: string[];
 }
 
@@ -23,7 +21,6 @@ const Dropdown = (props: DropdownProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { setDisableOuterPointerEvents } = useContext(PopupContext);
   const [isActive, setIsActive] = useState(false);
-  const [option, setOption] = useState<OptionType["mainOption"] | null>(null);
 
   const handleClick = (e: any) => {
     activatePopupHandler({
@@ -34,18 +31,16 @@ const Dropdown = (props: DropdownProps) => {
     });
   };
 
-  const options: OptionProps[] = props.options.map((option) => {
-    const mainOption = {
-      id: option.value,
-      component: <span>{option.text}</span>,
-    };
-    return {
-      mainOption,
-      onClick: () => {
-        setOption(mainOption);
-      },
-    };
-  });
+  const selectedOption = props.options.find(
+    (option) => option.id === props.selectedOptionID
+  );
+  console.log(selectedOption);
+
+  // Covert props between components
+  const options: React.ComponentProps<typeof OptionsPopup>["options"] =
+    props.options.map((option) => ({
+      mainOption: option,
+    }));
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperStyles: styles.InputWrapperNames[] = [
@@ -71,7 +66,7 @@ const Dropdown = (props: DropdownProps) => {
             </label>
           </div>
           <div className={dropdownStyles.Value}>
-            {option && option.component}
+            {selectedOption && selectedOption.component}
           </div>
         </div>
         <Icon src={downArrowIcon} hover={"none"} />

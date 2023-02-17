@@ -2,31 +2,28 @@ import Icon from "../Icon/Icon";
 import downArrowIcon from "../../../assets/icons/options/down-arrow.png";
 import styles from "./OptionsPopup.module.scss";
 
-interface SimpleOption {
+export type SimpleOption = {
   component: React.ReactNode;
-  id: string;
-}
+  id: number;
+  onSelect: () => void;
+};
 
-export interface OptionType {
+export interface OptionWithNested {
   mainOption: SimpleOption;
-  nestedOptions?: Array<SimpleOption>;
+  nestedOptions?: SimpleOption[];
   showNestedOptions?: boolean;
-}
-
-export interface OptionProps extends OptionType {
-  onClick?: () => void;
 }
 
 const Option = ({
   mainOption,
   nestedOptions,
   showNestedOptions,
-  onClick,
-}: OptionProps) => {
+}: OptionWithNested) => {
   const hasNestedOptions = nestedOptions && nestedOptions.length;
+  console.log(nestedOptions);
 
   return (
-    <div className={styles.Option} onClick={onClick}>
+    <div className={styles.Option} onClick={mainOption.onSelect}>
       {mainOption.component}
       {hasNestedOptions && (
         <div className={styles.PushRight}>

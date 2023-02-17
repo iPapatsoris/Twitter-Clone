@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
 import usePopup from "../../hooks/usePopup";
-import Option, { OptionProps } from "./Option";
+import Option, { OptionWithNested } from "./Option";
 import styles from "./OptionsPopup.module.scss";
 
 export interface OptionsPopupProps {
   // Options for the popup. Nested options are supported that expand it
-  options: Array<OptionProps>;
+  options: OptionWithNested[];
   // State controlled by outer components
   isActive: boolean;
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
@@ -39,7 +39,7 @@ const OptionsPopup = ({
     targetAreaRef,
     showNestedOptions: false,
   }));
-  const [options, setOptions] = useState<Array<OptionProps>>(initialOptions);
+  const [options, setOptions] = useState<OptionWithNested[]>(initialOptions);
   const popupRef = useRef<HTMLDivElement>(null);
 
   usePopup({
@@ -53,7 +53,7 @@ const OptionsPopup = ({
   });
 
   // Toggle nested options visibility for clicked option
-  const handleOptionClick = (id: string) => {
+  const handleOptionClick = (id: number) => {
     const index = options.findIndex((option) => option.mainOption.id === id);
     const option = options[index];
     if (option.nestedOptions) {
@@ -62,7 +62,7 @@ const OptionsPopup = ({
         !newOptions[index].showNestedOptions;
       setOptions(newOptions);
     }
-    option.onClick && option.onClick();
+    option.mainOption.onSelect && option.mainOption.onSelect();
   };
 
   const optionsJSX = options.map((option) => {
@@ -70,7 +70,11 @@ const OptionsPopup = ({
     if (option.nestedOptions && option.showNestedOptions) {
       nestedOptionsJSX = option.nestedOptions?.map((nested) => (
         <Option
-          mainOption={{ component: nested.component, id: nested.id }}
+          mainOption={{
+            component: nested.component,
+            id: nested.id,
+            onSelect: () => nested.onSelect,
+          }}
           key={nested.id}
         />
       ));
@@ -78,9 +82,14 @@ const OptionsPopup = ({
 
     return [
       <Option
-        {...option}
+        mainOption={{
+          component: option.mainOption.component,
+          id: option.mainOption.id,
+          onSelect: () => handleOptionClick(option.mainOption.id),
+        }}
+        nestedOptions={option.nestedOptions}
+        showNestedOptions={option.showNestedOptions}
         key={option.mainOption.id}
-        onClick={() => handleOptionClick(option.mainOption.id)}
       />,
       ...nestedOptionsJSX,
     ];

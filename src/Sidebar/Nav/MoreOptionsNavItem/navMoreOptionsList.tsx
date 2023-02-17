@@ -10,9 +10,10 @@ import displayIcon from "../../../assets/icons/options/display.png";
 import shortcutsIcon from "../../../assets/icons/options/shortcuts.png";
 import monetizationIcon from "../../../assets/icons/options/monetization.png";
 import IconAndTitle from "../../../util/components/OptionsPopup/IconAndTitle/IconAndTitle";
-import { OptionType } from "../../../util/components/OptionsPopup/Option";
+import { OptionWithNested } from "../../../util/components/OptionsPopup/Option";
 
-export const navMoreOptionsList: Array<OptionType> = [
+const onSelect = () => {};
+export const navMoreOptionsList: OptionWithNested[] = [
   {
     mainOption: {
       component: (
@@ -24,6 +25,7 @@ export const navMoreOptionsList: Array<OptionType> = [
         />
       ),
       id: "topics",
+      onSelect,
     },
   },
   {
@@ -37,12 +39,14 @@ export const navMoreOptionsList: Array<OptionType> = [
         />
       ),
       id: "circle",
+      onSelect,
     },
   },
   {
     mainOption: {
       component: "Creator Studio",
       id: "studio",
+      onSelect,
     },
     nestedOptions: [
       {
@@ -54,6 +58,7 @@ export const navMoreOptionsList: Array<OptionType> = [
           />
         ),
         id: "newsletters",
+        onSelect,
       },
       {
         component: (
@@ -64,6 +69,7 @@ export const navMoreOptionsList: Array<OptionType> = [
           />
         ),
         id: "analytics",
+        onSelect,
       },
     ],
   },
@@ -71,6 +77,7 @@ export const navMoreOptionsList: Array<OptionType> = [
     mainOption: {
       component: "Professional Tools",
       id: "pro-tools",
+      onSelect,
     },
     nestedOptions: [
       {
@@ -82,12 +89,14 @@ export const navMoreOptionsList: Array<OptionType> = [
           />
         ),
         id: "pros",
+        onSelect,
       },
       {
         component: (
           <IconAndTitle title="Twitter Ads" alt="Twitter ads" icon={adsIcon} />
         ),
         id: "ads",
+        onSelect,
       },
       {
         component: (
@@ -98,6 +107,7 @@ export const navMoreOptionsList: Array<OptionType> = [
           />
         ),
         id: "monetization",
+        onSelect,
       },
     ],
   },
@@ -105,6 +115,7 @@ export const navMoreOptionsList: Array<OptionType> = [
     mainOption: {
       component: "Settings and Support",
       id: "settings-support",
+      onSelect,
     },
     nestedOptions: [
       {
@@ -116,18 +127,21 @@ export const navMoreOptionsList: Array<OptionType> = [
           />
         ),
         id: "settings",
+        onSelect,
       },
       {
         component: (
           <IconAndTitle title="Help Center" alt="Help center" icon={helpIcon} />
         ),
         id: "help",
+        onSelect,
       },
       {
         component: (
           <IconAndTitle title="Display" alt="Display" icon={displayIcon} />
         ),
         id: "display",
+        onSelect,
       },
       {
         component: (
@@ -138,6 +152,7 @@ export const navMoreOptionsList: Array<OptionType> = [
           />
         ),
         id: "shortcuts",
+        onSelect,
       },
     ],
   },
