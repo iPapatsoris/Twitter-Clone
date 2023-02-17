@@ -9,13 +9,17 @@ import useScrollToTop from "./util/hooks/useScrollToTop";
 export const PopupContext = createContext<{
   disableOuterPointerEvents: boolean;
   isModalOpen: boolean;
+  isPopupOpen: boolean;
   setDisableOuterPointerEvents: React.Dispatch<SetStateAction<boolean>>;
   setIsModalOpen: React.Dispatch<SetStateAction<boolean>>;
+  setIsPopupOpen: React.Dispatch<SetStateAction<boolean>>;
 }>({
   disableOuterPointerEvents: false,
   isModalOpen: false,
+  isPopupOpen: false,
   setDisableOuterPointerEvents: () => {},
   setIsModalOpen: () => {},
+  setIsPopupOpen: () => {},
 });
 
 const App = () => {
@@ -36,6 +40,7 @@ const App = () => {
      as the most recent ancestor that allows pointer events.
   */
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   // Avoid useless re-rendering when simply a popup becomes active
   const innerContent = useMemo(
@@ -66,8 +71,10 @@ const App = () => {
       value={{
         disableOuterPointerEvents,
         isModalOpen,
+        isPopupOpen,
         setDisableOuterPointerEvents,
         setIsModalOpen,
+        setIsPopupOpen,
       }}
     >
       <div className={[styles.App, ...extraClasses].join(" ")}>

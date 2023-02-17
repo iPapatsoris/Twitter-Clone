@@ -1,5 +1,5 @@
 import Icon from "../Icon/Icon";
-import styles from "./Modal.module.scss";
+import styles, { ModalNames } from "./Modal.module.scss";
 import closeIcon from "../../../assets/icons/close.png";
 import React, { useContext, useEffect, useRef } from "react";
 import useClickOutside from "../../hooks/useClickOutside";
@@ -12,7 +12,7 @@ interface ModalProps {
 
 const Modal = ({ header, children }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  const { setIsModalOpen } = useContext(PopupContext);
+  const { isPopupOpen, setIsModalOpen } = useContext(PopupContext);
   useClickOutside({
     ref: modalRef,
     callback: () => setIsModalOpen(false),
@@ -23,9 +23,13 @@ const Modal = ({ header, children }: ModalProps) => {
     return () => setIsModalOpen(false);
   }, [setIsModalOpen]);
 
+  const wrapperStyles: ModalNames[] = [styles.Wrapper];
+  if (isPopupOpen) {
+    wrapperStyles.push(styles.DisablePointerEvents);
+  }
   return (
-    <div className={styles.Center}>
-      <div className={styles.Modal} ref={modalRef}>
+    <div className={styles.Modal}>
+      <div className={wrapperStyles.join(" ")} ref={modalRef}>
         <div className={styles.CloseIcon} onClick={() => setIsModalOpen(false)}>
           <Icon src={closeIcon} />
         </div>

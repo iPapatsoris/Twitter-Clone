@@ -4,7 +4,6 @@ declare const classNames: typeof globalClassNames & {
   readonly NoHeaderRight: "NoHeaderRight";
   readonly ExtendedHeaderMain: "ExtendedHeaderMain";
   readonly ErrorPage: "ErrorPage";
-  readonly DisablePointerEvents: "DisablePointerEvents";
 };
 export = classNames;
 export type AppNames =
@@ -12,5 +11,4 @@ export type AppNames =
   | "NoHeaderRight"
   | "ExtendedHeaderMain"
   | "ErrorPage"
-  | "DisablePointerEvents"
   | GlobalClassNames;

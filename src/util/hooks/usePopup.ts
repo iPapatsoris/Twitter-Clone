@@ -22,7 +22,8 @@ const usePopup = (
 
   // Listen to window height updates to handle resizing
   const { height: windowHeight } = useWindowDimensions(autoMaxHeight);
-  const { setDisableOuterPointerEvents } = useContext(PopupContext);
+  const { setIsPopupOpen, setDisableOuterPointerEvents } =
+    useContext(PopupContext);
   // Used to fire effect of dynamic max-height calculation after
   // effect of popup placement has occured.
   const [justPlacedPopup, setJustPlacedPopup] = useState(false);
@@ -91,6 +92,13 @@ const usePopup = (
       setDisableOuterPointerEvents(false);
     },
     clickAnywhere: disableByClickingAnywhere,
+  });
+
+  // Notify global state that a popup is active. This is needed for managing
+  // clicking outside to disable, when a popup is contained within a modal
+  useEffect(() => {
+    setIsPopupOpen(true);
+    return () => setIsPopupOpen(false);
   });
 };
 

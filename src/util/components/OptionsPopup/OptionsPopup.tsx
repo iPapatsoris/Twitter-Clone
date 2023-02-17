@@ -87,7 +87,6 @@ const OptionsPopup = ({
   });
 
   return (
-    // <div className={styles.Wrapper}>
     <div
       id="popup"
       ref={popupRef}
@@ -95,7 +94,6 @@ const OptionsPopup = ({
     >
       {optionsJSX}
     </div>
-    // </div>
   );
 };
 
