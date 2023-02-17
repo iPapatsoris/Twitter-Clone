@@ -1,18 +1,18 @@
-import { useState } from "react";
+import { useContext } from "react";
 import Modal, { openModalHandler } from "../util/components/Modal/Modal";
 import SignupHeader from "./SingupHeader/SignupHeader";
 import Signup from "./Signup";
+import { PopupContext } from "../App";
 
 interface TestSignupProps {}
 
 const TestSignup = ({}: TestSignupProps) => {
-  const [showModal, setShowModal] = useState(false);
-  console.log(showModal);
+  const { isModalOpen, setIsModalOpen } = useContext(PopupContext);
 
   return (
     <>
-      {showModal && (
-        <Modal header={<SignupHeader />} setShowModal={setShowModal}>
+      {isModalOpen && (
+        <Modal header={<SignupHeader />}>
           <Signup />
         </Modal>
       )}
@@ -21,8 +21,8 @@ const TestSignup = ({}: TestSignupProps) => {
           onClick={(e: any) =>
             openModalHandler({
               e,
-              isOpenModal: showModal,
-              setIsOpenModal: setShowModal,
+              isModalOpen,
+              setIsModalOpen,
             })
           }
         >

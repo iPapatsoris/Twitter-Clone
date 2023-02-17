@@ -8,17 +8,15 @@ import { PopupContext } from "../../../App";
 interface ModalProps {
   header: React.ReactNode;
   children: React.ReactNode;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Modal = ({ header, children, setShowModal }: ModalProps) => {
+const Modal = ({ header, children }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const { setIsModalOpen } = useContext(PopupContext);
   useClickOutside({
     ref: modalRef,
-    callback: () => setShowModal(false),
+    callback: () => setIsModalOpen(false),
   });
-
-  const { setIsModalOpen } = useContext(PopupContext);
 
   useEffect(() => {
     setIsModalOpen(true);
@@ -28,7 +26,7 @@ const Modal = ({ header, children, setShowModal }: ModalProps) => {
   return (
     <div className={styles.Center}>
       <div className={styles.Modal} ref={modalRef}>
-        <div className={styles.CloseIcon}>
+        <div className={styles.CloseIcon} onClick={() => setIsModalOpen(false)}>
           <Icon src={closeIcon} />
         </div>
         <div className={styles.Header}>{header}</div>
@@ -41,12 +39,12 @@ const Modal = ({ header, children, setShowModal }: ModalProps) => {
 // Handler to be used by components to open the modal
 export const openModalHandler = (params: {
   e: MouseEvent;
-  isOpenModal: boolean;
-  setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  isModalOpen: boolean;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { e, isOpenModal, setIsOpenModal } = params;
-  if (!isOpenModal) {
-    setIsOpenModal(true);
+  const { e, isModalOpen, setIsModalOpen } = params;
+  if (!isModalOpen) {
+    setIsModalOpen(true);
   }
   /* If we don't prevent propagation, useClickOutside will
      receive this click event after registering a listener for it (bubbling),

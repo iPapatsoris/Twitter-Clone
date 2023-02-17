@@ -8,10 +8,12 @@ import useScrollToTop from "./util/hooks/useScrollToTop";
 
 export const PopupContext = createContext<{
   disableOuterPointerEvents: boolean;
+  isModalOpen: boolean;
   setDisableOuterPointerEvents: React.Dispatch<SetStateAction<boolean>>;
   setIsModalOpen: React.Dispatch<SetStateAction<boolean>>;
 }>({
   disableOuterPointerEvents: false,
+  isModalOpen: false,
   setDisableOuterPointerEvents: () => {},
   setIsModalOpen: () => {},
 });
@@ -63,6 +65,7 @@ const App = () => {
     <PopupContext.Provider
       value={{
         disableOuterPointerEvents,
+        isModalOpen,
         setDisableOuterPointerEvents,
         setIsModalOpen,
       }}
