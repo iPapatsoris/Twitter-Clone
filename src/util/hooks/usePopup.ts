@@ -88,7 +88,6 @@ const usePopup = (
     ref: popupRef,
     callback: () => {
       setIsActive(false);
-      console.log("enabling pointer events");
       setDisableOuterPointerEvents(false);
     },
     clickAnywhere: disableByClickingAnywhere,

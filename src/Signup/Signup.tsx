@@ -13,7 +13,6 @@ const Signup = ({}: SignupProps) => {
   ];
   return (
     <div className={styles.Signup}>
-      {/* <div className={styles.Header}>Step 1 of 5</div> */}
       <h1>Create your account</h1>
       <div className={styles.Form}>
         <div className={styles.NameEmail}>

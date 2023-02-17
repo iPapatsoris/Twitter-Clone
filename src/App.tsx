@@ -9,9 +9,11 @@ import useScrollToTop from "./util/hooks/useScrollToTop";
 export const PopupContext = createContext<{
   disableOuterPointerEvents: boolean;
   setDisableOuterPointerEvents: React.Dispatch<SetStateAction<boolean>>;
+  setIsModalOpen: React.Dispatch<SetStateAction<boolean>>;
 }>({
   disableOuterPointerEvents: false,
   setDisableOuterPointerEvents: () => {},
+  setIsModalOpen: () => {},
 });
 
 const App = () => {
@@ -19,9 +21,20 @@ const App = () => {
   const path = useLocation().pathname;
   useScrollToTop();
 
-  // To use when a popup becomes active
+  // To use when a popup becomes active, to allow clicking only within popup
   const [disableOuterPointerEvents, setDisableOuterPointerEvents] =
     useState(false);
+  /* If there is an open modal, do not disable outer pointer events, since
+     it includes a fixed div wrapping the whole screen that automatically
+     disables them. This behaviour is needed to cover the case that we want to
+     use a popup within the modal, because if we were to disable pointer events,
+     it would introduce buggy behaviour with the useClickOutside click events,
+     regarding identifying clicked elements. Because clicking on an element 
+     with disabled pointer events, results in the click source being identified 
+     as the most recent ancestor that allows pointer events.
+  */
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // Avoid useless re-rendering when simply a popup becomes active
   const innerContent = useMemo(
     () => (
@@ -42,13 +55,17 @@ const App = () => {
   } else if (isNotificationsPage(path)) {
     extraClasses.push(styles.ExtendedHeaderMain);
   }
-  if (disableOuterPointerEvents) {
+  if (!isModalOpen && disableOuterPointerEvents) {
     extraClasses.push(styles.DisablePointerEvents);
   }
 
   return (
     <PopupContext.Provider
-      value={{ disableOuterPointerEvents, setDisableOuterPointerEvents }}
+      value={{
+        disableOuterPointerEvents,
+        setDisableOuterPointerEvents,
+        setIsModalOpen,
+      }}
     >
       <div className={[styles.App, ...extraClasses].join(" ")}>
         {innerContent}

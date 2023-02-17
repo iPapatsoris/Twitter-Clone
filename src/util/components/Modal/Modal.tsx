@@ -1,8 +1,9 @@
 import Icon from "../Icon/Icon";
 import styles from "./Modal.module.scss";
 import closeIcon from "../../../assets/icons/close.png";
-import React, { useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import useClickOutside from "../../hooks/useClickOutside";
+import { PopupContext } from "../../../App";
 
 interface ModalProps {
   header: React.ReactNode;
@@ -12,7 +13,17 @@ interface ModalProps {
 
 const Modal = ({ header, children, setShowModal }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  useClickOutside({ ref: modalRef, callback: () => setShowModal(false) });
+  useClickOutside({
+    ref: modalRef,
+    callback: () => setShowModal(false),
+  });
+
+  const { setIsModalOpen } = useContext(PopupContext);
+
+  useEffect(() => {
+    setIsModalOpen(true);
+    return () => setIsModalOpen(false);
+  }, [setIsModalOpen]);
 
   return (
     <div className={styles.Center}>
