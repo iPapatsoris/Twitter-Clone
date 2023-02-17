@@ -25,12 +25,14 @@ const Icon = ({
   }
 
   return (
-    <div className={[hoverClassname, styles.IconWrapper].join(" ")}>
+    <div
+      onClick={onClick}
+      className={[hoverClassname, styles.IconWrapper].join(" ")}
+    >
       <img
         src={src}
         title={title}
         alt={alt}
-        onClick={onClick}
         className={[
           styles.Icon,
           styles.NoHighlighting,
