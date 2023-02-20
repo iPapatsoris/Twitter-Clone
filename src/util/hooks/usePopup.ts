@@ -99,7 +99,7 @@ const usePopup = (
   useEffect(() => {
     setIsPopupOpen(true);
     return () => setIsPopupOpen(false);
-  });
+  }, [setIsPopupOpen]);
 };
 
 export default usePopup;
