@@ -23,7 +23,6 @@ const Option = ({
   extraStyles?: string[];
 }) => {
   const hasNestedOptions = nestedOptions && nestedOptions.length;
-  console.log(nestedOptions);
 
   return (
     <div

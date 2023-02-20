@@ -11,7 +11,7 @@ import { SimpleOption } from "../OptionsPopup/Option";
 
 interface DropdownProps {
   name: string;
-  selectedOptionID: number;
+  selectedOptionID: number | null;
   options: SimpleOption[];
   position?: React.ComponentProps<typeof OptionsPopup>["position"];
   extraStyles: string[];
@@ -32,10 +32,9 @@ const Dropdown = (props: DropdownProps) => {
     });
   };
 
-  const selectedOption = props.options.find(
-    (option) => option.id === props.selectedOptionID
-  );
-  console.log(selectedOption);
+  const selectedOption =
+    props.selectedOptionID !== null &&
+    props.options.find((option) => option.id === props.selectedOptionID);
 
   // Covert props between components
   const options: React.ComponentProps<typeof OptionsPopup>["options"] =

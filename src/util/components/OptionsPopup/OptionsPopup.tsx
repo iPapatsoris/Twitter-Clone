@@ -64,6 +64,7 @@ const OptionsPopup = ({
         !newOptions[index].showNestedOptions;
       setOptions(newOptions);
     }
+
     option.mainOption.onSelect && option.mainOption.onSelect();
   };
 
