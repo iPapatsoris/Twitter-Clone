@@ -20,7 +20,17 @@ const Modal = ({ header, children }: ModalProps) => {
 
   useEffect(() => {
     setIsModalOpen(true);
-    return () => setIsModalOpen(false);
+    // Disable scrolling the background
+    document.body.style.overflow = "hidden";
+    // Disabling scrolling removes the scroll bar, resulting in the content
+    // moving horizontally. Adjust some padding to compensate
+    // TODO: calculate exactly the scrollbar width
+    document.body.style.paddingRight = "15px";
+    return () => {
+      setIsModalOpen(false);
+      document.body.style.overflow = "auto";
+      document.body.style.paddingRight = "0";
+    };
   }, [setIsModalOpen]);
 
   const wrapperStyles: ModalNames[] = [styles.Wrapper];

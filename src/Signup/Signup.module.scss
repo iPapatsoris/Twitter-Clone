@@ -31,10 +31,12 @@
     .Dropdowns {
       margin-top: 1rem;
       display: flex;
+      gap: 1rem;
+
       .Dropdown:nth-child(1) {
         flex: 1;
       }
-      .Dropdown:nth-child(2) {
+      .Dropdown:nth-child(n + 2) {
         flex: 0.5;
       }
     }
