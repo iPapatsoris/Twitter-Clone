@@ -12,13 +12,14 @@ export interface OptionsPopupProps {
   // Where to place popup
   targetAreaRef: React.RefObject<HTMLDivElement>;
   // Fine tuning of position (above, below, etc)
-  position?: "middle" | "top";
+  position?: "middle" | "top" | "bottom";
   // If true, max-height property is set dynamically so that a scroll bar is
   // introduced if popup exceeds beyond the viewport. Useful when popup is
   // positioned under a sticky or fixed context.
   autoMaxHeight?: boolean;
   // Allow custom styling
-  extraStyles?: Array<string>;
+  extraPopupStyles?: string[];
+  extraOptionStyles?: string[];
   // Disables the popup by clicking anywhere.
   // By default, cliking inside the popup will not disable it.
   disableByClickingAnywhere?: boolean;
@@ -31,7 +32,8 @@ const OptionsPopup = ({
   targetAreaRef,
   position = "middle",
   autoMaxHeight = false,
-  extraStyles = [],
+  extraPopupStyles = [],
+  extraOptionStyles = [],
   disableByClickingAnywhere = false,
 }: OptionsPopupProps) => {
   const initialOptions = optionProps.map((option) => ({
@@ -76,6 +78,7 @@ const OptionsPopup = ({
             onSelect: () => nested.onSelect,
           }}
           key={nested.id}
+          extraStyles={extraOptionStyles}
         />
       ));
     }
@@ -90,6 +93,7 @@ const OptionsPopup = ({
         nestedOptions={option.nestedOptions}
         showNestedOptions={option.showNestedOptions}
         key={option.mainOption.id}
+        extraStyles={extraOptionStyles}
       />,
       ...nestedOptionsJSX,
     ];
@@ -99,7 +103,7 @@ const OptionsPopup = ({
     <div
       id="popup"
       ref={popupRef}
-      className={[styles.OptionsPopup, ...extraStyles].join(" ")}
+      className={[styles.OptionsPopup, ...extraPopupStyles].join(" ")}
     >
       {optionsJSX}
     </div>

@@ -13,11 +13,12 @@ interface DropdownProps {
   name: string;
   selectedOptionID: number;
   options: SimpleOption[];
+  position?: React.ComponentProps<typeof OptionsPopup>["position"];
   extraStyles: string[];
 }
 
 const Dropdown = (props: DropdownProps) => {
-  const { name, extraStyles } = props;
+  const { name, extraStyles, position } = props;
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { setDisableOuterPointerEvents } = useContext(PopupContext);
   const [isActive, setIsActive] = useState(false);
@@ -42,7 +43,6 @@ const Dropdown = (props: DropdownProps) => {
       mainOption: option,
     }));
 
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const wrapperStyles: styles.InputWrapperNames[] = [
     styles.Wrapper,
     dropdownStyles.Wrapper,
@@ -55,7 +55,7 @@ const Dropdown = (props: DropdownProps) => {
   return (
     <div className={extraStyles.join(" ")}>
       <div
-        ref={wrapperRef}
+        ref={dropdownRef}
         className={wrapperStyles.join(" ")}
         onClick={handleClick}
       >
@@ -78,6 +78,9 @@ const Dropdown = (props: DropdownProps) => {
           setIsActive={setIsActive}
           targetAreaRef={dropdownRef}
           disableByClickingAnywhere
+          extraPopupStyles={[dropdownStyles.Popup]}
+          extraOptionStyles={[dropdownStyles.Option]}
+          position={position}
         />
       )}
     </div>

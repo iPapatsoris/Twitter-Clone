@@ -18,12 +18,18 @@ const Option = ({
   mainOption,
   nestedOptions,
   showNestedOptions,
-}: OptionWithNested) => {
+  extraStyles = [],
+}: OptionWithNested & {
+  extraStyles?: string[];
+}) => {
   const hasNestedOptions = nestedOptions && nestedOptions.length;
   console.log(nestedOptions);
 
   return (
-    <div className={styles.Option} onClick={mainOption.onSelect}>
+    <div
+      className={[...extraStyles, styles.Option].join(" ")}
+      onClick={mainOption.onSelect}
+    >
       {mainOption.component}
       {hasNestedOptions && (
         <div className={styles.PushRight}>

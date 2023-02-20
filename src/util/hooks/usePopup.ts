@@ -39,7 +39,8 @@ const usePopup = (
       popupRef &&
       popupRef.current &&
       targetAreaRef &&
-      targetAreaRef.current
+      targetAreaRef.current &&
+      position !== "bottom"
     ) {
       const targetTop = targetAreaRef.current.offsetTop.toString() + "px";
       if (position === "middle") {
