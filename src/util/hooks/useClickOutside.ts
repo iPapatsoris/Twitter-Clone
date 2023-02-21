@@ -14,18 +14,17 @@ const useClickOutside = (params: {
     ref,
     callback,
     clickAnywhere = false,
-    // ignoreFirstClick = false,
+    ignoreFirstClick = false,
   } = params;
 
   const [isFirstClick, setIsFirstClick] = useState(true);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      // if (ignoreFirstClick && isFirstClick) {
-      //   setIsFirstClick(false);
-      //   e.stopImmediatePropagation();
-      //   return;
-      // }
+      if (ignoreFirstClick && isFirstClick) {
+        setIsFirstClick(false);
+        return;
+      }
 
       if (
         clickAnywhere ||
@@ -42,7 +41,7 @@ const useClickOutside = (params: {
     ref,
     callback,
     clickAnywhere,
-    // ignoreFirstClick,
+    ignoreFirstClick,
     setIsFirstClick,
     isFirstClick,
   ]);

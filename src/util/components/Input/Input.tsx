@@ -6,7 +6,6 @@ import inputStyles from "./Input.module.scss";
 interface InputProps {
   placeholder: string;
   characterLimit?: number;
-  // type: "input" | "dropdown";
 }
 
 const Input = ({ placeholder, characterLimit }: InputProps) => {
@@ -20,10 +19,12 @@ const Input = ({ placeholder, characterLimit }: InputProps) => {
     callback: () => setIsFocused(false),
   });
 
-  const handleClick = () => {
+  // TODO: correct TS for MouseEvent
+  const handleClick = (e: any) => {
     if (inputRef.current) {
       inputRef.current.focus();
       setIsFocused(true);
+      e.preventDefault();
     }
   };
 
@@ -42,7 +43,7 @@ const Input = ({ placeholder, characterLimit }: InputProps) => {
     <div
       ref={wrapperRef}
       className={wrapperStyles.join(" ")}
-      onClick={handleClick}
+      onMouseDown={(e) => handleClick(e)}
     >
       {!isFocused && !value.length && (
         <div className={inputStyles.Placeholder}>
