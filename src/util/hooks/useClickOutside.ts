@@ -9,12 +9,14 @@ const useClickOutside = (params: {
   callback: () => void;
   clickAnywhere?: boolean;
   ignoreFirstClick?: boolean;
+  onMouseDown?: boolean;
 }) => {
   const {
     ref,
     callback,
     clickAnywhere = false,
     ignoreFirstClick = false,
+    onMouseDown = false,
   } = params;
 
   const [isFirstClick, setIsFirstClick] = useState(true);
@@ -33,9 +35,12 @@ const useClickOutside = (params: {
         callback();
       }
     };
-    window.addEventListener("click", handleClick);
+    window.addEventListener(onMouseDown ? "mousedown" : "click", handleClick);
     return () => {
-      window.removeEventListener("click", handleClick);
+      window.removeEventListener(
+        onMouseDown ? "mousedown" : "click",
+        handleClick
+      );
     };
   }, [
     ref,
@@ -44,6 +49,7 @@ const useClickOutside = (params: {
     ignoreFirstClick,
     setIsFirstClick,
     isFirstClick,
+    onMouseDown,
   ]);
 };
 

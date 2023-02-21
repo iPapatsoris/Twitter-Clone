@@ -8,8 +8,7 @@ import {
   getYears,
   isInvalidDate,
 } from "../util/date";
-import { useEffect, useState } from "react";
-import dayjs from "dayjs";
+import { useState } from "react";
 interface SignupProps {}
 
 type Option = React.ComponentProps<typeof Dropdown>["options"][0];
@@ -54,7 +53,7 @@ const Signup = ({}: SignupProps) => {
       <h1>Create your account</h1>
       <div className={styles.Form}>
         <div className={styles.NameEmail}>
-          <Input placeholder="Name" characterLimit={50} />
+          <Input placeholder="Name" characterLimit={50} autofocus />
           <Input placeholder="Email" />
         </div>
         <div>
