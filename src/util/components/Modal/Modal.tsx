@@ -12,14 +12,17 @@ interface ModalProps {
 
 const Modal = ({ header, children }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  const { isPopupOpen, setIsModalOpen } = useContext(PopupContext);
+  const { isPopupOpenRef, setIsModalOpen } = useContext(PopupContext);
   useClickOutside({
     ref: modalRef,
-    callback: () => setIsModalOpen(false),
+    callback: () => {
+      if (!isPopupOpenRef?.current) {
+        setIsModalOpen(false);
+      }
+    },
   });
 
   useEffect(() => {
-    setIsModalOpen(true);
     // Disable scrolling the background
     document.body.style.overflow = "hidden";
     // Disabling scrolling removes the scroll bar, resulting in the content
@@ -27,14 +30,13 @@ const Modal = ({ header, children }: ModalProps) => {
     // TODO: calculate exactly the scrollbar width
     document.body.style.paddingRight = "15px";
     return () => {
-      setIsModalOpen(false);
       document.body.style.overflow = "auto";
       document.body.style.paddingRight = "0";
     };
-  }, [setIsModalOpen]);
+  }, []);
 
   const wrapperStyles: ModalNames[] = [styles.Wrapper];
-  if (isPopupOpen) {
+  if (isPopupOpenRef?.current) {
     wrapperStyles.push(styles.DisablePointerEvents);
   }
   return (

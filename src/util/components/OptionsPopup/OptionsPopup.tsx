@@ -23,6 +23,7 @@ export interface OptionsPopupProps {
   // Disables the popup by clicking anywhere.
   // By default, cliking inside the popup will not disable it.
   disableByClickingAnywhere?: boolean;
+  ignoreFirstClick?: boolean;
 }
 
 const OptionsPopup = ({
@@ -35,6 +36,7 @@ const OptionsPopup = ({
   extraPopupStyles = [],
   extraOptionStyles = [],
   disableByClickingAnywhere = false,
+  ignoreFirstClick = false,
 }: OptionsPopupProps) => {
   const initialOptions = optionProps.map((option) => ({
     ...option,
@@ -52,6 +54,7 @@ const OptionsPopup = ({
     setIsActive,
     autoMaxHeight,
     disableByClickingAnywhere,
+    ignoreFirstClick,
   });
 
   // Toggle nested options visibility for clicked option

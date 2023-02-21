@@ -7,8 +7,8 @@ import OptionsPopup, {
   activatePopupHandler,
 } from "../../util/components/OptionsPopup/OptionsPopup";
 import { useContext, useRef, useState } from "react";
-import { OptionProps } from "../../util/components/OptionsPopup/Option";
 import { PopupContext } from "../../App";
+import { OptionWithNested } from "../../util/components/OptionsPopup/Option";
 
 const ProfileButton = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -23,12 +23,20 @@ const ProfileButton = () => {
     });
   };
 
-  const options: Array<OptionProps> = [
+  const options: Array<OptionWithNested> = [
     {
-      mainOption: { component: "Add an existing account", id: "addAccount" },
+      mainOption: {
+        component: "Add an existing account",
+        id: 1,
+        onSelect: () => {},
+      },
     },
     {
-      mainOption: { component: "Logout @toulouse-cat", id: "logout" },
+      mainOption: {
+        component: "Logout @toulouse-cat",
+        id: 2,
+        onSelect: () => {},
+      },
     },
   ];
 
@@ -47,7 +55,7 @@ const ProfileButton = () => {
           isActive={showOptions}
           targetAreaRef={profileButtonRef}
           position="top"
-          extraStyles={[styles.PopupStyles]}
+          extraPopupStyles={[styles.PopupStyles]}
         />
       )}
       <UserCard

@@ -56,7 +56,7 @@ const Dropdown = (props: DropdownProps) => {
       <div
         ref={dropdownRef}
         className={wrapperStyles.join(" ")}
-        onClick={handleClick}
+        onMouseDown={handleClick}
       >
         <div>
           <div className={styles.Info}>
@@ -80,6 +80,7 @@ const Dropdown = (props: DropdownProps) => {
           extraPopupStyles={[dropdownStyles.Popup]}
           extraOptionStyles={[dropdownStyles.Option]}
           position={position}
+          ignoreFirstClick
         />
       )}
     </div>

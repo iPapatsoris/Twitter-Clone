@@ -18,6 +18,7 @@ const usePopup = (
     setIsActive,
     autoMaxHeight = false,
     disableByClickingAnywhere = false,
+    ignoreFirstClick = false,
   } = params;
 
   // Listen to window height updates to handle resizing
@@ -93,6 +94,7 @@ const usePopup = (
       setDisableOuterPointerEvents(false);
     },
     clickAnywhere: disableByClickingAnywhere,
+    ignoreFirstClick,
   });
 
   // Notify global state that a popup is active. This is needed for managing
