@@ -23,15 +23,15 @@ const Modal = ({ header, children }: ModalProps) => {
   });
 
   useEffect(() => {
-    // Disable scrolling the background
+    // Disable scrolling the background. Doing so removes the scroll bar,
+    // resulting in the content moving horizontally. Adjust some padding to
+    // compensate.
+    const scrollbarWidth = window.innerWidth - document.body.clientWidth;
+    document.body.style.paddingRight = scrollbarWidth + "px";
     document.body.style.overflow = "hidden";
-    // Disabling scrolling removes the scroll bar, resulting in the content
-    // moving horizontally. Adjust some padding to compensate
-    // TODO: calculate exactly the scrollbar width
-    document.body.style.paddingRight = "15px";
     return () => {
       document.body.style.overflow = "auto";
-      document.body.style.paddingRight = "0";
+      document.body.style.paddingRight = "initial";
     };
   }, []);
 
@@ -60,6 +60,14 @@ export const openModalHandler = (params: {
 }) => {
   const { e, isModalOpen, setIsModalOpen } = params;
   if (!isModalOpen) {
+    // Disable scrolling the background
+    document.body.style.overflow = "hidden";
+    // Disabling scrolling removes the scroll bar, resulting in the content
+    // moving horizontally. Adjust some padding to compensate
+    // TODO: calculate exactly the scrollbar width
+    const scrollbarWidth = window.innerWidth - document.body.clientWidth;
+    console.log(scrollbarWidth);
+    document.body.style.paddingRight = scrollbarWidth + "px";
     setIsModalOpen(true);
   }
   /* If we don't prevent propagation, useClickOutside will
