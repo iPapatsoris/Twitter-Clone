@@ -13,7 +13,6 @@ const paths: {
   lists: string;
   profile: string;
   error: string;
-  signup: string;
   settings: string;
   tos: string;
   privacy: string;
@@ -31,7 +30,6 @@ const paths: {
   lists: "/:username/lists",
   profile: "/:username",
   error: "/error",
-  signup: "/signup",
   settings: "/settings",
   tos: "/tos",
   privacy: "/privacy",

@@ -5,9 +5,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
-  Routes,
   useLocation,
-  BrowserRouter,
 } from "react-router-dom";
 import App from "./App";
 import Home from "./Home/Home";
@@ -18,7 +16,6 @@ import paths from "./util/paths";
 import Notifications from "./Main/routes/Notifications/Notifications";
 import NotificationsVerified from "./Main/routes/Notifications/NotificationsVerified";
 import NotificationsMentions from "./Main/routes/Notifications/NotificationsMentions";
-import TestSignup from "./Signup/TestSignup";
 import { useAuth } from "./util/hooks/useAuth";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
@@ -72,7 +69,6 @@ const router = createBrowserRouter(
         <Route path={paths.bookmarks} />
         <Route path={paths.lists} />
         <Route path={paths.profile} />
-        <Route path={paths.signup} element={<TestSignup />} />
         <Route index element={<Navigate to={paths.home} />} />
         <Route path="*" id={paths.error} element={<ErrorPage />} />
       </Route>
