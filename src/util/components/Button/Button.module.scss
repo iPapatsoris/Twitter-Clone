@@ -22,6 +22,14 @@
     }
   }
 
+  &.White {
+    background: white;
+    border: 1px solid rgb(207, 217, 222);
+    &:hover {
+      background: rgb(230, 230, 230);
+    }
+  }
+
   &.Small {
     height: 32px;
   }
@@ -40,5 +48,9 @@
 
   &.LargeFont {
     font-size: 17px;
+  }
+
+  &.BlackFont {
+    color: black;
   }
 }

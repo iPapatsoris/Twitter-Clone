@@ -1,56 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import {
-  Navigate,
-  Route,
-  createBrowserRouter,
-  createRoutesFromElements,
-  RouterProvider,
-} from "react-router-dom";
-import App from "./App";
-import Home from "./Home/Home";
 import "./global.css";
-import ErrorPage from "./Main/routes/ErrorPage/ErrorPage";
-import Explore from "./Main/routes/Explore/Explore";
-import paths from "./util/paths";
-import Notifications from "./Main/routes/Notifications/Notifications";
-import NotificationsVerified from "./Main/routes/Notifications/NotificationsVerified";
-import NotificationsMentions from "./Main/routes/Notifications/NotificationsMentions";
-import Signup from "./Signup/Signup";
-import Modal from "./util/components/Modal/Modal";
-import SignupHeader from "./Signup/SingupHeader/SignupHeader";
-import TestSignup from "./Signup/TestSignup";
-
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <>
-      <Route path="/" element={<App />}>
-        <Route path={paths.home} element={<Home />} />
-        <Route path={paths.explore} element={<Explore />} />
-        <Route path={paths.notifications.self} element={<Notifications />} />
-        <Route
-          path={paths.notifications.verified}
-          element={<NotificationsVerified />}
-        />
-        <Route
-          path={paths.notifications.mentions}
-          element={<NotificationsMentions />}
-        />
-        {/* <Route index element={<Navigate to={paths.notifications.self} />} /> */}
-        <Route path={paths.messages} />
-        <Route path={paths.bookmarks} />
-        <Route path={paths.lists} />
-        <Route path={paths.profile} />
-        <Route path={paths.signup} element={<TestSignup />} />
-        <Route index element={<Navigate to={paths.home} />} />
-        <Route path="*" id={paths.error} element={<ErrorPage />} />
-      </Route>
-    </>
-  )
-);
+import Router from "./Router";
+import { AuthContext } from "./util/hooks/useAuth";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthContext.Provider value={{}}>
+      <Router />
+    </AuthContext.Provider>
   </React.StrictMode>
 );

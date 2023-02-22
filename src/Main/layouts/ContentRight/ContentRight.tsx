@@ -7,14 +7,18 @@ import paths from "../../../util/paths";
 import SiteInfo from "../../components/SiteInfo/SiteInfo";
 import { useRef } from "react";
 import useDynamicSticky from "../../../util/hooks/useDynamicSticky";
+import { useAuth } from "../../../util/hooks/useAuth";
+import GuestPrompt from "../../components/GuestPrompt/GuestPrompt";
 
 const ContentRight = () => {
   const path = useLocation().pathname;
   const ref = useRef<HTMLDivElement>(null);
   useDynamicSticky(ref);
+  const { user } = useAuth();
 
-  return (
-    <div className={styles.ContentRight} ref={ref}>
+  const guestView = <GuestPrompt />;
+  const regularView = (
+    <div>
       {path !== paths.explore && (
         <ContentRightSection title="Trends for you">
           <Trends />
@@ -23,6 +27,12 @@ const ContentRight = () => {
       <ContentRightSection title="Who to follow">
         <WhoToFollow />
       </ContentRightSection>
+    </div>
+  );
+
+  return (
+    <div className={styles.ContentRight} ref={ref}>
+      {user ? regularView : guestView}
       <SiteInfo />
     </div>
   );

@@ -2,11 +2,12 @@ import styles from "./Button.module.scss";
 
 interface ButtonProps {
   children: React.ReactNode;
-  color?: "primary" | "black";
+  color?: "primary" | "black" | "white";
   size?: "small" | "medium" | "large";
   largeFont?: boolean;
   stretch?: boolean;
   extraClasses?: string[];
+  onClick?: (e: any) => void;
 }
 
 const Button = ({
@@ -15,9 +16,20 @@ const Button = ({
   size = "medium",
   largeFont = false,
   stretch = false,
+  onClick = (e) => {},
   extraClasses = [],
 }: ButtonProps) => {
-  const colorStyle = color === "primary" ? styles.Primary : styles.Black;
+  let buttonColorStyle;
+  let fontColorStyle;
+  if (color === "primary") {
+    buttonColorStyle = styles.Primary;
+  } else if (color === "black") {
+    buttonColorStyle = styles.Black;
+  } else if (color === "white") {
+    buttonColorStyle = styles.White;
+    fontColorStyle = styles.BlackFont;
+  }
+
   let sizeStyle: styles.ButtonNames = styles.Medium;
   if (size === "small") {
     sizeStyle = styles.Small;
@@ -27,14 +39,19 @@ const Button = ({
 
   const classes = [
     styles.Button,
-    colorStyle,
+    buttonColorStyle,
+    fontColorStyle,
     sizeStyle,
     largeFont ? styles.LargeFont : "",
     stretch ? styles.Stretch : "",
     ...extraClasses,
   ].join(" ");
 
-  return <button className={classes}>{children}</button>;
+  return (
+    <button className={classes} onClick={(e) => onClick(e)}>
+      {children}
+    </button>
+  );
 };
 
 export default Button;
