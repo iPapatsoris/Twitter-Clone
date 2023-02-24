@@ -11,11 +11,16 @@ import React, {
   useState,
 } from "react";
 import useScrollToTop from "./util/hooks/useScrollToTop";
+import Modal from "./util/components/Modal/Modal";
+
+type ModalProps = React.ComponentProps<typeof Modal>;
+const deafultModalProps = { header: <></>, children: <></> };
 
 export const PopupContext = createContext<{
   disableOuterPointerEvents: boolean;
   isModalOpen: boolean;
   isPopupOpenRef: React.RefObject<boolean> | null;
+  setModalProps: React.Dispatch<ModalProps>;
   setDisableOuterPointerEvents: React.Dispatch<SetStateAction<boolean>>;
   setIsModalOpen: React.Dispatch<SetStateAction<boolean>>;
   setIsPopupOpen: (value: boolean) => void;
@@ -23,6 +28,7 @@ export const PopupContext = createContext<{
   disableOuterPointerEvents: false,
   isModalOpen: false,
   isPopupOpenRef: null,
+  setModalProps: () => {},
   setDisableOuterPointerEvents: () => {},
   setIsModalOpen: () => {},
   setIsPopupOpen: () => {},
@@ -47,7 +53,8 @@ const App = () => {
      as the most recent ancestor that allows pointer events.
   */
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPopupOpen, _setIsPopupOpen] = useState(false);
+  const [modalProps, setModalProps] = useState<ModalProps>(deafultModalProps);
+
   /* Use a reference to the state, to avoid "stale state in callback" problem.
      When a modal is opened, a click event listener is added that detects 
      clicking outside of it, to close it. However, it is closed only in the 
@@ -60,6 +67,7 @@ const App = () => {
      callback. This is why we need to use a ref, to make sure we always 
      have access to the latest state. 
   */
+  const [isPopupOpen, _setIsPopupOpen] = useState(false);
   const isPopupOpenRef = useRef(isPopupOpen);
   const setIsPopupOpen = (value: boolean) => {
     isPopupOpenRef.current = value;
@@ -96,12 +104,14 @@ const App = () => {
         disableOuterPointerEvents,
         isModalOpen,
         isPopupOpenRef,
+        setModalProps,
         setDisableOuterPointerEvents,
         setIsModalOpen,
         setIsPopupOpen,
       }}
     >
       <div className={[styles.App, ...extraClasses].join(" ")}>
+        {isModalOpen && <Modal {...modalProps} />}
         {innerContent}
       </div>
     </PopupContext.Provider>

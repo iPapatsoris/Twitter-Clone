@@ -4,21 +4,23 @@ import { PopupContext } from "../../../App";
 import Signup from "../../../Signup/Signup";
 import SignupHeader from "../../../Signup/SingupHeader/SignupHeader";
 import Button from "../../../util/components/Button/Button";
-import Modal, { openModalHandler } from "../../../util/components/Modal/Modal";
+import { openModalHandler } from "../../../util/components/Modal/Modal";
 import paths from "../../../util/paths";
 import styles from "./GuestPrompt.module.scss";
 
 interface GuestPromptProps {}
 
 const GuestPrompt = ({}: GuestPromptProps) => {
-  const { isModalOpen, setIsModalOpen } = useContext(PopupContext);
+  const { isModalOpen, setIsModalOpen, setModalProps } =
+    useContext(PopupContext);
+
+  const handleClick = (e: any) => {
+    setModalProps({ header: <SignupHeader />, children: <Signup /> });
+    openModalHandler({ e, isModalOpen, setIsModalOpen });
+  };
+
   return (
     <>
-      {isModalOpen && (
-        <Modal header={<SignupHeader />}>
-          <Signup />
-        </Modal>
-      )}
       <div className={styles.GuestPrompt}>
         <h2>New to Twitter?</h2>
         <span className={styles.Text}>
@@ -28,13 +30,7 @@ const GuestPrompt = ({}: GuestPromptProps) => {
           size="medium"
           stretch
           color="white"
-          onClick={(e: any) =>
-            openModalHandler({
-              e,
-              isModalOpen,
-              setIsModalOpen,
-            })
-          }
+          onClick={(e: any) => handleClick(e)}
         >
           Create account
         </Button>
