@@ -8,7 +8,6 @@ declare const classNames: {
   readonly ShowOpacity: "ShowOpacity";
   readonly Blue: "Blue";
   readonly LightColor: "LightColor";
-  readonly DisablePointerEvents: "DisablePointerEvents";
   readonly NoHighlighting: "NoHighlighting";
 };
 export = classNames;
@@ -22,5 +21,4 @@ export type ClassNames =
   | "ShowOpacity"
   | "Blue"
   | "LightColor"
-  | "DisablePointerEvents"
   | "NoHighlighting";
