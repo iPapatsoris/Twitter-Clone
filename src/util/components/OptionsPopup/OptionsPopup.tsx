@@ -8,7 +8,6 @@ export interface OptionsPopupProps {
   // Options for the popup. Nested options are supported that expand it
   options: OptionWithNested[];
   // State controlled by outer components
-  isActive: boolean;
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
   // Where to place popup
   targetAreaRef: React.RefObject<HTMLDivElement>;
@@ -30,7 +29,6 @@ export interface OptionsPopupProps {
 
 const OptionsPopup = ({
   options: optionProps,
-  isActive,
   setIsActive,
   targetAreaRef,
   position = {
@@ -54,7 +52,6 @@ const OptionsPopup = ({
     popupRef,
     targetAreaRef,
     position,
-    isActive,
     setIsActive,
     autoMaxHeight,
     onMouseDown,

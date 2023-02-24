@@ -8,13 +8,7 @@ const usePopup = (
     popupRef: React.RefObject<HTMLDivElement>;
   }
 ) => {
-  const {
-    popupRef,
-    targetAreaRef,
-    position,
-    isActive,
-    autoMaxHeight = false,
-  } = params;
+  const { popupRef, targetAreaRef, position, autoMaxHeight = false } = params;
 
   // Listen to window height updates to handle resizing
   const { height: windowHeight } = useWindowDimensions(autoMaxHeight);
@@ -25,7 +19,6 @@ const usePopup = (
   // Place popup in relation to targetAreaRef according to position.
   useEffect(() => {
     if (
-      // isActive &&
       popupRef &&
       popupRef.current &&
       targetAreaRef &&
@@ -67,7 +60,7 @@ const usePopup = (
       }
       setJustPlacedPopup(true);
     }
-  }, [isActive, popupRef, targetAreaRef, position]);
+  }, [popupRef, targetAreaRef, position]);
 
   // Limit popup's max-height to the max available space just before it goes
   // off screen. Adjust on window resizing.
@@ -77,7 +70,7 @@ const usePopup = (
         windowHeight - popupRef.current.getBoundingClientRect().top
       );
     }
-  }, [justPlacedPopup, isActive, windowHeight, autoMaxHeight, popupRef]);
+  }, [justPlacedPopup, windowHeight, autoMaxHeight, popupRef]);
 };
 
 export default usePopup;

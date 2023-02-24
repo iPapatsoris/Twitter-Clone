@@ -19,7 +19,6 @@ const MoreOptionsNavItem = ({ children }: MoreOptionsNavItemProps) => {
       {showOptions && popupTargetAreaRef && (
         <OptionsPopup
           options={navMoreOptionsList}
-          isActive={showOptions}
           setIsActive={setShowOptions}
           targetAreaRef={popupTargetAreaRef}
           autoMaxHeight

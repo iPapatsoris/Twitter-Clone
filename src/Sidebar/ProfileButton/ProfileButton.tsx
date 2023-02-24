@@ -39,7 +39,6 @@ const ProfileButton = () => {
         <OptionsPopup
           options={options}
           setIsActive={setShowOptions}
-          isActive={showOptions}
           targetAreaRef={profileButtonRef}
           position={{ block: "top", inline: "leftCover" }}
           extraPopupStyles={[styles.PopupStyles]}

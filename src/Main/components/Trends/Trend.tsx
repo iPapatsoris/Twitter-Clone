@@ -46,7 +46,6 @@ const Trend = () => {
         <OptionsPopup
           targetAreaRef={iconRef}
           options={options}
-          isActive={showOptions}
           setIsActive={setShowOptions}
           position={{ block: "bottomCover", inline: "rightCover" }}
         />
