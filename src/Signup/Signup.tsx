@@ -22,6 +22,8 @@ const Signup = ({}: SignupProps) => {
     id: m.id,
     component: <span>{m.text}</span>,
     onSelect: () => {
+      console.log("clicked on a month");
+
       setMonth(m.id);
       if (isInvalidDate({ day, year, month: m.id })) {
         setDay(-1);
@@ -68,21 +70,21 @@ const Signup = ({}: SignupProps) => {
               options={months}
               selectedOptionID={month !== -1 ? month : null}
               extraStyles={[styles.Dropdown]}
-              position="bottom"
+              position={{ block: "bottom", inline: "leftCover" }}
             />
             <Dropdown
               name="Day"
               options={days}
               selectedOptionID={day !== -1 ? day : null}
               extraStyles={[styles.Dropdown]}
-              position="top"
+              position={{ block: "top", inline: "leftCover" }}
             />
             <Dropdown
               name="Year"
               options={years}
               selectedOptionID={year !== -1 ? year : null}
               extraStyles={[styles.Dropdown]}
-              position="top"
+              position={{ block: "top", inline: "leftCover" }}
             />
           </div>
         </div>

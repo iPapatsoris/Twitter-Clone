@@ -19,11 +19,6 @@ const Input = ({
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState("");
 
-  useClickOutside({
-    ref: wrapperRef,
-    callback: () => setIsFocused(false),
-  });
-
   useEffect(() => {
     if (autofocus) {
       inputRef.current?.focus();

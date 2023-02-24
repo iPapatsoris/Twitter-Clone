@@ -3,25 +3,12 @@ import styles from "./ProfileButton.module.scss";
 import avatar from "../../assets/cats/cat2.jpg";
 import dots from "../../assets/icons/dots.png";
 import Icon from "../../util/components/Icon/Icon";
-import OptionsPopup, {
-  activatePopupHandler,
-} from "../../util/components/OptionsPopup/OptionsPopup";
-import { useContext, useRef, useState } from "react";
-import { PopupContext } from "../../App";
+import OptionsPopup from "../../util/components/OptionsPopup/OptionsPopup";
+import { useRef, useState } from "react";
 import { OptionWithNested } from "../../util/components/OptionsPopup/Option";
 
 const ProfileButton = () => {
   const [showOptions, setShowOptions] = useState(false);
-  const { setDisableOuterPointerEvents } = useContext(PopupContext);
-  // TODO: Correct TS for event
-  const onClick = (e: any) => {
-    activatePopupHandler({
-      e,
-      isActivePopup: showOptions,
-      setIsActivePopup: setShowOptions,
-      setDisableOuterPointerEvents,
-    });
-  };
 
   const options: Array<OptionWithNested> = [
     {
@@ -45,7 +32,7 @@ const ProfileButton = () => {
   return (
     <div
       ref={profileButtonRef}
-      onClick={onClick}
+      onClick={() => setShowOptions(true)}
       className={[styles.ProfileButton, styles.NoHighlighting].join(" ")}
     >
       {showOptions && (
@@ -54,7 +41,7 @@ const ProfileButton = () => {
           setIsActive={setShowOptions}
           isActive={showOptions}
           targetAreaRef={profileButtonRef}
-          position="top"
+          position={{ block: "top", inline: "leftCover" }}
           extraPopupStyles={[styles.PopupStyles]}
         />
       )}

@@ -1,8 +1,5 @@
-import { useContext, useRef, useState } from "react";
-import { PopupContext } from "../../../App";
-import OptionsPopup, {
-  activatePopupHandler,
-} from "../OptionsPopup/OptionsPopup";
+import { useRef, useState } from "react";
+import OptionsPopup from "../OptionsPopup/OptionsPopup";
 import styles from "../Input/InputWrapper.module.scss";
 import dropdownStyles from "./Dropdown.module.scss";
 import Icon from "../Icon/Icon";
@@ -20,17 +17,7 @@ interface DropdownProps {
 const Dropdown = (props: DropdownProps) => {
   const { name, extraStyles, position } = props;
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { setDisableOuterPointerEvents } = useContext(PopupContext);
   const [isActive, setIsActive] = useState(false);
-
-  const handleClick = (e: any) => {
-    activatePopupHandler({
-      e,
-      isActivePopup: isActive,
-      setIsActivePopup: setIsActive,
-      setDisableOuterPointerEvents,
-    });
-  };
 
   const selectedOption =
     props.selectedOptionID !== null &&
@@ -56,7 +43,7 @@ const Dropdown = (props: DropdownProps) => {
       <div
         ref={dropdownRef}
         className={wrapperStyles.join(" ")}
-        onMouseDown={handleClick}
+        onMouseDown={() => setIsActive(true)}
       >
         <div>
           <div className={styles.Info}>
@@ -76,11 +63,10 @@ const Dropdown = (props: DropdownProps) => {
           isActive
           setIsActive={setIsActive}
           targetAreaRef={dropdownRef}
-          disableByClickingAnywhere
           extraPopupStyles={[dropdownStyles.Popup]}
           extraOptionStyles={[dropdownStyles.Option]}
           position={position}
-          ignoreFirstClick
+          onMouseDown
         />
       )}
     </div>

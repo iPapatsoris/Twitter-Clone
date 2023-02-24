@@ -1,37 +1,34 @@
-import { useContext } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { PopupContext } from "../../../App";
 import Signup from "../../../Signup/Signup";
 import SignupHeader from "../../../Signup/SingupHeader/SignupHeader";
 import Button from "../../../util/components/Button/Button";
-import { openModalHandler } from "../../../util/components/Modal/Modal";
+import Modal, { openModalHandler } from "../../../util/components/Modal/Modal";
 import paths from "../../../util/paths";
 import styles from "./GuestPrompt.module.scss";
 
 interface GuestPromptProps {}
 
 const GuestPrompt = ({}: GuestPromptProps) => {
-  const { isModalOpen, setIsModalOpen, setModalProps } =
-    useContext(PopupContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleClick = (e: any) => {
-    setModalProps({ header: <SignupHeader />, children: <Signup /> });
-    openModalHandler({ e, isModalOpen, setIsModalOpen });
+  const handleClick = () => {
+    openModalHandler({ setIsModalOpen });
   };
 
   return (
     <>
+      {isModalOpen && (
+        <Modal setIsActive={setIsModalOpen} header={<SignupHeader />}>
+          <Signup />
+        </Modal>
+      )}
       <div className={styles.GuestPrompt}>
         <h2>New to Twitter?</h2>
         <span className={styles.Text}>
           Sign up now to get your own personalized timeline!
         </span>
-        <Button
-          size="medium"
-          stretch
-          color="white"
-          onClick={(e: any) => handleClick(e)}
-        >
+        <Button size="medium" stretch color="white" onClick={handleClick}>
           Create account
         </Button>
         <div className={styles.Text}>

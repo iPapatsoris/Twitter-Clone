@@ -1,10 +1,7 @@
-import { ReactElement, useContext, useRef, useState } from "react";
+import { ReactElement, useRef, useState } from "react";
 import styles from "./MoreOptionsNavItem.module.scss";
-import OptionsPopup, {
-  activatePopupHandler,
-} from "../../../util/components/OptionsPopup/OptionsPopup";
+import OptionsPopup from "../../../util/components/OptionsPopup/OptionsPopup";
 import { navMoreOptionsList } from "./navMoreOptionsList";
-import { PopupContext } from "../../../App";
 
 interface MoreOptionsNavItemProps {
   children: ReactElement;
@@ -12,22 +9,11 @@ interface MoreOptionsNavItemProps {
 
 const MoreOptionsNavItem = ({ children }: MoreOptionsNavItemProps) => {
   const [showOptions, setShowOptions] = useState(false);
-  const { setDisableOuterPointerEvents } = useContext(PopupContext);
   const popupTargetAreaRef = useRef(null);
-
-  // TODO: fix event TS
-  const onClick = (e: any) => {
-    activatePopupHandler({
-      e,
-      isActivePopup: showOptions,
-      setIsActivePopup: setShowOptions,
-      setDisableOuterPointerEvents,
-    });
-  };
 
   return (
     <>
-      <div ref={popupTargetAreaRef} onClick={onClick}>
+      <div ref={popupTargetAreaRef} onClick={() => setShowOptions(true)}>
         {children}
       </div>
       {showOptions && popupTargetAreaRef && (

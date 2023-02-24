@@ -1,57 +1,69 @@
-import React, { useContext, useEffect, useState } from "react";
-import { PopupContext } from "../../App";
+import React, { useEffect, useState } from "react";
 import { OptionsPopupProps } from "../components/OptionsPopup/OptionsPopup";
-import useClickOutside from "./useClickOutside";
+import { toPixels } from "../string";
 import useWindowDimensions from "./useWindowDimensions";
 
 const usePopup = (
   params: Omit<OptionsPopupProps, "options" | "extraStyles"> & {
     popupRef: React.RefObject<HTMLDivElement>;
-    disableByClickingAnywhere: boolean;
   }
 ) => {
   const {
     popupRef,
     targetAreaRef,
-    position = "middle",
+    position,
     isActive,
-    setIsActive,
     autoMaxHeight = false,
-    disableByClickingAnywhere = false,
-    ignoreFirstClick = false,
   } = params;
 
   // Listen to window height updates to handle resizing
   const { height: windowHeight } = useWindowDimensions(autoMaxHeight);
-  const { setIsPopupOpen, setDisableOuterPointerEvents } =
-    useContext(PopupContext);
   // Used to fire effect of dynamic max-height calculation after
   // effect of popup placement has occured.
   const [justPlacedPopup, setJustPlacedPopup] = useState(false);
 
   // Place popup in relation to targetAreaRef according to position.
-  // This is needed because we place with absolute positioning, to allow the
-  // programmer to put it where they want in relation to another element,
-  // without disrupting the content flow when it appears
-  // (e.g. pushing other content down)
   useEffect(() => {
     if (
-      isActive &&
+      // isActive &&
       popupRef &&
       popupRef.current &&
       targetAreaRef &&
-      targetAreaRef.current &&
-      position !== "bottom"
+      targetAreaRef.current
     ) {
-      const targetTop = targetAreaRef.current.offsetTop.toString() + "px";
-      if (position === "middle") {
-        popupRef.current.style.top = targetTop;
-      } else if (position === "top") {
-        popupRef.current.style.top =
-          (
-            targetAreaRef.current.offsetTop -
-            popupRef.current.getBoundingClientRect().height
-          ).toString() + "px";
+      const {
+        top: targetTop,
+        left: targetLeft,
+        height: targetHeight,
+        width: targetWidth,
+      } = targetAreaRef.current.getBoundingClientRect();
+      const { height: popupHeight, width: popupWidth } =
+        popupRef.current.getBoundingClientRect();
+
+      // Vertical placement
+      if (position?.block === "bottomCover") {
+        popupRef.current.style.top = toPixels(targetTop);
+      } else if (position?.block === "bottom") {
+        popupRef.current.style.top = toPixels(targetTop + targetHeight);
+      } else if (position?.block === "topCover") {
+        popupRef.current.style.top = toPixels(
+          targetTop - popupHeight + targetHeight
+        );
+      } else if (position?.block === "top") {
+        popupRef.current.style.top = toPixels(targetTop - popupHeight);
+      }
+
+      // Horizontal placement
+      if (position?.inline === "leftCover") {
+        popupRef.current.style.left = toPixels(targetLeft);
+      } else if (position?.inline === "right") {
+        popupRef.current.style.left = toPixels(targetLeft + targetWidth);
+      } else if (position?.inline === "rightCover") {
+        popupRef.current.style.left = toPixels(
+          targetLeft - popupWidth + targetWidth
+        );
+      } else if (position?.inline === "left") {
+        popupRef.current.style.left = toPixels(targetLeft - popupWidth);
       }
       setJustPlacedPopup(true);
     }
@@ -60,49 +72,12 @@ const usePopup = (
   // Limit popup's max-height to the max available space just before it goes
   // off screen. Adjust on window resizing.
   useEffect(() => {
-    if (
-      autoMaxHeight &&
-      justPlacedPopup &&
-      isActive &&
-      popupRef &&
-      popupRef.current
-    ) {
-      console.log(windowHeight);
-      console.log(popupRef.current.getBoundingClientRect().top);
-      popupRef.current.style.maxHeight =
-        (
-          windowHeight - popupRef.current.getBoundingClientRect().top
-        ).toString() + "px";
-
-      // This state change is not required if we assume that components that use
-      // the popup will render it conditionally. Because as soon as we close it,
-      // all of its state will disappear anyway. It would be needed in the case
-      // that we refactor so that components would render the popup
-      // uncoditionally, and the popup would conditionally render itself
-      // internally. In that case, state wouldn't reset automatically, since
-      // the popup's lifetime would be consistent, so we would have to reset it
-      // manually.
-      // setJustPlacedPopup(false);
+    if (autoMaxHeight && justPlacedPopup && popupRef && popupRef.current) {
+      popupRef.current.style.maxHeight = toPixels(
+        windowHeight - popupRef.current.getBoundingClientRect().top
+      );
     }
   }, [justPlacedPopup, isActive, windowHeight, autoMaxHeight, popupRef]);
-
-  // Detect clicking outside of popup area to disable it
-  useClickOutside({
-    ref: popupRef,
-    callback: () => {
-      setIsActive(false);
-      setDisableOuterPointerEvents(false);
-    },
-    clickAnywhere: disableByClickingAnywhere,
-    ignoreFirstClick,
-  });
-
-  // Notify global state that a popup is active. This is needed for managing
-  // clicking outside to disable, when a popup is contained within a modal
-  useEffect(() => {
-    setIsPopupOpen(true);
-    return () => setIsPopupOpen(false);
-  }, [setIsPopupOpen]);
 };
 
 export default usePopup;

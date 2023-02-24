@@ -1,26 +1,19 @@
 import Icon from "../Icon/Icon";
-import styles, { ModalNames } from "./Modal.module.scss";
+import styles from "./Modal.module.scss";
 import closeIcon from "../../../assets/icons/close.png";
-import React, { useContext, useEffect, useRef } from "react";
-import useClickOutside from "../../hooks/useClickOutside";
-import { PopupContext } from "../../../App";
+import React, { useEffect, useRef } from "react";
+import { toPixels } from "../../string";
+import { createPortal } from "react-dom";
 
 interface ModalProps {
   header: React.ReactNode;
   children: React.ReactNode;
+  // State controlled by outer components
+  setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Modal = ({ header, children }: ModalProps) => {
+const Modal = ({ header, children, setIsActive }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  const { isPopupOpenRef, setIsModalOpen } = useContext(PopupContext);
-  useClickOutside({
-    ref: modalRef,
-    callback: () => {
-      if (!isPopupOpenRef?.current) {
-        setIsModalOpen(false);
-      }
-    },
-  });
 
   useEffect(() => {
     // Disable scrolling the background. Doing so removes the scroll bar,
@@ -35,14 +28,25 @@ const Modal = ({ header, children }: ModalProps) => {
     };
   }, []);
 
-  const wrapperStyles: ModalNames[] = [styles.Wrapper];
-  if (isPopupOpenRef?.current) {
-    wrapperStyles.push(styles.DisablePointerEvents);
-  }
-  return (
-    <div className={styles.Modal}>
-      <div className={wrapperStyles.join(" ")} ref={modalRef}>
-        <div className={styles.CloseIcon} onClick={() => setIsModalOpen(false)}>
+  const onOuterClick = (e: any) => {
+    setIsActive(false);
+    // Stop propagation to not open the modal again due to event bubbling
+    e.stopPropagation();
+  };
+
+  const onInnerClick = (e: any) => {
+    // Stop propagation to not close the modal due to event bubbling
+    e.stopPropagation();
+  };
+
+  const modal = (
+    <div className={styles.Modal} onClick={(e) => onOuterClick(e)}>
+      <div
+        className={styles.Wrapper}
+        ref={modalRef}
+        onClick={(e) => onInnerClick(e)}
+      >
+        <div className={styles.CloseIcon} onClick={() => setIsActive(false)}>
           <Icon src={closeIcon} />
         </div>
         <div className={styles.Header}>{header}</div>
@@ -50,32 +54,22 @@ const Modal = ({ header, children }: ModalProps) => {
       </div>
     </div>
   );
+
+  return createPortal(modal, document.body);
 };
 
 // Handler to be used by components to open the modal
 export const openModalHandler = (params: {
-  e: MouseEvent;
-  isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { e, isModalOpen, setIsModalOpen } = params;
-  if (!isModalOpen) {
-    // Disable scrolling the background
-    document.body.style.overflow = "hidden";
-    // Disabling scrolling removes the scroll bar, resulting in the content
-    // moving horizontally. Adjust some padding to compensate
-    // TODO: calculate exactly the scrollbar width
-    const scrollbarWidth = window.innerWidth - document.body.clientWidth;
-    console.log(scrollbarWidth);
-    document.body.style.paddingRight = scrollbarWidth + "px";
-    setIsModalOpen(true);
-  }
-  /* If we don't prevent propagation, useClickOutside will
-     receive this click event after registering a listener for it (bubbling),
-     and perceive it as a click outside the popup area, thus closing it
-     on the spot.
-  */
-  e.stopPropagation();
+  const { setIsModalOpen } = params;
+  // Disable scrolling the background
+  document.body.style.overflow = "hidden";
+  // Disabling scrolling removes the scroll bar, resulting in the content
+  // moving horizontally. Adjust some padding to compensate
+  const scrollbarWidth = window.innerWidth - document.body.clientWidth;
+  document.body.style.paddingRight = toPixels(scrollbarWidth);
+  setIsModalOpen(true);
 };
 
 export default Modal;
