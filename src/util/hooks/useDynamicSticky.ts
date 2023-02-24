@@ -21,7 +21,7 @@ const useDynamicSticky = (ref: RefObject<HTMLDivElement>) => {
       const whitespaceBottom = 100;
       ref.current.style.top =
         elementHeight <= windowHeight
-          ? "0"
+          ? ref.current.getBoundingClientRect().top + "px"
           : (
               -1 * elementHeight +
               (windowHeight - whitespaceBottom)
