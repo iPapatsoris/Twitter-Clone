@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import styles from "./ModalWrapper.module.scss";
 
@@ -23,14 +23,28 @@ const ModalWrapper = ({
   innerRef,
   setIsActive,
 }: ModalWrapperProps) => {
-  const onOuterClick = (e: any) => {
-    setIsActive(false);
+  let mostRecentMousedown = useRef<Element | null>(null);
+
+  useEffect(() => {
+    const onMousedownHandler = (e: any) => {
+      mostRecentMousedown.current = e.target;
+    };
+    window.addEventListener("mousedown", onMousedownHandler);
+    return () => window.removeEventListener("mousedown", onMousedownHandler);
+  });
+
+  const onOuterMouseup = (e: any) => {
+    if (mostRecentMousedown.current === e.target) {
+      // Condition to prevent bug where mousedown inside modal and mouseup
+      // outside would count as a click outside and close the modal
+      setIsActive(false);
+    }
     // Stop propagation to not potentially open the modal again due to event
     // bubbling
     e.stopPropagation();
   };
 
-  const onInnerClick = (e: any) => {
+  const onInnerMouseup = (e: any) => {
     // Stop propagation to not potentially close the modal due to event bubbling
     e.stopPropagation();
   };
@@ -38,12 +52,12 @@ const ModalWrapper = ({
   const modalWrapper = (
     <div
       className={[styles.OuterWrapper, ...outerStyles].join(" ")}
-      onClick={onOuterClick}
+      onMouseUp={onOuterMouseup}
     >
       <div
         ref={innerRef}
         className={innerStyles.join(" ")}
-        onClick={onInnerClick}
+        onMouseUp={onInnerMouseup}
       >
         {children}
       </div>
