@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 /* Call callback on clicking outside of referenced div
  * TODO: fix TS to allow generic type for ref element
@@ -9,8 +9,6 @@ const useClickOutside = (params: {
   onMouseDown?: boolean;
 }) => {
   const { ref, callback, onMouseDown = false } = params;
-
-  const [isFirstClick, setIsFirstClick] = useState(true);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -26,7 +24,7 @@ const useClickOutside = (params: {
         handleClick
       );
     };
-  }, [ref, callback, setIsFirstClick, isFirstClick, onMouseDown]);
+  }, [ref, callback, onMouseDown]);
 };
 
 export default useClickOutside;

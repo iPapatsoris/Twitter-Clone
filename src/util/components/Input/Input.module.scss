@@ -6,14 +6,12 @@
   align-items: center;
 }
 
-.TypingArea {
-  /* Use opacity to hide element instead of visiblity, because we want to 
-       show it and focus on it at the same time. With visibility: hidden, 
-       we would have to first wait for the css property change to render,
-       and then trigger another render where we would focus on the element.
-       This is because it is not possible to focus on a hidden element. 
-    */
-  opacity: 0;
+.TypingArea:not(.Focused).Empty {
+  visibility: hidden;
+}
+
+.InheritCursor {
+  cursor: inherit;
 }
 
 .Info {
@@ -25,9 +23,10 @@ input {
   border: 0;
   width: 100%;
   font-size: 16px;
-  cursor: pointer;
+  cursor: inherit;
 
   &:focus {
     outline: none;
+    cursor: text;
   }
 }

@@ -1,89 +1,128 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import useClickOutside from "../../hooks/useClickOutside";
 import styles from "./InputWrapper.module.scss";
 import inputStyles from "./Input.module.scss";
 
 interface InputProps {
+  name: string;
   placeholder: string;
-  characterLimit?: number;
+  maxLength?: number;
   autofocus?: boolean;
+  onChange: (e: any) => void;
+  onBlur?: (e: any) => void;
+  value: string;
+  error?: string;
 }
 
-const Input = ({
-  placeholder,
-  characterLimit,
-  autofocus = false,
-}: InputProps) => {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [isFocused, setIsFocused] = useState(false);
-  const [value, setValue] = useState("");
+const Input = forwardRef(
+  (
+    {
+      name,
+      placeholder,
+      maxLength,
+      autofocus = false,
+      onChange,
+      onBlur,
+      value,
+      error,
+    }: InputProps,
+    ref
+  ) => {
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const [isFocused, setIsFocused] = useState(false);
 
-  useEffect(() => {
-    if (autofocus) {
-      inputRef.current?.focus();
-      setIsFocused(true);
-    }
-  }, [autofocus]);
+    useImperativeHandle(ref, () => inputRef.current);
+    console.log(isFocused);
+    console.log(value.length);
 
-  useClickOutside({
-    ref: wrapperRef,
-    onMouseDown: true,
-    callback: () => {
-      setIsFocused(false);
-    },
-  });
+    useEffect(() => {
+      if (autofocus && inputRef.current) {
+        inputRef.current.style.visibility = "visible";
+        inputRef.current?.focus();
+        setIsFocused(true);
+      }
+    }, [autofocus]);
 
-  // TODO: correct TS for MouseEvent
-  const handleClick = (e: any) => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-      setIsFocused(true);
-      e.preventDefault();
-    }
-  };
+    useClickOutside({
+      ref: wrapperRef,
+      onMouseDown: true,
+      callback: () => {
+        setIsFocused(false);
+      },
+    });
 
-  const wrapperStyles: styles.InputWrapperNames[] = [styles.Wrapper];
-  const typingAreaStyles: inputStyles.InputNames[] = [inputStyles.TypingArea];
-  const labelStyles: string[] = [];
-  if (isFocused || value.length) {
-    typingAreaStyles.push(styles.ShowOpacity);
+    const handleClick = (e: any) => {
+      if (inputRef.current) {
+        inputRef.current.style.visibility = "visible";
+        inputRef.current.focus();
+        setIsFocused(true);
+        // TODO: this line disables highlighting
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    const wrapperStyles: styles.InputWrapperNames[] = [styles.Wrapper];
+    const typingAreaStyles: inputStyles.InputNames[] = [inputStyles.TypingArea];
+    const labelStyles: string[] = [inputStyles.InheritCursor];
+
     if (isFocused) {
       wrapperStyles.push(styles.Focused);
-      labelStyles.push(styles.Blue);
+      typingAreaStyles.push(inputStyles.Focused);
     }
-  }
+    if (error) {
+      wrapperStyles.push(styles.Error);
+    }
+    if (!value.length) {
+      wrapperStyles.push(styles.Empty);
+      typingAreaStyles.push(inputStyles.Empty);
+    }
 
-  return (
-    <div
-      ref={wrapperRef}
-      className={wrapperStyles.join(" ")}
-      onMouseDown={(e) => handleClick(e)}
-    >
-      {!isFocused && !value.length && (
-        <div className={inputStyles.Placeholder}>
-          <span>{placeholder}</span>
-        </div>
-      )}
-      <div className={typingAreaStyles.join(" ")}>
-        <div className={[styles.Info, inputStyles.Info].join(" ")}>
-          <label htmlFor="input" className={labelStyles.join(" ")}>
-            {placeholder}
-          </label>
-          {characterLimit && (
-            <span>
-              {value.length} / {characterLimit}
-            </span>
+    return (
+      <div>
+        <div
+          ref={wrapperRef}
+          className={wrapperStyles.join(" ")}
+          onMouseDown={(e) => handleClick(e)}
+        >
+          {!isFocused && !value.length && (
+            <div className={inputStyles.Placeholder}>
+              <span>{placeholder}</span>
+            </div>
           )}
+          <div className={typingAreaStyles.join(" ")}>
+            <div className={[styles.Info, inputStyles.Info].join(" ")}>
+              <label htmlFor="input" className={labelStyles.join(" ")}>
+                {placeholder}
+              </label>
+              {maxLength && (
+                <span>
+                  {value.length} / {maxLength}
+                </span>
+              )}
+            </div>
+            <input
+              name={name}
+              ref={inputRef}
+              maxLength={maxLength}
+              onChange={(e) => {
+                onChange(e.target.value);
+              }}
+              onBlur={onBlur}
+            />
+          </div>
         </div>
-        <input
-          id="input"
-          ref={inputRef}
-          onChange={(e) => setValue(e.target.value)}
-        />
+        <div className={styles.ErrorBox}>{error}</div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
 
 export default Input;

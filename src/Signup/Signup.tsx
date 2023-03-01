@@ -9,6 +9,11 @@ import {
   isInvalidDate,
 } from "../util/date";
 import { useState } from "react";
+import { SubmitHandler, useForm, Controller } from "react-hook-form";
+import dayjs from "dayjs";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 interface SignupProps {}
 
 type Option = React.ComponentProps<typeof Dropdown>["options"][0];
@@ -50,13 +55,98 @@ const Signup = ({}: SignupProps) => {
     },
   }));
 
+  type FormInput = {
+    name: string;
+    email: string;
+    birthDate: dayjs.Dayjs;
+  };
+
+  const maxNameChars = 50;
+  const schema = yup.object().shape({
+    name: yup.string().required("What's your name?").max(maxNameChars),
+    email: yup
+      .string()
+      .required("Please enter your email.")
+      .email("Please enter a valid email."),
+  });
+
+  const form = useForm<FormInput>({
+    defaultValues: {
+      name: "",
+      email: "",
+    },
+    mode: "onTouched",
+    resolver: yupResolver(schema),
+  });
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors, isValid },
+  } = form;
+  const onSubmit: SubmitHandler<FormInput> = (data) => {
+    console.log(data);
+  };
+  console.log(errors);
+
+  const isValidForm = isValid && day !== -1 && month !== -1 && year !== -1;
+
   return (
-    <div className={styles.Signup}>
+    <form
+      className={styles.Signup}
+      onSubmit={(e) => {
+        console.log(form.formState.touchedFields);
+        handleSubmit(onSubmit);
+        e.preventDefault();
+      }}
+    >
       <h1>Create your account</h1>
       <div className={styles.Form}>
         <div className={styles.NameEmail}>
-          <Input placeholder="Name" characterLimit={50} autofocus />
-          <Input placeholder="Email" />
+          <Controller
+            name="name"
+            control={control}
+            render={({
+              field: { onChange, onBlur, value, name, ref },
+              fieldState: { invalid, isTouched, isDirty, error },
+              formState,
+            }) => {
+              return (
+                <Input
+                  name={name}
+                  placeholder="Name"
+                  maxLength={50}
+                  autofocus
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  value={value}
+                  ref={ref}
+                  error={error?.message}
+                />
+              );
+            }}
+          ></Controller>
+          <Controller
+            name="email"
+            control={control}
+            render={({
+              field: { onChange, onBlur, value, name, ref },
+              fieldState: { invalid, isTouched, isDirty, error },
+              formState,
+            }) => {
+              return (
+                <Input
+                  name={name}
+                  placeholder="Email"
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  value={value}
+                  ref={ref}
+                  error={error?.message}
+                />
+              );
+            }}
+          ></Controller>
         </div>
         <div>
           <h4>Date of birth</h4>
@@ -90,14 +180,16 @@ const Signup = ({}: SignupProps) => {
         </div>
       </div>
       <Button
+        type="submit"
         size="large"
         largeFont
         extraClasses={[styles.Button]}
         color="black"
+        disabled={!isValidForm}
       >
         Next
       </Button>
-    </div>
+    </form>
   );
 };
 

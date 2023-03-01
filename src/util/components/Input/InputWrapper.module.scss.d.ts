@@ -3,12 +3,18 @@ import globalClassNames, {
 } from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly Wrapper: "Wrapper";
-  readonly Focused: "Focused";
+  readonly Error: "Error";
   readonly Info: "Info";
+  readonly Focused: "Focused";
+  readonly Empty: "Empty";
+  readonly ErrorBox: "ErrorBox";
 };
 export = classNames;
 export type InputWrapperNames =
   | "Wrapper"
-  | "Focused"
+  | "Error"
   | "Info"
+  | "Focused"
+  | "Empty"
+  | "ErrorBox"
   | GlobalClassNames;

@@ -5,6 +5,7 @@ declare const classNames: typeof globalClassNames & {
   readonly Button: "Button";
   readonly Primary: "Primary";
   readonly Black: "Black";
+  readonly Disabled: "Disabled";
   readonly White: "White";
   readonly Small: "Small";
   readonly Medium: "Medium";
@@ -18,6 +19,7 @@ export type ButtonNames =
   | "Button"
   | "Primary"
   | "Black"
+  | "Disabled"
   | "White"
   | "Small"
   | "Medium"

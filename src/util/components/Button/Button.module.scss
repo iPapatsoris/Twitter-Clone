@@ -17,7 +17,7 @@
 
   &.Black {
     background: rgb(15, 20, 25);
-    &:hover {
+    &:hover:not(.Disabled) {
       background: rgb(39, 44, 48);
     }
   }
@@ -25,7 +25,7 @@
   &.White {
     background: white;
     border: 1px solid rgb(207, 217, 222);
-    &:hover {
+    &:hover:not(.Disabled) {
       background: rgb(230, 230, 230);
     }
   }
@@ -52,5 +52,10 @@
 
   &.BlackFont {
     color: black;
+  }
+
+  &.Disabled {
+    cursor: initial;
+    opacity: 50%;
   }
 }

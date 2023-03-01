@@ -7,12 +7,39 @@
   cursor: pointer;
   position: relative;
 
+  &.Error {
+    border-color: red;
+
+    .Info label {
+      color: red;
+    }
+  }
+
   &.Focused {
-    border-color: var(--primary-color);
-    box-shadow: var(--primary-color) 0 0 0 1px;
+    cursor: text;
+
+    &:not(.Error) {
+      border-color: var(--primary-color);
+      box-shadow: var(--primary-color) 0 0 0 1px;
+
+      label {
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  &:not(.Focused):not(.Empty) {
+    display: hidden;
   }
 
   .Info {
     font-size: 12px;
   }
+}
+
+.ErrorBox {
+  height: 1rem;
+  padding-left: 0.5rem;
+  font-size: 13px;
+  color: red;
 }

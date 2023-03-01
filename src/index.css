@@ -28,6 +28,10 @@
   opacity: 1 !important;
 }
 
+.Hide {
+  visibility: hidden;
+}
+
 .Blue {
   color: var(--primary-color);
 }

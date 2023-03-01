@@ -1,6 +1,8 @@
+import { ButtonHTMLAttributes } from "react";
 import styles from "./Button.module.scss";
 
 interface ButtonProps {
+  type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
   children: React.ReactNode;
   color?: "primary" | "black" | "white";
   size?: "small" | "medium" | "large";
@@ -8,9 +10,11 @@ interface ButtonProps {
   stretch?: boolean;
   extraClasses?: string[];
   onClick?: (e: any) => void;
+  disabled?: boolean;
 }
 
 const Button = ({
+  type = "button",
   children,
   color = "primary",
   size = "medium",
@@ -18,6 +22,7 @@ const Button = ({
   stretch = false,
   onClick = (e) => {},
   extraClasses = [],
+  disabled = false,
 }: ButtonProps) => {
   let buttonColorStyle;
   let fontColorStyle;
@@ -44,11 +49,17 @@ const Button = ({
     sizeStyle,
     largeFont ? styles.LargeFont : "",
     stretch ? styles.Stretch : "",
+    disabled ? styles.Disabled : "",
     ...extraClasses,
   ].join(" ");
 
   return (
-    <button className={classes} onClick={(e) => onClick(e)}>
+    <button
+      type={type}
+      disabled={disabled}
+      className={classes}
+      onClick={(e) => onClick(e)}
+    >
       {children}
     </button>
   );
