@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Signup from "../../../Signup/Signup";
-import SignupHeader from "../../../Signup/SingupHeader/SignupHeader";
 import Button from "../../../util/components/Button/Button";
 import Modal, { openModalHandler } from "../../../util/components/Modal/Modal";
 import paths from "../../../util/paths";
@@ -19,7 +18,7 @@ const GuestPrompt = ({}: GuestPromptProps) => {
   return (
     <>
       {isModalOpen && (
-        <Modal setIsActive={setIsModalOpen} header={<SignupHeader />}>
+        <Modal withCloseIcon={false} setIsActive={setIsModalOpen}>
           <Signup />
         </Modal>
       )}

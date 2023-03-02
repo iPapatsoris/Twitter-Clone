@@ -1,159 +1,45 @@
-import Button from "../util/components/Button/Button";
-import Dropdown from "../util/components/Dropdown/Dropdown";
-import Input from "../util/components/Input/Input";
-import styles from "./Signup.module.scss";
-import {
-  getDaysInMonth,
-  getMonths,
-  getYears,
-  isInvalidDate,
-} from "../util/date";
-import { useState } from "react";
-import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import dayjs from "dayjs";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import FormInput from "../util/components/Input/FormInput";
+import { useState } from "react";
+import styles from "./Signup.module.scss";
+import SignupHeader from "./SingupHeader/SignupHeader";
+import AccountInfo from "./Steps/AccountInfo/AccountInfo";
+import Settings from "./Steps/Settings/Settings";
 
 interface SignupProps {}
 
-type Option = React.ComponentProps<typeof Dropdown>["options"][0];
-
 const Signup = ({}: SignupProps) => {
-  const [month, setMonth] = useState(-1);
-  const [day, setDay] = useState(-1);
-  const [year, setYear] = useState(-1);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [birthDate, setBirthDate] = useState<dayjs.Dayjs | null>(null);
 
-  const months: Option[] = getMonths().map((m) => ({
-    id: m.id,
-    component: <span>{m.text}</span>,
-    onSelect: () => {
-      console.log("clicked on a month");
-
-      setMonth(m.id);
-      if (isInvalidDate({ day, year, month: m.id })) {
-        setDay(-1);
-      }
-    },
-  }));
-
-  const days: Option[] = getDaysInMonth({ month, year }).map((d) => ({
-    id: d.id,
-    component: <span>{d.text}</span>,
-    onSelect: () => {
-      setDay(d.id);
-    },
-  }));
-
-  const years: Option[] = getYears().map((y) => ({
-    id: y.id,
-    component: <span>{y.text}</span>,
-    onSelect: () => {
-      setYear(y.id);
-      if (isInvalidDate({ day, year: y.id, month })) {
-        setDay(-1);
-      }
-    },
-  }));
-
-  type FormInput = {
-    name: string;
-    email: string;
-    birthDate: dayjs.Dayjs;
+  const [step, setStep] = useState(0);
+  const nextStep = () => {
+    setStep((s) => s + 1);
   };
-
-  const maxNameChars = 50;
-  const schema = yup.object().shape({
-    name: yup.string().required("What's your name?").max(maxNameChars),
-    email: yup
-      .string()
-      .required("Please enter your email.")
-      .email("Please enter a valid email."),
-  });
-
-  const form = useForm<FormInput>({
-    defaultValues: {
-      name: "",
-      email: "",
-    },
-    mode: "onTouched",
-    resolver: yupResolver(schema),
-  });
-
-  const {
-    handleSubmit,
-    control,
-    formState: { errors, isValid },
-  } = form;
-  const onSubmit: SubmitHandler<FormInput> = (data) => {
-    console.log(data);
+  const prevStep = () => {
+    setStep((s) => s - 1);
   };
-
-  const isValidForm = isValid && day !== -1 && month !== -1 && year !== -1;
+  const steps = [
+    <AccountInfo
+      name={name}
+      email={email}
+      birthDate={birthDate}
+      nextStep={nextStep}
+      setName={setName}
+      setEmail={setEmail}
+      setBirthDate={setBirthDate}
+    />,
+    <Settings />,
+  ];
 
   return (
-    <form
-      className={styles.Signup}
-      onSubmit={(e) => {
-        console.log(form.formState.touchedFields);
-        handleSubmit(onSubmit);
-        e.preventDefault();
-      }}
-    >
-      <h1>Create your account</h1>
-      <div className={styles.Form}>
-        <div className={styles.NameEmail}>
-          <FormInput
-            name="name"
-            placeholder="Name"
-            control={control}
-            maxLength={50}
-            autofocus
-          />
-          <FormInput name="email" placeholder="Email" control={control} />
-        </div>
-        <div>
-          <h4>Date of birth</h4>
-          <div className={styles.DateOfBirth}>
-            This will not be shown publicly. Confirm your own age, even if this
-            account is for a business, a pet, or something else.
-          </div>
-          <div className={styles.Dropdowns}>
-            <Dropdown
-              name="Month"
-              options={months}
-              selectedOptionID={month !== -1 ? month : null}
-              extraStyles={[styles.Dropdown]}
-              position={{ block: "bottom", inline: "leftCover" }}
-            />
-            <Dropdown
-              name="Day"
-              options={days}
-              selectedOptionID={day !== -1 ? day : null}
-              extraStyles={[styles.Dropdown]}
-              position={{ block: "top", inline: "leftCover" }}
-            />
-            <Dropdown
-              name="Year"
-              options={years}
-              selectedOptionID={year !== -1 ? year : null}
-              extraStyles={[styles.Dropdown]}
-              position={{ block: "top", inline: "leftCover" }}
-            />
-          </div>
-        </div>
-      </div>
-      <Button
-        type="submit"
-        size="large"
-        largeFont
-        extraClasses={[styles.Button]}
-        color="black"
-        disabled={!isValidForm}
-      >
-        Next
-      </Button>
-    </form>
+    <div className={styles.Signup}>
+      <SignupHeader
+        stepper={{ step, nextStep, prevStep }}
+        header={"Step " + (step + 1) + " of " + steps.length}
+      />
+      <div className={styles.Content}>{steps[step]}</div>
+    </div>
   );
 };
 

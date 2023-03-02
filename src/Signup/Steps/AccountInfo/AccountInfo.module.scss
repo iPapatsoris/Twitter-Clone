@@ -1,0 +1,48 @@
+.AccountInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 400px;
+
+  .NameEmail {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .DateOfBirth {
+    margin-top: 0.5rem;
+    color: var(--light-color);
+  }
+
+  h1 {
+    font-size: 31px;
+  }
+
+  h4 {
+    font-size: 15px;
+  }
+
+  .Form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    .Dropdowns {
+      margin-top: 1rem;
+      display: flex;
+      gap: 1rem;
+
+      .Dropdown:nth-child(1) {
+        flex: 1;
+      }
+      .Dropdown:nth-child(n + 2) {
+        flex: 0.5;
+      }
+    }
+  }
+
+  .Button {
+    margin-top: 5rem;
+  }
+}

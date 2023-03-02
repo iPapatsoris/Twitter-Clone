@@ -114,6 +114,7 @@ const Input = forwardRef(
                 onChange(e.target.value);
               }}
               onBlur={onBlur}
+              value={value}
             />
           </div>
         </div>

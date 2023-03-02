@@ -9,14 +9,17 @@
   background-color: rgba(0, 0, 0, 0.5);
 
   .Modal {
-    display: grid;
-    grid-template:
-      "close header  ." 4em
-      ".     content ."
-      / 1fr 5fr 1fr;
-    align-items: center;
     background-color: white;
     border-radius: 15px;
+    padding-bottom: 2rem;
+
+    &.WithCloseIcon {
+      display: grid;
+      grid-template:
+        "close content ." 4rem
+        ".     content . "
+        / 1fr 5fr 1fr;
+    }
 
     .CloseIcon {
       grid-area: close;
@@ -29,8 +32,6 @@
 
     .Content {
       grid-area: content;
-      padding-top: 1.5rem;
-      padding-bottom: 2rem;
     }
   }
 }
