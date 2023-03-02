@@ -39,8 +39,6 @@ const Input = forwardRef(
     const [isFocused, setIsFocused] = useState(false);
 
     useImperativeHandle(ref, () => inputRef.current);
-    console.log(isFocused);
-    console.log(value.length);
 
     useEffect(() => {
       if (autofocus && inputRef.current) {

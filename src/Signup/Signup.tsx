@@ -13,6 +13,7 @@ import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import dayjs from "dayjs";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import FormInput from "../util/components/Input/FormInput";
 
 interface SignupProps {}
 
@@ -87,7 +88,6 @@ const Signup = ({}: SignupProps) => {
   const onSubmit: SubmitHandler<FormInput> = (data) => {
     console.log(data);
   };
-  console.log(errors);
 
   const isValidForm = isValid && day !== -1 && month !== -1 && year !== -1;
 
@@ -103,50 +103,14 @@ const Signup = ({}: SignupProps) => {
       <h1>Create your account</h1>
       <div className={styles.Form}>
         <div className={styles.NameEmail}>
-          <Controller
+          <FormInput
             name="name"
+            placeholder="Name"
             control={control}
-            render={({
-              field: { onChange, onBlur, value, name, ref },
-              fieldState: { invalid, isTouched, isDirty, error },
-              formState,
-            }) => {
-              return (
-                <Input
-                  name={name}
-                  placeholder="Name"
-                  maxLength={50}
-                  autofocus
-                  onBlur={onBlur}
-                  onChange={onChange}
-                  value={value}
-                  ref={ref}
-                  error={error?.message}
-                />
-              );
-            }}
-          ></Controller>
-          <Controller
-            name="email"
-            control={control}
-            render={({
-              field: { onChange, onBlur, value, name, ref },
-              fieldState: { invalid, isTouched, isDirty, error },
-              formState,
-            }) => {
-              return (
-                <Input
-                  name={name}
-                  placeholder="Email"
-                  onBlur={onBlur}
-                  onChange={onChange}
-                  value={value}
-                  ref={ref}
-                  error={error?.message}
-                />
-              );
-            }}
-          ></Controller>
+            maxLength={50}
+            autofocus
+          />
+          <FormInput name="email" placeholder="Email" control={control} />
         </div>
         <div>
           <h4>Date of birth</h4>
