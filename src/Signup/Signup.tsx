@@ -7,10 +7,30 @@ import Settings from "./Steps/Settings/Settings";
 
 interface SignupProps {}
 
+export type AccountInfoT = {
+  name: string;
+  email: string;
+  birthDate: dayjs.Dayjs | null;
+};
+
+export type SettingsT = {
+  receiveEmails: boolean;
+  beFoundByEmail: boolean;
+  personalizeAds: boolean;
+};
+
 const Signup = ({}: SignupProps) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [birthDate, setBirthDate] = useState<dayjs.Dayjs | null>(null);
+  const [accountInfo, setAccountInfo] = useState<AccountInfoT>({
+    name: "",
+    email: "",
+    birthDate: null,
+  });
+
+  const [settings, setSettings] = useState<SettingsT>({
+    receiveEmails: false,
+    beFoundByEmail: false,
+    personalizeAds: false,
+  });
 
   const [step, setStep] = useState(0);
   const nextStep = () => {
@@ -21,15 +41,11 @@ const Signup = ({}: SignupProps) => {
   };
   const steps = [
     <AccountInfo
-      name={name}
-      email={email}
-      birthDate={birthDate}
       nextStep={nextStep}
-      setName={setName}
-      setEmail={setEmail}
-      setBirthDate={setBirthDate}
+      accountInfo={accountInfo}
+      setAccountInfo={setAccountInfo}
     />,
-    <Settings />,
+    <Settings settings={settings} setSettings={setSettings} />,
   ];
 
   return (

@@ -6,27 +6,29 @@
   align-items: center;
 }
 
-.TypingArea:not(.Focused).Empty {
-  visibility: hidden;
+.TypingArea {
+  .Info {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &:not(.Focused).Empty {
+    visibility: hidden;
+  }
+
+  input {
+    border: 0;
+    width: 100%;
+    font-size: 16px;
+    cursor: inherit;
+
+    &:focus {
+      outline: none;
+      cursor: text;
+    }
+  }
 }
 
 .InheritCursor {
   cursor: inherit;
-}
-
-.Info {
-  display: flex;
-  justify-content: space-between;
-}
-
-input {
-  border: 0;
-  width: 100%;
-  font-size: 16px;
-  cursor: inherit;
-
-  &:focus {
-    outline: none;
-    cursor: text;
-  }
 }

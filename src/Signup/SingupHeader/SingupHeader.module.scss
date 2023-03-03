@@ -1,9 +1,12 @@
 .Header {
   grid-area: header;
+  align-self: center;
   font-weight: 700;
   font-size: 20px;
 }
 
 .NavIcon {
+  grid-area: close;
+  align-self: center;
   padding-left: 7px;
 }

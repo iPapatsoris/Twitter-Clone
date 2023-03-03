@@ -68,7 +68,9 @@ const TextInput = forwardRef(
     };
 
     const wrapperStyles: styles.InputWrapperNames[] = [styles.Wrapper];
-    const typingAreaStyles: styles.TextInputNames = [inputStyles.TypingArea];
+    const typingAreaStyles: inputStyles.TextInputNames[] = [
+      inputStyles.TypingArea,
+    ];
     const labelStyles: string[] = [inputStyles.InheritCursor];
 
     if (isFocused) {

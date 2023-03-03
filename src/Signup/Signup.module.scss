@@ -1,10 +1,10 @@
 .Signup {
+  height: 100%;
   display: grid;
   grid-template:
     "close header ." 4rem
     ".     content . "
     / 1fr 5fr 1fr;
-  align-items: center;
 
   .Content {
     grid-area: content;

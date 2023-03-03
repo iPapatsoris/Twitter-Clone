@@ -13,27 +13,20 @@ import dayjs from "dayjs";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormInput from "../../../util/components/TextInput/FormTextInput";
+import { AccountInfoT } from "../../Signup";
 
 interface AccountInfoProps {
   nextStep: VoidFunction;
-  name: string;
-  email: string;
-  birthDate: dayjs.Dayjs | null;
-  setName: React.Dispatch<SetStateAction<string>>;
-  setEmail: React.Dispatch<SetStateAction<string>>;
-  setBirthDate: React.Dispatch<SetStateAction<dayjs.Dayjs | null>>;
+  accountInfo: AccountInfoT;
+  setAccountInfo: React.Dispatch<SetStateAction<AccountInfoT>>;
 }
 
 type Option = React.ComponentProps<typeof Dropdown>["options"][0];
 
 const AccountInfo = ({
   nextStep,
-  name,
-  email,
-  birthDate,
-  setName,
-  setEmail,
-  setBirthDate,
+  accountInfo: { name, email, birthDate },
+  setAccountInfo,
 }: AccountInfoProps) => {
   const [month, setMonth] = useState(birthDate ? birthDate.month() : -1);
   const [day, setDay] = useState(birthDate ? birthDate.date() : -1);
@@ -43,8 +36,6 @@ const AccountInfo = ({
     id: m.id,
     component: <span>{m.text}</span>,
     onSelect: () => {
-      console.log("clicked on a month");
-
       setMonth(m.id);
       if (isInvalidDate({ day, year, month: m.id })) {
         setDay(-1);
@@ -102,9 +93,11 @@ const AccountInfo = ({
   } = form;
 
   const onSubmit: SubmitHandler<FormInput> = ({ name, email }) => {
-    setName(name);
-    setEmail(email);
-    setBirthDate(dayjs().year(year).month(month).date(day));
+    setAccountInfo({
+      name,
+      email,
+      birthDate: dayjs().year(year).month(month).date(day),
+    });
     nextStep();
   };
 

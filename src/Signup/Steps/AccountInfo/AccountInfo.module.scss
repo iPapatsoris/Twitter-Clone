@@ -1,8 +1,8 @@
 .AccountInfo {
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  max-width: 400px;
 
   .NameEmail {
     display: flex;
@@ -43,6 +43,6 @@
   }
 
   .Button {
-    margin-top: 5rem;
+    margin-block: auto 2rem;
   }
 }
