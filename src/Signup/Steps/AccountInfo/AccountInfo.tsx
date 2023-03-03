@@ -12,7 +12,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import FormInput from "../../../util/components/Input/FormInput";
+import FormInput from "../../../util/components/TextInput/FormTextInput";
 
 interface AccountInfoProps {
   nextStep: VoidFunction;

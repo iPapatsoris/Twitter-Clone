@@ -7,7 +7,7 @@ import {
 } from "react";
 import useClickOutside from "../../hooks/useClickOutside";
 import styles from "./InputWrapper.module.scss";
-import inputStyles from "./Input.module.scss";
+import inputStyles from "./TextInput.module.scss";
 
 interface InputProps {
   name: string;
@@ -20,7 +20,7 @@ interface InputProps {
   error?: string;
 }
 
-const Input = forwardRef(
+const TextInput = forwardRef(
   (
     {
       name,
@@ -68,7 +68,7 @@ const Input = forwardRef(
     };
 
     const wrapperStyles: styles.InputWrapperNames[] = [styles.Wrapper];
-    const typingAreaStyles: inputStyles.InputNames[] = [inputStyles.TypingArea];
+    const typingAreaStyles: styles.TextInputNames = [inputStyles.TypingArea];
     const labelStyles: string[] = [inputStyles.InheritCursor];
 
     if (isFocused) {
@@ -124,4 +124,4 @@ const Input = forwardRef(
   }
 );
 
-export default Input;
+export default TextInput;

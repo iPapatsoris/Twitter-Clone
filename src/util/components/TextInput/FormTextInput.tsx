@@ -1,11 +1,5 @@
-import {
-  Controller,
-  Field,
-  FieldValues,
-  Path,
-  UseFormReturn,
-} from "react-hook-form";
-import Input from "./Input";
+import { Controller, FieldValues, Path, UseFormReturn } from "react-hook-form";
+import Input from "./TextInput";
 import React from "react";
 
 type FormInputProps<FormInput extends FieldValues> = Omit<

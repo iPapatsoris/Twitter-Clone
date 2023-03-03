@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import OptionsPopup from "../OptionsPopup/OptionsPopup";
-import styles from "../Input/InputWrapper.module.scss";
+import styles from "../TextInput/InputWrapper.module.scss";
 import dropdownStyles from "./Dropdown.module.scss";
 import Icon from "../Icon/Icon";
 import downArrowIcon from "../../../assets/icons/options/down-arrow.png";
@@ -60,7 +60,6 @@ const Dropdown = (props: DropdownProps) => {
       {isActive && dropdownRef && (
         <OptionsPopup
           options={options}
-          isActive
           setIsActive={setIsActive}
           targetAreaRef={dropdownRef}
           extraPopupStyles={[dropdownStyles.Popup]}
