@@ -1,5 +1,6 @@
 import { SetStateAction } from "react";
 import { SettingsT } from "../../Signup";
+import SignupFooter from "../../SignupFooter/SignupFooter";
 import Setting from "./Setting";
 import styles from "./Settings.module.scss";
 
@@ -48,6 +49,7 @@ const Settings = ({
     <div className={styles.Settings}>
       <h1>Customize your experience</h1>
       <div className={styles.SettingsList}>{settingsListJSX}</div>
+      <SignupFooter isDisabled={false} />
     </div>
   );
 };

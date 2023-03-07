@@ -1,4 +1,3 @@
-import Button from "../../../util/components/Button/Button";
 import Dropdown from "../../../util/components/Dropdown/Dropdown";
 import styles from "./AccountInfo.module.scss";
 import {
@@ -14,6 +13,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormInput from "../../../util/components/TextInput/FormTextInput";
 import { AccountInfoT } from "../../Signup";
+import SignupFooter from "../../SignupFooter/SignupFooter";
 
 interface AccountInfoProps {
   nextStep: VoidFunction;
@@ -148,16 +148,7 @@ const AccountInfo = ({
           </div>
         </div>
       </div>
-      <Button
-        type="submit"
-        size="large"
-        largeFont
-        extraClasses={[styles.Button]}
-        color="black"
-        disabled={!isValidForm}
-      >
-        Next
-      </Button>
+      <SignupFooter isDisabled={!isValidForm} />
     </form>
   );
 };

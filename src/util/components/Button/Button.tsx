@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes } from "react";
+import React, { ButtonHTMLAttributes, forwardRef } from "react";
 import styles from "./Button.module.scss";
 
 interface ButtonProps {
@@ -13,56 +13,62 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-const Button = ({
-  type = "button",
-  children,
-  color = "primary",
-  size = "medium",
-  largeFont = false,
-  stretch = false,
-  onClick = (e) => {},
-  extraClasses = [],
-  disabled = false,
-}: ButtonProps) => {
-  let buttonColorStyle;
-  let fontColorStyle;
-  if (color === "primary") {
-    buttonColorStyle = styles.Primary;
-  } else if (color === "black") {
-    buttonColorStyle = styles.Black;
-  } else if (color === "white") {
-    buttonColorStyle = styles.White;
-    fontColorStyle = styles.BlackFont;
+const Button = forwardRef(
+  (
+    {
+      type = "button",
+      children,
+      color = "primary",
+      size = "medium",
+      largeFont = false,
+      stretch = false,
+      onClick = (e) => {},
+      extraClasses = [],
+      disabled = false,
+    }: ButtonProps,
+    ref: React.ForwardedRef<HTMLButtonElement>
+  ) => {
+    let buttonColorStyle;
+    let fontColorStyle;
+    if (color === "primary") {
+      buttonColorStyle = styles.Primary;
+    } else if (color === "black") {
+      buttonColorStyle = styles.Black;
+    } else if (color === "white") {
+      buttonColorStyle = styles.White;
+      fontColorStyle = styles.BlackFont;
+    }
+
+    let sizeStyle: styles.ButtonNames = styles.Medium;
+    if (size === "small") {
+      sizeStyle = styles.Small;
+    } else if (size === "large") {
+      sizeStyle = styles.Large;
+    }
+
+    const classes = [
+      styles.Button,
+      buttonColorStyle,
+      fontColorStyle,
+      sizeStyle,
+      largeFont ? styles.LargeFont : "",
+      stretch ? styles.Stretch : "",
+      disabled ? styles.Disabled : "",
+      ...extraClasses,
+    ].join(" ");
+
+    return (
+      <button
+        ref={ref}
+        type={type}
+        disabled={disabled}
+        className={classes}
+        onClick={(e) => onClick(e)}
+      >
+        {children}
+      </button>
+    );
   }
-
-  let sizeStyle: styles.ButtonNames = styles.Medium;
-  if (size === "small") {
-    sizeStyle = styles.Small;
-  } else if (size === "large") {
-    sizeStyle = styles.Large;
-  }
-
-  const classes = [
-    styles.Button,
-    buttonColorStyle,
-    fontColorStyle,
-    sizeStyle,
-    largeFont ? styles.LargeFont : "",
-    stretch ? styles.Stretch : "",
-    disabled ? styles.Disabled : "",
-    ...extraClasses,
-  ].join(" ");
-
-  return (
-    <button
-      type={type}
-      disabled={disabled}
-      className={classes}
-      onClick={(e) => onClick(e)}
-    >
-      {children}
-    </button>
-  );
-};
+);
 
 export default Button;

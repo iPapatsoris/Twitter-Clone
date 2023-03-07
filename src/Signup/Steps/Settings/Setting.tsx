@@ -1,11 +1,10 @@
-import { SetStateAction } from "react";
 import Checkbox from "../../../util/components/Checkbox/Checkbox";
 
 interface SettingProps {
   title: string;
   text: string;
   value: boolean;
-  onChange: React.Dispatch<SetStateAction<boolean>>;
+  onChange: VoidFunction;
   id: number;
 }
 

@@ -8,7 +8,6 @@ declare const classNames: typeof globalClassNames & {
   readonly Form: "Form";
   readonly Dropdowns: "Dropdowns";
   readonly Dropdown: "Dropdown";
-  readonly Button: "Button";
 };
 export = classNames;
 export type AccountInfoNames =
@@ -18,5 +17,4 @@ export type AccountInfoNames =
   | "Form"
   | "Dropdowns"
   | "Dropdown"
-  | "Button"
   | GlobalClassNames;
