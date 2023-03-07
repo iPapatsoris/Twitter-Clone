@@ -1,10 +1,11 @@
 import { SetStateAction } from "react";
 import { SettingsT } from "../../Signup";
-import SignupFooter from "../../SignupFooter/SignupFooter";
+import SignupFooter from "../../NextStepButton/NextStepButton";
 import Setting from "./Setting";
 import styles from "./Settings.module.scss";
 
 interface SettingsProps {
+  nextStep: VoidFunction;
   settings: SettingsT;
   setSettings: React.Dispatch<SetStateAction<SettingsT>>;
 }
@@ -12,6 +13,7 @@ interface SettingsProps {
 const Settings = ({
   settings: { receiveEmails, beFoundByEmail, personalizeAds },
   setSettings,
+  nextStep,
 }: SettingsProps) => {
   const settingsList: Array<
     Omit<React.ComponentProps<typeof Setting>, "id"> & {
@@ -49,7 +51,7 @@ const Settings = ({
     <div className={styles.Settings}>
       <h1>Customize your experience</h1>
       <div className={styles.SettingsList}>{settingsListJSX}</div>
-      <SignupFooter isDisabled={false} />
+      <SignupFooter isDisabled={false} onClick={nextStep} />
     </div>
   );
 };

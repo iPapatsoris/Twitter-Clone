@@ -8,7 +8,6 @@ import styles from "../SingupHeader/SingupHeader.module.scss";
 interface SignupHeaderProps {
   stepper: {
     step: number;
-    nextStep: VoidFunction;
     prevStep: VoidFunction;
   };
   header: string;

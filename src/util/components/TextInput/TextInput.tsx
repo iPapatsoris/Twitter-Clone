@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import useClickOutside from "../../hooks/useClickOutside";
-import styles from "./InputWrapper.module.scss";
+import styles, { InputWrapperNames } from "./InputWrapper.module.scss";
 import inputStyles from "./TextInput.module.scss";
 
 interface InputProps {
@@ -18,6 +18,7 @@ interface InputProps {
   onBlur?: (e: any) => void;
   value: string;
   error?: string;
+  helper?: React.ReactElement;
 }
 
 const TextInput = forwardRef(
@@ -31,6 +32,7 @@ const TextInput = forwardRef(
       onBlur,
       value,
       error,
+      helper,
     }: InputProps,
     ref
   ) => {
@@ -72,6 +74,7 @@ const TextInput = forwardRef(
       inputStyles.TypingArea,
     ];
     const labelStyles: string[] = [inputStyles.InheritCursor];
+    const helperBoxStyles: InputWrapperNames[] = [styles.HelperBox];
 
     if (isFocused) {
       wrapperStyles.push(styles.Focused);
@@ -79,6 +82,7 @@ const TextInput = forwardRef(
     }
     if (error) {
       wrapperStyles.push(styles.Error);
+      helperBoxStyles.push(styles.Error);
     }
     if (!value.length) {
       wrapperStyles.push(styles.Empty);
@@ -120,7 +124,9 @@ const TextInput = forwardRef(
             />
           </div>
         </div>
-        <div className={styles.ErrorBox}>{error}</div>
+        <div className={helperBoxStyles.join(" ")}>
+          {helper ? helper : error}
+        </div>
       </div>
     );
   }

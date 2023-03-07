@@ -13,7 +13,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormInput from "../../../util/components/TextInput/FormTextInput";
 import { AccountInfoT } from "../../Signup";
-import SignupFooter from "../../SignupFooter/SignupFooter";
+import NextStepButton from "../../NextStepButton/NextStepButton";
 
 interface AccountInfoProps {
   nextStep: VoidFunction;
@@ -104,7 +104,7 @@ const AccountInfo = ({
   const isValidForm = isValid && day !== -1 && month !== -1 && year !== -1;
 
   return (
-    <form className={styles.AccountInfo} onSubmit={handleSubmit(onSubmit)}>
+    <form className={styles.AccountInfo}>
       <h1>Create your account</h1>
       <div className={styles.Form}>
         <div className={styles.NameEmail}>
@@ -148,7 +148,10 @@ const AccountInfo = ({
           </div>
         </div>
       </div>
-      <SignupFooter isDisabled={!isValidForm} />
+      <NextStepButton
+        isDisabled={!isValidForm}
+        onClick={handleSubmit(onSubmit)}
+      />
     </form>
   );
 };

@@ -1,8 +1,8 @@
 import globalClassNames, {
   ClassNames as GlobalClassNames,
-} from "../../style.d";
+} from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Footer: "Footer";
+  readonly Helper: "Helper";
 };
 export = classNames;
-export type SignupFooterNames = "Footer" | GlobalClassNames;
+export type HelperNames = "Helper" | GlobalClassNames;

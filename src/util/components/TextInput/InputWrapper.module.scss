@@ -37,9 +37,13 @@
   }
 }
 
-.ErrorBox {
+.HelperBox {
   height: 1rem;
   padding-left: 0.5rem;
   font-size: 13px;
-  color: red;
+  color: var(--primary-color);
+ 
+  &.Error {
+    color: red;
+  }
 }

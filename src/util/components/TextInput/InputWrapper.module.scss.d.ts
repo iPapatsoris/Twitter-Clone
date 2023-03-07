@@ -7,7 +7,7 @@ declare const classNames: typeof globalClassNames & {
   readonly Info: "Info";
   readonly Focused: "Focused";
   readonly Empty: "Empty";
-  readonly ErrorBox: "ErrorBox";
+  readonly HelperBox: "HelperBox";
 };
 export = classNames;
 export type InputWrapperNames =
@@ -16,5 +16,5 @@ export type InputWrapperNames =
   | "Info"
   | "Focused"
   | "Empty"
-  | "ErrorBox"
+  | "HelperBox"
   | GlobalClassNames;

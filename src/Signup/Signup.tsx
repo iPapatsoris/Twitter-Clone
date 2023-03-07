@@ -4,6 +4,7 @@ import styles from "./Signup.module.scss";
 import SignupHeader from "./SingupHeader/SignupHeader";
 import AccountInfo from "./Steps/AccountInfo/AccountInfo";
 import Settings from "./Steps/Settings/Settings";
+import VerifyEmail from "./Steps/VerifyEmail/VerifyEmail";
 
 interface SignupProps {}
 
@@ -45,13 +46,18 @@ const Signup = ({}: SignupProps) => {
       accountInfo={accountInfo}
       setAccountInfo={setAccountInfo}
     />,
-    <Settings settings={settings} setSettings={setSettings} />,
+    <Settings
+      settings={settings}
+      setSettings={setSettings}
+      nextStep={nextStep}
+    />,
+    <VerifyEmail email={accountInfo.email} nextStep={nextStep} />,
   ];
 
   return (
     <div className={styles.Signup}>
       <SignupHeader
-        stepper={{ step, nextStep, prevStep }}
+        stepper={{ step, prevStep }}
         header={"Step " + (step + 1) + " of " + steps.length}
       />
       <div className={styles.Content}>{steps[step]}</div>
