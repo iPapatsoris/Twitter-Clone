@@ -3,6 +3,7 @@ import { useState } from "react";
 import styles from "./Signup.module.scss";
 import SignupHeader from "./SingupHeader/SignupHeader";
 import AccountInfo from "./Steps/AccountInfo/AccountInfo";
+import MakePassword from "./Steps/MakePassword/MakePassword";
 import Settings from "./Steps/Settings/Settings";
 import VerifyEmail from "./Steps/VerifyEmail/VerifyEmail";
 
@@ -52,6 +53,7 @@ const Signup = ({}: SignupProps) => {
       nextStep={nextStep}
     />,
     <VerifyEmail email={accountInfo.email} nextStep={nextStep} />,
+    <MakePassword nextStep={nextStep} />,
   ];
 
   return (

@@ -8,10 +8,15 @@ import {
 import useClickOutside from "../../hooks/useClickOutside";
 import styles, { InputWrapperNames } from "./InputWrapper.module.scss";
 import inputStyles from "./TextInput.module.scss";
+import eyeIcon from "../../../assets/icons/eye.png";
+import eyeStrikeIcon from "../../../assets/icons/eye-strike.png";
+import verifiedIcon from "../../../assets/icons/verified.png";
+import Icon from "../Icon/Icon";
 
 interface InputProps {
   name: string;
   placeholder: string;
+  type?: "text" | "password";
   maxLength?: number;
   autofocus?: boolean;
   onChange: (e: any) => void;
@@ -33,12 +38,23 @@ const TextInput = forwardRef(
       value,
       error,
       helper,
+      type: initialType = "text",
     }: InputProps,
     ref
   ) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [isFocused, setIsFocused] = useState(false);
+    const [inputType, setInputType] = useState(initialType);
+
+    const togglePasswordReveal = (e: any) => {
+      e.preventDefault();
+      if (inputType === "password") {
+        setInputType("text");
+      } else {
+        setInputType("password");
+      }
+    };
 
     useImperativeHandle(ref, () => inputRef.current);
 
@@ -112,16 +128,26 @@ const TextInput = forwardRef(
                 </span>
               )}
             </div>
-            <input
-              name={name}
-              ref={inputRef}
-              maxLength={maxLength}
-              onChange={(e) => {
-                onChange(e.target.value);
-              }}
-              onBlur={onBlur}
-              value={value}
-            />
+            <div className={inputStyles.Input}>
+              <input
+                name={name}
+                ref={inputRef}
+                maxLength={maxLength}
+                onChange={(e) => {
+                  onChange(e.target.value);
+                }}
+                onBlur={onBlur}
+                value={value}
+                type={inputType}
+              />
+              {initialType === "password" && (
+                <Icon
+                  src={inputType === "password" ? eyeIcon : eyeStrikeIcon}
+                  onClick={(e) => togglePasswordReveal(e)}
+                  hover="none"
+                />
+              )}
+            </div>
           </div>
         </div>
         <div className={helperBoxStyles.join(" ")}>

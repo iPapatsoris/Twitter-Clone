@@ -16,15 +16,22 @@
     visibility: hidden;
   }
 
-  input {
-    border: 0;
-    width: 100%;
-    font-size: 16px;
-    cursor: inherit;
+  .Input {
+    display: flex;
 
-    &:focus {
-      outline: none;
-      cursor: text;
+    input {
+      border: 0;
+      width: 100%;
+      font-size: 16px;
+      cursor: inherit;
+
+      &:focus {
+        outline: none;
+        cursor: text;
+      }
+    }
+
+    .RevealPasswordIcon {
     }
   }
 }

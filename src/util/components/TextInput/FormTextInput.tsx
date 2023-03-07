@@ -1,6 +1,7 @@
 import { Controller, FieldValues, Path, UseFormReturn } from "react-hook-form";
 import Input from "./TextInput";
 import React from "react";
+import TextInput from "./TextInput";
 
 type FormInputProps<FormInput extends FieldValues> = Omit<
   React.ComponentProps<typeof Input>,
@@ -8,7 +9,7 @@ type FormInputProps<FormInput extends FieldValues> = Omit<
 > & {
   control: UseFormReturn<FormInput, any>["control"];
   name: Path<FormInput>;
-};
+} & Pick<React.ComponentProps<typeof TextInput>, "type">;
 
 const FormInput = <FormInput extends FieldValues>({
   name,
@@ -16,6 +17,7 @@ const FormInput = <FormInput extends FieldValues>({
   placeholder,
   maxLength,
   autofocus,
+  type,
 }: FormInputProps<FormInput>) => (
   <Controller
     name={name}
@@ -36,6 +38,7 @@ const FormInput = <FormInput extends FieldValues>({
           value={value}
           ref={ref}
           error={error?.message}
+          type={type}
         />
       );
     }}
