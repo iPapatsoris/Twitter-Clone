@@ -1,12 +1,20 @@
 .Header {
   grid-area: header;
-  align-self: center;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  align-items: center;
   font-weight: 700;
   font-size: 20px;
-}
+  display: grid;
+  grid-template: "icon title ." / 1fr 5fr 1fr;
 
-.NavIcon {
-  grid-area: close;
-  align-self: center;
-  padding-left: 7px;
+  .NavIcon {
+    grid-area: icon;
+    padding-left: 7px;
+  }
+
+  .Title {
+    grid-area: title;
+  }
 }

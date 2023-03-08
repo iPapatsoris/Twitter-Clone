@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { useState } from "react";
+import Stepper from "../util/components/Stepper/Stepper";
 import styles from "./Signup.module.scss";
 import SignupHeader from "./SingupHeader/SignupHeader";
 import AccountInfo from "./Steps/AccountInfo/AccountInfo";
@@ -34,36 +35,40 @@ const Signup = ({}: SignupProps) => {
     personalizeAds: false,
   });
 
-  const [step, setStep] = useState(0);
-  const nextStep = () => {
-    setStep((s) => s + 1);
-  };
-  const prevStep = () => {
-    setStep((s) => s - 1);
-  };
+  // const [step, setStep] = useState(0);
+  // const nextStep = () => {
+  //   setStep((s) => s + 1);
+  // };
+  // const prevStep = () => {
+  //   setStep((s) => s - 1);
+  // };
   const steps = [
     <AccountInfo
-      nextStep={nextStep}
+      // nextStep={nextStep}
       accountInfo={accountInfo}
       setAccountInfo={setAccountInfo}
     />,
     <Settings
       settings={settings}
       setSettings={setSettings}
-      nextStep={nextStep}
+      // nextStep={nextStep}
     />,
-    <VerifyEmail email={accountInfo.email} nextStep={nextStep} />,
-    <MakePassword nextStep={nextStep} />,
+    <VerifyEmail
+      email={accountInfo.email}
+      // nextStep={nextStep}
+    />,
+    <MakePassword />,
   ];
 
   return (
-    <div className={styles.Signup}>
-      <SignupHeader
-        stepper={{ step, prevStep }}
-        header={"Step " + (step + 1) + " of " + steps.length}
-      />
-      <div className={styles.Content}>{steps[step]}</div>
-    </div>
+    <Stepper steps={steps} />
+    // <div className={styles.Signup}>
+    //   <SignupHeader
+    //     stepper={{ step, prevStep }}
+    //     header={"Step " + (step + 1) + " of " + steps.length}
+    //   />
+    //   <div className={styles.Content}>{steps[step]}</div>
+    // </div>
   );
 };
 

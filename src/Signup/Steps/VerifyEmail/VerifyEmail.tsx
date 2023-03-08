@@ -1,16 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { StepperProps } from "../../../util/components/Stepper/Stepper";
 import TextInput from "../../../util/components/TextInput/TextInput";
 import NextStepButton from "../../NextStepButton/NextStepButton";
 import Helper from "./Helper";
 import styles from "./VerifyEmail.module.scss";
 
-interface VerifyEmailProps {
+interface VerifyEmailProps extends StepperProps {
   email: string;
   nextStep: VoidFunction;
 }
 
-const VerifyEmail = ({ email, nextStep }: VerifyEmailProps) => {
+const VerifyEmail = ({ email, stepper }: VerifyEmailProps) => {
   const [code, setCode] = useState("");
+  useEffect(() => {
+    stepper.setIsNextStepDisabled(!code.length);
+  }, [stepper, code.length]);
+
+  useEffect(() => {
+    stepper.nextStepButtonRef.current?.addEventListener(
+      "click",
+      stepper.nextStep
+    );
+    return () =>
+      stepper.nextStepButtonRef.current?.removeEventListener(
+        "click",
+        stepper.nextStep
+      );
+  }, [stepper]);
 
   return (
     <div className={styles.VerifyEmail}>
@@ -24,7 +40,7 @@ const VerifyEmail = ({ email, nextStep }: VerifyEmailProps) => {
         autofocus
         helper={<Helper />}
       />
-      <NextStepButton onClick={nextStep} isDisabled={!code.length} />
+      {/* <NextStepButton onClick={nextStep} isDisabled={!code.length} /> */}
     </div>
   );
 };

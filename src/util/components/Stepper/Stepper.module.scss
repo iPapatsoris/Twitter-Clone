@@ -1,0 +1,22 @@
+.Stepper {
+  height: 100%;
+  display: grid;
+  grid-template:
+    "header" 4rem
+    "content" 1fr
+    "footer" 7rem
+    / 1fr;
+
+  .Wrapper {
+    overflow-y: auto;
+    grid-area: content;
+    padding-top: 1.5rem;
+    padding-bottom: 5rem;
+    display: grid;
+    grid-template: ". content ." 1fr / 1fr 5fr 1fr;
+
+    .Content {
+      grid-area: content;
+    }
+  }
+}

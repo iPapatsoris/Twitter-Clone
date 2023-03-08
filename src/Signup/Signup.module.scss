@@ -2,8 +2,9 @@
   height: 100%;
   display: grid;
   grid-template:
-    "close header ." 4rem
-    ".     content . "
+    "icon header header" 4rem
+    ".     content . " auto
+    "footer     footer  footer"
     / 1fr 5fr 1fr;
 
   .Content {

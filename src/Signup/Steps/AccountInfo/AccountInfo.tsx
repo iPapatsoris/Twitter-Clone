@@ -6,17 +6,16 @@ import {
   getYears,
   isInvalidDate,
 } from "../../../util/date";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormInput from "../../../util/components/TextInput/FormTextInput";
 import { AccountInfoT } from "../../Signup";
-import NextStepButton from "../../NextStepButton/NextStepButton";
+import { StepperProps } from "../../../util/components/Stepper/Stepper";
 
-interface AccountInfoProps {
-  nextStep: VoidFunction;
+interface AccountInfoProps extends StepperProps {
   accountInfo: AccountInfoT;
   setAccountInfo: React.Dispatch<SetStateAction<AccountInfoT>>;
 }
@@ -24,7 +23,7 @@ interface AccountInfoProps {
 type Option = React.ComponentProps<typeof Dropdown>["options"][0];
 
 const AccountInfo = ({
-  nextStep,
+  stepper,
   accountInfo: { name, email, birthDate },
   setAccountInfo,
 }: AccountInfoProps) => {
@@ -92,16 +91,34 @@ const AccountInfo = ({
     formState: { isValid },
   } = form;
 
-  const onSubmit: SubmitHandler<FormInput> = ({ name, email }) => {
-    setAccountInfo({
-      name,
-      email,
-      birthDate: dayjs().year(year).month(month).date(day),
-    });
-    nextStep();
-  };
-
   const isValidForm = isValid && day !== -1 && month !== -1 && year !== -1;
+
+  useEffect(() => {
+    stepper.setIsNextStepDisabled(!isValidForm);
+  }, [isValidForm, stepper]);
+
+  useEffect(() => {
+    const onSubmit: SubmitHandler<FormInput> = ({ name, email }) => {
+      setAccountInfo({
+        name,
+        email,
+        birthDate: dayjs().year(year).month(month).date(day),
+      });
+      stepper.nextStep();
+    };
+
+    const nextStepClickHandler = handleSubmit(onSubmit);
+
+    stepper.nextStepButtonRef.current?.addEventListener(
+      "click",
+      nextStepClickHandler
+    );
+    return () =>
+      stepper.nextStepButtonRef.current?.removeEventListener(
+        "click",
+        nextStepClickHandler
+      );
+  }, [stepper, handleSubmit, day, month, year, setAccountInfo]);
 
   return (
     <form className={styles.AccountInfo}>
@@ -148,10 +165,10 @@ const AccountInfo = ({
           </div>
         </div>
       </div>
-      <NextStepButton
+      {/* <NextStepButton
         isDisabled={!isValidForm}
         onClick={handleSubmit(onSubmit)}
-      />
+      /> */}
     </form>
   );
 };

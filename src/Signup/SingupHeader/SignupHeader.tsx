@@ -29,12 +29,12 @@ const SignupHeader = ({
   };
 
   return (
-    <>
+    <div className={styles.Header}>
       <div className={styles.NavIcon} onClick={onNavIconClick}>
         <Icon src={navIcon} />
       </div>
-      <div className={styles.Header}>{header}</div>
-    </>
+      <div className={styles.Title}>{header}</div>
+    </div>
   );
 };
 

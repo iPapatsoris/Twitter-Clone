@@ -3,6 +3,7 @@ import globalClassNames, {
 } from "../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly Footer: "Footer";
+  readonly Button: "Button";
 };
 export = classNames;
-export type NextStepButtonNames = "Footer" | GlobalClassNames;
+export type NextStepButtonNames = "Footer" | "Button" | GlobalClassNames;
