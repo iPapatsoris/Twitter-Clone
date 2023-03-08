@@ -1,14 +1,20 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { StepperProps } from "../../../util/components/Stepper/Stepper";
+import Step from "../../../util/components/Stepper/Step";
 import FormInput from "../../../util/components/TextInput/FormTextInput";
-import TextInput from "../../../util/components/TextInput/TextInput";
-import NextStepButton from "../../NextStepButton/NextStepButton";
+import useStepper from "../../../util/hooks/useStepper";
 import styles from "./MakePassword.module.scss";
 
-const MakePassword = ({ stepper }: StepperProps) => {
+type MakePasswordProps = {
+  stepper: ReturnType<typeof useStepper>;
+  header?: string;
+};
+
+const MakePassword = ({
+  stepper: { step, nextStep, prevStep },
+  header = "",
+}: MakePasswordProps) => {
   type FormInput = {
     password: string;
   };
@@ -37,40 +43,26 @@ const MakePassword = ({ stepper }: StepperProps) => {
     formState: { isValid },
   } = form;
 
-  useEffect(() => {
-    stepper.setIsNextStepDisabled(!isValid);
-  }, [isValid, stepper]);
-
-  useEffect(() => {
-    const onSubmit: SubmitHandler<FormInput> = ({ password }) => {
-      stepper.nextStep();
-    };
-    const nextStepClickHandler = handleSubmit(onSubmit);
-
-    stepper.nextStepButtonRef.current?.addEventListener(
-      "click",
-      nextStepClickHandler
-    );
-    return () =>
-      stepper.nextStepButtonRef.current?.removeEventListener(
-        "click",
-        nextStepClickHandler
-      );
-  }, [stepper, handleSubmit]);
-
   return (
-    <div className={styles.MakePassword}>
-      <h1>You'll need a password</h1>
-      <span className={styles.Info}>Make sure it's 8 characters or more</span>
-      <FormInput
-        autofocus
-        name="password"
-        placeholder="Password"
-        control={control}
-        type="password"
-      />
-      {/* <NextStepButton isDisabled={!isValid} onClick={handleSubmit(nextStep)} /> */}
-    </div>
+    <Step
+      header={header}
+      step={step}
+      onNextStepClick={handleSubmit(nextStep)}
+      onPrevStepClick={prevStep}
+      isNextStepDisabled={!isValid}
+    >
+      <div className={styles.MakePassword}>
+        <h1>You'll need a password</h1>
+        <span className={styles.Info}>Make sure it's 8 characters or more</span>
+        <FormInput
+          autofocus
+          name="password"
+          placeholder="Password"
+          control={control}
+          type="password"
+        />
+      </div>
+    </Step>
   );
 };
 

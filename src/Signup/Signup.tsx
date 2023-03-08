@@ -1,8 +1,6 @@
 import dayjs from "dayjs";
-import { useState } from "react";
-import Stepper from "../util/components/Stepper/Stepper";
-import styles from "./Signup.module.scss";
-import SignupHeader from "./SingupHeader/SignupHeader";
+import React, { useState } from "react";
+import useStepper from "../util/hooks/useStepper";
 import AccountInfo from "./Steps/AccountInfo/AccountInfo";
 import MakePassword from "./Steps/MakePassword/MakePassword";
 import Settings from "./Steps/Settings/Settings";
@@ -35,41 +33,31 @@ const Signup = ({}: SignupProps) => {
     personalizeAds: false,
   });
 
-  // const [step, setStep] = useState(0);
-  // const nextStep = () => {
-  //   setStep((s) => s + 1);
-  // };
-  // const prevStep = () => {
-  //   setStep((s) => s - 1);
-  // };
+  const stepper = useStepper();
+
   const steps = [
     <AccountInfo
-      // nextStep={nextStep}
+      stepper={stepper}
       accountInfo={accountInfo}
       setAccountInfo={setAccountInfo}
     />,
     <Settings
+      stepper={stepper}
       settings={settings}
       setSettings={setSettings}
-      // nextStep={nextStep}
     />,
-    <VerifyEmail
-      email={accountInfo.email}
-      // nextStep={nextStep}
-    />,
-    <MakePassword />,
+    <VerifyEmail stepper={stepper} email={accountInfo.email} />,
+    <MakePassword stepper={stepper} />,
   ];
 
-  return (
-    <Stepper steps={steps} />
-    // <div className={styles.Signup}>
-    //   <SignupHeader
-    //     stepper={{ step, prevStep }}
-    //     header={"Step " + (step + 1) + " of " + steps.length}
-    //   />
-    //   <div className={styles.Content}>{steps[step]}</div>
-    // </div>
+  const stepsWithHeader = steps.map((stepComponent, index) =>
+    React.cloneElement(stepComponent, {
+      key: index,
+      header: "Step " + (index + 1) + " out of " + steps.length,
+    })
   );
+
+  return stepsWithHeader[stepper.step];
 };
 
 export default Signup;

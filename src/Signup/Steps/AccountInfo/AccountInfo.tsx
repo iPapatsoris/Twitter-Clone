@@ -6,26 +6,30 @@ import {
   getYears,
   isInvalidDate,
 } from "../../../util/date";
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormInput from "../../../util/components/TextInput/FormTextInput";
 import { AccountInfoT } from "../../Signup";
-import { StepperProps } from "../../../util/components/Stepper/Stepper";
+import useStepper from "../../../util/hooks/useStepper";
+import Step from "../../../util/components/Stepper/Step";
 
-interface AccountInfoProps extends StepperProps {
+interface AccountInfoProps {
   accountInfo: AccountInfoT;
   setAccountInfo: React.Dispatch<SetStateAction<AccountInfoT>>;
+  stepper: ReturnType<typeof useStepper>;
+  header?: string;
 }
 
 type Option = React.ComponentProps<typeof Dropdown>["options"][0];
 
 const AccountInfo = ({
-  stepper,
+  stepper: { step, nextStep, prevStep },
   accountInfo: { name, email, birthDate },
   setAccountInfo,
+  header = "",
 }: AccountInfoProps) => {
   const [month, setMonth] = useState(birthDate ? birthDate.month() : -1);
   const [day, setDay] = useState(birthDate ? birthDate.date() : -1);
@@ -92,84 +96,69 @@ const AccountInfo = ({
   } = form;
 
   const isValidForm = isValid && day !== -1 && month !== -1 && year !== -1;
-
-  useEffect(() => {
-    stepper.setIsNextStepDisabled(!isValidForm);
-  }, [isValidForm, stepper]);
-
-  useEffect(() => {
-    const onSubmit: SubmitHandler<FormInput> = ({ name, email }) => {
-      setAccountInfo({
-        name,
-        email,
-        birthDate: dayjs().year(year).month(month).date(day),
-      });
-      stepper.nextStep();
-    };
-
-    const nextStepClickHandler = handleSubmit(onSubmit);
-
-    stepper.nextStepButtonRef.current?.addEventListener(
-      "click",
-      nextStepClickHandler
-    );
-    return () =>
-      stepper.nextStepButtonRef.current?.removeEventListener(
-        "click",
-        nextStepClickHandler
-      );
-  }, [stepper, handleSubmit, day, month, year, setAccountInfo]);
+  const onSubmit: SubmitHandler<FormInput> = ({ name, email }) => {
+    setAccountInfo({
+      name,
+      email,
+      birthDate: dayjs().year(year).month(month).date(day),
+    });
+    nextStep();
+  };
 
   return (
-    <form className={styles.AccountInfo}>
-      <h1>Create your account</h1>
-      <div className={styles.Form}>
-        <div className={styles.NameEmail}>
-          <FormInput
-            name="name"
-            placeholder="Name"
-            control={control}
-            maxLength={50}
-            autofocus
-          />
-          <FormInput name="email" placeholder="Email" control={control} />
-        </div>
-        <div>
-          <h4>Date of birth</h4>
-          <div className={styles.DateOfBirth}>
-            This will not be shown publicly. Confirm your own age, even if this
-            account is for a business, a pet, or something else.
+    <Step
+      step={step}
+      header={header}
+      onNextStepClick={handleSubmit(onSubmit)}
+      onPrevStepClick={() => {}}
+      isNextStepDisabled={!isValidForm}
+    >
+      <form className={styles.AccountInfo}>
+        <h1>Create your account</h1>
+        <div className={styles.Form}>
+          <div className={styles.NameEmail}>
+            <FormInput
+              name="name"
+              placeholder="Name"
+              control={control}
+              maxLength={50}
+              autofocus
+            />
+            <FormInput name="email" placeholder="Email" control={control} />
           </div>
-          <div className={styles.Dropdowns}>
-            <Dropdown
-              name="Month"
-              options={months}
-              selectedOptionID={month !== -1 ? month : null}
-              extraStyles={[styles.Dropdown]}
-              position={{ block: "bottom", inline: "leftCover" }}
-            />
-            <Dropdown
-              name="Day"
-              options={days}
-              selectedOptionID={day !== -1 ? day : null}
-              extraStyles={[styles.Dropdown]}
-              position={{ block: "top", inline: "leftCover" }}
-            />
-            <Dropdown
-              name="Year"
-              options={years}
-              selectedOptionID={year !== -1 ? year : null}
-              extraStyles={[styles.Dropdown]}
-              position={{ block: "top", inline: "leftCover" }}
-            />
+          <div>
+            <h4>Date of birth</h4>
+            <div className={styles.DateOfBirth}>
+              This will not be shown publicly. Confirm your own age, even if
+              this account is for a business, a pet, or something else.
+            </div>
+            <div className={styles.Dropdowns}>
+              <Dropdown
+                name="Month"
+                options={months}
+                selectedOptionID={month !== -1 ? month : null}
+                extraStyles={[styles.Dropdown]}
+                position={{ block: "bottom", inline: "leftCover" }}
+              />
+              <Dropdown
+                name="Day"
+                options={days}
+                selectedOptionID={day !== -1 ? day : null}
+                extraStyles={[styles.Dropdown]}
+                position={{ block: "top", inline: "leftCover" }}
+              />
+              <Dropdown
+                name="Year"
+                options={years}
+                selectedOptionID={year !== -1 ? year : null}
+                extraStyles={[styles.Dropdown]}
+                position={{ block: "top", inline: "leftCover" }}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      {/* <NextStepButton
-        isDisabled={!isValidForm}
-        onClick={handleSubmit(onSubmit)}
-      /> */}
-    </form>
+      </form>
+    </Step>
   );
 };
 
