@@ -14,7 +14,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import FormInput from "../../../util/components/TextInput/FormTextInput";
 import { AccountInfoT } from "../../Signup";
 import useStepper from "../../../util/hooks/useStepper";
-import Step from "../../../util/components/Stepper/Step";
+import NextStepButton from "../NextStepButton";
+import StepHeader from "../StepHeader";
+import Minipage from "../../../util/layouts/Minipage/Minipage";
 
 interface AccountInfoProps {
   accountInfo: AccountInfoT;
@@ -26,7 +28,7 @@ interface AccountInfoProps {
 type Option = React.ComponentProps<typeof Dropdown>["options"][0];
 
 const AccountInfo = ({
-  stepper: { step, nextStep, prevStep },
+  stepper: { step, nextStep },
   accountInfo: { name, email, birthDate },
   setAccountInfo,
   header = "",
@@ -106,12 +108,18 @@ const AccountInfo = ({
   };
 
   return (
-    <Step
-      step={step}
-      header={header}
-      onNextStepClick={handleSubmit(onSubmit)}
-      onPrevStepClick={() => {}}
-      isNextStepDisabled={!isValidForm}
+    <Minipage
+      header={
+        <StepHeader step={step} onPrevStepClick={() => {}}>
+          {header}
+        </StepHeader>
+      }
+      footer={
+        <NextStepButton
+          onClick={handleSubmit(onSubmit)}
+          isDisabled={!isValidForm}
+        />
+      }
     >
       <form className={styles.AccountInfo}>
         <h1>Create your account</h1>
@@ -158,7 +166,7 @@ const AccountInfo = ({
           </div>
         </div>
       </form>
-    </Step>
+    </Minipage>
   );
 };
 

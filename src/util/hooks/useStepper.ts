@@ -9,7 +9,7 @@ const useStepper = () => {
     setStep((s) => s - 1);
   };
 
-  return { step, nextStep, prevStep };
+  return { step, nextStep, prevStep, setStep };
 };
 
 export default useStepper;

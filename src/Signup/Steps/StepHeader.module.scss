@@ -1,13 +1,10 @@
-.Header {
-  grid-area: header;
-  position: sticky;
-  top: 0;
-  background-color: white;
-  align-items: center;
+.StepHeader {
+  padding-top: 1rem;
   font-weight: 700;
   font-size: 20px;
   display: grid;
   grid-template: "icon title ." / 1fr 5fr 1fr;
+  align-items: center;
 
   .NavIcon {
     grid-area: icon;

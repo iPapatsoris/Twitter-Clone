@@ -10,7 +10,6 @@ import styles, { InputWrapperNames } from "./InputWrapper.module.scss";
 import inputStyles from "./TextInput.module.scss";
 import eyeIcon from "../../../assets/icons/eye.png";
 import eyeStrikeIcon from "../../../assets/icons/eye-strike.png";
-import verifiedIcon from "../../../assets/icons/verified.png";
 import Icon from "../Icon/Icon";
 
 interface InputProps {
@@ -19,11 +18,14 @@ interface InputProps {
   type?: "text" | "password";
   maxLength?: number;
   autofocus?: boolean;
+  readonly?: boolean;
+  onClick?: (e: any) => void;
   onChange: (e: any) => void;
   onBlur?: (e: any) => void;
   value: string;
   error?: string;
   helper?: React.ReactElement;
+  icon?: string;
 }
 
 const TextInput = forwardRef(
@@ -33,12 +35,15 @@ const TextInput = forwardRef(
       placeholder,
       maxLength,
       autofocus = false,
+      readonly = false,
+      onClick,
       onChange,
       onBlur,
       value,
       error,
       helper,
       type: initialType = "text",
+      icon,
     }: InputProps,
     ref
   ) => {
@@ -74,8 +79,8 @@ const TextInput = forwardRef(
       },
     });
 
-    const handleClick = (e: any) => {
-      if (inputRef.current) {
+    const handleMousedown = (e: any) => {
+      if (inputRef.current && !readonly) {
         inputRef.current.style.visibility = "visible";
         inputRef.current.focus();
         setIsFocused(true);
@@ -105,12 +110,26 @@ const TextInput = forwardRef(
       typingAreaStyles.push(inputStyles.Empty);
     }
 
+    let iconJSX;
+    if (initialType === "password") {
+      iconJSX = (
+        <Icon
+          src={inputType === "password" ? eyeIcon : eyeStrikeIcon}
+          onClick={(e) => togglePasswordReveal(e)}
+          hover="none"
+        />
+      );
+    } else if (icon) {
+      iconJSX = <Icon src={icon} hover="none" />;
+    }
+
     return (
       <div>
         <div
           ref={wrapperRef}
           className={wrapperStyles.join(" ")}
-          onMouseDown={(e) => handleClick(e)}
+          onMouseDown={(e) => handleMousedown(e)}
+          onClick={onClick}
         >
           {!isFocused && !value.length && (
             <div className={inputStyles.Placeholder}>
@@ -139,14 +158,9 @@ const TextInput = forwardRef(
                 onBlur={onBlur}
                 value={value}
                 type={inputType}
+                readOnly={readonly}
               />
-              {initialType === "password" && (
-                <Icon
-                  src={inputType === "password" ? eyeIcon : eyeStrikeIcon}
-                  onClick={(e) => togglePasswordReveal(e)}
-                  hover="none"
-                />
-              )}
+              {iconJSX}
             </div>
           </div>
         </div>

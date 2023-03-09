@@ -4,6 +4,7 @@ import useStepper from "../util/hooks/useStepper";
 import AccountInfo from "./Steps/AccountInfo/AccountInfo";
 import MakePassword from "./Steps/MakePassword/MakePassword";
 import Settings from "./Steps/Settings/Settings";
+import VerifyAccountInfo from "./Steps/VerifyAccountInfo/VerifyAccountInfo";
 import VerifyEmail from "./Steps/VerifyEmail/VerifyEmail";
 
 interface SignupProps {}
@@ -46,6 +47,7 @@ const Signup = ({}: SignupProps) => {
       settings={settings}
       setSettings={setSettings}
     />,
+    <VerifyAccountInfo stepper={stepper} accountInfo={accountInfo!} />,
     <VerifyEmail stepper={stepper} email={accountInfo.email} />,
     <MakePassword stepper={stepper} />,
   ];

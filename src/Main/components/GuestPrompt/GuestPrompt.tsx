@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import Signup from "../../../Signup/Signup";
+import Terms from "../../../Signup/Terms/Terms";
 import Button from "../../../util/components/Button/Button";
 import Modal, { openModalHandler } from "../../../util/components/Modal/Modal";
-import paths from "../../../util/paths";
 import styles from "./GuestPrompt.module.scss";
 
 interface GuestPromptProps {}
@@ -30,12 +29,7 @@ const GuestPrompt = ({}: GuestPromptProps) => {
         <Button size="medium" stretch color="white" onClick={handleClick}>
           Create account
         </Button>
-        <div className={styles.Text}>
-          By signing up, you agree to the{" "}
-          <Link to={paths.tos}> Terms of Service </Link>and{" "}
-          <Link to={paths.privacy}>Privacy Policy,</Link> including{" "}
-          <Link to={paths.cookies}>Cookie Use.</Link>
-        </div>
+        <Terms length="short" extraStyles={[styles.Text]} />
       </div>
     </>
   );

@@ -1,0 +1,12 @@
+.Terms {
+  font-size: 15px;
+  color: var(--light-color);
+  font-weight: 400;
+
+  a {
+    color: var(--primary-color);
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

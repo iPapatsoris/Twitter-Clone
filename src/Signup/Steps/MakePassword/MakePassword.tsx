@@ -1,9 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import Step from "../../../util/components/Stepper/Step";
+import Minipage from "../../../util/layouts/Minipage/Minipage";
 import FormInput from "../../../util/components/TextInput/FormTextInput";
 import useStepper from "../../../util/hooks/useStepper";
+import NextStepButton from "../NextStepButton";
+import StepHeader from "../StepHeader";
 import styles from "./MakePassword.module.scss";
 
 type MakePasswordProps = {
@@ -44,12 +46,18 @@ const MakePassword = ({
   } = form;
 
   return (
-    <Step
-      header={header}
-      step={step}
-      onNextStepClick={handleSubmit(nextStep)}
-      onPrevStepClick={prevStep}
-      isNextStepDisabled={!isValid}
+    <Minipage
+      header={
+        <StepHeader step={step} onPrevStepClick={prevStep}>
+          {header}
+        </StepHeader>
+      }
+      footer={
+        <NextStepButton
+          onClick={handleSubmit(nextStep)}
+          isDisabled={!isValid}
+        />
+      }
     >
       <div className={styles.MakePassword}>
         <h1>You'll need a password</h1>
@@ -62,7 +70,7 @@ const MakePassword = ({
           type="password"
         />
       </div>
-    </Step>
+    </Minipage>
   );
 };
 

@@ -1,7 +1,9 @@
 import { useState } from "react";
-import Step from "../../../util/components/Stepper/Step";
+import Minipage from "../../../util/layouts/Minipage/Minipage";
 import TextInput from "../../../util/components/TextInput/TextInput";
 import useStepper from "../../../util/hooks/useStepper";
+import NextStepButton from "../NextStepButton";
+import StepHeader from "../StepHeader";
 import Helper from "./Helper";
 import styles from "./VerifyEmail.module.scss";
 
@@ -18,12 +20,13 @@ const VerifyEmail = ({
 }: VerifyEmailProps) => {
   const [code, setCode] = useState("");
   return (
-    <Step
-      step={step}
-      header={header}
-      isNextStepDisabled={!code.length}
-      onNextStepClick={nextStep}
-      onPrevStepClick={prevStep}
+    <Minipage
+      header={
+        <StepHeader step={step} onPrevStepClick={prevStep}>
+          {header}
+        </StepHeader>
+      }
+      footer={<NextStepButton onClick={nextStep} isDisabled={!code.length} />}
     >
       <div className={styles.VerifyEmail}>
         <h1>We sent you a code</h1>
@@ -37,7 +40,7 @@ const VerifyEmail = ({
           helper={<Helper />}
         />
       </div>
-    </Step>
+    </Minipage>
   );
 };
 

@@ -2,10 +2,11 @@ import { SetStateAction } from "react";
 import { SettingsT } from "../../Signup";
 import Setting from "./Setting";
 import styles from "./Settings.module.scss";
-import { Link } from "react-router-dom";
-import paths from "../../../util/paths";
 import useStepper from "../../../util/hooks/useStepper";
-import Step from "../../../util/components/Stepper/Step";
+import Terms from "../../Terms/Terms";
+import NextStepButton from "../NextStepButton";
+import StepHeader from "../StepHeader";
+import Minipage from "../../../util/layouts/Minipage/Minipage";
 
 interface SettingsProps {
   settings: SettingsT;
@@ -53,81 +54,20 @@ const Settings = ({
   ));
 
   return (
-    <Step
-      header={header}
-      step={step}
-      onNextStepClick={nextStep}
-      onPrevStepClick={prevStep}
-      isNextStepDisabled={false}
+    <Minipage
+      header={
+        <StepHeader step={step} onPrevStepClick={prevStep}>
+          {header}
+        </StepHeader>
+      }
+      footer={<NextStepButton onClick={nextStep} isDisabled={false} />}
     >
       <div className={styles.Settings}>
         <h1>Customize your experience</h1>
         <div className={styles.SettingsList}>{settingsListJSX}</div>
-        <div className={styles.Terms}>
-          By signing up, you agree to the{" "}
-          <Link to={paths.tos}> Terms of Service </Link>and{" "}
-          <Link to={paths.privacy}>Privacy Policy,</Link> including{" "}
-          <Link to={paths.cookies}>Cookie Use.</Link>
-          Twitter may use your contact information, including your email address
-          and phone number for purposes outlined in our Privacy Policy.{" "}
-          <Link to={paths.privacy}>Learn more</Link>
-        </div>
-        <div className={styles.Terms}>
-          By signing up, you agree to the{" "}
-          <Link to={paths.tos}> Terms of Service </Link>and{" "}
-          <Link to={paths.privacy}>Privacy Policy,</Link> including{" "}
-          <Link to={paths.cookies}>Cookie Use.</Link>
-          Twitter may use your contact information, including your email address
-          and phone number for purposes outlined in our Privacy Policy.{" "}
-          <Link to={paths.privacy}>Learn more</Link>
-        </div>
-        <div className={styles.Terms}>
-          By signing up, you agree to the{" "}
-          <Link to={paths.tos}> Terms of Service </Link>and{" "}
-          <Link to={paths.privacy}>Privacy Policy,</Link> including{" "}
-          <Link to={paths.cookies}>Cookie Use.</Link>
-          Twitter may use your contact information, including your email address
-          and phone number for purposes outlined in our Privacy Policy.{" "}
-          <Link to={paths.privacy}>Learn more</Link>
-        </div>
-        <div className={styles.Terms}>
-          By signing up, you agree to the{" "}
-          <Link to={paths.tos}> Terms of Service </Link>and{" "}
-          <Link to={paths.privacy}>Privacy Policy,</Link> including{" "}
-          <Link to={paths.cookies}>Cookie Use.</Link>
-          Twitter may use your contact information, including your email address
-          and phone number for purposes outlined in our Privacy Policy.{" "}
-          <Link to={paths.privacy}>Learn more</Link>
-        </div>
-        <div className={styles.Terms}>
-          By signing up, you agree to the{" "}
-          <Link to={paths.tos}> Terms of Service </Link>and{" "}
-          <Link to={paths.privacy}>Privacy Policy,</Link> including{" "}
-          <Link to={paths.cookies}>Cookie Use.</Link>
-          Twitter may use your contact information, including your email address
-          and phone number for purposes outlined in our Privacy Policy.{" "}
-          <Link to={paths.privacy}>Learn more</Link>
-        </div>
-        <div className={styles.Terms}>
-          By signing up, you agree to the{" "}
-          <Link to={paths.tos}> Terms of Service </Link>and{" "}
-          <Link to={paths.privacy}>Privacy Policy,</Link> including{" "}
-          <Link to={paths.cookies}>Cookie Use.</Link>
-          Twitter may use your contact information, including your email address
-          and phone number for purposes outlined in our Privacy Policy.{" "}
-          <Link to={paths.privacy}>Learn more</Link>
-        </div>
-        <div className={styles.Terms}>
-          By signing up, you agree to the{" "}
-          <Link to={paths.tos}> Terms of Service </Link>and{" "}
-          <Link to={paths.privacy}>Privacy Policy,</Link> including{" "}
-          <Link to={paths.cookies}>Cookie Use.</Link>
-          Twitter may use your contact information, including your email address
-          and phone number for purposes outlined in our Privacy Policy.{" "}
-          <Link to={paths.privacy}>Learn more</Link>
-        </div>
+        <Terms />
       </div>
-    </Step>
+    </Minipage>
   );
 };
 

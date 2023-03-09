@@ -1,0 +1,50 @@
+.Minipage {
+  height: 100%;
+  display: grid;
+  grid-template:
+    "header" auto
+    "content" 1fr
+    "footer" auto
+    / 1fr;
+
+  .Header {
+    grid-area: header;
+    position: sticky;
+    top: 0;
+    background-color: white;
+  }
+
+  .Content {
+    overflow-y: auto;
+    grid-area: content;
+    padding-top: 1.5rem;
+    padding-bottom: 4rem;
+    display: grid;
+    grid-template: ". content ." 1fr / 1fr 5fr 1fr;
+
+    .Wrapper {
+      grid-area: content;
+    }
+  }
+
+  .Footer {
+    grid-area: footer;
+    background-color: white;
+    position: sticky;
+    bottom: 0;
+    box-shadow: var(--box-shadow);
+    display: grid;
+    grid-template:
+      ". content ."
+      / 1fr 5fr 1fr;
+    align-items: center;
+    padding-block: 2rem;
+
+    .Wrapper {
+      grid-area: content;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+}

@@ -34,6 +34,7 @@
 
   .Info {
     font-size: 12px;
+    padding-bottom: 0.5rem;
   }
 }
 
@@ -42,7 +43,7 @@
   padding-left: 0.5rem;
   font-size: 13px;
   color: var(--primary-color);
- 
+
   &.Error {
     color: red;
   }
