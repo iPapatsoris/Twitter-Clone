@@ -2,10 +2,15 @@ import Button from "../../util/components/Button/Button";
 
 interface NextStepButtonProps {
   isDisabled: boolean;
-  onClick: VoidFunction;
+  isLoading?: boolean;
+  onClick?: VoidFunction;
 }
 
-const NextStepButton = ({ isDisabled, onClick }: NextStepButtonProps) => (
+const NextStepButton = ({
+  isLoading = false,
+  isDisabled,
+  onClick,
+}: NextStepButtonProps) => (
   <Button
     type="submit"
     size="large"
@@ -13,6 +18,7 @@ const NextStepButton = ({ isDisabled, onClick }: NextStepButtonProps) => (
     color="black"
     stretch
     disabled={isDisabled}
+    isLoading={isLoading}
     onClick={onClick}
   >
     Next

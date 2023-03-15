@@ -7,6 +7,7 @@ declare const classNames: {
   readonly PushRight: "PushRight";
   readonly ShowOpacity: "ShowOpacity";
   readonly Hide: "Hide";
+  readonly Semantic: "Semantic";
   readonly Blue: "Blue";
   readonly LightColor: "LightColor";
   readonly NoHighlighting: "NoHighlighting";
@@ -21,6 +22,7 @@ export type ClassNames =
   | "PushRight"
   | "ShowOpacity"
   | "Hide"
+  | "Semantic"
   | "Blue"
   | "LightColor"
   | "NoHighlighting";

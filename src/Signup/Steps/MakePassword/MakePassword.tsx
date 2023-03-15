@@ -7,6 +7,7 @@ import useStepper from "../../../util/hooks/useStepper";
 import NextStepButton from "../NextStepButton";
 import StepHeader from "../StepHeader";
 import styles from "./MakePassword.module.scss";
+import Form from "../../../util/components/Form/Form";
 
 type MakePasswordProps = {
   stepper: ReturnType<typeof useStepper>;
@@ -46,31 +47,30 @@ const MakePassword = ({
   } = form;
 
   return (
-    <Minipage
-      header={
-        <StepHeader step={step} onPrevStepClick={prevStep}>
-          {header}
-        </StepHeader>
-      }
-      footer={
-        <NextStepButton
-          onClick={handleSubmit(nextStep)}
-          isDisabled={!isValid}
-        />
-      }
-    >
-      <div className={styles.MakePassword}>
-        <h1>You'll need a password</h1>
-        <span className={styles.Info}>Make sure it's 8 characters or more</span>
-        <FormInput
-          autofocus
-          name="password"
-          placeholder="Password"
-          control={control}
-          type="password"
-        />
-      </div>
-    </Minipage>
+    <Form onSubmit={handleSubmit(nextStep)}>
+      <Minipage
+        header={
+          <StepHeader step={step} onPrevStepClick={prevStep}>
+            {header}
+          </StepHeader>
+        }
+        footer={<NextStepButton isDisabled={!isValid} />}
+      >
+        <div className={styles.MakePassword}>
+          <h1>You'll need a password</h1>
+          <span className={styles.Info}>
+            Make sure it's 8 characters or more
+          </span>
+          <FormInput
+            autofocus
+            name="password"
+            placeholder="Password"
+            control={control}
+            type="password"
+          />
+        </div>
+      </Minipage>
+    </Form>
   );
 };
 

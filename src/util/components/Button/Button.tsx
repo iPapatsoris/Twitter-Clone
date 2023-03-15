@@ -1,4 +1,5 @@
 import React, { ButtonHTMLAttributes, forwardRef } from "react";
+import { TailSpin } from "react-loader-spinner";
 import styles from "./Button.module.scss";
 
 interface ButtonProps {
@@ -11,6 +12,7 @@ interface ButtonProps {
   extraClasses?: string[];
   onClick?: (e: any) => void;
   disabled?: boolean;
+  isLoading?: boolean;
 }
 
 const Button = forwardRef(
@@ -25,6 +27,7 @@ const Button = forwardRef(
       onClick = (e) => {},
       extraClasses = [],
       disabled = false,
+      isLoading = false,
     }: ButtonProps,
     ref: React.ForwardedRef<HTMLButtonElement>
   ) => {
@@ -65,7 +68,16 @@ const Button = forwardRef(
         className={classes}
         onClick={(e) => onClick(e)}
       >
-        {children}
+        {isLoading ? (
+          <TailSpin
+            height="30"
+            width="30"
+            color="var(--primary-color)"
+            ariaLabel="tail-spin-loading"
+          />
+        ) : (
+          children
+        )}
       </button>
     );
   }

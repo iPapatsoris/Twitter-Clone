@@ -34,6 +34,8 @@ const Signup = ({}: SignupProps) => {
     personalizeAds: false,
   });
 
+  const [emailCodeHint, setEmailCodeHint] = useState("");
+
   const stepper = useStepper();
 
   const steps = [
@@ -47,8 +49,17 @@ const Signup = ({}: SignupProps) => {
       settings={settings}
       setSettings={setSettings}
     />,
-    <VerifyAccountInfo stepper={stepper} accountInfo={accountInfo!} />,
-    <VerifyEmail stepper={stepper} email={accountInfo.email} />,
+    <VerifyAccountInfo
+      setEmailCodeHint={setEmailCodeHint}
+      stepper={stepper}
+      accountInfo={accountInfo!}
+    />,
+    <VerifyEmail
+      setEmailCodeHint={setEmailCodeHint}
+      stepper={stepper}
+      email={accountInfo.email}
+      codeHint={emailCodeHint}
+    />,
     <MakePassword stepper={stepper} />,
   ];
 

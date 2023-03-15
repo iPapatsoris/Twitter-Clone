@@ -7,6 +7,9 @@
   padding-inline: 1rem;
   padding-block: 0.5rem;
   transition: var(--transition-duration);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &.Primary {
     background: var(--primary-color);

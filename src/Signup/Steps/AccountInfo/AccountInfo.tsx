@@ -17,6 +17,7 @@ import useStepper from "../../../util/hooks/useStepper";
 import NextStepButton from "../NextStepButton";
 import StepHeader from "../StepHeader";
 import Minipage from "../../../util/layouts/Minipage/Minipage";
+import Form from "../../../util/components/Form/Form";
 
 interface AccountInfoProps {
   accountInfo: AccountInfoT;
@@ -108,65 +109,62 @@ const AccountInfo = ({
   };
 
   return (
-    <Minipage
-      header={
-        <StepHeader step={step} onPrevStepClick={() => {}}>
-          {header}
-        </StepHeader>
-      }
-      footer={
-        <NextStepButton
-          onClick={handleSubmit(onSubmit)}
-          isDisabled={!isValidForm}
-        />
-      }
-    >
-      <form className={styles.AccountInfo}>
-        <h1>Create your account</h1>
-        <div className={styles.Form}>
-          <div className={styles.NameEmail}>
-            <FormInput
-              name="name"
-              placeholder="Name"
-              control={control}
-              maxLength={50}
-              autofocus
-            />
-            <FormInput name="email" placeholder="Email" control={control} />
-          </div>
-          <div>
-            <h4>Date of birth</h4>
-            <div className={styles.DateOfBirth}>
-              This will not be shown publicly. Confirm your own age, even if
-              this account is for a business, a pet, or something else.
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <Minipage
+        header={
+          <StepHeader step={step} onPrevStepClick={() => {}}>
+            {header}
+          </StepHeader>
+        }
+        footer={<NextStepButton isDisabled={!isValidForm} />}
+      >
+        <div className={styles.AccountInfo}>
+          <h1>Create your account</h1>
+          <div className={styles.Form}>
+            <div className={styles.NameEmail}>
+              <FormInput
+                name="name"
+                placeholder="Name"
+                control={control}
+                maxLength={50}
+                autofocus
+              />
+              <FormInput name="email" placeholder="Email" control={control} />
             </div>
-            <div className={styles.Dropdowns}>
-              <Dropdown
-                name="Month"
-                options={months}
-                selectedOptionID={month !== -1 ? month : null}
-                extraStyles={[styles.Dropdown]}
-                position={{ block: "bottom", inline: "leftCover" }}
-              />
-              <Dropdown
-                name="Day"
-                options={days}
-                selectedOptionID={day !== -1 ? day : null}
-                extraStyles={[styles.Dropdown]}
-                position={{ block: "top", inline: "leftCover" }}
-              />
-              <Dropdown
-                name="Year"
-                options={years}
-                selectedOptionID={year !== -1 ? year : null}
-                extraStyles={[styles.Dropdown]}
-                position={{ block: "top", inline: "leftCover" }}
-              />
+            <div>
+              <h4>Date of birth</h4>
+              <div className={styles.DateOfBirth}>
+                This will not be shown publicly. Confirm your own age, even if
+                this account is for a business, a pet, or something else.
+              </div>
+              <div className={styles.Dropdowns}>
+                <Dropdown
+                  name="Month"
+                  options={months}
+                  selectedOptionID={month !== -1 ? month : null}
+                  extraStyles={[styles.Dropdown]}
+                  position={{ block: "bottom", inline: "leftCover" }}
+                />
+                <Dropdown
+                  name="Day"
+                  options={days}
+                  selectedOptionID={day !== -1 ? day : null}
+                  extraStyles={[styles.Dropdown]}
+                  position={{ block: "top", inline: "leftCover" }}
+                />
+                <Dropdown
+                  name="Year"
+                  options={years}
+                  selectedOptionID={year !== -1 ? year : null}
+                  extraStyles={[styles.Dropdown]}
+                  position={{ block: "top", inline: "leftCover" }}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </form>
-    </Minipage>
+      </Minipage>
+    </Form>
   );
 };
 

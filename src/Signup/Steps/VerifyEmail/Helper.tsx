@@ -2,9 +2,11 @@ import { useRef, useState } from "react";
 import OptionsPopup from "../../../util/components/OptionsPopup/OptionsPopup";
 import styles from "./Helper.module.scss";
 
-interface HelperProps {}
+interface HelperProps {
+  onResendCode: VoidFunction;
+}
 
-const Helper = ({}: HelperProps) => {
+const Helper = ({ onResendCode }: HelperProps) => {
   const [isPopupActive, setIsPopupActive] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -13,7 +15,7 @@ const Helper = ({}: HelperProps) => {
       mainOption: {
         id: 0,
         component: <span>Resend code</span>,
-        onSelect: () => {},
+        onSelect: onResendCode,
       },
     },
     {

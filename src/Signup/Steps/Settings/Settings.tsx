@@ -7,6 +7,7 @@ import Terms from "../../Terms/Terms";
 import NextStepButton from "../NextStepButton";
 import StepHeader from "../StepHeader";
 import Minipage from "../../../util/layouts/Minipage/Minipage";
+import Form from "../../../util/components/Form/Form";
 
 interface SettingsProps {
   settings: SettingsT;
@@ -54,20 +55,22 @@ const Settings = ({
   ));
 
   return (
-    <Minipage
-      header={
-        <StepHeader step={step} onPrevStepClick={prevStep}>
-          {header}
-        </StepHeader>
-      }
-      footer={<NextStepButton onClick={nextStep} isDisabled={false} />}
-    >
-      <div className={styles.Settings}>
-        <h1>Customize your experience</h1>
-        <div className={styles.SettingsList}>{settingsListJSX}</div>
-        <Terms />
-      </div>
-    </Minipage>
+    <Form onSubmit={nextStep}>
+      <Minipage
+        header={
+          <StepHeader step={step} onPrevStepClick={prevStep}>
+            {header}
+          </StepHeader>
+        }
+        footer={<NextStepButton isDisabled={false} />}
+      >
+        <div className={styles.Settings}>
+          <h1>Customize your experience</h1>
+          <div className={styles.SettingsList}>{settingsListJSX}</div>
+          <Terms />
+        </div>
+      </Minipage>
+    </Form>
   );
 };
 
