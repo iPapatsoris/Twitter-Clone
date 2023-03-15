@@ -1,12 +1,15 @@
 /* eslint-disable no-multi-str */
 import express from "express";
 import bodyParser from "body-parser";
+import cors from "cors";
 import tweetRoutes from "./routes/tweet.js";
 import userRoutes from "./routes/user.js";
+import emailCodeRoutes from "./routes/emailCode.js";
 
 const port = 3000;
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 // TODO: remove when auth is implemented
 export const currentUserID = 1;
 
@@ -21,6 +24,7 @@ export const currentUserID = 1;
 
 app.use("/user/", userRoutes);
 app.use("/tweet/", tweetRoutes);
+app.use("/emailCode/", emailCodeRoutes);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
