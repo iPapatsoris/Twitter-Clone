@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import Minipage from "../../../util/layouts/Minipage/Minipage";
 import FormInput from "../../../util/components/TextInput/FormTextInput";
@@ -8,15 +8,20 @@ import NextStepButton from "../NextStepButton";
 import StepHeader from "../StepHeader";
 import styles from "./MakePassword.module.scss";
 import Form from "../../../util/components/Form/Form";
+import { SetStateAction } from "react";
 
 type MakePasswordProps = {
   stepper: ReturnType<typeof useStepper>;
   header?: string;
+  setPassword: React.Dispatch<SetStateAction<string>>;
+  setPerformRegistration: React.Dispatch<SetStateAction<boolean>>;
 };
 
 const MakePassword = ({
-  stepper: { step, nextStep, prevStep },
+  stepper: { step, prevStep },
   header = "",
+  setPassword,
+  setPerformRegistration,
 }: MakePasswordProps) => {
   type FormInput = {
     password: string;
@@ -46,8 +51,13 @@ const MakePassword = ({
     formState: { isValid },
   } = form;
 
+  const onSubmit: SubmitHandler<FormInput> = ({ password }) => {
+    setPassword(password);
+    setPerformRegistration(true);
+  };
+
   return (
-    <Form onSubmit={handleSubmit(nextStep)}>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <Minipage
         header={
           <StepHeader step={step} onPrevStepClick={prevStep}>

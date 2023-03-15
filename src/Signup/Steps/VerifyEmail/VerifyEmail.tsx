@@ -7,7 +7,7 @@ import StepHeader from "../StepHeader";
 import Helper from "./Helper";
 import styles from "./VerifyEmail.module.scss";
 import { useMutation } from "react-query";
-import { VerifyEmailCode } from "../../../../backend/src/api/emailCode";
+import { VerifyEmailCode } from "../../../../backend/src/api/email";
 import useSendEmailCode from "./useSendEmailCode";
 import Form from "../../../util/components/Form/Form";
 import { postData } from "../../../util/api";

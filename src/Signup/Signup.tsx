@@ -1,5 +1,8 @@
 import dayjs from "dayjs";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useMutation } from "react-query";
+import { CreateUser } from "../../backend/src/api/user";
+import { postData } from "../util/api";
 import useStepper from "../util/hooks/useStepper";
 import AccountInfo from "./Steps/AccountInfo/AccountInfo";
 import MakePassword from "./Steps/MakePassword/MakePassword";
@@ -34,6 +37,24 @@ const Signup = ({}: SignupProps) => {
     personalizeAds: false,
   });
 
+  const [password, setPassword] = useState("");
+  const [performRegistration, setPerformRegistration] = useState(false);
+
+  const { mutate } = useMutation<
+    CreateUser["response"],
+    unknown,
+    CreateUser["request"]
+  >(async (body) => postData("user", body));
+
+  useEffect(() => {
+    console.log("registering");
+    // if (performRegistration) {
+    //   mutate({user: {
+
+    //   }})
+    // }
+  }, [performRegistration]);
+
   const [emailCodeHint, setEmailCodeHint] = useState("");
 
   const stepper = useStepper();
@@ -60,7 +81,11 @@ const Signup = ({}: SignupProps) => {
       email={accountInfo.email}
       codeHint={emailCodeHint}
     />,
-    <MakePassword stepper={stepper} />,
+    <MakePassword
+      setPerformRegistration={setPerformRegistration}
+      setPassword={setPassword}
+      stepper={stepper}
+    />,
   ];
 
   const stepsWithHeader = steps.map((stepComponent, index) =>

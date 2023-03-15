@@ -1,5 +1,5 @@
 import { useMutation } from "react-query";
-import { CreateEmailCode } from "../../../../backend/src/api/emailCode";
+import { CreateEmailCode } from "../../../../backend/src/api/email";
 import { postData } from "../../../util/api";
 
 const useSendEmailCode = (key: string) => {
