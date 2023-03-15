@@ -165,8 +165,9 @@ const TextInput = forwardRef(
           </div>
         </div>
         <div className={helperBoxStyles.join(" ")}>
-          {helper ? helper : error}
+          {error ? error : helper}
         </div>
+        {helper && error && <div className={styles.HelperBox}>{helper}</div>}
       </div>
     );
   }
