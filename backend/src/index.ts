@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import tweetRoutes from "./routes/tweet.js";
 import userRoutes from "./routes/user.js";
-import emailCodeRoutes from "./routes/emailCode.js";
+import emailRoutes from "./routes/email.js";
 
 const port = 3000;
 const app = express();
@@ -24,7 +24,7 @@ export const currentUserID = 1;
 
 app.use("/user/", userRoutes);
 app.use("/tweet/", tweetRoutes);
-app.use("/emailCode/", emailCodeRoutes);
+app.use("/email/", emailRoutes);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

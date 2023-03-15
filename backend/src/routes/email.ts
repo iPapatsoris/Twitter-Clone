@@ -1,12 +1,12 @@
 /* eslint-disable no-multi-str */
 import express, { Request, Response } from "express";
-import { CreateEmailCode, VerifyEmailCode } from "../api/emailCode.js";
+import { CreateEmailCode, VerifyEmailCode } from "../api/email.js";
 import {
   addEmailCode,
   codesMatch,
   emailHasCode,
   updateEmailCode,
-} from "../services/emailCode.js";
+} from "../services/email.js";
 const router = express.Router();
 
 router
