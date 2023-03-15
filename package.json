@@ -18,6 +18,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.2",
+    "react-loader-spinner": "^5.3.4",
+    "react-query": "^3.39.3",
     "react-router-dom": "^6.5.0",
     "vite-plugin-sass-dts": "^1.2.9",
     "yup": "^1.0.2"
