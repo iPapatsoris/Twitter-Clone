@@ -10,6 +10,8 @@ import styles, { InputWrapperNames } from "./InputWrapper.module.scss";
 import inputStyles from "./TextInput.module.scss";
 import eyeIcon from "../../../assets/icons/eye.png";
 import eyeStrikeIcon from "../../../assets/icons/eye-strike.png";
+import successIcon from "../../../assets/icons/success.png";
+import errorIcon from "../../../assets/icons/error.png";
 import Icon from "../Icon/Icon";
 
 interface InputProps {
@@ -23,9 +25,10 @@ interface InputProps {
   onChange: (e: any) => void;
   onBlur?: (e: any) => void;
   value: string;
+  isValid?: boolean;
   error?: string;
   helper?: React.ReactElement;
-  icon?: string;
+  showStatusIcon?: boolean;
   leader?: React.ReactNode;
 }
 
@@ -41,10 +44,11 @@ const TextInput = forwardRef(
       onChange,
       onBlur,
       value,
+      isValid = true,
       error,
       helper,
       type: initialType = "text",
-      icon,
+      showStatusIcon = false,
       leader = "",
     }: InputProps,
     ref
@@ -124,7 +128,13 @@ const TextInput = forwardRef(
           hover="none"
         />
       );
-    } else if (icon) {
+    } else if (showStatusIcon) {
+      let icon = "";
+      if (error) {
+        icon = errorIcon;
+      } else if (isValid) {
+        icon = successIcon;
+      }
       iconJSX = <Icon src={icon} hover="none" />;
     }
 

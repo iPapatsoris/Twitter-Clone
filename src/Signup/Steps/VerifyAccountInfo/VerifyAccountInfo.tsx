@@ -2,7 +2,6 @@ import TextInput from "../../../util/components/TextInput/TextInput";
 import useStepper from "../../../util/hooks/useStepper";
 import { AccountInfoT } from "../../Signup";
 import styles from "./VerifyAccountInfo.module.scss";
-import verifiedIcon from "../../../assets/icons/verified.png";
 import Terms from "../../Terms/Terms";
 import StepHeader from "../StepHeader";
 import Button from "../../../util/components/Button/Button";
@@ -67,7 +66,7 @@ const VerifyAccountInfo = ({
             name="name"
             placeholder="Name"
             readonly
-            icon={verifiedIcon}
+            showStatusIcon
             value={accountInfo.name}
             onClick={() => setStep(0)}
             onChange={() => {}}
@@ -76,7 +75,7 @@ const VerifyAccountInfo = ({
             name="email"
             placeholder="Email"
             readonly
-            icon={verifiedIcon}
+            showStatusIcon
             value={accountInfo.email}
             onClick={() => setStep(0)}
             onChange={() => {}}
@@ -85,7 +84,7 @@ const VerifyAccountInfo = ({
             name="birthDate"
             placeholder="Date of birth"
             readonly
-            icon={verifiedIcon}
+            showStatusIcon
             value={accountInfo.birthDate!.format("MMM M, YYYY")}
             onClick={() => setStep(0)}
             onChange={() => {}}

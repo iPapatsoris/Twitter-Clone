@@ -30,10 +30,11 @@ const FormInput = <FormInput extends FieldValues>({
   autofocus,
   type,
   leader,
+  showStatusIcon,
 }: FormInputProps<FormInput>) => {
   const {
     field: { onChange, onBlur, value, ref },
-    fieldState: { isDirty, error },
+    fieldState: { isDirty, error, invalid },
   } = useController({ name, control });
   const [hasBeenDirtied, setHasBeenDirtied] = useState(false);
   const [showErrors, setShowErrors] = useState(false);
@@ -50,6 +51,7 @@ const FormInput = <FormInput extends FieldValues>({
       setShowErrors(true);
     }
   };
+  console.log("invalid is ", invalid);
 
   return (
     <Input
@@ -61,9 +63,11 @@ const FormInput = <FormInput extends FieldValues>({
       onChange={onChange}
       value={value}
       ref={ref}
+      isValid={!invalid}
       error={showErrors && error ? error.message : ""}
       type={type}
       leader={leader}
+      showStatusIcon={showStatusIcon}
     />
   );
 };

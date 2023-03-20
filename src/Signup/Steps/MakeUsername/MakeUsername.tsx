@@ -113,6 +113,7 @@ const MakeUsername = ({
             placeholder="Usename"
             control={control}
             leader="@"
+            showStatusIcon
           />
         </div>
       </Minipage>
