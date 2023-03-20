@@ -1,11 +1,14 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SetStateAction } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useQuery } from "react-query";
+import { GetUsernameExists } from "../../../../backend/src/api/user";
+import { getData } from "../../../util/api";
 import Form from "../../../util/components/Form/Form";
 import FormInput from "../../../util/components/TextInput/FormTextInput";
 import useStepper from "../../../util/hooks/useStepper";
 import Minipage from "../../../util/layouts/Minipage/Minipage";
-import yup from "../../../util/yup";
+import yup, { yupSequentialStringSchema } from "../../../util/yup";
 import NextStepButton from "../NextStepButton";
 import StepHeader from "../StepHeader";
 import styles from "./MakeUsername.module.scss";
@@ -27,26 +30,51 @@ const MakeUsername = ({
     username: string;
   };
 
-  const schema = yup.object().shape({
-    username: yup
-      .string()
-      .required("Please enter a username.")
-      .max(15, "Your username cannot be longer than 15 characters.")
-      .matches(
-        /^\w*$/,
-        "Your usename can only contain alphanumeric characters and underscores."
-      )
-      .test(
-        "reservedWords",
-        'Your username cannot include the words "admin" or "twitter."',
-        (username) => {
-          const lowerCaseUsername = username.toLowerCase();
-          return (
-            !lowerCaseUsername.includes("admin") &&
-            !lowerCaseUsername.includes("twitter")
-          );
-        }
-      ),
+  const onSubmit: SubmitHandler<FormInput> = ({ username }) => {
+    setUsername(username);
+    setPerformRegistration(true);
+  };
+
+  const { refetch } = useQuery<GetUsernameExists["response"]>(
+    ["usernameExists"],
+    () => {
+      return getData("user/usernameExists/" + getValues("username"));
+    },
+    { enabled: false }
+  );
+
+  const schema: any = yup.object().shape({
+    username: yupSequentialStringSchema([
+      yup
+        .string()
+        .required("Please enter a username.")
+        .max(15, "Your username cannot be longer than 15 characters.")
+        .matches(
+          /^\w*$/,
+          "Your usename can only contain alphanumeric characters and underscores."
+        )
+        .test(
+          "reservedWords",
+          'Your username cannot include the words "admin" or "twitter."',
+          (username) => {
+            const lowerCaseUsername = username!.toLowerCase();
+            return (
+              !lowerCaseUsername.includes("admin") &&
+              !lowerCaseUsername.includes("twitter")
+            );
+          }
+        ),
+      yup
+        .string()
+        .test(
+          "usernameExists",
+          "That username has been taken. Please choose another.",
+          async () => {
+            const res = await refetch();
+            return !res.data?.data?.usernameExists;
+          }
+        ),
+    ]),
   });
 
   const form = useForm<FormInput>({
@@ -61,12 +89,9 @@ const MakeUsername = ({
     handleSubmit,
     control,
     formState: { isValid },
+    getValues,
   } = form;
 
-  const onSubmit: SubmitHandler<FormInput> = ({ username }) => {
-    setUsername(username);
-    setPerformRegistration(true);
-  };
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Minipage

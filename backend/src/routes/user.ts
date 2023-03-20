@@ -11,6 +11,7 @@ import {
   GetUserFields,
   GetUserFollowees,
   GetUserFollowers,
+  GetUsernameExists,
   GetUserParams,
   GetUserThreadsAndRetweets,
   GetUserTweetsAndRetweets,
@@ -35,6 +36,7 @@ import {
   mergeThreadsAndRetweets,
   mergeTweetsAndRetweets,
 } from "../services/tweet.js";
+import { usernameExists } from "../services/user.js";
 
 const router = express.Router();
 
@@ -388,6 +390,23 @@ router.get(
     res.send({
       ok: true,
       data: { tweets: await getTweets(tweetIDs.map(({ id }) => id)) },
+    });
+  }
+);
+
+router.get(
+  "/usernameExists/:username",
+  async (
+    req: TypedRequestQuery<{ username: string }>,
+    res: Response<GetUsernameExists["response"]>
+  ) => {
+    const { username } = req.params;
+
+    res.send({
+      ok: true,
+      data: {
+        usernameExists: await usernameExists(username),
+      },
     });
   }
 );

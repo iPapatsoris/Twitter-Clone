@@ -76,3 +76,7 @@ export type GetUserTweetsAndRetweets = {
     }>;
   }>;
 };
+
+export type GetUsernameExists = {
+  response: NormalResponse<{ usernameExists: boolean }>;
+};
