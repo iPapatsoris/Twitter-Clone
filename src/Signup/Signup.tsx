@@ -6,6 +6,7 @@ import { postData } from "../util/api";
 import useStepper from "../util/hooks/useStepper";
 import AccountInfo from "./Steps/AccountInfo/AccountInfo";
 import MakePassword from "./Steps/MakePassword/MakePassword";
+import MakeUsername from "./Steps/MakeUsername/MakeUsername";
 import Settings from "./Steps/Settings/Settings";
 import VerifyAccountInfo from "./Steps/VerifyAccountInfo/VerifyAccountInfo";
 import VerifyEmail from "./Steps/VerifyEmail/VerifyEmail";
@@ -37,6 +38,7 @@ const Signup = ({}: SignupProps) => {
     personalizeAds: false,
   });
 
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [performRegistration, setPerformRegistration] = useState(false);
 
@@ -81,9 +83,10 @@ const Signup = ({}: SignupProps) => {
       email={accountInfo.email}
       codeHint={emailCodeHint}
     />,
-    <MakePassword
+    <MakePassword setPassword={setPassword} stepper={stepper} />,
+    <MakeUsername
       setPerformRegistration={setPerformRegistration}
-      setPassword={setPassword}
+      setUsername={setUsername}
       stepper={stepper}
     />,
   ];

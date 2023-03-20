@@ -26,6 +26,7 @@ interface InputProps {
   error?: string;
   helper?: React.ReactElement;
   icon?: string;
+  leader?: React.ReactNode;
 }
 
 const TextInput = forwardRef(
@@ -44,6 +45,7 @@ const TextInput = forwardRef(
       helper,
       type: initialType = "text",
       icon,
+      leader = "",
     }: InputProps,
     ref
   ) => {
@@ -96,14 +98,17 @@ const TextInput = forwardRef(
     ];
     const labelStyles: string[] = [inputStyles.InheritCursor];
     const helperBoxStyles: InputWrapperNames[] = [styles.HelperBox];
+    const leaderStyles: inputStyles.TextInputNames[] = [inputStyles.Leader];
 
     if (isFocused) {
       wrapperStyles.push(styles.Focused);
       typingAreaStyles.push(inputStyles.Focused);
+      leaderStyles.push(inputStyles.Focused);
     }
     if (error) {
       wrapperStyles.push(styles.Error);
       helperBoxStyles.push(styles.Error);
+      leaderStyles.push(inputStyles.Error);
     }
     if (!value.length) {
       wrapperStyles.push(styles.Empty);
@@ -148,6 +153,7 @@ const TextInput = forwardRef(
               )}
             </div>
             <div className={inputStyles.Input}>
+              <span className={leaderStyles.join(" ")}>{leader}</span>
               <input
                 name={name}
                 ref={inputRef}

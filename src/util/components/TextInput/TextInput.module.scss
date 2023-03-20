@@ -19,6 +19,15 @@
   .Input {
     display: flex;
 
+    .Leader {
+      &.Focused {
+        color: var(--primary-color);
+      }
+      &.Error {
+        color: red;
+      }
+    }
+
     input {
       border: 0;
       width: 100%;

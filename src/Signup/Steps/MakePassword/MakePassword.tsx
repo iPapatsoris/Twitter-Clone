@@ -14,14 +14,12 @@ type MakePasswordProps = {
   stepper: ReturnType<typeof useStepper>;
   header?: string;
   setPassword: React.Dispatch<SetStateAction<string>>;
-  setPerformRegistration: React.Dispatch<SetStateAction<boolean>>;
 };
 
 const MakePassword = ({
-  stepper: { step, prevStep },
+  stepper: { step, nextStep, prevStep },
   header = "",
   setPassword,
-  setPerformRegistration,
 }: MakePasswordProps) => {
   type FormInput = {
     password: string;
@@ -30,10 +28,10 @@ const MakePassword = ({
   const schema = yup.object().shape({
     password: yup
       .string()
-      .required("Please enter a password")
+      .required("Please enter a password.")
       .min(
         8,
-        "Your password needs to be at least 8 characters. Please enter a longer one"
+        "Your password needs to be at least 8 characters. Please enter a longer one."
       ),
   });
 
@@ -53,7 +51,7 @@ const MakePassword = ({
 
   const onSubmit: SubmitHandler<FormInput> = ({ password }) => {
     setPassword(password);
-    setPerformRegistration(true);
+    nextStep();
   };
 
   return (
@@ -69,7 +67,7 @@ const MakePassword = ({
         <div className={styles.MakePassword}>
           <h1>You'll need a password</h1>
           <span className={styles.Info}>
-            Make sure it's 8 characters or more
+            Make sure it's 8 characters or more.
           </span>
           <FormInput
             autofocus

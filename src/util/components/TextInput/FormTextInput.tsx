@@ -29,6 +29,7 @@ const FormInput = <FormInput extends FieldValues>({
   maxLength,
   autofocus,
   type,
+  leader,
 }: FormInputProps<FormInput>) => {
   const {
     field: { onChange, onBlur, value, ref },
@@ -62,6 +63,7 @@ const FormInput = <FormInput extends FieldValues>({
       ref={ref}
       error={showErrors && error ? error.message : ""}
       type={type}
+      leader={leader}
     />
   );
 };

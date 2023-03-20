@@ -8,6 +8,8 @@ declare const classNames: typeof globalClassNames & {
   readonly Focused: "Focused";
   readonly Empty: "Empty";
   readonly Input: "Input";
+  readonly Leader: "Leader";
+  readonly Error: "Error";
   readonly InheritCursor: "InheritCursor";
 };
 export = classNames;
@@ -18,5 +20,7 @@ export type TextInputNames =
   | "Focused"
   | "Empty"
   | "Input"
+  | "Leader"
+  | "Error"
   | "InheritCursor"
   | GlobalClassNames;
