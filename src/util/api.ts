@@ -14,3 +14,10 @@ export const postData = async (path: string, body: any) => {
 
   return res.json();
 };
+
+export const getData = async (path: string) => {
+  const res = await fetch(getPath(path), {
+    method: "GET",
+  });
+  return res.json();
+};

@@ -43,14 +43,6 @@ export const codesMatch = async ({
   email: string;
   code: string;
 }) => {
-  console.log(email, code);
-
-  console.log(
-    await runQuery<{ code: string }>(
-      "SELECT code from email_code WHERE email = ?",
-      [email]
-    )
-  );
   const savedCode = (
     await runQuery<{ code: string }>(
       "SELECT code from email_code WHERE email = ?",
@@ -58,4 +50,14 @@ export const codesMatch = async ({
     )
   )[0].code;
   return code === savedCode;
+};
+
+export const emailExists = async (email: string) => {
+  const count = (
+    await runQuery<{ count: number }>(
+      "SELECT count(*) as count FROM user WHERE email = ?",
+      [email]
+    )
+  )[0].count;
+  return count > 0;
 };

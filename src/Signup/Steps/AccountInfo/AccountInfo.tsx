@@ -9,7 +9,6 @@ import {
 import { SetStateAction, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import dayjs from "dayjs";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormInput from "../../../util/components/TextInput/FormTextInput";
 import { AccountInfoT } from "../../Signup";
@@ -18,6 +17,10 @@ import NextStepButton from "../NextStepButton";
 import StepHeader from "../StepHeader";
 import Minipage from "../../../util/layouts/Minipage/Minipage";
 import Form from "../../../util/components/Form/Form";
+import { useQuery } from "react-query";
+import { GetEmail } from "../../../../backend/src/api/email";
+import { getData } from "../../../util/api";
+import yup, { yupSequentialStringSchema } from "../../../util/yup";
 
 interface AccountInfoProps {
   accountInfo: AccountInfoT;
@@ -74,13 +77,27 @@ const AccountInfo = ({
     birthDate: dayjs.Dayjs;
   };
 
+  const { refetch } = useQuery<GetEmail["response"]>(
+    ["emailExists"],
+    () => {
+      return getData("email/" + getValues("email"));
+    },
+    { enabled: false }
+  );
+
   const maxNameChars = 50;
-  const schema = yup.object().shape({
+  const schema: any = yup.object().shape({
     name: yup.string().required("What's your name?").max(maxNameChars),
-    email: yup
-      .string()
-      .required("Please enter your email.")
-      .email("Please enter a valid email."),
+    email: yupSequentialStringSchema([
+      yup.string().required("Please enter your email."),
+      yup.string().email("Please enter a valid email."),
+      yup
+        .string()
+        .test("checkEmail", "This email is already taken", async () => {
+          const res = await refetch();
+          return !res.data?.data?.emailExists;
+        }),
+    ]),
   });
 
   const form = useForm<FormInput>({
@@ -96,6 +113,7 @@ const AccountInfo = ({
     handleSubmit,
     control,
     formState: { isValid },
+    getValues,
   } = form;
 
   const isValidForm = isValid && day !== -1 && month !== -1 && year !== -1;

@@ -18,3 +18,9 @@ export type VerifyEmailCode = {
   };
   response: NormalResponse<{ codesMatch: boolean }>;
 };
+
+export type GetEmail = {
+  response: NormalResponse<{
+    emailExists: boolean;
+  }>;
+};
