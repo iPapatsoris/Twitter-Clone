@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { CreateUser } from "../../backend/src/api/user";
@@ -49,13 +49,18 @@ const Signup = ({}: SignupProps) => {
   >(async (body) => postData("user", body));
 
   useEffect(() => {
-    console.log("registering");
-    // if (performRegistration) {
-    //   mutate({user: {
-
-    //   }})
-    // }
-  }, [performRegistration]);
+    if (performRegistration) {
+      mutate({
+        user: {
+          username,
+          password,
+          name: accountInfo.name,
+          email: accountInfo.email,
+          birthDate: accountInfo.birthDate!.format("YYYY-MM-DD"),
+        },
+      });
+    }
+  }, [performRegistration, accountInfo, mutate, username, password]);
 
   const [emailCodeHint, setEmailCodeHint] = useState("");
 

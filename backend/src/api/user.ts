@@ -5,10 +5,7 @@ import { Thread } from "./tweet.js";
 
 export type CreateUser = {
   request: {
-    user: Omit<
-      User,
-      "id" | "totalFollowers" | "totalFollowees" | "totalTweets"
-    >;
+    user: Pick<User, "name" | "username" | "password" | "birthDate" | "email">;
   };
   response: NormalResponse;
 };

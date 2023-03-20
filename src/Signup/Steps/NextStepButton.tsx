@@ -1,27 +1,31 @@
 import Button from "../../util/components/Button/Button";
 
 interface NextStepButtonProps {
-  isDisabled: boolean;
+  isDisabled?: boolean;
   isLoading?: boolean;
   onClick?: VoidFunction;
+  color?: React.ComponentProps<typeof Button>["color"];
+  children?: string;
 }
 
 const NextStepButton = ({
   isLoading = false,
-  isDisabled,
+  isDisabled = false,
   onClick,
+  color = "black",
+  children = "Next",
 }: NextStepButtonProps) => (
   <Button
     type="submit"
     size="large"
     largeFont
-    color="black"
+    color={color}
     stretch
     disabled={isDisabled}
     isLoading={isLoading}
     onClick={onClick}
   >
-    Next
+    {children}
   </Button>
 );
 

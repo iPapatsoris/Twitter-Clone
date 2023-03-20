@@ -9,6 +9,7 @@ import Minipage from "../../../util/layouts/Minipage/Minipage";
 import { SetStateAction } from "react";
 import useSendEmailCode from "../VerifyEmail/useSendEmailCode";
 import Form from "../../../util/components/Form/Form";
+import NextStepButton from "../NextStepButton";
 
 interface VerifyAccountInfoProps {
   accountInfo: AccountInfoT;
@@ -49,15 +50,7 @@ const VerifyAccountInfo = ({
         footer={
           <>
             <Terms extraStyles={[styles.Terms]} />
-            <Button
-              type="submit"
-              size="large"
-              largeFont
-              color="primary"
-              stretch
-            >
-              Sign up
-            </Button>
+            <NextStepButton color="primary">Confirm</NextStepButton>
           </>
         }
       >

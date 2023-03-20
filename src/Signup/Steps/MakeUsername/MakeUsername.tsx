@@ -100,7 +100,11 @@ const MakeUsername = ({
             {header}
           </StepHeader>
         }
-        footer={<NextStepButton isDisabled={!isValid} />}
+        footer={
+          <NextStepButton color="primary" isDisabled={!isValid}>
+            Sign up
+          </NextStepButton>
+        }
       >
         <div className={styles.MakeUsername}>
           <h1>What should we call you?</h1>
