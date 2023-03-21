@@ -92,7 +92,6 @@ const TextInput = forwardRef(
         setIsFocused(true);
         // TODO: this line disables highlighting
         e.preventDefault();
-        e.stopPropagation();
       }
     };
 
