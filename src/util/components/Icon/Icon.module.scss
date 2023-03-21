@@ -17,6 +17,7 @@
 
   &.NoHover {
     padding: 0;
+    transition: none;
 
     .Icon {
       cursor: inherit;
