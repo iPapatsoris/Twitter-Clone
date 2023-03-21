@@ -129,13 +129,11 @@ const TextInput = forwardRef(
         />
       );
     } else if (showStatusIcon) {
-      let icon = "";
       if (error) {
-        icon = errorIcon;
+        iconJSX = <Icon src={errorIcon} hover="none" />;
       } else if (isValid) {
-        icon = successIcon;
+        iconJSX = <Icon src={successIcon} hover="none" />;
       }
-      iconJSX = <Icon src={icon} hover="none" />;
     }
 
     return (
