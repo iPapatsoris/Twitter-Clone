@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { OptionsPopupProps } from "../components/OptionsPopup/OptionsPopup";
 import { toPixels } from "../string";
 import useWindowDimensions from "./useWindowDimensions";
@@ -17,7 +17,7 @@ const usePopup = (
   const [justPlacedPopup, setJustPlacedPopup] = useState(false);
 
   // Place popup in relation to targetAreaRef according to position.
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (
       popupRef &&
       popupRef.current &&
@@ -64,7 +64,7 @@ const usePopup = (
 
   // Limit popup's max-height to the max available space just before it goes
   // off screen. Adjust on window resizing.
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (autoMaxHeight && justPlacedPopup && popupRef && popupRef.current) {
       popupRef.current.style.maxHeight = toPixels(
         windowHeight - popupRef.current.getBoundingClientRect().top
