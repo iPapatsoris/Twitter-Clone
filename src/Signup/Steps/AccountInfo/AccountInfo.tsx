@@ -27,6 +27,7 @@ interface AccountInfoProps {
   setAccountInfo: React.Dispatch<SetStateAction<AccountInfoT>>;
   stepper: ReturnType<typeof useStepper>;
   header?: string;
+  inputToFocus?: keyof AccountInfoT;
 }
 
 type Option = React.ComponentProps<typeof Dropdown>["options"][0];
@@ -36,6 +37,7 @@ const AccountInfo = ({
   accountInfo: { name, email, birthDate },
   setAccountInfo,
   header = "",
+  inputToFocus = "name",
 }: AccountInfoProps) => {
   const [month, setMonth] = useState(birthDate ? birthDate.month() : -1);
   const [day, setDay] = useState(birthDate ? birthDate.date() : -1);
@@ -71,12 +73,6 @@ const AccountInfo = ({
     },
   }));
 
-  type FormInput = {
-    name: string;
-    email: string;
-    birthDate: dayjs.Dayjs;
-  };
-
   const { refetch } = useQuery<GetEmail["response"]>(
     ["emailExists"],
     () => {
@@ -100,7 +96,7 @@ const AccountInfo = ({
     ]),
   });
 
-  const form = useForm<FormInput>({
+  const form = useForm<AccountInfoT>({
     defaultValues: {
       name: name,
       email: email,
@@ -117,7 +113,7 @@ const AccountInfo = ({
   } = form;
 
   const isValidForm = isValid && day !== -1 && month !== -1 && year !== -1;
-  const onSubmit: SubmitHandler<FormInput> = ({ name, email }) => {
+  const onSubmit: SubmitHandler<AccountInfoT> = ({ name, email }) => {
     setAccountInfo({
       name,
       email,
@@ -145,9 +141,14 @@ const AccountInfo = ({
                 placeholder="Name"
                 control={control}
                 maxLength={50}
-                autofocus
+                autofocus={inputToFocus === "name"}
               />
-              <FormInput name="email" placeholder="Email" control={control} />
+              <FormInput
+                name="email"
+                placeholder="Email"
+                control={control}
+                autofocus={inputToFocus === "email"}
+              />
             </div>
             <div>
               <h4>Date of birth</h4>

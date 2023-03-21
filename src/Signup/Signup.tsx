@@ -41,6 +41,7 @@ const Signup = ({}: SignupProps) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [performRegistration, setPerformRegistration] = useState(false);
+  const [inputToFocus, setInputToFocus] = useState<keyof AccountInfoT>("name");
 
   const { mutate } = useMutation<
     CreateUser["response"],
@@ -71,6 +72,7 @@ const Signup = ({}: SignupProps) => {
       stepper={stepper}
       accountInfo={accountInfo}
       setAccountInfo={setAccountInfo}
+      inputToFocus={inputToFocus}
     />,
     <Settings
       stepper={stepper}
@@ -81,6 +83,7 @@ const Signup = ({}: SignupProps) => {
       setEmailCodeHint={setEmailCodeHint}
       stepper={stepper}
       accountInfo={accountInfo!}
+      setInputToFocus={setInputToFocus}
     />,
     <VerifyEmail
       setEmailCodeHint={setEmailCodeHint}

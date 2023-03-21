@@ -16,6 +16,7 @@ interface VerifyAccountInfoProps {
   stepper: ReturnType<typeof useStepper>;
   header?: string;
   setEmailCodeHint: React.Dispatch<SetStateAction<string>>;
+  setInputToFocus: React.Dispatch<SetStateAction<keyof AccountInfoT>>;
 }
 
 const VerifyAccountInfo = ({
@@ -23,6 +24,7 @@ const VerifyAccountInfo = ({
   accountInfo,
   stepper: { step, setStep, nextStep, prevStep },
   setEmailCodeHint,
+  setInputToFocus,
 }: VerifyAccountInfoProps) => {
   const sendCode = useSendEmailCode(accountInfo.email).mutate;
 
@@ -61,7 +63,10 @@ const VerifyAccountInfo = ({
             readonly
             showStatusIcon
             value={accountInfo.name}
-            onClick={() => setStep(0)}
+            onClick={() => {
+              setInputToFocus("name");
+              setStep(0);
+            }}
             onChange={() => {}}
           />
           <TextInput
@@ -70,7 +75,10 @@ const VerifyAccountInfo = ({
             readonly
             showStatusIcon
             value={accountInfo.email}
-            onClick={() => setStep(0)}
+            onClick={() => {
+              setInputToFocus("email");
+              setStep(0);
+            }}
             onChange={() => {}}
           />
           <TextInput
@@ -79,7 +87,10 @@ const VerifyAccountInfo = ({
             readonly
             showStatusIcon
             value={accountInfo.birthDate!.format("MMM M, YYYY")}
-            onClick={() => setStep(0)}
+            onClick={() => {
+              setInputToFocus("birthDate");
+              setStep(0);
+            }}
             onChange={() => {}}
           />
         </div>

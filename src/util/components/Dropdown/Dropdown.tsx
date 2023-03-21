@@ -38,6 +38,7 @@ const Dropdown = (props: DropdownProps) => {
     wrapperStyles.push(styles.Focused);
     labelStyles.push(styles.Blue);
   }
+
   return (
     <div className={extraStyles.join(" ")}>
       <div
