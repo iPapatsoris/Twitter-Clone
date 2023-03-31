@@ -49,15 +49,22 @@ const ModalWrapper = ({
     e.stopPropagation();
   };
 
+  // const onClick = (e: any) => {
+  //   setIsActive(false);
+  //   e.stopPropagation();
+  // };
+
   const modalWrapper = (
     <div
       className={[styles.OuterWrapper, ...outerStyles].join(" ")}
       onMouseUp={onOuterMouseup}
+      // onClick={onClick}
     >
       <div
         ref={innerRef}
         className={innerStyles.join(" ")}
         onMouseUp={onInnerMouseup}
+        // onClick={onClick}
       >
         {children}
       </div>

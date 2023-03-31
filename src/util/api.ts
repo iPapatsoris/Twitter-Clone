@@ -3,10 +3,11 @@ const getPath = (path: string) => {
   return base + path;
 };
 
-export const postData = async (path: string, body: any) => {
+export const postData = async <T>(path: string, body: T) => {
   const res = await fetch(getPath(path), {
     method: "POST",
     body: JSON.stringify(body),
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -15,9 +16,13 @@ export const postData = async (path: string, body: any) => {
   return res.json();
 };
 
-export const getData = async (path: string) => {
+const simpleRequest = async (path: string, method: "GET" | "DELETE") => {
   const res = await fetch(getPath(path), {
-    method: "GET",
+    method,
+    credentials: "include",
   });
   return res.json();
 };
+
+export const getData = async (path: string) => simpleRequest(path, "GET");
+export const deleteData = async (path: string) => simpleRequest(path, "DELETE");

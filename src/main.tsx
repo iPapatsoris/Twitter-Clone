@@ -11,9 +11,11 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthContext.Provider
-        value={{
-          user: { id: 1, avatar: "adsf", username: "adsf", name: "asdf" },
-        }}
+        value={
+          {
+            // user: { id: 1, avatar: "adsf", username: "adsf", name: "asdf" },
+          }
+        }
       >
         <Router />
       </AuthContext.Provider>

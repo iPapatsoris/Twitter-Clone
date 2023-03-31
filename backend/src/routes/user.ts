@@ -37,6 +37,7 @@ import {
   mergeTweetsAndRetweets,
 } from "../services/tweet.js";
 import { usernameExists } from "../services/user.js";
+import { requireAuth } from "./auth.js";
 
 const router = express.Router();
 
