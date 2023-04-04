@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { CreateUser } from "../../backend/src/api/user";

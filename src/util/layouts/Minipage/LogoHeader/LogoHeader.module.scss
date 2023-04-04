@@ -1,0 +1,21 @@
+.LogoHeader {
+  display: grid;
+  grid-template: "icon logo ." / 1fr 3fr 1fr;
+  padding-top: 1rem;
+
+  .NavIcon {
+    grid-area: icon;
+    padding-left: 1rem;
+  }
+
+  .Logo {
+    grid-area: logo;
+    justify-self: center;
+    align-self: center;
+
+    .LogoSize {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}

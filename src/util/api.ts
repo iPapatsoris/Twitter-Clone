@@ -3,7 +3,7 @@ const getPath = (path: string) => {
   return base + path;
 };
 
-export const postData = async <T>(path: string, body: T) => {
+export const postData = async (path: string, body: any) => {
   const res = await fetch(getPath(path), {
     method: "POST",
     body: JSON.stringify(body),
