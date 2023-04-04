@@ -4,6 +4,9 @@ import ModalWrapper from "../ModalWrapper/ModalWrapper";
 import Option, { OptionWithNested } from "./Option";
 import styles from "./OptionsPopup.module.scss";
 
+// Note: If OptionsPopup is placed as the child of the element that opens it
+// onClick, the onClick event handler passed to the individual options
+// should call stopPropagation(), to prevent it from re-opening after it closes.
 export interface OptionsPopupProps {
   // Options for the popup. Nested options are supported that expand it
   options: OptionWithNested[];

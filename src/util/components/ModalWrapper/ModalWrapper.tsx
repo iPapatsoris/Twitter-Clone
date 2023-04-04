@@ -11,7 +11,7 @@ import styles from "./ModalWrapper.module.scss";
 interface ModalWrapperProps {
   outerStyles?: string[];
   innerStyles?: string[];
-  children: React.ReactElement;
+  children: React.ReactElement | React.ReactElement[];
   innerRef?: React.RefObject<HTMLDivElement>;
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 }

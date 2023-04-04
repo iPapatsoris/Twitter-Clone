@@ -7,13 +7,27 @@ import { useRef, useState } from "react";
 import { OptionWithNested } from "../../util/components/OptionsPopup/Option";
 import { useAuth } from "../../util/hooks/useAuth";
 import { webPath } from "../../util/paths";
+import { useMutation } from "react-query";
+import { NormalResponse } from "../../../backend/src/api/common";
+import { deleteData } from "../../util/api";
 
 const ProfileButton = () => {
   const [showOptions, setShowOptions] = useState(false);
 
   const profileButtonRef = useRef(null);
+  const { user, setUser } = useAuth();
+  const { mutate } = useMutation<NormalResponse>(
+    ["logout"],
+    () => deleteData("auth/logout"),
+    {
+      onSuccess: (data) => {
+        if (data.ok) {
+          setUser(null);
+        }
+      },
+    }
+  );
 
-  const { user } = useAuth();
   if (!user) return null;
 
   const options: Array<OptionWithNested> = [
@@ -28,17 +42,13 @@ const ProfileButton = () => {
       mainOption: {
         component: "Logout @" + user.username,
         id: 2,
-        onSelect: () => {},
+        onSelect: mutate,
       },
     },
   ];
 
   return (
-    <div
-      ref={profileButtonRef}
-      onClick={() => setShowOptions(true)}
-      className={[styles.ProfileButton, styles.NoHighlighting].join(" ")}
-    >
+    <>
       {showOptions && (
         <OptionsPopup
           options={options}
@@ -48,15 +58,23 @@ const ProfileButton = () => {
           extraPopupStyles={[styles.PopupStyles]}
         />
       )}
-      <UserCard
-        name={user.name}
-        username={user.username}
-        avatar={webPath(user.avatar)}
-        isStandalone
+      <div
+        ref={profileButtonRef}
+        onClick={() => {
+          setShowOptions(true);
+        }}
+        className={[styles.ProfileButton, styles.NoHighlighting].join(" ")}
       >
-        <Icon src={dots} title="" hover="none" alt="Account options" />
-      </UserCard>
-    </div>
+        <UserCard
+          name={user.name}
+          username={user.username}
+          avatar={webPath(user.avatar)}
+          isStandalone
+        >
+          <Icon src={dots} title="" hover="none" alt="Account options" />
+        </UserCard>
+      </div>
+    </>
   );
 };
 
