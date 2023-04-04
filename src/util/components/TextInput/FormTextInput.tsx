@@ -51,7 +51,6 @@ const FormInput = <FormInput extends FieldValues>({
       setShowErrors(true);
     }
   };
-  console.log("invalid is ", invalid);
 
   return (
     <Input
