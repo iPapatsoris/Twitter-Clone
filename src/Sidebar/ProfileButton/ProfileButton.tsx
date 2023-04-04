@@ -1,14 +1,20 @@
 import UserCard from "../../util/components/UserCard/UserCard";
 import styles from "./ProfileButton.module.scss";
-import avatar from "../../assets/cats/cat2.jpg";
 import dots from "../../assets/icons/dots.png";
 import Icon from "../../util/components/Icon/Icon";
 import OptionsPopup from "../../util/components/OptionsPopup/OptionsPopup";
 import { useRef, useState } from "react";
 import { OptionWithNested } from "../../util/components/OptionsPopup/Option";
+import { useAuth } from "../../util/hooks/useAuth";
+import { webPath } from "../../util/paths";
 
 const ProfileButton = () => {
   const [showOptions, setShowOptions] = useState(false);
+
+  const profileButtonRef = useRef(null);
+
+  const { user } = useAuth();
+  if (!user) return null;
 
   const options: Array<OptionWithNested> = [
     {
@@ -20,14 +26,12 @@ const ProfileButton = () => {
     },
     {
       mainOption: {
-        component: "Logout @toulouse-cat",
+        component: "Logout @" + user.username,
         id: 2,
         onSelect: () => {},
       },
     },
   ];
-
-  const profileButtonRef = useRef(null);
 
   return (
     <div
@@ -45,9 +49,9 @@ const ProfileButton = () => {
         />
       )}
       <UserCard
-        name="Toulouse"
-        username="toulouse-cat"
-        avatar={avatar}
+        name={user.name}
+        username={user.username}
+        avatar={webPath(user.avatar)}
         isStandalone
       >
         <Icon src={dots} title="" hover="none" alt="Account options" />

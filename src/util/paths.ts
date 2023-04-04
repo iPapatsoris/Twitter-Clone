@@ -52,4 +52,6 @@ export const isNotificationsPage = (path: string) =>
   path === paths.notifications.verified ||
   path === paths.notifications.mentions;
 
+export const webPath = (path: string) => "//www." + path;
+
 export default paths;

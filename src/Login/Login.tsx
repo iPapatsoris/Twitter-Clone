@@ -8,24 +8,32 @@ import Button from "../util/components/Button/Button";
 import Form from "../util/components/Form/Form";
 import { ModalContext } from "../util/components/Modal/Modal";
 import FormInput from "../util/components/TextInput/FormTextInput";
+import { useAuth } from "../util/hooks/useAuth";
 import LogoHeader from "../util/layouts/Minipage/LogoHeader/LogoHeader";
 import Minipage from "../util/layouts/Minipage/Minipage";
 import yup from "../util/yup";
 import styles from "./Login.module.scss";
 
 const Login = () => {
+  const { setUser } = useAuth();
   const { mutate, isLoading } = useMutation<
     LoginUser["response"],
     unknown,
     LoginUser["request"]
-  >(["login"], (body) => postData("auth/login", body));
+  >(["login"], (body) => postData("auth/login", body), {
+    onSuccess: (data) => {
+      if (data.data) {
+        setUser(data.data.user);
+      }
+    },
+  });
 
   const schema: any = yup.object().shape({
     email: yup
       .string()
       .required("Please enter your email.")
       .email("Please enter a valid email."),
-    password: yup.string(),
+    password: yup.string().required(),
   });
 
   const form = useForm<LoginUser["request"]["user"]>({
