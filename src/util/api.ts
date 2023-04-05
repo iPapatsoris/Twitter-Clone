@@ -9,7 +9,7 @@ const buildURL = <T extends string>(path: string, params: T[]) => {
 export const postData = async <T extends string>(
   path: string,
   body: any,
-  params: T[]
+  params: T[] = []
 ) => {
   const res = await fetch(buildURL(path, params), {
     method: "POST",
