@@ -35,105 +35,20 @@ const Main = () => {
     headerLayout = <HeaderMain>{header}</HeaderMain>;
   }
 
-  const placeholderJSX = !isErrorPage && (
-    <>
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-      asdfadsf <br />
-    </>
-  );
+  const placeholderJSX = [];
+  for (let count = 0; count < 100; count++)
+    placeholderJSX.push(
+      <>
+        asdfadsf <br />
+      </>
+    );
 
   return (
     <main>
       {!isErrorPage && headerLayout}
       <div className={isErrorPage ? styles.ErrorPage : styles.ContentMain}>
         <Outlet />
-        {/* {placeholderJSX} */}
+        {!isErrorPage && placeholderJSX}
       </div>
       {!isErrorPage && path !== getPagePath("explore") && <HeaderRight />}
       {!isErrorPage && <ContentRight />}
