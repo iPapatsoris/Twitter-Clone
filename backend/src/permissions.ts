@@ -6,8 +6,10 @@ export const checkPermissions = (
   fields: string[]
 ) => {
   let fieldWhitelist: Array<GetUserFields | UpdateUserFields>;
+
   if (endpoint === "GetUser") {
     fieldWhitelist = [
+      "id",
       "username",
       "name",
       "avatar",

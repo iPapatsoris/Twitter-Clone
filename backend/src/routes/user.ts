@@ -37,7 +37,6 @@ import {
   mergeTweetsAndRetweets,
 } from "../services/tweet.js";
 import { usernameExists } from "../services/user.js";
-import { requireAuth } from "./auth.js";
 
 const router = express.Router();
 
@@ -110,9 +109,9 @@ router
   );
 
 router.get(
-  "/:id",
+  "/:username",
   async (
-    req: TypedRequestQuery<{ id: string }, Fields<GetUserFields>>,
+    req: TypedRequestQuery<{ username: string }, Fields<GetUserFields>>,
     res: Response<GetUser["response"]>
   ) => {
     const fields = Object.keys(req.query);
@@ -152,18 +151,19 @@ router.get(
 
     // Adjust query fields to select
     const views = fields.map((f) => "," + f);
-    const userID = req.params.id;
+    const username = req.params.username;
 
     // Query regular fields
     const [user] = await runQuery<GetUserParams>(
-      "SELECT id" + views.join("") + " FROM user WHERE id = ?",
-      [userID]
+      "SELECT id" + views.join("") + " FROM user WHERE username = ?",
+      [username]
     );
 
     if (!user) {
       res.send({ ok: false });
       return;
     }
+    const { id: userID } = user;
 
     if (getTotalTweets) {
       user.totalTweets = await getTotalUserTweets(Number(userID));
