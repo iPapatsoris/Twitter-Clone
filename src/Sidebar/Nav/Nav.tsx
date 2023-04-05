@@ -15,34 +15,32 @@ import listIcon from "../../assets/icons/nav/list.png";
 import listIconActive from "../../assets/icons/nav/list-active.png";
 import settingsIcon from "../../assets/icons/settings.png";
 import settingsIconActive from "../../assets/icons/nav/settings-active.png";
-import { useLocation } from "react-router-dom";
 import NavItem from "./NavItem";
-import paths, { isNotificationsPage } from "../../util/paths";
+import { getPagePath } from "../../util/paths";
 import { useAuth } from "../../util/hooks/useAuth";
 
 const Nav = () => {
-  const path = useLocation().pathname;
   const { user } = useAuth();
 
+  let itemPath = getPagePath("explore");
   const explore = (
     <NavItem
-      icon={path === paths.explore ? exploreIconActive : exploreIcon}
+      icon={exploreIcon}
+      iconActive={exploreIconActive}
       title="Explore"
-      alt="Explore"
-      path={paths.explore}
-      isActive={path === paths.explore}
+      path={itemPath}
     />
   );
 
+  itemPath = getPagePath("settings");
   const guestNav = (
     <>
       {explore}
       <NavItem
-        icon={path === paths.settings ? settingsIconActive : settingsIcon}
+        iconActive={settingsIconActive}
+        icon={settingsIcon}
         title="Settings"
-        alt="Settings"
-        path={paths.settings}
-        isActive={path === paths.settings}
+        path={itemPath}
       />
     </>
   );
@@ -54,53 +52,43 @@ const Nav = () => {
       ) : (
         <>
           <NavItem
-            icon={path === paths.home ? homeIconActive : homeIcon}
+            iconActive={homeIconActive}
+            icon={homeIcon}
             title="Home"
-            alt="Home"
-            path={paths.home}
-            isActive={path === paths.home}
+            path={getPagePath("home")}
           />
           {explore}
           <NavItem
-            icon={
-              isNotificationsPage(path)
-                ? notificationIconActive
-                : notificationIcon
-            }
+            iconActive={notificationIconActive}
+            icon={notificationIcon}
             title="Notifications"
-            alt="Notifications"
-            path={paths.notifications.self}
-            isActive={isNotificationsPage(path)}
+            path={getPagePath("notifications")}
           />
           <NavItem
-            icon={path === paths.messages ? messageIconActive : messageIcon}
+            iconActive={messageIconActive}
+            icon={messageIcon}
             title="Messages"
-            alt="Messages"
-            path={paths.messages}
-            isActive={path === paths.messages}
+            path={getPagePath("messages")}
           />
           <NavItem
-            icon={path === paths.bookmarks ? bookmarkIconActive : bookmarkIcon}
+            iconActive={bookmarkIconActive}
+            icon={bookmarkIcon}
             title="Bookmarks"
-            alt="Bookmarks"
-            path={paths.bookmarks}
-            isActive={path === paths.bookmarks}
+            path={getPagePath("bookmarks")}
           />
           <NavItem
-            icon={path === paths.lists ? listIconActive : listIcon}
+            icon={listIcon}
+            iconActive={listIconActive}
             title="Lists"
-            alt="Lists"
-            path={paths.lists}
-            isActive={path === paths.lists}
+            path={getPagePath("lists", user)}
           />
           <NavItem
-            icon={path === paths.profile ? profileIconActive : profileIcon}
+            icon={profileIcon}
+            iconActive={profileIconActive}
             title="Profile"
-            alt="Profile"
-            path={paths.profile}
-            isActive={path === paths.profile}
+            path={getPagePath("profileLoggedIn", user)}
           />
-          <NavItem icon={moreIcon} title="More" alt="More options" isPopup />
+          <NavItem icon={moreIcon} title="More" isPopup />
         </>
       )}
     </nav>

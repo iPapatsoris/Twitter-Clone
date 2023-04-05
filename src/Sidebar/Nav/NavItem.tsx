@@ -1,24 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Icon from "../../util/components/Icon/Icon";
+import { getPagePath } from "../../util/paths";
 import MoreOptionsNavItem from "./MoreOptionsNavItem/MoreOptionsNavItem";
 import styles from "./Nav.module.scss";
 interface NavItemProps {
   icon: string;
+  iconActive?: string;
   title: string;
-  alt: string;
   path?: string;
-  isActive?: boolean;
   isPopup?: boolean;
 }
 
 const NavItem = ({
   icon,
+  iconActive,
   title,
-  alt,
-  path = "/error",
-  isActive = false,
+  path: itemPath = getPagePath("error"),
   isPopup = false,
 }: NavItemProps) => {
+  const currentPath = useLocation().pathname;
+  const isActive = itemPath === currentPath;
   const navItemClass = [styles.BiggerText, isActive ? styles.Bold : ""].join(
     " "
   );
@@ -26,7 +27,12 @@ const NavItem = ({
   const item = (
     <div className={styles.NavItem}>
       <div className={styles.IconAndTitle}>
-        <Icon src={icon} extraStyles={[styles.Icon]} hover="none" alt={alt} />
+        <Icon
+          src={isActive && iconActive ? iconActive : icon}
+          extraStyles={[styles.Icon]}
+          hover="none"
+          alt={title}
+        />
         <span className={navItemClass}>{title}</span>
       </div>
     </div>
@@ -35,7 +41,7 @@ const NavItem = ({
   return isPopup ? (
     <MoreOptionsNavItem>{item}</MoreOptionsNavItem>
   ) : (
-    <Link to={path}>{item}</Link>
+    <Link to={itemPath}>{item}</Link>
   );
 };
 

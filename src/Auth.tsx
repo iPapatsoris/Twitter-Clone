@@ -6,7 +6,7 @@ import React, {
 } from "react";
 import { User } from "../backend/src/entities/user";
 
-type LoggedInUser = Pick<User, "avatar" | "username" | "name"> | null;
+export type LoggedInUser = Pick<User, "avatar" | "username" | "name"> | null;
 
 export const AuthContext = createContext<{
   user: LoggedInUser;

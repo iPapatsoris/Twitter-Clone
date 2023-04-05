@@ -1,39 +1,45 @@
 import { useMatches } from "react-router-dom";
+import { LoggedInUser } from "../Auth";
 
-const paths: {
-  home: string;
-  explore: string;
-  notifications: {
-    self: string;
-    verified: string;
-    mentions: string;
+type Page =
+  | "home"
+  | "explore"
+  | "notifications"
+  | "notificationsVerified"
+  | "notificationsMentions"
+  | "messages"
+  | "bookmarks"
+  | "lists"
+  | "profileLoggedIn"
+  | "profileAny"
+  | "error"
+  | "settings"
+  | "tos"
+  | "privacy"
+  | "cookies";
+
+export const getPagePath = (page: Page, user: LoggedInUser = null) => {
+  const paths: {
+    [key in Page]: string;
+  } = {
+    home: "/home",
+    explore: "/explore",
+    notifications: "/notifications",
+    notificationsVerified: "/notifications/verified",
+    notificationsMentions: "/notifications/mentions",
+    messages: "/messages",
+    bookmarks: "/i/bookmarks",
+    lists: "/" + user?.username + "/lists",
+    profileLoggedIn: "/" + user?.username,
+    profileAny: "/:username",
+    error: "/error",
+    settings: "/settings",
+    tos: "/tos",
+    privacy: "/privacy",
+    cookies: "/cookies",
   };
-  messages: string;
-  bookmarks: string;
-  lists: string;
-  profile: string;
-  error: string;
-  settings: string;
-  tos: string;
-  privacy: string;
-  cookies: string;
-} = {
-  home: "/home",
-  explore: "/explore",
-  notifications: {
-    self: "/notifications",
-    verified: "/notifications/verified",
-    mentions: "/notifications/mentions",
-  },
-  messages: "/messages",
-  bookmarks: "/i/bookmarks",
-  lists: "/:username/lists",
-  profile: "/:username",
-  error: "/error",
-  settings: "/settings",
-  tos: "/tos",
-  privacy: "/privacy",
-  cookies: "/cookies",
+
+  return paths[page];
 };
 
 export const useRouteMatch = (idToMatch: string) => {
@@ -43,15 +49,12 @@ export const useRouteMatch = (idToMatch: string) => {
       return true;
     }
   }
-
   return false;
 };
 
 export const isNotificationsPage = (path: string) =>
-  path === paths.notifications.self ||
-  path === paths.notifications.verified ||
-  path === paths.notifications.mentions;
+  path === getPagePath("notifications", null) ||
+  path === getPagePath("notificationsMentions", null) ||
+  path === getPagePath("notificationsVerified", null);
 
 export const webPath = (path: string) => "//www." + path;
-
-export default paths;

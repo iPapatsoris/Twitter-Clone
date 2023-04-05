@@ -1,4 +1,3 @@
-import React, { useContext } from "react";
 import {
   Navigate,
   Route,
@@ -12,11 +11,12 @@ import Home from "./Home/Home";
 import "./global.css";
 import ErrorPage from "./Main/routes/ErrorPage/ErrorPage";
 import Explore from "./Main/routes/Explore/Explore";
-import paths from "./util/paths";
 import Notifications from "./Main/routes/Notifications/Notifications";
 import NotificationsVerified from "./Main/routes/Notifications/NotificationsVerified";
 import NotificationsMentions from "./Main/routes/Notifications/NotificationsMentions";
 import { useAuth } from "./util/hooks/useAuth";
+import { getPagePath } from "./util/paths";
+import Profile from "./Main/routes/Profile/Profile";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const { user } = useAuth();
@@ -24,59 +24,61 @@ const RequireAuth = ({ children }: { children: JSX.Element }) => {
   return user ? (
     children
   ) : (
-    <Navigate to={paths.explore} state={{ from: location }} />
+    <Navigate to={getPagePath("explore")} state={{ from: location }} />
   );
 };
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <>
-      <Route path="/" element={<App />}>
-        <Route
-          path={paths.home}
-          element={
-            <RequireAuth>
-              <Home />
-            </RequireAuth>
-          }
-        />
-        <Route path={paths.explore} element={<Explore />} />
-        <Route
-          path={paths.notifications.self}
-          element={
-            <RequireAuth>
-              <Notifications />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path={paths.notifications.verified}
-          element={
-            <RequireAuth>
-              <NotificationsVerified />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path={paths.notifications.mentions}
-          element={
-            <RequireAuth>
-              <NotificationsMentions />
-            </RequireAuth>
-          }
-        />
-        {/* <Route index element={<Navigate to={paths.notifications.self} />} /> */}
-        <Route path={paths.messages} />
-        <Route path={paths.bookmarks} />
-        <Route path={paths.lists} />
-        <Route path={paths.profile} />
-        <Route index element={<Navigate to={paths.home} />} />
-        <Route path="*" id={paths.error} element={<ErrorPage />} />
-      </Route>
-    </>
-  )
-);
 
 const Router = () => {
+  const { user } = useAuth();
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <>
+        <Route path="/" element={<App />}>
+          <Route
+            path={getPagePath("home")}
+            element={
+              <RequireAuth>
+                <Home />
+              </RequireAuth>
+            }
+          />
+          <Route path={getPagePath("explore")} element={<Explore />} />
+          <Route
+            path={getPagePath("notifications")}
+            element={
+              <RequireAuth>
+                <Notifications />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={getPagePath("notificationsVerified")}
+            element={
+              <RequireAuth>
+                <NotificationsVerified />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={getPagePath("notificationsMentions")}
+            element={
+              <RequireAuth>
+                <NotificationsMentions />
+              </RequireAuth>
+            }
+          />
+          {/* <Route index element={<Navigate to={paths.notifications.self} />} /> */}
+          <Route path={getPagePath("messages")} />
+          <Route path={getPagePath("bookmarks")} />
+          <Route path={getPagePath("lists", user)} />
+          <Route path={getPagePath("profileAny")} element={<Profile />} />
+          <Route index element={<Navigate to={getPagePath("home")} />} />
+          <Route path="*" id={getPagePath("error")} element={<ErrorPage />} />
+        </Route>
+      </>
+    )
+  );
+
   return <RouterProvider router={router} />;
 };
 

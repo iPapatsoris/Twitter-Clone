@@ -2,12 +2,12 @@ import styles from "./App.module.scss";
 import Main from "./Main/layouts/Main";
 import Sidebar from "./Sidebar/Sidebar";
 import { useLocation } from "react-router-dom";
-import paths, { isNotificationsPage, useRouteMatch } from "./util/paths";
+import { getPagePath, isNotificationsPage, useRouteMatch } from "./util/paths";
 import { useMemo } from "react";
 import useScrollToTop from "./util/hooks/useScrollToTop";
 
 const App = () => {
-  const isErrorPage = useRouteMatch(paths.error);
+  const isErrorPage = useRouteMatch(getPagePath("error"));
   const path = useLocation().pathname;
   useScrollToTop();
 
@@ -26,7 +26,7 @@ const App = () => {
   // Modify grid layout for different pages
   if (isErrorPage) {
     extraClasses.push(styles.ErrorPage);
-  } else if (path === paths.explore) {
+  } else if (path === getPagePath("explore")) {
     extraClasses.push(styles.NoHeaderRight);
   } else if (isNotificationsPage(path)) {
     extraClasses.push(styles.ExtendedHeaderMain);
