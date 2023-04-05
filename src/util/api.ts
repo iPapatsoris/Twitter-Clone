@@ -1,10 +1,17 @@
-const getPath = (path: string) => {
+const buildURL = <T extends string>(path: string, params: T[]) => {
   const base = import.meta.env.VITE_API_PATH;
-  return base + path;
+  const url = new URL(path, base);
+  params.forEach((param) => url.searchParams.append(param, ""));
+
+  return url;
 };
 
-export const postData = async (path: string, body: any) => {
-  const res = await fetch(getPath(path), {
+export const postData = async <T extends string>(
+  path: string,
+  body: any,
+  params: T[]
+) => {
+  const res = await fetch(buildURL(path, params), {
     method: "POST",
     body: JSON.stringify(body),
     credentials: "include",
@@ -16,13 +23,23 @@ export const postData = async (path: string, body: any) => {
   return res.json();
 };
 
-const simpleRequest = async (path: string, method: "GET" | "DELETE") => {
-  const res = await fetch(getPath(path), {
+const simpleRequest = async <T extends string>(
+  path: string,
+  method: "GET" | "DELETE",
+  params: T[]
+) => {
+  const res = await fetch(buildURL(path, params), {
     method,
     credentials: "include",
   });
   return res.json();
 };
 
-export const getData = async (path: string) => simpleRequest(path, "GET");
-export const deleteData = async (path: string) => simpleRequest(path, "DELETE");
+export const getData = async <T extends string>(
+  path: string,
+  params: T[] = []
+) => simpleRequest(path, "GET", params);
+export const deleteData = async <T extends string>(
+  path: string,
+  params: T[] = []
+) => simpleRequest(path, "DELETE", params);
