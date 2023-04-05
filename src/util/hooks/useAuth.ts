@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../../Auth";
 
 export const useAuth = () => {
@@ -10,10 +10,12 @@ export const useAuth = () => {
     setUserContext(user);
   };
 
-  const storedUser = localStorage.getItem("user");
-  if (storedUser && !userContext) {
-    setUserContext(JSON.parse(storedUser));
-  }
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser && !userContext) {
+      setUserContext(JSON.parse(storedUser));
+    }
+  }, [setUserContext, userContext]);
 
   return { user: userContext, setUser };
 };
