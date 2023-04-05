@@ -133,7 +133,7 @@ const Main = () => {
       {!isErrorPage && headerLayout}
       <div className={isErrorPage ? styles.ErrorPage : styles.ContentMain}>
         <Outlet />
-        {placeholderJSX}
+        {/* {placeholderJSX} */}
       </div>
       {!isErrorPage && path !== getPagePath("explore") && <HeaderRight />}
       {!isErrorPage && <ContentRight />}
