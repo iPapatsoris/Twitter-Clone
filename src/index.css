@@ -12,6 +12,10 @@
   font-size: var(--bigger-text);
 }
 
+.SmallerText {
+  font-size: var(--smaller-text);
+}
+
 .Flex {
   display: flex;
 }

@@ -14,13 +14,27 @@ import HeaderExplore from "../routes/Explore/HeaderExplore/HeaderExplore";
 import HeaderNotifications from "../routes/Notifications/HeaderNotifications/HeaderNotifications";
 import HeaderExtendedNotifications from "../routes/Notifications/HeaderNotifications/HeaderExtendedNotifications/HeaderExtendedNotifications";
 import HeaderMainExtension from "./Header/HeaderMain/HeaderMainExtension/HeaderMainExtension";
+import { User } from "../../../backend/src/entities/user";
+import { createContext, SetStateAction, useState } from "react";
+import HeaderProfile from "../routes/Profile/HeaderProfile/HeaderProfile";
+
+export type HeaderProfileUser = Pick<User, "name" | "totalTweets"> | null;
+export const HeaderProfileContext = createContext<{
+  setUser: React.Dispatch<SetStateAction<HeaderProfileUser>>;
+}>({ setUser: () => {} });
 
 const Main = () => {
+  const [user, setUser] = useState<HeaderProfileUser>(null);
+
   const isErrorPage = useRouteMatch(getPagePath("error"));
+  const isProfilePage = useRouteMatch(getPagePath("profileAny"));
+
   const path = useLocation().pathname;
   let header = <HeaderHome />;
   if (path === getPagePath("explore")) {
     header = <HeaderExplore />;
+  } else if (isProfilePage) {
+    header = <HeaderProfile user={user} />;
   }
 
   let headerLayout;
@@ -45,14 +59,16 @@ const Main = () => {
 
   return (
     <main>
-      {!isErrorPage && headerLayout}
-      <div className={isErrorPage ? styles.ErrorPage : styles.ContentMain}>
-        <Outlet />
-        {!isErrorPage && placeholderJSX}
-      </div>
-      {!isErrorPage && path !== getPagePath("explore") && <HeaderRight />}
-      {!isErrorPage && <ContentRight />}
-      {!isErrorPage && <StickyInbox />}
+      <HeaderProfileContext.Provider value={{ setUser }}>
+        {!isErrorPage && headerLayout}
+        <div className={isErrorPage ? styles.ErrorPage : styles.ContentMain}>
+          <Outlet />
+          {/* {!isErrorPage && placeholderJSX} */}
+        </div>
+        {!isErrorPage && path !== getPagePath("explore") && <HeaderRight />}
+        {!isErrorPage && <ContentRight />}
+        {!isErrorPage && <StickyInbox />}
+      </HeaderProfileContext.Provider>
     </main>
   );
 };

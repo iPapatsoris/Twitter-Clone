@@ -2,6 +2,7 @@ declare const classNames: {
   readonly Sticky: "Sticky";
   readonly Bold: "Bold";
   readonly BiggerText: "BiggerText";
+  readonly SmallerText: "SmallerText";
   readonly Flex: "Flex";
   readonly CenterAligned: "CenterAligned";
   readonly PushRight: "PushRight";
@@ -17,6 +18,7 @@ export type ClassNames =
   | "Sticky"
   | "Bold"
   | "BiggerText"
+  | "SmallerText"
   | "Flex"
   | "CenterAligned"
   | "PushRight"

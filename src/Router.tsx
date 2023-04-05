@@ -71,7 +71,11 @@ const Router = () => {
           <Route path={getPagePath("messages")} />
           <Route path={getPagePath("bookmarks")} />
           <Route path={getPagePath("lists", user)} />
-          <Route path={getPagePath("profileAny")} element={<Profile />} />
+          <Route
+            path={getPagePath("profileAny")}
+            element={<Profile />}
+            id={getPagePath("profileAny")}
+          />
           <Route index element={<Navigate to={getPagePath("home")} />} />
           <Route path="*" id={getPagePath("error")} element={<ErrorPage />} />
         </Route>
