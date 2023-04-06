@@ -16,7 +16,7 @@ import NotificationsVerified from "./Main/routes/Notifications/NotificationsVeri
 import NotificationsMentions from "./Main/routes/Notifications/NotificationsMentions";
 import { useAuth } from "./util/hooks/useAuth";
 import { getPagePath } from "./util/paths";
-import Profile from "./Main/routes/Profile/Profile";
+import Profile, { profileLoader } from "./Main/routes/Profile/Profile";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const { user } = useAuth();
@@ -75,6 +75,8 @@ const Router = () => {
             path={getPagePath("profileAny")}
             element={<Profile />}
             id={getPagePath("profileAny")}
+            loader={profileLoader}
+            errorElement={<ErrorPage />}
           />
           <Route index element={<Navigate to={getPagePath("home")} />} />
           <Route path="*" id={getPagePath("error")} element={<ErrorPage />} />

@@ -35,10 +35,11 @@ const simpleRequest = async <T extends string>(
   return res.json();
 };
 
-export const getData = async <T extends string>(
+export const getData = async <Res, T extends string>(
   path: string,
   params: T[] = []
-) => simpleRequest(path, "GET", params);
+): Promise<Res> => simpleRequest(path, "GET", params);
+
 export const deleteData = async <T extends string>(
   path: string,
   params: T[] = []

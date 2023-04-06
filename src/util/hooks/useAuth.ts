@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 import { AuthContext } from "../../Auth";
 
 export const useAuth = () => {
@@ -10,7 +10,7 @@ export const useAuth = () => {
     setUserContext(user);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser && !userContext) {
       setUserContext(JSON.parse(storedUser));

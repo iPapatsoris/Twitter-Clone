@@ -2,12 +2,19 @@ import styles from "./App.module.scss";
 import Main from "./Main/layouts/Main";
 import Sidebar from "./Sidebar/Sidebar";
 import { useLocation } from "react-router-dom";
-import { getPagePath, isNotificationsPage, useRouteMatch } from "./util/paths";
-import { useMemo } from "react";
+import { getPagePath, isNotificationsPage } from "./util/paths";
+import { createContext, SetStateAction, useMemo, useState } from "react";
 import useScrollToTop from "./util/hooks/useScrollToTop";
 
+export const ErrorPageContext = createContext<{
+  setIsErrorPage: React.Dispatch<SetStateAction<boolean>>;
+  isErrorPage: boolean;
+}>({
+  setIsErrorPage: () => {},
+  isErrorPage: false,
+});
 const App = () => {
-  const isErrorPage = useRouteMatch(getPagePath("error"));
+  const [isErrorPage, setIsErrorPage] = useState(false);
   const path = useLocation().pathname;
   useScrollToTop();
 
@@ -33,9 +40,11 @@ const App = () => {
   }
 
   return (
-    <div className={[styles.App, ...extraClasses].join(" ")}>
-      {innerContent}
-    </div>
+    <ErrorPageContext.Provider value={{ setIsErrorPage, isErrorPage }}>
+      <div className={[styles.App, ...extraClasses].join(" ")}>
+        {innerContent}
+      </div>
+    </ErrorPageContext.Provider>
   );
 };
 

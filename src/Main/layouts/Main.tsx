@@ -15,18 +15,22 @@ import HeaderNotifications from "../routes/Notifications/HeaderNotifications/Hea
 import HeaderExtendedNotifications from "../routes/Notifications/HeaderNotifications/HeaderExtendedNotifications/HeaderExtendedNotifications";
 import HeaderMainExtension from "./Header/HeaderMain/HeaderMainExtension/HeaderMainExtension";
 import { User } from "../../../backend/src/entities/user";
-import { createContext, SetStateAction, useState } from "react";
+import { createContext, SetStateAction, useContext, useState } from "react";
 import HeaderProfile from "../routes/Profile/HeaderProfile/HeaderProfile";
+import { ErrorPageContext } from "../../App";
 
 export type HeaderProfileUser = Pick<User, "name" | "totalTweets"> | null;
 export const HeaderProfileContext = createContext<{
   setUser: React.Dispatch<SetStateAction<HeaderProfileUser>>;
-}>({ setUser: () => {} });
+}>({
+  setUser: () => {},
+});
 
 const Main = () => {
   const [user, setUser] = useState<HeaderProfileUser>(null);
+  const { isErrorPage: isErrorPageContext } = useContext(ErrorPageContext);
 
-  const isErrorPage = useRouteMatch(getPagePath("error"));
+  const isErrorPage = useRouteMatch(getPagePath("error")) || isErrorPageContext;
   const isProfilePage = useRouteMatch(getPagePath("profileAny"));
 
   const path = useLocation().pathname;
@@ -59,7 +63,11 @@ const Main = () => {
 
   return (
     <main>
-      <HeaderProfileContext.Provider value={{ setUser }}>
+      <HeaderProfileContext.Provider
+        value={{
+          setUser,
+        }}
+      >
         {!isErrorPage && headerLayout}
         <div className={isErrorPage ? styles.ErrorPage : styles.ContentMain}>
           <Outlet />
