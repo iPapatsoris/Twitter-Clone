@@ -1,19 +1,16 @@
 import { LoaderFunction, useLoaderData } from "react-router-dom";
 import styles from "./Profile.module.scss";
-import {
-  ExposedUser,
-  GetUser,
-  GetUserFields,
-} from "../../../../backend/src/api/user";
+import { ExposedUser, GetUser } from "../../../../backend/src/api/user";
 import { getData } from "../../../util/api";
 import { useContext, useLayoutEffect } from "react";
-import { HeaderProfileContext, HeaderProfileUser } from "../../layouts/Main";
+import { HeaderProfileContext } from "../../layouts/Main";
 import { LoaderData } from "../../../util/types";
 import { webPath } from "../../../util/paths";
 import Icon from "../../../util/components/Icon/Icon";
 import optionsIcon from "../../../assets/icons/dots.png";
 import notificationsIcon from "../../../assets/icons/notifications.png";
 import Button from "../../../util/components/Button/Button";
+import { useAuth } from "../../../util/hooks/useAuth";
 
 interface ProfileProps {}
 
@@ -27,6 +24,7 @@ const userFields = [
   "isVerified",
   "location",
   "name",
+  "username",
   "totalFollowees",
   "totalFollowers",
   "totalTweets",
@@ -49,6 +47,7 @@ export const profileLoader = (async ({ params }) => {
 }) satisfies LoaderFunction;
 
 const Profile = ({}: ProfileProps) => {
+  const { user: activeUser } = useAuth();
   const { setUser } = useContext(HeaderProfileContext);
   const res = useLoaderData() as LoaderData<typeof profileLoader>;
   const user = res.data!.user;
@@ -58,18 +57,21 @@ const Profile = ({}: ProfileProps) => {
     setUser(user);
   }, [res, setUser]);
 
-  const friendshipButton = user.isFollowedByActiveUser ? (
-    <Button
-      color="white"
-      hoverColor="red"
-      hoverText="Unfollow"
-      extraClasses={[styles.FollowButton]}
-    >
-      Following
-    </Button>
-  ) : (
-    <Button color="black">Follow</Button>
-  );
+  let actionButton = <Button color="black">Follow</Button>;
+  if (activeUser && user.isFollowedByActiveUser) {
+    actionButton = (
+      <Button
+        color="white"
+        hoverColor="red"
+        hoverText="Unfollow"
+        extraClasses={[styles.FollowButton]}
+      >
+        Following
+      </Button>
+    );
+  } else if (activeUser && activeUser.id === user.id) {
+    actionButton = <Button color="white">Edit profile</Button>;
+  }
 
   return (
     <div className={styles.Profile}>
@@ -83,14 +85,14 @@ const Profile = ({}: ProfileProps) => {
           <img
             className={styles.Avatar}
             src={webPath(user.avatar)}
-            alt="The avatar of the use"
+            alt="The avatar of the user"
           />
           <div className={styles.Actions}>
             <Icon src={optionsIcon} withBorder title="More" />
             {user.isFollowedByActiveUser && (
               <Icon src={notificationsIcon} withBorder title="Notify" />
             )}
-            {friendshipButton}
+            {actionButton}
           </div>
         </div>
       </div>

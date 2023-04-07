@@ -26,7 +26,12 @@ router.post(
     res.send({
       ok: true,
       data: {
-        user: { username: user.username, name: user.name, avatar: user.avatar },
+        user: {
+          id: user.id,
+          username: user.username,
+          name: user.name,
+          avatar: user.avatar,
+        },
       },
     });
   }

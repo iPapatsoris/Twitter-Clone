@@ -4,9 +4,11 @@ import React, {
   SetStateAction,
   useState,
 } from "react";
-import { User } from "../backend/src/entities/user";
+import { LoginUser } from "../backend/src/api/auth";
 
-export type LoggedInUser = Pick<User, "avatar" | "username" | "name"> | null;
+export type LoggedInUser =
+  | NonNullable<LoginUser["response"]["data"]>["user"]
+  | null;
 
 export const AuthContext = createContext<{
   user: LoggedInUser;
