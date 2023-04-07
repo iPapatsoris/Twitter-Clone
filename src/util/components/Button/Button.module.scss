@@ -26,11 +26,26 @@
   }
 
   &.White {
+    color: black;
     background: white;
     border: 1px solid rgb(207, 217, 222);
     &:hover:not(.Disabled) {
       background: rgb(230, 230, 230);
     }
+  }
+
+  @mixin Red {
+    color: red;
+    background: rgba(244, 33, 46, 0.2) !important;
+    border: 1px solid rgb(253, 201, 206);
+  }
+
+  &.Red {
+    @include Red;
+  }
+
+  &.HoverRed:hover {
+    @include Red;
   }
 
   &.Small {
@@ -51,10 +66,6 @@
 
   &.LargeFont {
     font-size: 17px;
-  }
-
-  &.BlackFont {
-    color: black;
   }
 
   &.Disabled {

@@ -7,12 +7,13 @@ declare const classNames: typeof globalClassNames & {
   readonly Black: "Black";
   readonly Disabled: "Disabled";
   readonly White: "White";
+  readonly Red: "Red";
+  readonly HoverRed: "HoverRed";
   readonly Small: "Small";
   readonly Medium: "Medium";
   readonly Large: "Large";
   readonly Stretch: "Stretch";
   readonly LargeFont: "LargeFont";
-  readonly BlackFont: "BlackFont";
 };
 export = classNames;
 export type ButtonNames =
@@ -21,10 +22,11 @@ export type ButtonNames =
   | "Black"
   | "Disabled"
   | "White"
+  | "Red"
+  | "HoverRed"
   | "Small"
   | "Medium"
   | "Large"
   | "Stretch"
   | "LargeFont"
-  | "BlackFont"
   | GlobalClassNames;

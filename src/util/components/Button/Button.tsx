@@ -1,11 +1,13 @@
-import React, { ButtonHTMLAttributes, forwardRef } from "react";
+import React, { ButtonHTMLAttributes, forwardRef, useState } from "react";
 import { TailSpin } from "react-loader-spinner";
 import styles from "./Button.module.scss";
 
 interface ButtonProps {
   type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
   children: React.ReactNode;
-  color?: "primary" | "black" | "white";
+  hoverText?: string;
+  hoverColor?: "red" | undefined;
+  color?: "primary" | "black" | "white" | "red";
   size?: "small" | "medium" | "large";
   largeFont?: boolean;
   stretch?: boolean;
@@ -20,6 +22,8 @@ const Button = forwardRef(
     {
       type = "button",
       children,
+      hoverText = "",
+      hoverColor,
       color = "primary",
       size = "medium",
       largeFont = false,
@@ -31,16 +35,27 @@ const Button = forwardRef(
     }: ButtonProps,
     ref: React.ForwardedRef<HTMLButtonElement>
   ) => {
+    const [content, setContent] = useState(children);
+    const toggleHover = () => {
+      if (content === children) {
+        setContent(hoverText);
+      } else {
+        setContent(children);
+      }
+    };
+
     let buttonColorStyle;
-    let fontColorStyle;
     if (color === "primary") {
       buttonColorStyle = styles.Primary;
     } else if (color === "black") {
       buttonColorStyle = styles.Black;
     } else if (color === "white") {
       buttonColorStyle = styles.White;
-      fontColorStyle = styles.BlackFont;
+    } else if (color === "red") {
+      buttonColorStyle = styles.Red;
     }
+
+    const buttonHoverStyle = hoverColor === "red" ? styles.HoverRed : "";
 
     let sizeStyle: styles.ButtonNames = styles.Medium;
     if (size === "small") {
@@ -52,7 +67,7 @@ const Button = forwardRef(
     const classes = [
       styles.Button,
       buttonColorStyle,
-      fontColorStyle,
+      buttonHoverStyle,
       sizeStyle,
       largeFont ? styles.LargeFont : "",
       stretch ? styles.Stretch : "",
@@ -67,6 +82,8 @@ const Button = forwardRef(
         disabled={disabled}
         className={classes}
         onClick={(e) => onClick(e)}
+        {...(hoverText && { onMouseEnter: toggleHover })}
+        {...(hoverText && { onMouseLeave: toggleHover })}
       >
         {isLoading ? (
           <TailSpin
@@ -76,7 +93,7 @@ const Button = forwardRef(
             ariaLabel="tail-spin-loading"
           />
         ) : (
-          children
+          content
         )}
       </button>
     );
