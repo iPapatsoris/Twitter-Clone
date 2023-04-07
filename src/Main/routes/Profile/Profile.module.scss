@@ -1,3 +1,34 @@
+.Profile {
+  .Cover {
+    object-fit: contain;
+    width: calc(100% + 2 * var(--main-content-padding));
+    margin-left: calc(-1 * var(--main-content-padding));
+    cursor: pointer;
+  }
+
+  .AvatarAndActions {
+    .AvatarContainer {
+      --avatar-height: 133px;
+      position: relative;
+
+      .Avatar {
+        width: var(--avatar-height);
+        height: 133px;
+        border: 4px solid white;
+        border-radius: 100px;
+        position: absolute;
+        top: calc(-1 * (var(--avatar-height) / 2));
+        cursor: pointer;
+      }
+    }
+    .Actions {
+      display: flex;
+      justify-content: end;
+      gap: 0.5rem;
+    }
+  }
+}
+
 .Loading {
   justify-content: center;
   align-items: center;

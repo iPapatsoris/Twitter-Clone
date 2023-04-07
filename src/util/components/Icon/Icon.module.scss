@@ -24,6 +24,10 @@
     }
   }
 
+  &.WithBorder {
+    border: 1px solid rgb(207, 217, 222);
+  }
+
   .Icon {
     cursor: pointer;
     width: 20px;

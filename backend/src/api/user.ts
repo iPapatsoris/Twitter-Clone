@@ -28,16 +28,16 @@ export type UpdateUser = {
   }>;
 };
 
-export type GetUserParams = Partial<Omit<User, "password">>;
-export type GetUser = {
+export type ExposedUser = Omit<User, "password">;
+export type GetUser<T extends keyof ExposedUser> = {
   response: NormalResponse<{
-    user: GetUserParams;
+    user: Pick<ExposedUser, T>;
   }>;
 };
 
 export type CreateUserFields = keyof CreateUser["request"];
 export type UpdateUserFields = keyof UpdateUser["request"];
-export type GetUserFields = keyof GetUserParams;
+export type GetUserFields = keyof ExposedUser;
 
 type MiniUserInfo = Pick<
   User,

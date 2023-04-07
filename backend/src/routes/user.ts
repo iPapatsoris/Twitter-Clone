@@ -7,12 +7,12 @@ import ErrorCodes from "../api/errorCodes.js";
 import { GetTweets, Thread } from "../api/tweet.js";
 import {
   CreateUser,
+  ExposedUser,
   GetUser,
   GetUserFields,
   GetUserFollowees,
   GetUserFollowers,
   GetUsernameExists,
-  GetUserParams,
   GetUserThreadsAndRetweets,
   GetUserTweetsAndRetweets,
   UpdateUser,
@@ -112,7 +112,7 @@ router.get(
   "/:username",
   async (
     req: TypedRequestQuery<{ username: string }, Fields<GetUserFields>>,
-    res: Response<GetUser["response"]>
+    res: Response<GetUser<GetUserFields>["response"]>
   ) => {
     const fields = Object.keys(req.query);
     // Make sure request has included some fields to query about
@@ -154,7 +154,7 @@ router.get(
     const username = req.params.username;
 
     // Query regular fields
-    const [user] = await runQuery<GetUserParams>(
+    const [user] = await runQuery<ExposedUser>(
       "SELECT id" + views.join("") + " FROM user WHERE username = ?",
       [username]
     );

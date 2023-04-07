@@ -7,6 +7,7 @@ declare const classNames: typeof globalClassNames & {
   readonly HoverPrimary: "HoverPrimary";
   readonly NoHover: "NoHover";
   readonly Icon: "Icon";
+  readonly WithBorder: "WithBorder";
 };
 export = classNames;
 export type IconNames =
@@ -15,4 +16,5 @@ export type IconNames =
   | "HoverPrimary"
   | "NoHover"
   | "Icon"
+  | "WithBorder"
   | GlobalClassNames;

@@ -1,4 +1,4 @@
-const buildURL = <T extends string>(path: string, params: T[]) => {
+const buildURL = <T extends string>(path: string, params: readonly T[]) => {
   const base = import.meta.env.VITE_API_PATH;
   const url = new URL(path, base);
   params.forEach((param) => url.searchParams.append(param, ""));
@@ -26,7 +26,7 @@ export const postData = async <T extends string>(
 const simpleRequest = async <T extends string>(
   path: string,
   method: "GET" | "DELETE",
-  params: T[]
+  params: readonly T[]
 ) => {
   const res = await fetch(buildURL(path, params), {
     method,
@@ -37,7 +37,7 @@ const simpleRequest = async <T extends string>(
 
 export const getData = async <Res, T extends string>(
   path: string,
-  params: T[] = []
+  params: readonly T[] = []
 ): Promise<Res> => simpleRequest(path, "GET", params);
 
 export const deleteData = async <T extends string>(
