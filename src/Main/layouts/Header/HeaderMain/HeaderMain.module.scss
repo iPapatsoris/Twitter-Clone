@@ -4,6 +4,13 @@
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   border-inline: var(--border);
+
+  /** We have relatively positioned elements below the header
+   * (eg: user avatar), which create their own stacking context,
+   * so we need relative position here too to prevent them from laying on top of 
+   * the header.
+   */
+  position: relative;
 }
 
 .HeaderMainGridArea {
