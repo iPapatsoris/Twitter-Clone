@@ -28,7 +28,9 @@ export type UpdateUser = {
   }>;
 };
 
-export type ExposedUser = Omit<User, "password">;
+export type ExposedUser = Omit<User, "password"> & {
+  isFollowedByActiveUser: boolean;
+};
 export type GetUser<T extends keyof ExposedUser> = {
   response: NormalResponse<{
     user: Pick<ExposedUser, T>;

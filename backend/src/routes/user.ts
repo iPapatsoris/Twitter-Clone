@@ -36,7 +36,10 @@ import {
   mergeThreadsAndRetweets,
   mergeTweetsAndRetweets,
 } from "../services/tweet.js";
-import { usernameExists } from "../services/user.js";
+import {
+  checkUserFollowedByActiveUser,
+  usernameExists,
+} from "../services/user.js";
 
 const router = express.Router();
 
@@ -108,13 +111,14 @@ router
     }
   );
 
+// TODO: move queries to services, run in parallel
 router.get(
   "/:username",
   async (
     req: TypedRequestQuery<{ username: string }, Fields<GetUserFields>>,
     res: Response<GetUser<GetUserFields>["response"]>
   ) => {
-    const fields = Object.keys(req.query);
+    const fields = Object.keys(req.query) as GetUserFields[];
     // Make sure request has included some fields to query about
     if (!fields.length) {
       res.send({ ok: false, errorCode: ErrorCodes.NoFieldsSpecified });
@@ -128,17 +132,19 @@ router.get(
       return;
     }
 
-    // Frienship fields will be handled on a seperate queries, so remove them
+    // Frienship fields will be handled on seperate queries, so remove them
     const seperateFields = removeArrayFields<typeof fields[0]>(fields, [
       "totalFollowees",
       "totalFollowers",
       "totalTweets",
+      "isFollowedByActiveUser",
     ]);
 
     // Set flags for seperate fields to query
     let getTotalFollowees = false;
     let getTotalFollowers = false;
     let getTotalTweets = false;
+    let getIsFollowedByActiveUser = false;
     seperateFields.forEach((field) => {
       if (field === "totalFollowees") {
         getTotalFollowees = true;
@@ -146,6 +152,8 @@ router.get(
         getTotalFollowers = true;
       } else if (field === "totalTweets") {
         getTotalTweets = true;
+      } else if (field === "isFollowedByActiveUser") {
+        getIsFollowedByActiveUser = true;
       }
     });
 
@@ -168,36 +176,46 @@ router.get(
     if (getTotalTweets) {
       user.totalTweets = await getTotalUserTweets(Number(userID));
     }
-    if (!getTotalFollowers && !getTotalFollowees) {
-      res.send({ ok: true, data: { user } });
-      return;
-    }
-
-    // Query friendship fields
-    const totalFollowersQuery =
-      "SELECT COUNT(*) as totalFollowers \
+    if (getTotalFollowers || getTotalFollowees) {
+      // Query friendship fields
+      const totalFollowersQuery =
+        "SELECT COUNT(*) as totalFollowers \
          FROM user_follows as friendship \
          WHERE friendship.followeeID = ?";
-    const totalFolloweesQuery =
-      "SELECT COUNT(*) as totalFollowees \
+      const totalFolloweesQuery =
+        "SELECT COUNT(*) as totalFollowees \
          FROM user_follows as friendship \
          WHERE friendship.followerID = ?";
 
-    if (getTotalFollowees) {
-      user.totalFollowees = (
-        await runQuery<{ totalFollowees: number }>(totalFolloweesQuery, [
-          userID,
-        ])
-      )[0].totalFollowees;
+      if (getTotalFollowees) {
+        user.totalFollowees = (
+          await runQuery<{ totalFollowees: number }>(totalFolloweesQuery, [
+            userID,
+          ])
+        )[0].totalFollowees;
+      }
+
+      if (getTotalFollowers) {
+        user.totalFollowers = (
+          await runQuery<{ totalFollowers: number }>(totalFollowersQuery, [
+            userID,
+          ])
+        )[0].totalFollowers;
+      }
     }
 
-    if (getTotalFollowers) {
-      user.totalFollowers = (
-        await runQuery<{ totalFollowers: number }>(totalFollowersQuery, [
-          userID,
-        ])
-      )[0].totalFollowers;
+    const activeUserID = req.session.userID;
+    user.isFollowedByActiveUser = false;
+    console.log(req.session);
+    console.log(getIsFollowedByActiveUser);
+
+    if (req.session.isLoggedIn && getIsFollowedByActiveUser) {
+      user.isFollowedByActiveUser = await checkUserFollowedByActiveUser(
+        userID,
+        activeUserID!
+      );
     }
+
     res.send({ ok: true, data: { user } });
   }
 );

@@ -25,6 +25,7 @@ export const checkPermissions = (
       "totalFollowees",
       "totalFollowers",
       "totalTweets",
+      "isFollowedByActiveUser",
     ];
   } else if (endpoint === "UpdateUser") {
     fieldWhitelist = [

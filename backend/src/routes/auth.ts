@@ -20,7 +20,9 @@ router.post(
       return;
     }
 
-    req.session.loggedIn = true;
+    req.session.isLoggedIn = true;
+    req.session.userID = user.id;
+
     res.send({
       ok: true,
       data: {
@@ -35,7 +37,7 @@ export const requireAuth = (
   res: Response,
   next: NextFunction
 ): void => {
-  if (req.session && req.session.loggedIn === true) {
+  if (req.session && req.session.isLoggedIn === true) {
     next();
     return;
   }
