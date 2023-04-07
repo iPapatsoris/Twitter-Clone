@@ -30,6 +30,7 @@ const userFields = [
   "totalFollowees",
   "totalFollowers",
   "totalTweets",
+  "isFollowedByActiveUser",
 ] as const satisfies Readonly<Array<keyof ExposedUser>>;
 
 type RequestFields = typeof userFields[number];
@@ -57,6 +58,19 @@ const Profile = ({}: ProfileProps) => {
     setUser(user);
   }, [res, setUser]);
 
+  const friendshipButton = user.isFollowedByActiveUser ? (
+    <Button
+      color="white"
+      hoverColor="red"
+      hoverText="Unfollow"
+      extraClasses={[styles.FollowButton]}
+    >
+      Following
+    </Button>
+  ) : (
+    <Button color="black">Follow</Button>
+  );
+
   return (
     <div className={styles.Profile}>
       <img
@@ -72,9 +86,11 @@ const Profile = ({}: ProfileProps) => {
             alt="The avatar of the use"
           />
           <div className={styles.Actions}>
-            <Icon src={optionsIcon} withBorder />
-            <Icon src={notificationsIcon} withBorder />{" "}
-            <Button color="black">Follow</Button>{" "}
+            <Icon src={optionsIcon} withBorder title="More" />
+            {user.isFollowedByActiveUser && (
+              <Icon src={notificationsIcon} withBorder title="Notify" />
+            )}
+            {friendshipButton}
           </div>
         </div>
       </div>

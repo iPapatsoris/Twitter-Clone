@@ -8,6 +8,7 @@ declare const classNames: typeof globalClassNames & {
   readonly AvatarContainer: "AvatarContainer";
   readonly Avatar: "Avatar";
   readonly Actions: "Actions";
+  readonly FollowButton: "FollowButton";
   readonly Loading: "Loading";
 };
 export = classNames;
@@ -18,5 +19,6 @@ export type ProfileNames =
   | "AvatarContainer"
   | "Avatar"
   | "Actions"
+  | "FollowButton"
   | "Loading"
   | GlobalClassNames;
