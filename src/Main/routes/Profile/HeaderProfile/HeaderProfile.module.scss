@@ -6,5 +6,10 @@
   .UserInfo {
     display: flex;
     flex-direction: column;
+
+    .NameAndVerified {
+      display: flex;
+      gap: 0.5rem;
+    }
   }
 }

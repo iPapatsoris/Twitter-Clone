@@ -19,7 +19,10 @@ import { createContext, SetStateAction, useContext, useState } from "react";
 import HeaderProfile from "../routes/Profile/HeaderProfile/HeaderProfile";
 import { ErrorPageContext } from "../../App";
 
-export type HeaderProfileUser = Pick<User, "name" | "totalTweets"> | null;
+export type HeaderProfileUser = Pick<
+  User,
+  "name" | "totalTweets" | "isVerified"
+> | null;
 export const HeaderProfileContext = createContext<{
   setUser: React.Dispatch<SetStateAction<HeaderProfileUser>>;
 }>({
