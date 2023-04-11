@@ -8,6 +8,7 @@ export interface IconProps {
   hover?: "normal" | "primary" | "none";
   withBorder?: boolean;
   extraStyles?: Array<string>;
+  extraWrapperStyles?: Array<string>;
   onClick?: React.MouseEventHandler<HTMLImageElement>;
 }
 
@@ -20,6 +21,7 @@ const Icon = forwardRef(
       hover = "normal",
       withBorder = false,
       extraStyles = [],
+      extraWrapperStyles = [],
       onClick = () => {},
     }: IconProps,
     ref: React.ForwardedRef<HTMLImageElement>
@@ -39,9 +41,12 @@ const Icon = forwardRef(
         // Prevent losing cursor position when an icon is clicked within an
         // input, like a password reveal toggle
         onMouseUp={(e) => e.preventDefault()}
-        className={[hoverClassname, withBorderClass, styles.IconWrapper].join(
-          " "
-        )}
+        className={[
+          hoverClassname,
+          withBorderClass,
+          styles.IconWrapper,
+          extraWrapperStyles,
+        ].join(" ")}
       >
         <img
           src={src}

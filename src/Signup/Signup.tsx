@@ -67,7 +67,9 @@ const Signup = ({}: SignupProps) => {
   const [emailCodeHint, setEmailCodeHint] = useState("");
 
   const stepper = useStepper();
-
+  // TODO: Define Minipage here, and change its props conditionally
+  // instead of defining an inner minipage within each step.
+  // Will also allow to remove Minipage::Wrapper and put it locally
   const steps = [
     <AccountInfo
       stepper={stepper}

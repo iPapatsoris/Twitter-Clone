@@ -77,6 +77,7 @@ const Login = () => {
             Login
           </Button>
         }
+        contentStyles={[styles.Wrapper]}
       >
         <div className={styles.Login}>
           <h1>Login</h1>

@@ -1,5 +1,6 @@
 import Dropdown from "../../../util/components/Dropdown/Dropdown";
 import styles from "./AccountInfo.module.scss";
+import signupStyles from "../../Signup.module.scss";
 import {
   getDaysInMonth,
   getMonths,
@@ -131,6 +132,7 @@ const AccountInfo = ({
             {header}
           </StepHeader>
         }
+        contentStyles={[signupStyles.Signup]}
         footer={<NextStepButton isDisabled={!isValidForm} />}
       >
         <div className={styles.AccountInfo}>

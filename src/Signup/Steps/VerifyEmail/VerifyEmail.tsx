@@ -6,6 +6,7 @@ import NextStepButton from "../NextStepButton";
 import StepHeader from "../StepHeader";
 import Helper from "./Helper";
 import styles from "./VerifyEmail.module.scss";
+import signupStyles from "../../Signup.module.scss";
 import { useMutation } from "react-query";
 import { VerifyEmailCode } from "../../../../backend/src/api/email";
 import useSendEmailCode from "./useSendEmailCode";
@@ -85,6 +86,7 @@ const VerifyEmail = ({
             // isLoading={isVerificationLoading}
           />
         }
+        contentStyles={[signupStyles.Signup]}
       >
         <div className={styles.VerifyEmail}>
           <h1>We sent you a code</h1>

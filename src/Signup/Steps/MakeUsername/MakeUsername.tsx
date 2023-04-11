@@ -12,6 +12,7 @@ import yup, { yupSequentialStringSchema } from "../../../util/yup";
 import NextStepButton from "../NextStepButton";
 import StepHeader from "../StepHeader";
 import styles from "./MakeUsername.module.scss";
+import signupStyles from "../../Signup.module.scss";
 
 interface MakeUsernameProps {
   stepper: ReturnType<typeof useStepper>;
@@ -107,6 +108,7 @@ const MakeUsername = ({
             Sign up
           </NextStepButton>
         }
+        contentStyles={[signupStyles.Signup]}
       >
         <div className={styles.MakeUsername}>
           <h1>What should we call you?</h1>
