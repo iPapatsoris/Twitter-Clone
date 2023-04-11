@@ -3,12 +3,12 @@ import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { LoginUser } from "../../backend/src/api/auth";
-import { postData } from "../util/api";
 import Button from "../util/components/Button/Button";
 import Form from "../util/components/Form/Form";
 import { ModalContext } from "../util/components/Modal/Modal";
 import FormInput from "../util/components/TextInput/FormTextInput";
 import { useAuth } from "../util/hooks/useAuth";
+import useRequest from "../util/hooks/useRequest";
 import LogoHeader from "../util/layouts/Minipage/LogoHeader/LogoHeader";
 import Minipage from "../util/layouts/Minipage/Minipage";
 import yup from "../util/yup";
@@ -16,6 +16,7 @@ import styles from "./Login.module.scss";
 
 const Login = () => {
   const { setUser } = useAuth();
+  const { postData } = useRequest();
   const { mutate, isLoading } = useMutation<
     LoginUser["response"],
     unknown,

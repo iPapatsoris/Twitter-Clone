@@ -9,13 +9,14 @@ import { useAuth } from "../../util/hooks/useAuth";
 import { webPath } from "../../util/paths";
 import { useMutation } from "react-query";
 import { NormalResponse } from "../../../backend/src/api/common";
-import { deleteData } from "../../util/api";
+import useRequest from "../../util/hooks/useRequest";
 
 const ProfileButton = () => {
   const [showOptions, setShowOptions] = useState(false);
 
   const profileButtonRef = useRef(null);
   const { user, setUser } = useAuth();
+  const { deleteData } = useRequest();
   const { mutate } = useMutation<NormalResponse>(
     ["logout"],
     () => deleteData("auth/logout"),

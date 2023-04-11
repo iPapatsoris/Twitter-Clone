@@ -1,8 +1,9 @@
 import { useMutation } from "react-query";
 import { CreateEmailCode } from "../../../../backend/src/api/email";
-import { postData } from "../../../util/api";
+import useRequest from "../../../util/hooks/useRequest";
 
 const useSendEmailCode = (key: string) => {
+  const { postData } = useRequest();
   return useMutation<
     CreateEmailCode["response"],
     unknown,

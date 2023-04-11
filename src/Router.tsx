@@ -17,6 +17,7 @@ import NotificationsMentions from "./Main/routes/Notifications/NotificationsMent
 import { useAuth } from "./util/hooks/useAuth";
 import { getPagePath } from "./util/paths";
 import Profile, { profileLoader } from "./Main/routes/Profile/Profile";
+import useRequest from "./util/hooks/useRequest";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const { user } = useAuth();
@@ -30,6 +31,7 @@ const RequireAuth = ({ children }: { children: JSX.Element }) => {
 
 const Router = () => {
   const { user } = useAuth();
+  const { getData } = useRequest();
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
@@ -75,7 +77,7 @@ const Router = () => {
             path={getPagePath("profileAny")}
             element={<Profile />}
             id={getPagePath("profileAny")}
-            loader={profileLoader}
+            loader={(args) => profileLoader(args, getData)}
             errorElement={<ErrorPage />}
           />
           <Route index element={<Navigate to={getPagePath("home")} />} />

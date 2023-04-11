@@ -19,8 +19,8 @@ import Minipage from "../../../util/layouts/Minipage/Minipage";
 import Form from "../../../util/components/Form/Form";
 import { useQuery } from "react-query";
 import { GetEmail } from "../../../../backend/src/api/email";
-import { getData } from "../../../util/api";
 import yup, { yupSequentialStringSchema } from "../../../util/yup";
+import useRequest from "../../../util/hooks/useRequest";
 
 interface AccountInfoProps {
   accountInfo: AccountInfoT;
@@ -73,6 +73,7 @@ const AccountInfo = ({
     },
   }));
 
+  const { getData } = useRequest();
   const { refetch } = useQuery<GetEmail["response"]>(
     ["emailExists"],
     () => {

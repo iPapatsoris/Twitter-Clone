@@ -10,7 +10,7 @@ import { useMutation } from "react-query";
 import { VerifyEmailCode } from "../../../../backend/src/api/email";
 import useSendEmailCode from "./useSendEmailCode";
 import Form from "../../../util/components/Form/Form";
-import { postData } from "../../../util/api";
+import useRequest from "../../../util/hooks/useRequest";
 
 interface VerifyEmailProps {
   email: string;
@@ -29,6 +29,8 @@ const VerifyEmail = ({
 }: VerifyEmailProps) => {
   const [code, setCode] = useState("");
   const [wrongCodeError, setWrongCodeError] = useState("");
+
+  const { postData } = useRequest();
 
   const {
     mutate: verifyCode,

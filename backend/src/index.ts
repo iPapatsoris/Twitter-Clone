@@ -3,11 +3,12 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import session from "express-session";
-import authRoutes from "./routes/auth.js";
+import authRoutes, { authPath } from "./routes/auth.js";
 import tweetRoutes from "./routes/tweet.js";
 import userRoutes from "./routes/user.js";
 import emailRoutes from "./routes/email.js";
 import dotenv from "dotenv";
+import { checkSession } from "./middleware/auth.js";
 
 // Augment express-session with a custom SessionData object
 declare module "express-session" {
@@ -46,7 +47,8 @@ export const currentUserID = 1;
  * TODO: auth and secure routes
  */
 
-app.use("/auth/", authRoutes);
+app.use(checkSession);
+app.use(authPath, authRoutes);
 app.use("/user/", userRoutes);
 app.use("/tweet/", tweetRoutes);
 app.use("/email/", emailRoutes);

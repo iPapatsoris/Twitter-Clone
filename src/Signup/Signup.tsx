@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { CreateUser } from "../../backend/src/api/user";
-import { postData } from "../util/api";
+import useRequest from "../util/hooks/useRequest";
 import useStepper from "../util/hooks/useStepper";
 import AccountInfo from "./Steps/AccountInfo/AccountInfo";
 import MakePassword from "./Steps/MakePassword/MakePassword";
@@ -43,6 +43,7 @@ const Signup = ({}: SignupProps) => {
   const [performRegistration, setPerformRegistration] = useState(false);
   const [inputToFocus, setInputToFocus] = useState<keyof AccountInfoT>("name");
 
+  const { postData } = useRequest();
   const { mutate } = useMutation<
     CreateUser["response"],
     unknown,

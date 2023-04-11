@@ -3,9 +3,9 @@ import { SetStateAction } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import { GetUsernameExists } from "../../../../backend/src/api/user";
-import { getData } from "../../../util/api";
 import Form from "../../../util/components/Form/Form";
 import FormInput from "../../../util/components/TextInput/FormTextInput";
+import useRequest from "../../../util/hooks/useRequest";
 import useStepper from "../../../util/hooks/useStepper";
 import Minipage from "../../../util/layouts/Minipage/Minipage";
 import yup, { yupSequentialStringSchema } from "../../../util/yup";
@@ -34,6 +34,8 @@ const MakeUsername = ({
     setUsername(username);
     setPerformRegistration(true);
   };
+
+  const { getData } = useRequest();
 
   const { refetch } = useQuery<GetUsernameExists["response"]>(
     ["usernameExists"],

@@ -1,14 +1,22 @@
 /* eslint-disable no-multi-str */
-import express, { NextFunction, Request, Response } from "express";
+import express, { Response } from "express";
 import { LoginUser } from "../api/auth.js";
 import { NormalResponse } from "../api/common.js";
 import { cookieName } from "../index.js";
+import { requireAuth } from "../middleware/auth.js";
 import { checkCredentials } from "../services/user.js";
 import { TypedRequestQuery } from "../util.js";
 
+export const authPath = "/auth";
+const loginSubpath = "/login";
+const logoutSubpath = "/logout";
+
+export const loginPath = authPath + loginSubpath;
+export const logoutPath = authPath + logoutSubpath;
+
 const router = express.Router();
 router.post(
-  "/login",
+  loginSubpath,
   async (
     req: TypedRequestQuery<{}, {}, LoginUser["request"]>,
     res: Response<LoginUser["response"]>
@@ -37,21 +45,8 @@ router.post(
   }
 );
 
-export const requireAuth = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
-  if (req.session && req.session.isLoggedIn === true) {
-    next();
-    return;
-  }
-  res.status(403);
-  res.send("Not permitted");
-};
-
 router.delete(
-  "/logout",
+  logoutSubpath,
   requireAuth,
   (req: TypedRequestQuery<{}>, res: Response<NormalResponse>) => {
     req.session.destroy((error) => {
