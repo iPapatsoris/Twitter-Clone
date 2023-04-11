@@ -1,0 +1,15 @@
+.Info {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  .IconAndText {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+
+    span {
+      width: max-content;
+    }
+  }
+}

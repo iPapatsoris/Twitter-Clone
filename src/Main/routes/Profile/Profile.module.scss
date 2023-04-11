@@ -7,8 +7,10 @@
   }
 
   .AvatarAndActions {
+    --avatar-height: 133px;
+    height: calc(var(--avatar-height) / 2);
+    margin-bottom: 1.5rem;
     .AvatarContainer {
-      --avatar-height: 133px;
       position: relative;
 
       .Avatar {
@@ -30,6 +32,37 @@
       .FollowButton {
         width: 7rem;
       }
+    }
+  }
+
+  .ProfileInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .Title {
+      .NameAndVerified {
+        display: flex;
+        gap: 0.5rem;
+
+        h1 {
+          font-size: 20px;
+          font-weight: 800;
+        }
+      }
+
+      .Username {
+        font-size: 15px;
+      }
+    }
+
+    .Bio {
+      font-size: 15px;
+    }
+
+    .Friendship {
+      display: flex;
+      gap: 1rem;
     }
   }
 }
