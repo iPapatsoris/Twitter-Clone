@@ -2,7 +2,6 @@ import TextInput from "../../../util/components/TextInput/TextInput";
 import useStepper from "../../../util/hooks/useStepper";
 import { AccountInfoT } from "../../Signup";
 import styles from "./VerifyAccountInfo.module.scss";
-import signupStyles from "../../Signup.module.scss";
 import Terms from "../../Terms/Terms";
 import StepHeader from "../StepHeader";
 import Minipage from "../../../util/layouts/Minipage/Minipage";
@@ -55,7 +54,6 @@ const VerifyAccountInfo = ({
             <NextStepButton color="primary">Confirm</NextStepButton>
           </>
         }
-        contentStyles={[signupStyles.Signup]}
       >
         <div className={styles.VerifyAccountInfo}>
           <TextInput

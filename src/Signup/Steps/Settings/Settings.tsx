@@ -2,7 +2,6 @@ import { SetStateAction } from "react";
 import { SettingsT } from "../../Signup";
 import Setting from "./Setting";
 import styles from "./Settings.module.scss";
-import signupStyles from "../../Signup.module.scss";
 import useStepper from "../../../util/hooks/useStepper";
 import Terms from "../../Terms/Terms";
 import NextStepButton from "../NextStepButton";
@@ -64,7 +63,6 @@ const Settings = ({
           </StepHeader>
         }
         footer={<NextStepButton isDisabled={false} />}
-        contentStyles={[signupStyles.Signup]}
       >
         <div className={styles.Settings}>
           <h1>Customize your experience</h1>

@@ -7,7 +7,6 @@ import useStepper from "../../../util/hooks/useStepper";
 import NextStepButton from "../NextStepButton";
 import StepHeader from "../StepHeader";
 import styles from "./MakePassword.module.scss";
-import signupStyles from "../../Signup.module.scss";
 import Form from "../../../util/components/Form/Form";
 import { SetStateAction } from "react";
 
@@ -63,7 +62,6 @@ const MakePassword = ({
             {header}
           </StepHeader>
         }
-        contentStyles={[signupStyles.Signup]}
         footer={<NextStepButton isDisabled={!isValid} />}
       >
         <div className={styles.MakePassword}>
