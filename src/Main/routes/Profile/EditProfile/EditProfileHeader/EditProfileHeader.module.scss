@@ -1,0 +1,19 @@
+.Header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+
+  .Text {
+    font-size: 20px;
+  }
+
+  .Action {
+    min-width: 0;
+    height: 32px;
+    margin-left: auto;
+  }
+}
+
+.Icon {
+  grid-area: icon;
+}
