@@ -27,7 +27,7 @@
      *  spacing by using subgrid. 
      **/
     padding-right: calc(
-      var(--minipage-blank-area) + var(--minipage-icon-area-length) - 20px
+      var(--minipage-blank-area) + var(--minipage-icon-area-length)
     );
   }
 

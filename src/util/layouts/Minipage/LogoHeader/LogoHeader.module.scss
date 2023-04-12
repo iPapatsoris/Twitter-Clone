@@ -6,6 +6,10 @@
   grid-area: header;
   justify-self: center;
   align-self: center;
+
+  /* Substract icon width to center taking into account the whole row and not 
+  just this column.
+  */
   margin-left: calc(-1 * var(--minipage-icon-area-length));
 
   .LogoSize {
