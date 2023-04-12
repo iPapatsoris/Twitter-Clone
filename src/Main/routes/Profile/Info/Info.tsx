@@ -16,14 +16,19 @@ const Info = ({ user }: InfoProps) => {
   const infoArray = [];
 
   if (user.location) {
-    infoArray.push(<IconAndText icon={locationIcon} text={user.location} />);
+    infoArray.push(
+      <IconAndText key="location" icon={locationIcon} text={user.location} />
+    );
   }
   if (user.website) {
-    infoArray.push(<IconAndText icon={websiteIcon} link={user.website} />);
+    infoArray.push(
+      <IconAndText key="website" icon={websiteIcon} link={user.website} />
+    );
   }
   if (user.birthDate) {
     infoArray.push(
       <IconAndText
+        key="birthDate"
         icon={birthdayIcon}
         text={"Born " + dayjs(user.birthDate).format("MMMM D")}
       />
@@ -32,6 +37,7 @@ const Info = ({ user }: InfoProps) => {
   if (user.joinedDate) {
     infoArray.push(
       <IconAndText
+        key="joinedDate"
         icon={dateIcon}
         text={"Joined " + dayjs(user.joinedDate).format("MMMM YYYY")}
       />
