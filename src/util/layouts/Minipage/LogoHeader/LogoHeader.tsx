@@ -9,14 +9,16 @@ interface LogoHeaderProps {
 
 const LogoHeader = ({ onNavIconClick }: LogoHeaderProps) => {
   return (
-    <div className={styles.LogoHeader}>
-      <div className={styles.NavIcon} onClick={onNavIconClick}>
-        <Icon src={closeIcon} />
-      </div>
+    <>
+      <Icon
+        src={closeIcon}
+        extraWrapperStyles={[styles.NavIcon]}
+        onClick={onNavIconClick}
+      />
       <div className={styles.Logo}>
         <Icon src={logoIcon} extraStyles={[styles.LogoSize]} hover="none" />
       </div>
-    </div>
+    </>
   );
 };
 

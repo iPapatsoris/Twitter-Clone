@@ -1,12 +1,16 @@
 .Minipage {
   height: 100%;
   display: grid;
+  --minipage-icon-area-length: 4rem;
+  --minipage-blank-area: 1rem;
   grid-template:
     ". .      .       ." 1rem
     ". icon   header  ." auto
     ". .      content content" 1fr
     "footer footer footer  footer" auto
-    / 1rem minmax(auto, 4rem) 1fr 1rem;
+    / var(--minipage-blank-area) minmax(auto, var(--minipage-icon-area-length)) 1fr var(
+      --minipage-blank-area
+    );
 
   .Content {
     overflow-y: auto;
@@ -22,7 +26,9 @@
      *  dynamic. In the future, we will be able to graciously get the exact 
      *  spacing by using subgrid. 
      **/
-    padding-right: 5rem;
+    padding-right: calc(
+      var(--minipage-blank-area) + var(--minipage-icon-area-length) - 20px
+    );
   }
 
   .Footer {
