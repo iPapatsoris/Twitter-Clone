@@ -4,11 +4,6 @@ import globalClassNames, {
 declare const classNames: typeof globalClassNames & {
   readonly StepHeader: "StepHeader";
   readonly NavIcon: "NavIcon";
-  readonly Title: "Title";
 };
 export = classNames;
-export type StepHeaderNames =
-  | "StepHeader"
-  | "NavIcon"
-  | "Title"
-  | GlobalClassNames;
+export type StepHeaderNames = "StepHeader" | "NavIcon" | GlobalClassNames;

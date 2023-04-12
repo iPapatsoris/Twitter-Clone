@@ -1,11 +1,16 @@
 .IconWrapper {
-  padding: 8px;
+  --icon-wrapper-padding: 8px;
+  padding: var(--icon-wrapper-padding);
   border-radius: 40px;
   transition: var(--transition-duration);
   display: flex;
   align-items: center;
   width: min-content;
   cursor: pointer;
+
+  &.ExactPlacement {
+    margin-left: calc(-1 * var(--icon-wrapper-padding));
+  }
 
   &.Hover:hover {
     background-color: var(--hover-bg);

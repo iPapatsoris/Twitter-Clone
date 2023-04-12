@@ -2,17 +2,11 @@
   height: 100%;
   display: grid;
   grid-template:
-    "header" auto
-    "content" 1fr
-    "footer" auto
-    / 1fr;
-
-  .Header {
-    grid-area: header;
-    position: sticky;
-    top: 0;
-    background-color: white;
-  }
+    ". .      .       ." 1rem
+    ". icon   header  ." auto
+    ". .      content content" 1fr
+    "footer footer footer  footer" auto
+    / 1rem minmax(auto, 4rem) 1fr 1rem;
 
   .Content {
     overflow-y: auto;
@@ -20,29 +14,29 @@
     padding-top: 1.5rem;
     padding-bottom: 4rem;
 
-    .Wrapper {
-      grid-area: content;
-    }
+    /** This padding should be equal to the grid's left blank area plus the icon 
+     *  area. Normally, content grid area would be only in the center and not 
+     *  take up the right area too, but we need to do this to let the scroll bar
+     *  stick to the rightmost part of the screen. Right now padding is at a 
+     *  "close enough but not exact" value, since the grid's column widths are 
+     *  dynamic. In the future, we will be able to graciously get the exact 
+     *  spacing by using subgrid. 
+     **/
+    padding-right: 5rem;
   }
 
   .Footer {
     grid-area: footer;
-    background-color: white;
-    position: sticky;
-    bottom: 0;
     box-shadow: var(--box-shadow);
     display: grid;
     grid-template:
       ". content ."
-      / 1fr 5fr 1fr;
+      / 4rem 1fr 4rem;
     align-items: center;
     padding-block: 2rem;
 
     .Wrapper {
       grid-area: content;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
     }
   }
 }

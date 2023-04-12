@@ -3,6 +3,7 @@ import globalClassNames, {
 } from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly IconWrapper: "IconWrapper";
+  readonly ExactPlacement: "ExactPlacement";
   readonly Hover: "Hover";
   readonly HoverPrimary: "HoverPrimary";
   readonly NoHover: "NoHover";
@@ -12,6 +13,7 @@ declare const classNames: typeof globalClassNames & {
 export = classNames;
 export type IconNames =
   | "IconWrapper"
+  | "ExactPlacement"
   | "Hover"
   | "HoverPrimary"
   | "NoHover"

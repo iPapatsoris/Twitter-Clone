@@ -1,17 +1,11 @@
 .StepHeader {
-  padding-top: 1rem;
   font-weight: 700;
   font-size: 20px;
-  display: grid;
-  grid-template: "icon title ." / 1fr 5fr 1fr;
-  align-items: center;
+  grid-area: header;
+  align-self: center;
+}
 
-  .NavIcon {
-    grid-area: icon;
-    padding-left: 7px;
-  }
-
-  .Title {
-    grid-area: title;
-  }
+.NavIcon {
+  grid-area: icon;
+  align-self: center;
 }

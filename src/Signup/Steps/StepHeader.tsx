@@ -24,12 +24,14 @@ const StepHeader = ({ children, step, onPrevStepClick }: StepHeaderProps) => {
   };
 
   return (
-    <div className={styles.StepHeader}>
+    <>
       <div className={styles.NavIcon} onClick={onNavIconClick}>
         <Icon src={navIcon} />
       </div>
-      <div className={styles.Title}>{children}</div>
-    </div>
+      <div className={styles.StepHeader}>
+        <div>{children}</div>
+      </div>
+    </>
   );
 };
 
