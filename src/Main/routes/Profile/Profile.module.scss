@@ -1,8 +1,9 @@
 .Profile {
   .Cover {
-    object-fit: contain;
+    object-fit: cover;
     width: calc(100% + 2 * var(--main-content-padding));
     margin-left: calc(-1 * var(--main-content-padding));
+    height: 200px;
     cursor: pointer;
   }
 

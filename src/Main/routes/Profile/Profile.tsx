@@ -37,6 +37,8 @@ const userFields = [
 ] as const satisfies Readonly<Array<keyof ExposedUser>>;
 
 export type RequestFields = typeof userFields[number];
+export type UserProfileT = Pick<ExposedUser, RequestFields>;
+
 type Extra = ReturnType<typeof useRequest>["getData"];
 export const profileLoader = (async (
   { params }: LoaderFunctionArgs,
@@ -93,7 +95,7 @@ const Profile = ({}: ProfileProps) => {
     <>
       {isModalOpen && (
         <Modal withCloseIcon={false} setIsActive={setIsModalOpen}>
-          <EditProfile<typeof user> user={user} />
+          <EditProfile user={user} />
         </Modal>
       )}
       <div className={styles.Profile}>

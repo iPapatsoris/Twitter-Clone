@@ -3,32 +3,43 @@
   display: grid;
   --minipage-icon-area-length: 4rem;
   --minipage-blank-area: 1rem;
-  grid-template:
-    ". .      .       ." 1rem
-    ". icon   header  ." auto
-    ". .      content content" 1fr
-    "footer footer footer  footer" auto
-    / var(--minipage-blank-area) minmax(auto, var(--minipage-icon-area-length)) 1fr var(
-      --minipage-blank-area
-    );
+  grid-template-areas:
+    ".       .       .       .      "
+    ".       icon    header  .      "
+    "content content content content"
+    "footer  footer  footer  footer ";
+  grid-template-rows: 1rem auto 1fr auto;
+  grid-template-columns:
+    var(--minipage-blank-area) minmax(auto, var(--minipage-icon-area-length))
+    1fr var(--minipage-blank-area);
+
+  &.AlignHeaderWithContent {
+    grid-template-areas:
+      ".      .       .       .      "
+      ".      icon    header  .      "
+      ".      .       content content"
+      "footer footer  footer  footer ";
+
+    .Content {
+      /** This padding should be equal to the grid's left blank area plus the icon 
+         *  area. Normally, content grid area would be only in the center and not 
+         *  take up the right area too, but we need to do this to let the scroll bar
+         *  stick to the rightmost part of the screen. Right now padding is at a 
+         *  "close enough but not exact" value, since the grid's column widths are 
+         *  dynamic. In the future, we will be able to graciously get the exact 
+         *  spacing by using subgrid. 
+         **/
+      padding-right: calc(
+        var(--minipage-blank-area) + var(--minipage-icon-area-length)
+      );
+    }
+  }
 
   .Content {
     overflow-y: auto;
     grid-area: content;
-    padding-top: 1.5rem;
+    padding-top: 0.8rem;
     padding-bottom: 4rem;
-
-    /** This padding should be equal to the grid's left blank area plus the icon 
-     *  area. Normally, content grid area would be only in the center and not 
-     *  take up the right area too, but we need to do this to let the scroll bar
-     *  stick to the rightmost part of the screen. Right now padding is at a 
-     *  "close enough but not exact" value, since the grid's column widths are 
-     *  dynamic. In the future, we will be able to graciously get the exact 
-     *  spacing by using subgrid. 
-     **/
-    padding-right: calc(
-      var(--minipage-blank-area) + var(--minipage-icon-area-length)
-    );
   }
 
   .Footer {
