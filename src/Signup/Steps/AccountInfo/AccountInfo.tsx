@@ -1,11 +1,4 @@
-import Dropdown from "../../../util/components/Dropdown/Dropdown";
 import styles from "./AccountInfo.module.scss";
-import {
-  getDaysInMonth,
-  getMonths,
-  getYears,
-  isInvalidDate,
-} from "../../../util/date";
 import { SetStateAction, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import dayjs from "dayjs";
@@ -22,6 +15,7 @@ import { GetEmail } from "../../../../backend/src/api/email";
 import yup, { yupSequentialStringSchema } from "../../../util/yup";
 import useRequest from "../../../util/hooks/useRequest";
 import DatePicker from "../../../util/components/DatePicker/DatePicker";
+import { charLimits } from "../../../../backend/src/api/user";
 
 interface AccountInfoProps {
   accountInfo: AccountInfoT;
@@ -51,9 +45,8 @@ const AccountInfo = ({
     { enabled: false }
   );
 
-  const maxNameChars = 50;
   const schema: any = yup.object().shape({
-    name: yup.string().required("What's your name?").max(maxNameChars),
+    name: yup.string().required("What's your name?").max(charLimits.name),
     email: yupSequentialStringSchema([
       yup.string().required("Please enter your email."),
       yup.string().email("Please enter a valid email."),

@@ -79,3 +79,14 @@ export type GetUserTweetsAndRetweets = {
 export type GetUsernameExists = {
   response: NormalResponse<{ usernameExists: boolean }>;
 };
+
+export const charLimits: {
+  [K in keyof Required<
+    Pick<User, "name" | "bio" | "location" | "website">
+  >]: number;
+} = {
+  name: 50,
+  bio: 160,
+  location: 30,
+  website: 100,
+};
