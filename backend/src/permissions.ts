@@ -1,44 +1,52 @@
-import { GetUserFields, UpdateUserFields } from "./api/user.js";
+import { UserWithExtra } from "./api/user.js";
+import { User } from "./entities/user.js";
 
-// TODO: Add more specific type safety than Union
+const getUserFieldWhitelist = [
+  "id",
+  "username",
+  "name",
+  "avatar",
+  "coverPic",
+  "isVerified",
+  "bio",
+  "location",
+  "website",
+  "birthDate",
+  "joinedDate",
+  "email",
+  "phone",
+  "totalFollowees",
+  "totalFollowers",
+  "totalTweets",
+  "isFollowedByActiveUser",
+] as const satisfies Readonly<Array<keyof UserWithExtra>>;
+
+const updateUserFieldWhitelist = [
+  "name",
+  "avatar",
+  "coverPic",
+  "bio",
+  "location",
+  "website",
+  "birthDate",
+] as const satisfies Readonly<Array<keyof User>>;
+
+export type GetUserFields = typeof getUserFieldWhitelist[number];
+export type UpdateUserFields = typeof updateUserFieldWhitelist[number];
+
 export const checkPermissions = (
   endpoint: "GetUser" | "UpdateUser",
   fields: string[]
 ) => {
-  let fieldWhitelist: Array<GetUserFields | UpdateUserFields>;
+  let fieldWhitelist:
+    | typeof getUserFieldWhitelist
+    | typeof updateUserFieldWhitelist;
+  console.log(fields);
 
   if (endpoint === "GetUser") {
-    fieldWhitelist = [
-      "id",
-      "username",
-      "name",
-      "avatar",
-      "coverPic",
-      "isVerified",
-      "bio",
-      "location",
-      "website",
-      "birthDate",
-      "joinedDate",
-      "email",
-      "phone",
-      "totalFollowees",
-      "totalFollowers",
-      "totalTweets",
-      "isFollowedByActiveUser",
-    ];
+    fieldWhitelist = getUserFieldWhitelist;
   } else if (endpoint === "UpdateUser") {
-    fieldWhitelist = [
-      "name",
-      "avatar",
-      "coverPic",
-      "isVerified",
-      "bio",
-      "location",
-      "website",
-      "birthDate",
-      "email",
-    ];
+    fieldWhitelist = updateUserFieldWhitelist;
   }
 
   return fields.every((f) => fieldWhitelist.findIndex((w) => w === f) !== -1);

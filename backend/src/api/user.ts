@@ -2,6 +2,7 @@ import { Retweet, Tweet } from "../entities/tweet.js";
 import { User } from "../entities/user.js";
 import { NormalResponse } from "./common.js";
 import { Thread } from "./tweet.js";
+import { GetUserFields, UpdateUserFields } from "../permissions.js";
 
 export type CreateUser = {
   request: {
@@ -10,36 +11,26 @@ export type CreateUser = {
   response: NormalResponse;
 };
 
-export type UpdateUser = {
+export type UpdateUser<T extends UpdateUserFields> = {
   request: {
-    user: Partial<
-      Omit<
-        User,
-        | "username"
-        | "password"
-        | "joinedDate"
-        | "totalFollowers"
-        | "totalFollowees"
-      >
-    >;
+    user: Pick<User, T>;
   };
   response: NormalResponse<{
-    user: UpdateUser["request"];
+    user: Pick<User, T>;
   }>;
 };
 
-export type ExposedUser = Omit<User, "password"> & {
+export type UserWithExtra = User & {
   isFollowedByActiveUser: boolean;
 };
-export type GetUser<T extends keyof ExposedUser> = {
+
+export type GetUser<T extends GetUserFields> = {
   response: NormalResponse<{
-    user: Pick<ExposedUser, T>;
+    user: Pick<UserWithExtra, T>;
   }>;
 };
 
 export type CreateUserFields = keyof CreateUser["request"];
-export type UpdateUserFields = keyof UpdateUser["request"];
-export type GetUserFields = keyof ExposedUser;
 
 type MiniUserInfo = Pick<
   User,

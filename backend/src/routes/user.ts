@@ -7,18 +7,20 @@ import ErrorCodes from "../api/errorCodes.js";
 import { GetTweets, Thread } from "../api/tweet.js";
 import {
   CreateUser,
-  ExposedUser,
   GetUser,
-  GetUserFields,
   GetUserFollowees,
   GetUserFollowers,
   GetUsernameExists,
   GetUserThreadsAndRetweets,
   GetUserTweetsAndRetweets,
   UpdateUser,
-  UpdateUserFields,
+  UserWithExtra,
 } from "../api/user.js";
-import { checkPermissions } from "../permissions.js";
+import {
+  checkPermissions,
+  GetUserFields,
+  UpdateUserFields,
+} from "../permissions.js";
 import {
   Fields,
   removeArrayFields,
@@ -40,6 +42,7 @@ import {
   checkUserFollowedByActiveUser,
   usernameExists,
 } from "../services/user.js";
+import { requireAuth } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -75,15 +78,17 @@ router
   )
   .patch(
     // Update user info
+    requireAuth,
     async (
       req: TypedRequestQuery<
         {},
         Fields<UpdateUserFields>,
-        UpdateUser["request"]
+        UpdateUser<UpdateUserFields>["request"]
       >,
-      res: Response<UpdateUser["response"]>
+      res: Response<UpdateUser<UpdateUserFields>["response"]>
     ) => {
-      const fields = Object.keys(req.body);
+      const currentUserID = req.session.userID;
+      const fields = Object.keys(req.query) as UpdateUserFields[];
       // Make sure request has included some fields to query about
       if (!fields.length) {
         res.send({ ok: false, errorCode: ErrorCodes.NoFieldsSpecified });
@@ -100,8 +105,12 @@ router
       const preparedFields = fields.map((f, index) => {
         return f + " = ?" + (index !== fields.length - 1 ? "," : "");
       });
-      const user = req.body;
-      const values = Object.values(req.body);
+      const { user } = req.body;
+      const values: any = [];
+      fields.forEach((key) => values.push(user[key]));
+
+      console.log(preparedFields);
+      console.log(values);
 
       await runQuery(
         "UPDATE user SET " + preparedFields.join("") + " WHERE id = ?",
@@ -162,7 +171,7 @@ router.get(
     const username = req.params.username;
 
     // Query regular fields
-    const [user] = await runQuery<ExposedUser>(
+    const [user] = await runQuery<Pick<UserWithExtra, GetUserFields>>(
       "SELECT id" + views.join("") + " FROM user WHERE username = ?",
       [username]
     );

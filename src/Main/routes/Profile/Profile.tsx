@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import styles from "./Profile.module.scss";
-import { ExposedUser, GetUser } from "../../../../backend/src/api/user";
+import { GetUser } from "../../../../backend/src/api/user";
 import { useContext, useLayoutEffect, useState } from "react";
 import { HeaderProfileContext } from "../../layouts/Main";
 import { LoaderData, LoaderFunctionWithExtra } from "../../../util/types";
@@ -15,6 +15,7 @@ import useRequest from "../../../util/hooks/useRequest";
 import Info from "./Info/Info";
 import Modal from "../../../util/components/Modal/Modal";
 import EditProfile from "./EditProfile/EditProfile";
+import { GetUserFields } from "../../../../backend/src/permissions";
 
 interface ProfileProps {}
 
@@ -34,10 +35,12 @@ const userFields = [
   "totalTweets",
   "website",
   "isFollowedByActiveUser",
-] as const satisfies Readonly<Array<keyof ExposedUser>>;
+] as const satisfies Readonly<Array<GetUserFields>>;
 
 export type RequestFields = typeof userFields[number];
-export type UserProfileT = Pick<ExposedUser, RequestFields>;
+export type UserProfileT = NonNullable<
+  GetUser<RequestFields>["response"]["data"]
+>["user"];
 
 type Extra = ReturnType<typeof useRequest>["getData"];
 export const profileLoader = (async (
