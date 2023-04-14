@@ -1,6 +1,7 @@
 .Profile {
   .Cover {
     object-fit: cover;
+    object-position: center;
     width: calc(100% + 2 * var(--main-content-padding));
     margin-left: calc(-1 * var(--main-content-padding));
     height: 200px;
@@ -17,6 +18,8 @@
       .Avatar {
         width: var(--avatar-height);
         height: 133px;
+        object-fit: cover;
+        object-position: center;
         border: 4px solid white;
         border-radius: 100px;
         position: absolute;

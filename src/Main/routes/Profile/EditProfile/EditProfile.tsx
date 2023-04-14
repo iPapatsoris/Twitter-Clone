@@ -1,6 +1,7 @@
 import Minipage from "../../../../util/layouts/Minipage/Minipage";
 import { webPath } from "../../../../util/paths";
 import { UserProfileT } from "../Profile";
+import AddPhotoButton from "./AddPhotoButton";
 import styles from "./EditProfile.module.scss";
 import EditProfileHeader from "./EditProfileHeader/EditProfileHeader";
 
@@ -12,16 +13,18 @@ const EditProfile = ({ user }: EditProfileProps) => {
   return (
     <Minipage alignHeaderWithContent={false} header={<EditProfileHeader />}>
       <div className={styles.EditProfile}>
-        <img
+        <div
           className={styles.Cover}
-          src={webPath(user.coverPic)}
-          alt="The profile cover of the user"
-        />
-        <img
+          style={{ backgroundImage: "url(" + webPath(user.coverPic) + ")" }}
+        >
+          <AddPhotoButton alt="Change cover" />
+        </div>
+        <div
           className={styles.Avatar}
-          src={webPath(user.avatar)}
-          alt="The avatar of the user"
-        />
+          style={{ backgroundImage: "url(" + webPath(user.avatar) + ")" }}
+        >
+          <AddPhotoButton alt="Change avatar" />
+        </div>
         <div className={styles.Content}>content</div>
       </div>
     </Minipage>
