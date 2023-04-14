@@ -4,6 +4,7 @@ import {
   useImperativeHandle,
   useRef,
   useState,
+  ForwardedRef,
 } from "react";
 import useClickOutside from "../../hooks/useClickOutside";
 import styles, { InputWrapperNames } from "./InputWrapper.module.scss";
@@ -17,7 +18,7 @@ import Icon from "../Icon/Icon";
 interface InputProps {
   name: string;
   placeholder: string;
-  type?: "text" | "password";
+  type?: "text" | "password" | "textArea";
   maxLength?: number;
   autofocus?: boolean;
   readonly?: boolean;
@@ -32,7 +33,8 @@ interface InputProps {
   leader?: React.ReactNode;
 }
 
-const TextInput = forwardRef(
+type RefType = HTMLInputElement | HTMLTextAreaElement;
+const TextInput = forwardRef<RefType, InputProps>(
   (
     {
       name,
@@ -50,11 +52,11 @@ const TextInput = forwardRef(
       type: initialType = "text",
       showStatusIcon = false,
       leader = "",
-    }: InputProps,
+    },
     ref
   ) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const inputRef = useRef<HTMLInputElement | null>(null);
+    const inputRef = useRef<RefType>(null);
     const [isFocused, setIsFocused] = useState(false);
     const [inputType, setInputType] = useState(initialType);
 
@@ -67,15 +69,16 @@ const TextInput = forwardRef(
       }
     };
 
-    useImperativeHandle(ref, () => inputRef.current);
+    // Forward inputRef outside component
+    useImperativeHandle(ref, () => inputRef.current as NonNullable<RefType>);
 
     useEffect(() => {
-      if (autofocus && inputRef.current) {
+      if (autofocus && inputRef && inputRef.current) {
         inputRef.current.style.visibility = "visible";
         inputRef.current?.focus();
         setIsFocused(true);
       }
-    }, [autofocus]);
+    }, [autofocus, inputRef]);
 
     useClickOutside({
       ref: wrapperRef,
@@ -86,7 +89,7 @@ const TextInput = forwardRef(
     });
 
     const handleMousedown = (e: any) => {
-      if (inputRef.current && !readonly) {
+      if (inputRef && inputRef.current && !readonly) {
         inputRef.current.style.visibility = "visible";
         inputRef.current.focus();
         setIsFocused(true);
@@ -135,6 +138,36 @@ const TextInput = forwardRef(
       }
     }
 
+    const inputProps = {
+      name,
+      // ref: inputRef,
+      maxLength,
+      onChange: (e: any) => {
+        onChange(e.target.value);
+      },
+      onBlur,
+      value,
+      readOnly: readonly,
+    };
+
+    let input;
+    if (inputType === "textArea") {
+      input = (
+        <textarea
+          {...inputProps}
+          ref={inputRef as ForwardedRef<HTMLTextAreaElement>}
+        />
+      );
+    } else {
+      input = (
+        <input
+          {...inputProps}
+          ref={inputRef as ForwardedRef<HTMLInputElement>}
+          type={inputType}
+        />
+      );
+    }
+
     return (
       <div>
         <div
@@ -161,18 +194,7 @@ const TextInput = forwardRef(
             </div>
             <div className={inputStyles.Input}>
               <span className={leaderStyles.join(" ")}>{leader}</span>
-              <input
-                name={name}
-                ref={inputRef}
-                maxLength={maxLength}
-                onChange={(e) => {
-                  onChange(e.target.value);
-                }}
-                onBlur={onBlur}
-                value={value}
-                type={inputType}
-                readOnly={readonly}
-              />
+              {input}
               {iconJSX}
             </div>
           </div>
