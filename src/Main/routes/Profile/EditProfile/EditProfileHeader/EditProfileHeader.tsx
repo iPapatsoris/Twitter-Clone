@@ -5,9 +5,11 @@ import closeIcon from "../../../../../assets/icons/close.png";
 import { useContext } from "react";
 import { ModalContext } from "../../../../../util/components/Modal/Modal";
 
-interface EditProfileHeaderProps {}
+interface EditProfileHeaderProps {
+  disableUpdate: boolean;
+}
 
-const EditProfileHeader = ({}: EditProfileHeaderProps) => {
+const EditProfileHeader = ({ disableUpdate }: EditProfileHeaderProps) => {
   const { setIsActive } = useContext(ModalContext);
   return (
     <>
@@ -19,7 +21,12 @@ const EditProfileHeader = ({}: EditProfileHeaderProps) => {
       />
       <div className={styles.Header}>
         <h2 className={styles.Text}>Edit profile</h2>
-        <Button extraClasses={[styles.Action]} color="black">
+        <Button
+          extraClasses={[styles.Action]}
+          color="black"
+          type="submit"
+          disabled={disableUpdate}
+        >
           Save
         </Button>
       </div>
