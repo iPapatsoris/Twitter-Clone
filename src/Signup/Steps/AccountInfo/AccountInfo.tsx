@@ -21,6 +21,7 @@ import { useQuery } from "react-query";
 import { GetEmail } from "../../../../backend/src/api/email";
 import yup, { yupSequentialStringSchema } from "../../../util/yup";
 import useRequest from "../../../util/hooks/useRequest";
+import DatePicker from "../../../util/components/DatePicker/DatePicker";
 
 interface AccountInfoProps {
   accountInfo: AccountInfoT;
@@ -29,8 +30,6 @@ interface AccountInfoProps {
   header?: string;
   inputToFocus?: keyof AccountInfoT;
 }
-
-type Option = React.ComponentProps<typeof Dropdown>["options"][0];
 
 const AccountInfo = ({
   stepper: { step, nextStep },
@@ -42,36 +41,6 @@ const AccountInfo = ({
   const [month, setMonth] = useState(birthDate ? birthDate.month() : -1);
   const [day, setDay] = useState(birthDate ? birthDate.date() : -1);
   const [year, setYear] = useState(birthDate ? birthDate.year() : -1);
-
-  const months: Option[] = getMonths().map((m) => ({
-    id: m.id,
-    component: <span>{m.text}</span>,
-    onSelect: () => {
-      setMonth(m.id);
-      if (isInvalidDate({ day, year, month: m.id })) {
-        setDay(-1);
-      }
-    },
-  }));
-
-  const days: Option[] = getDaysInMonth({ month, year }).map((d) => ({
-    id: d.id,
-    component: <span>{d.text}</span>,
-    onSelect: () => {
-      setDay(d.id);
-    },
-  }));
-
-  const years: Option[] = getYears().map((y) => ({
-    id: y.id,
-    component: <span>{y.text}</span>,
-    onSelect: () => {
-      setYear(y.id);
-      if (isInvalidDate({ day, year: y.id, month })) {
-        setDay(-1);
-      }
-    },
-  }));
 
   const { getData } = useRequest();
   const { refetch } = useQuery<GetEmail["response"]>(
@@ -157,29 +126,14 @@ const AccountInfo = ({
                 This will not be shown publicly. Confirm your own age, even if
                 this account is for a business, a pet, or something else.
               </div>
-              <div className={styles.Dropdowns}>
-                <Dropdown
-                  name="Month"
-                  options={months}
-                  selectedOptionID={month !== -1 ? month : null}
-                  extraStyles={[styles.Dropdown]}
-                  position={{ block: "bottom", inline: "leftCover" }}
-                />
-                <Dropdown
-                  name="Day"
-                  options={days}
-                  selectedOptionID={day !== -1 ? day : null}
-                  extraStyles={[styles.Dropdown]}
-                  position={{ block: "top", inline: "leftCover" }}
-                />
-                <Dropdown
-                  name="Year"
-                  options={years}
-                  selectedOptionID={year !== -1 ? year : null}
-                  extraStyles={[styles.Dropdown]}
-                  position={{ block: "top", inline: "leftCover" }}
-                />
-              </div>
+              <DatePicker
+                day={day}
+                month={month}
+                year={year}
+                setDay={setDay}
+                setMonth={setMonth}
+                setYear={setYear}
+              />
             </div>
           </div>
         </div>
