@@ -1,5 +1,5 @@
-import photoIcon from "../../../../assets/icons/photo.png";
-import styles from "./EditProfile.module.scss";
+import photoIcon from "../../../../../assets/icons/photo.png";
+import styles from "./EditProfilePhotos.module.scss";
 
 interface AddPhotoButtonProps {
   alt: string;
