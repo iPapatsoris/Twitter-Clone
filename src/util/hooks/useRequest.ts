@@ -2,7 +2,7 @@ import { NormalResponse } from "../../../backend/src/api/common";
 import { useAuth } from "./useAuth";
 
 const useRequest = () => {
-  const { setUser } = useAuth();
+  const { user, setUser } = useAuth();
 
   const buildURL = <T extends string>(path: string, params: readonly T[]) => {
     const base = import.meta.env.VITE_API_PATH;
@@ -12,40 +12,27 @@ const useRequest = () => {
     return url;
   };
 
-  const postData = async <T extends string>(
+  const request = async <T extends string>(
     path: string,
-    body: any,
-    params: T[] = []
+    method: "GET" | "DELETE" | "PATCH" | "POST",
+    params: readonly T[],
+    body: any = {}
   ) => {
-    const res: Response = await fetch(buildURL(path, params), {
-      method: "POST",
-      body: JSON.stringify(body),
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const data: NormalResponse = await res.json();
-    if (data.loggedOut) {
-      setUser(null);
-    }
-
-    return data as any;
-  };
-
-  const simpleRequest = async <T extends string>(
-    path: string,
-    method: "GET" | "DELETE",
-    params: readonly T[]
-  ) => {
-    const res = await fetch(buildURL(path, params), {
+    const options: RequestInit = {
       method,
       credentials: "include",
-    });
+    };
+    if (method === "POST" || method === "PATCH") {
+      options.body = JSON.stringify(body);
+      options.headers = {
+        "Content-Type": "application/json",
+      };
+    }
+
+    const res = await fetch(buildURL(path, params), options);
 
     const data: NormalResponse = await res.json();
-    if (data.loggedOut) {
+    if (user && data.loggedOut) {
       setUser(null);
     }
 
@@ -56,13 +43,25 @@ const useRequest = () => {
     path: string,
     params: readonly T[] = []
   ): Promise<Res> => {
-    return simpleRequest(path, "GET", params);
+    return request(path, "GET", params);
   };
 
   const deleteData = async <T extends string>(path: string, params: T[] = []) =>
-    simpleRequest(path, "DELETE", params);
+    request(path, "DELETE", params);
 
-  return { getData, deleteData, postData };
+  const patchData = async <T extends string>(
+    path: string,
+    body: any,
+    params: readonly T[] = []
+  ) => request(path, "PATCH", params, body);
+
+  const postData = async <T extends string>(
+    path: string,
+    body: any,
+    params: readonly T[] = []
+  ) => request(path, "POST", params, body);
+
+  return { getData, deleteData, patchData, postData };
 };
 
 export default useRequest;
