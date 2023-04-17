@@ -1,7 +1,7 @@
 .Profile {
   .Cover {
-    object-fit: cover;
-    object-position: center;
+    background-size: cover;
+    background-position: center;
     width: calc(100% + 2 * var(--main-content-padding));
     margin-left: calc(-1 * var(--main-content-padding));
     height: 200px;

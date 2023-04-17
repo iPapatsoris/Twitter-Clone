@@ -16,6 +16,7 @@ import Info from "./Info/Info";
 import Modal from "../../../util/components/Modal/Modal";
 import EditProfile from "./EditProfile/EditProfile";
 import { GetUserFields } from "../../../../backend/src/permissions";
+import { defaultAvatar, defaultCoverColor } from "./defaultPics";
 
 interface ProfileProps {}
 
@@ -94,6 +95,10 @@ const Profile = ({}: ProfileProps) => {
     );
   }
 
+  const coverStyle: React.CSSProperties = user.coverPic
+    ? { backgroundImage: "url(" + user.coverPic + ")" }
+    : { backgroundColor: defaultCoverColor };
+
   return (
     <>
       {isModalOpen && (
@@ -102,16 +107,12 @@ const Profile = ({}: ProfileProps) => {
         </Modal>
       )}
       <div className={styles.Profile}>
-        <img
-          className={styles.Cover}
-          src={webPath(user.coverPic)}
-          alt="The profile cover of the user"
-        />
+        <div className={styles.Cover} style={coverStyle} />
         <div className={styles.AvatarAndActions}>
           <div className={styles.AvatarContainer}>
             <img
               className={styles.Avatar}
-              src={webPath(user.avatar)}
+              src={user.avatar || defaultAvatar}
               alt="The avatar of the user"
             />
             <div className={styles.Actions}>

@@ -52,6 +52,8 @@ const EditProfileInfo = ({
         control={control}
         maxLength={charLimits.website}
       />
+      <FormInput name="avatar" placeholder="Avatar link" control={control} />
+      <FormInput name="coverPic" placeholder="Cover link" control={control} />
       <div>
         <span className={styles.LightColor}>Birth date</span>
         <DatePicker

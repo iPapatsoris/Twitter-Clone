@@ -23,13 +23,13 @@ const requestFields = [
   "bio",
   "location",
   "website",
-  // "avatar",
-  // "coverPic",
+  "avatar",
+  "coverPic",
   "birthDate",
 ] as const satisfies Readonly<Array<UpdateUserFields>>;
-export type ProfileInfoT = Pick<
+export type ProfileInfoT = Omit<
   UpdateUser<typeof requestFields[number]>["request"]["user"],
-  "name" | "bio" | "location" | "website"
+  "birthDate"
 >;
 
 const EditProfile = ({ user }: EditProfileProps) => {
@@ -45,6 +45,8 @@ const EditProfile = ({ user }: EditProfileProps) => {
     bio: yup.string().max(charLimits.bio),
     location: yup.string().max(charLimits.location),
     website: yup.string().max(100),
+    avatar: yup.string(),
+    coverPic: yup.string(),
   });
 
   const form = useForm<ProfileInfoT>({
@@ -53,6 +55,8 @@ const EditProfile = ({ user }: EditProfileProps) => {
       bio: user.bio,
       location: user.location,
       website: user.website,
+      avatar: user.avatar,
+      coverPic: user.coverPic,
     },
     mode: "onTouched",
     resolver: yupResolver(schema),
@@ -79,8 +83,6 @@ const EditProfile = ({ user }: EditProfileProps) => {
     mutate({
       user: {
         ...formUser,
-        avatar: user.avatar,
-        coverPic: user.coverPic,
         birthDate: birthDate.format("YYYY-MM-DD"),
       },
     });

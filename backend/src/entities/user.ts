@@ -4,8 +4,8 @@ export type User = {
   password: string;
   name: string;
   email: string;
-  avatar: string;
-  coverPic: string;
+  avatar?: string;
+  coverPic?: string;
   isVerified: boolean;
   bio?: string;
   location?: string;
