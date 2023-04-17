@@ -1,9 +1,10 @@
+import { defaultAvatar } from "../../../Main/routes/Profile/defaultPics";
 import styles from "./UserCard.module.scss";
 
 export interface UserCardDetails {
   name: string;
   username: string;
-  avatar: string;
+  avatar?: string;
 }
 interface UserCardProps extends UserCardDetails {
   children: React.ReactNode;
@@ -21,7 +22,11 @@ const UserCard = ({
 
   return (
     <div className={[styles.UserCard, extraClass].join(" ")}>
-      <img src={avatar} className={styles.Avatar} alt="User avatar" />
+      <img
+        src={avatar || defaultAvatar}
+        className={styles.Avatar}
+        alt="User avatar"
+      />
       <div>
         <div className={styles.Name}>{name}</div>
         <div className={styles.Username}>@{username}</div>

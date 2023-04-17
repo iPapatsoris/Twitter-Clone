@@ -69,7 +69,7 @@ const ProfileButton = () => {
         <UserCard
           name={user.name}
           username={user.username}
-          avatar={webPath(user.avatar)}
+          avatar={user.avatar}
           isStandalone
         >
           <Icon src={dots} title="" hover="none" alt="Account options" />
