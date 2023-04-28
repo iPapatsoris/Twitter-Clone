@@ -4,7 +4,6 @@ import { GetUser } from "../../../../backend/src/api/user";
 import { useContext, useLayoutEffect, useState } from "react";
 import { HeaderProfileContext } from "../../layouts/Main";
 import { LoaderData, LoaderFunctionWithExtra } from "../../../util/types";
-import { webPath } from "../../../util/paths";
 import Icon from "../../../util/components/Icon/Icon";
 import optionsIcon from "../../../assets/icons/dots.png";
 import notificationsIcon from "../../../assets/icons/notifications.png";
@@ -75,7 +74,11 @@ const Profile = ({}: ProfileProps) => {
   }, [res, setUser]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  let actionButton = <Button color="black">Follow</Button>;
+  let actionButton = (
+    <Button color="black" key={user.id}>
+      Follow
+    </Button>
+  );
   if (activeUser && user.isFollowedByActiveUser) {
     actionButton = (
       <Button
@@ -83,13 +86,14 @@ const Profile = ({}: ProfileProps) => {
         hoverColor="red"
         hoverText="Unfollow"
         extraClasses={[styles.FollowButton]}
+        key={user.id}
       >
         Following
       </Button>
     );
   } else if (activeUser && activeUser.id === user.id) {
     actionButton = (
-      <Button color="white" onClick={() => setIsModalOpen(true)}>
+      <Button color="white" onClick={() => setIsModalOpen(true)} key={user.id}>
         Edit profile
       </Button>
     );
