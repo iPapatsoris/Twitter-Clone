@@ -1,11 +1,4 @@
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-  ForwardedRef,
-} from "react";
+import { forwardRef, useEffect, useRef, useState, ForwardedRef } from "react";
 import useClickOutside from "../../hooks/useClickOutside";
 import styles, { InputWrapperNames } from "./InputWrapper.module.scss";
 import inputStyles from "./TextInput.module.scss";
@@ -14,6 +7,7 @@ import eyeStrikeIcon from "../../../assets/icons/eye-strike.png";
 import successIcon from "../../../assets/icons/success.png";
 import errorIcon from "../../../assets/icons/error.png";
 import Icon from "../Icon/Icon";
+import useForwardRef from "../../hooks/useForwardRef";
 
 interface InputProps {
   name: string;
@@ -53,10 +47,12 @@ const TextInput = forwardRef<RefType, InputProps>(
       showStatusIcon = false,
       leader = "",
     },
-    ref
+    fref
   ) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
+
     const inputRef = useRef<RefType>(null);
+    const ref = useForwardRef(fref, inputRef);
     const [isFocused, setIsFocused] = useState(false);
     const [inputType, setInputType] = useState(initialType);
 
@@ -69,17 +65,13 @@ const TextInput = forwardRef<RefType, InputProps>(
       }
     };
 
-    // Forward inputRef outside component
-    // TODO: is this needed?
-    useImperativeHandle(ref, () => inputRef.current as NonNullable<RefType>);
-
     useEffect(() => {
-      if (autofocus && inputRef && inputRef.current) {
-        inputRef.current.style.visibility = "visible";
-        inputRef.current?.focus();
+      if (autofocus && ref && ref.current) {
+        ref.current.style.visibility = "visible";
+        ref.current?.focus();
         setIsFocused(true);
       }
-    }, [autofocus, inputRef]);
+    }, [autofocus, ref]);
 
     useClickOutside({
       ref: wrapperRef,
@@ -90,9 +82,9 @@ const TextInput = forwardRef<RefType, InputProps>(
     });
 
     const handleMousedown = (e: any) => {
-      if (inputRef && inputRef.current && !readonly) {
-        inputRef.current.style.visibility = "visible";
-        inputRef.current.focus();
+      if (ref && ref.current && !readonly) {
+        ref.current.style.visibility = "visible";
+        ref.current.focus();
         setIsFocused(true);
         // TODO: this line disables highlighting
         e.preventDefault();
@@ -156,14 +148,14 @@ const TextInput = forwardRef<RefType, InputProps>(
       input = (
         <textarea
           {...inputProps}
-          ref={inputRef as ForwardedRef<HTMLTextAreaElement>}
+          ref={ref as ForwardedRef<HTMLTextAreaElement>}
         />
       );
     } else {
       input = (
         <input
           {...inputProps}
-          ref={inputRef as ForwardedRef<HTMLInputElement>}
+          ref={ref as ForwardedRef<HTMLInputElement>}
           type={inputType}
         />
       );
