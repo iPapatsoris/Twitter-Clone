@@ -33,7 +33,7 @@ interface InputProps {
   leader?: React.ReactNode;
 }
 
-type RefType = HTMLInputElement | HTMLTextAreaElement;
+export type RefType = HTMLInputElement | HTMLTextAreaElement;
 const TextInput = forwardRef<RefType, InputProps>(
   (
     {
@@ -70,6 +70,7 @@ const TextInput = forwardRef<RefType, InputProps>(
     };
 
     // Forward inputRef outside component
+    // TODO: is this needed?
     useImperativeHandle(ref, () => inputRef.current as NonNullable<RefType>);
 
     useEffect(() => {

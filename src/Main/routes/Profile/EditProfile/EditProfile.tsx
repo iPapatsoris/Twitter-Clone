@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { RefObject, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { charLimits, UpdateUser } from "../../../../../backend/src/api/user";
@@ -12,7 +12,9 @@ import yup from "../../../../util/yup";
 import { UserProfileT } from "../Profile";
 import styles from "./EditProfile.module.scss";
 import EditProfileHeader from "./EditProfileHeader/EditProfileHeader";
-import EditProfileInfo from "./EditProfileInfo/EditProfileInfo";
+import EditProfileInfo, {
+  PhotoInputRefs,
+} from "./EditProfileInfo/EditProfileInfo";
 import EditProfilePhotos from "./EditProfilePhotos/EditProfilePhotos";
 
 interface EditProfileProps {
@@ -87,6 +89,16 @@ const EditProfile = ({ user }: EditProfileProps) => {
       },
     });
   };
+
+  const scrollToInput = (ref: RefObject<HTMLInputElement>) => {
+    if (ref && ref.current) ref.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const ref = useRef<PhotoInputRefs>(null);
+
+  const [focusOnAvatar, setFocusOnAvatar] = useState(false);
+  const [focusOnCover, setFocusOnCover] = useState(false);
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Minipage
@@ -94,7 +106,18 @@ const EditProfile = ({ user }: EditProfileProps) => {
         header={<EditProfileHeader disableUpdate={!isValidForm} />}
       >
         <div className={styles.EditProfile}>
-          <EditProfilePhotos coverPic={user.coverPic} avatar={user.avatar} />
+          <EditProfilePhotos
+            coverPic={user.coverPic}
+            avatar={user.avatar}
+            focusOnAvatar={() => {
+              setFocusOnAvatar(true);
+              scrollToInput(ref!.current!.avatarRef());
+            }}
+            focusOnCover={() => {
+              setFocusOnCover(true);
+              scrollToInput(ref!.current!.coverRef());
+            }}
+          />
           <EditProfileInfo
             control={control}
             day={day}
@@ -103,6 +126,9 @@ const EditProfile = ({ user }: EditProfileProps) => {
             setDay={setDay}
             setMonth={setMonth}
             setYear={setYear}
+            ref={ref}
+            focusOnAvatar={focusOnAvatar}
+            focusOnCover={focusOnCover}
           />
         </div>
       </Minipage>

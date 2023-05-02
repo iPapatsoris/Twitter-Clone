@@ -5,16 +5,23 @@ import styles from "./EditProfilePhotos.module.scss";
 interface EditProfilePhotosProps {
   coverPic?: string;
   avatar?: string;
+  focusOnAvatar: VoidFunction;
+  focusOnCover: VoidFunction;
 }
 
-const EditProfilePhotos = ({ coverPic, avatar }: EditProfilePhotosProps) => {
+const EditProfilePhotos = ({
+  coverPic,
+  avatar,
+  focusOnAvatar,
+  focusOnCover,
+}: EditProfilePhotosProps) => {
   const coverStyle: React.CSSProperties = coverPic
     ? { backgroundImage: "url(" + coverPic + ")" }
     : { backgroundColor: "background-color: rgb(207, 217, 222)" };
   return (
     <>
       <div className={styles.Cover} style={coverStyle}>
-        <AddPhotoButton alt="Change cover" />
+        <AddPhotoButton alt="Change cover" onClick={focusOnCover} />
       </div>
       <div
         className={styles.Avatar}
@@ -22,7 +29,7 @@ const EditProfilePhotos = ({ coverPic, avatar }: EditProfilePhotosProps) => {
           backgroundImage: "url(" + avatar || defaultAvatar + ")",
         }}
       >
-        <AddPhotoButton alt="Change avatar" />
+        <AddPhotoButton alt="Change avatar" onClick={focusOnAvatar} />
       </div>
     </>
   );

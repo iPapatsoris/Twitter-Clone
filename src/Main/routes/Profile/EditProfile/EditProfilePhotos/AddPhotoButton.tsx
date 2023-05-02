@@ -3,10 +3,11 @@ import styles from "./EditProfilePhotos.module.scss";
 
 interface AddPhotoButtonProps {
   alt: string;
+  onClick: VoidFunction;
 }
 
-const AddPhotoButton = ({ alt }: AddPhotoButtonProps) => (
-  <div className={styles.AddPhoto}>
+const AddPhotoButton = ({ alt, onClick }: AddPhotoButtonProps) => (
+  <div className={styles.AddPhoto} onClick={onClick}>
     <img src={photoIcon} title="Add photo" alt={alt} />
   </div>
 );
