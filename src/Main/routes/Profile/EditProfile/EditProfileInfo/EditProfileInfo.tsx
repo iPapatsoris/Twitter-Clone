@@ -22,6 +22,8 @@ interface EditProfileInfoProps {
   setYear: React.Dispatch<SetStateAction<number>>;
   focusOnAvatar: boolean;
   focusOnCover: boolean;
+  setFocusOnAvatar: React.Dispatch<SetStateAction<boolean>>;
+  setFocusOnCover: React.Dispatch<SetStateAction<boolean>>;
 }
 
 export type PhotoInputRefs = {
@@ -40,6 +42,8 @@ const EditProfileInfo = forwardRef<PhotoInputRefs, EditProfileInfoProps>(
       setYear,
       focusOnAvatar,
       focusOnCover,
+      setFocusOnAvatar,
+      setFocusOnCover,
     },
     ref
   ) => {
@@ -50,6 +54,8 @@ const EditProfileInfo = forwardRef<PhotoInputRefs, EditProfileInfoProps>(
       () => ({ avatarRef: () => avatarRef, coverRef: () => coverRef }),
       []
     );
+
+    console.log("edit profile info: focus is", focusOnAvatar);
 
     return (
       <div className={styles.EditProfileInfo}>
@@ -84,6 +90,7 @@ const EditProfileInfo = forwardRef<PhotoInputRefs, EditProfileInfoProps>(
           control={control}
           ref={avatarRef}
           autofocus={focusOnAvatar}
+          onBlur={() => setFocusOnAvatar(false)}
         />
         <FormInput
           name="coverPic"
@@ -91,6 +98,7 @@ const EditProfileInfo = forwardRef<PhotoInputRefs, EditProfileInfoProps>(
           control={control}
           ref={coverRef}
           autofocus={focusOnCover}
+          onBlur={() => setFocusOnCover(false)}
         />
         <div>
           <span className={styles.LightColor}>Birth date</span>

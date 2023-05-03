@@ -110,12 +110,12 @@ const EditProfile = ({ user }: EditProfileProps) => {
             coverPic={user.coverPic}
             avatar={user.avatar}
             focusOnAvatar={() => {
-              setFocusOnAvatar(true);
               scrollToInput(ref!.current!.avatarRef());
+              setFocusOnAvatar(true);
             }}
             focusOnCover={() => {
-              setFocusOnCover(true);
               scrollToInput(ref!.current!.coverRef());
+              setFocusOnCover(true);
             }}
           />
           <EditProfileInfo
@@ -129,6 +129,8 @@ const EditProfile = ({ user }: EditProfileProps) => {
             ref={ref}
             focusOnAvatar={focusOnAvatar}
             focusOnCover={focusOnCover}
+            setFocusOnAvatar={setFocusOnAvatar}
+            setFocusOnCover={setFocusOnCover}
           />
         </div>
       </Minipage>

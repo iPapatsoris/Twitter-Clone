@@ -16,7 +16,7 @@ import TextInput from "./TextInput";
 
 type FormInputProps<FormInput extends FieldValues> = Omit<
   React.ComponentProps<typeof Input>,
-  "onChange" | "onBlur" | "value" | "error"
+  "onChange" | "value" | "error"
 > & {
   control: UseFormReturn<FormInput, any>["control"];
   name: Path<FormInput>;
@@ -41,6 +41,7 @@ const ActualComponent = <FormInput extends FieldValues>(
     type,
     leader,
     showStatusIcon,
+    onBlur: onBlurUser = () => {},
   } = props;
   const {
     field: { onChange, onBlur, value, ref: register },
@@ -56,7 +57,8 @@ const ActualComponent = <FormInput extends FieldValues>(
     }
   }, [isDirty, hasBeenDirtied, setHasBeenDirtied]);
 
-  const handleBlur = () => {
+  const handleBlur = (e: any) => {
+    onBlurUser(e);
     onBlur();
     if (hasBeenDirtied) {
       setShowErrors(true);
