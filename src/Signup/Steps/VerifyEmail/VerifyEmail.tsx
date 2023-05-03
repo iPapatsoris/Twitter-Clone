@@ -1,6 +1,6 @@
 import { SetStateAction, useState } from "react";
 import Minipage from "../../../util/layouts/Minipage/Minipage";
-import TextInput from "../../../util/components/TextInput/TextInput";
+import TextInput from "../../../util/components/Input/Input";
 import useStepper from "../../../util/hooks/useStepper";
 import NextStepButton from "../NextStepButton";
 import StepHeader from "../StepHeader";

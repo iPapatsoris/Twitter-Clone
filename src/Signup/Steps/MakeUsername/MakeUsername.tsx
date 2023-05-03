@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import { GetUsernameExists } from "../../../../backend/src/api/user";
 import Form from "../../../util/components/Form/Form";
-import FormInput from "../../../util/components/TextInput/FormTextInput";
+import FormInput from "../../../util/components/Input/FormInput";
 import useRequest from "../../../util/hooks/useRequest";
 import useStepper from "../../../util/hooks/useStepper";
 import Minipage from "../../../util/layouts/Minipage/Minipage";

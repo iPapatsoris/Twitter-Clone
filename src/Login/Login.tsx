@@ -6,7 +6,7 @@ import { LoginUser } from "../../backend/src/api/auth";
 import Button from "../util/components/Button/Button";
 import Form from "../util/components/Form/Form";
 import { ModalContext } from "../util/components/Modal/Modal";
-import FormInput from "../util/components/TextInput/FormTextInput";
+import FormInput from "../util/components/Input/FormInput";
 import { useAuth } from "../util/hooks/useAuth";
 import useRequest from "../util/hooks/useRequest";
 import LogoHeader from "../util/layouts/Minipage/LogoHeader/LogoHeader";

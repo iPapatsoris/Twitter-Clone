@@ -8,7 +8,7 @@ import {
 } from "react";
 import useClickOutside from "../../hooks/useClickOutside";
 import styles, { InputWrapperNames } from "./InputWrapper.module.scss";
-import inputStyles from "./TextInput.module.scss";
+import inputStyles from "./Input.module.scss";
 import eyeIcon from "../../../assets/icons/eye.png";
 import eyeStrikeIcon from "../../../assets/icons/eye-strike.png";
 import successIcon from "../../../assets/icons/success.png";
@@ -35,7 +35,7 @@ interface InputProps {
 }
 
 export type RefType = HTMLInputElement | HTMLTextAreaElement;
-const TextInput = forwardRef<RefType, InputProps>(
+const Input = forwardRef<RefType, InputProps>(
   (
     {
       name,
@@ -121,12 +121,10 @@ const TextInput = forwardRef<RefType, InputProps>(
     };
 
     const wrapperStyles: styles.InputWrapperNames[] = [styles.Wrapper];
-    const typingAreaStyles: inputStyles.TextInputNames[] = [
-      inputStyles.TypingArea,
-    ];
+    const typingAreaStyles: inputStyles.InputNames[] = [inputStyles.TypingArea];
     const labelStyles: string[] = [inputStyles.InheritCursor];
     const helperBoxStyles: InputWrapperNames[] = [styles.HelperBox];
-    const leaderStyles: inputStyles.TextInputNames[] = [inputStyles.Leader];
+    const leaderStyles: inputStyles.InputNames[] = [inputStyles.Leader];
 
     if (isFocused) {
       wrapperStyles.push(styles.Focused);
@@ -236,4 +234,4 @@ const TextInput = forwardRef<RefType, InputProps>(
   }
 );
 
-export default TextInput;
+export default Input;

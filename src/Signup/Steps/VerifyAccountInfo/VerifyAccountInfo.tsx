@@ -1,4 +1,4 @@
-import TextInput from "../../../util/components/TextInput/TextInput";
+import TextInput from "../../../util/components/Input/Input";
 import useStepper from "../../../util/hooks/useStepper";
 import { AccountInfoT } from "../../Signup";
 import styles from "./VerifyAccountInfo.module.scss";
@@ -34,7 +34,6 @@ const VerifyAccountInfo = ({
         onSuccess: (res) => {
           setEmailCodeHint(res.data!.code);
           nextStep();
-          console.log("nextStep from verify account info");
         },
       }
     );

@@ -4,7 +4,7 @@ import {
   useController,
   UseFormReturn,
 } from "react-hook-form";
-import Input, { RefType } from "./TextInput";
+import Input, { RefType } from "./Input";
 import React, {
   MutableRefObject,
   ReactElement,
@@ -12,7 +12,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import TextInput from "./TextInput";
+import TextInput from "./Input";
 
 type FormInputProps<FormInput extends FieldValues> = Omit<
   React.ComponentProps<typeof Input>,

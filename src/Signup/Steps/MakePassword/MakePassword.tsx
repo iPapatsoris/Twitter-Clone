@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import Minipage from "../../../util/layouts/Minipage/Minipage";
-import FormInput from "../../../util/components/TextInput/FormTextInput";
+import FormInput from "../../../util/components/Input/FormInput";
 import useStepper from "../../../util/hooks/useStepper";
 import NextStepButton from "../NextStepButton";
 import StepHeader from "../StepHeader";

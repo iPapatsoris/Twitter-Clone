@@ -3,7 +3,7 @@ import { SetStateAction, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import { yupResolver } from "@hookform/resolvers/yup";
-import FormInput from "../../../util/components/TextInput/FormTextInput";
+import FormInput from "../../../util/components/Input/FormInput";
 import { AccountInfoT } from "../../Signup";
 import useStepper from "../../../util/hooks/useStepper";
 import NextStepButton from "../NextStepButton";

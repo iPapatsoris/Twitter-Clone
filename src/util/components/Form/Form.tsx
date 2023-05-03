@@ -1,4 +1,4 @@
-import styles from "../TextInput/TextInput.module.scss";
+import styles from "../Input/Input.module.scss";
 
 interface FormProps {
   onSubmit: VoidFunction;
