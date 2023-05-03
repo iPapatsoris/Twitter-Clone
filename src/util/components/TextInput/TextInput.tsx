@@ -1,4 +1,11 @@
-import { forwardRef, useEffect, useRef, useState, ForwardedRef } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+  ForwardedRef,
+  HTMLProps,
+} from "react";
 import useClickOutside from "../../hooks/useClickOutside";
 import styles, { InputWrapperNames } from "./InputWrapper.module.scss";
 import inputStyles from "./TextInput.module.scss";
@@ -68,7 +75,7 @@ const TextInput = forwardRef<RefType, InputProps>(
     useEffect(() => {
       if (autofocus && ref && ref.current) {
         ref.current.style.visibility = "visible";
-        ref.current?.focus();
+        ref.current?.focus({ preventScroll: true });
         setIsFocused(true);
       }
     }, [autofocus, ref]);
@@ -76,18 +83,40 @@ const TextInput = forwardRef<RefType, InputProps>(
     useClickOutside({
       ref: wrapperRef,
       onMouseDown: true,
+      enabled: isFocused,
       callback: () => {
         setIsFocused(false);
       },
     });
 
-    const handleMousedown = (e: any) => {
-      if (ref && ref.current && !readonly) {
+    /* We have an input element nested within a wrapper for custom styling.
+       Wrapper initially holds a placeholder div, and on wrapper mouse down,
+       we remove the placeholder, make the input visible and manually focus on
+       it.
+    */
+    useEffect(() => {
+      if (isFocused) {
         ref.current.style.visibility = "visible";
         ref.current.focus();
-        setIsFocused(true);
-        // TODO: this line disables highlighting
+      }
+    }, [ref, isFocused]);
+
+    const handleWrapperMousedown = (e: any) => {
+      if (ref && ref.current && !readonly) {
+        // Mouse down on wrapper div would blur the inner input that we are
+        // trying to manually focus on, prevent this behavior.
         e.preventDefault();
+        /* 
+           Mouse down on wrapper removes input placeholder div (this is intended
+           behavior). Then, the mousedown handler in useClickOutside checks if 
+           the clicked area is within the wrapper, to decide if we should 
+           unfocus from the input or not. Because placeholder element has been 
+           removed, it is perceived as a click outside the wrapper, and so 
+           undesirably removes focus. Stop propagation to skip the 
+           useClickOutside handler.
+           */
+        e.stopPropagation();
+        setIsFocused(true);
       }
     };
 
@@ -131,9 +160,8 @@ const TextInput = forwardRef<RefType, InputProps>(
       }
     }
 
-    const inputProps = {
+    const inputProps: HTMLProps<HTMLInputElement | HTMLTextAreaElement> = {
       name,
-      // ref: inputRef,
       maxLength,
       onChange: (e: any) => {
         onChange(e.target.value);
@@ -141,6 +169,13 @@ const TextInput = forwardRef<RefType, InputProps>(
       onBlur,
       value,
       readOnly: readonly,
+      onMouseDown: (e: any) => {
+        setIsFocused(true);
+        // Parent calls preventDefault() on onMouseDown. We need to stop
+        // propagation, because otherwise text highlighting (mouse down
+        // default behavior) will not work.
+        e.stopPropagation();
+      },
     };
 
     let input;
@@ -166,7 +201,7 @@ const TextInput = forwardRef<RefType, InputProps>(
         <div
           ref={wrapperRef}
           className={wrapperStyles.join(" ")}
-          onMouseDown={(e) => handleMousedown(e)}
+          onMouseDown={(e) => handleWrapperMousedown(e)}
           onClick={onClick}
         >
           {!isFocused && !value.length && (
