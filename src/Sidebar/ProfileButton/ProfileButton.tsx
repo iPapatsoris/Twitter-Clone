@@ -6,7 +6,6 @@ import OptionsPopup from "../../util/components/OptionsPopup/OptionsPopup";
 import { useRef, useState } from "react";
 import { OptionWithNested } from "../../util/components/OptionsPopup/Option";
 import { useAuth } from "../../util/hooks/useAuth";
-import { webPath } from "../../util/paths";
 import { useMutation } from "react-query";
 import { NormalResponse } from "../../../backend/src/api/common";
 import useRequest from "../../util/hooks/useRequest";

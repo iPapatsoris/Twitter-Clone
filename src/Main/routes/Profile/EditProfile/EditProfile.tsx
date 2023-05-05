@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { charLimits, UpdateUser } from "../../../../../backend/src/api/user";
 import { UpdateUserFields } from "../../../../../backend/src/permissions";
 import Form from "../../../../util/components/Form/Form";
+import { useAuth } from "../../../../util/hooks/useAuth";
 import useRequest from "../../../../util/hooks/useRequest";
 import Minipage from "../../../../util/layouts/Minipage/Minipage";
 import yup from "../../../../util/yup";
@@ -41,6 +42,7 @@ const EditProfile = ({ user }: EditProfileProps) => {
   const [year, setYear] = useState(birthDate ? birthDate.year() : -1);
 
   const { patchData } = useRequest();
+  const { user: LoggedInUser, setUser: setLoggedInUser } = useAuth();
   const queryClient = useQueryClient();
 
   const schema: yup.ObjectSchema<ProfileInfoT> = yup.object().shape({
@@ -83,17 +85,23 @@ const EditProfile = ({ user }: EditProfileProps) => {
 
   const onSubmit: SubmitHandler<ProfileInfoT> = (formUser) => {
     const birthDate = dayjs().year(year).month(month).date(day);
+    const newUser: UpdateUser<UpdateUserFields>["request"]["user"] = {
+      ...formUser,
+      birthDate: birthDate.format("YYYY-MM-DD"),
+    };
     mutate(
       {
-        user: {
-          ...formUser,
-          birthDate: birthDate.format("YYYY-MM-DD"),
-        },
+        user: newUser,
       },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: [profileQueryKey, user.username],
+          });
+          setLoggedInUser({
+            ...user,
+            avatar: newUser.avatar,
+            name: newUser.name,
           });
         },
       }
