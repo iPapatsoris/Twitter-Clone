@@ -2,14 +2,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import dayjs from "dayjs";
 import { RefObject, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { charLimits, UpdateUser } from "../../../../../backend/src/api/user";
 import { UpdateUserFields } from "../../../../../backend/src/permissions";
 import Form from "../../../../util/components/Form/Form";
 import useRequest from "../../../../util/hooks/useRequest";
 import Minipage from "../../../../util/layouts/Minipage/Minipage";
 import yup from "../../../../util/yup";
-import { UserProfileT } from "../Profile";
+import { profileQueryKey, UserProfileT } from "../Profile";
 import styles from "./EditProfile.module.scss";
 import EditProfileHeader from "./EditProfileHeader/EditProfileHeader";
 import EditProfileInfo, {
@@ -41,6 +41,7 @@ const EditProfile = ({ user }: EditProfileProps) => {
   const [year, setYear] = useState(birthDate ? birthDate.year() : -1);
 
   const { patchData } = useRequest();
+  const queryClient = useQueryClient();
 
   const schema: yup.ObjectSchema<ProfileInfoT> = yup.object().shape({
     name: yup.string().required("Name can't be blank.").max(charLimits.name),
@@ -82,12 +83,21 @@ const EditProfile = ({ user }: EditProfileProps) => {
 
   const onSubmit: SubmitHandler<ProfileInfoT> = (formUser) => {
     const birthDate = dayjs().year(year).month(month).date(day);
-    mutate({
-      user: {
-        ...formUser,
-        birthDate: birthDate.format("YYYY-MM-DD"),
+    mutate(
+      {
+        user: {
+          ...formUser,
+          birthDate: birthDate.format("YYYY-MM-DD"),
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: [profileQueryKey, user.username],
+          });
+        },
+      }
+    );
   };
 
   const scrollToInput = (ref: RefObject<HTMLInputElement>) => {

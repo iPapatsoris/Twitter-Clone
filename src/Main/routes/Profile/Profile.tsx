@@ -40,12 +40,13 @@ const userFields = [
 export type RequestFields = typeof userFields[number];
 type Response = GetUser<RequestFields>["response"];
 export type UserProfileT = NonNullable<Response["data"]>["user"];
+export const profileQueryKey = "userProfile";
 
 const getProfileQuery: (
   username: string,
   getData: ReturnType<typeof useRequest>["getData"]
 ) => FetchQueryOptions<Response> = (username, getData) => ({
-  queryKey: ["userProfile", username],
+  queryKey: [profileQueryKey, username],
   queryFn: async () => {
     const res = await getData<Response, RequestFields>(
       "user/" + username,
