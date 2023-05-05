@@ -1,9 +1,8 @@
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { LoaderFunctionArgs, useParams } from "react-router-dom";
 import styles from "./Profile.module.scss";
 import { GetUser } from "../../../../backend/src/api/user";
 import { useContext, useLayoutEffect, useState } from "react";
 import { HeaderProfileContext } from "../../layouts/Main";
-import { LoaderData, LoaderFunctionWithExtra } from "../../../util/types";
 import Icon from "../../../util/components/Icon/Icon";
 import optionsIcon from "../../../assets/icons/dots.png";
 import notificationsIcon from "../../../assets/icons/notifications.png";
@@ -16,6 +15,7 @@ import Modal from "../../../util/components/Modal/Modal";
 import EditProfile from "./EditProfile/EditProfile";
 import { GetUserFields } from "../../../../backend/src/permissions";
 import { defaultAvatar, defaultCoverColor } from "./defaultPics";
+import { FetchQueryOptions, QueryClient, useQuery } from "react-query";
 
 interface ProfileProps {}
 
@@ -38,40 +38,52 @@ const userFields = [
 ] as const satisfies Readonly<Array<GetUserFields>>;
 
 export type RequestFields = typeof userFields[number];
-export type UserProfileT = NonNullable<
-  GetUser<RequestFields>["response"]["data"]
->["user"];
+type Response = GetUser<RequestFields>["response"];
+export type UserProfileT = NonNullable<Response["data"]>["user"];
 
-type Extra = ReturnType<typeof useRequest>["getData"];
-export const profileLoader = (async (
-  { params }: LoaderFunctionArgs,
-  getData: Extra
-) => {
-  const data = await getData<GetUser<RequestFields>["response"], RequestFields>(
-    "user/" + params.username,
-    userFields
-  );
+const getProfileQuery: (
+  username: string,
+  getData: ReturnType<typeof useRequest>["getData"]
+) => FetchQueryOptions<Response> = (username, getData) => ({
+  queryKey: ["userProfile", username],
+  queryFn: async () => {
+    const res = await getData<Response, RequestFields>(
+      "user/" + username,
+      userFields
+    );
 
-  if (!data.ok) {
-    throw new Error();
-  }
+    if (!res.ok) {
+      throw new Error();
+    }
+    return res;
+  },
+});
 
-  return data;
-}) satisfies LoaderFunctionWithExtra<Extra>;
+export const profileLoader =
+  (
+    getData: ReturnType<typeof useRequest>["getData"],
+    queryClient: QueryClient
+  ) =>
+  async ({ params }: LoaderFunctionArgs) => {
+    const query = getProfileQuery(params.username!, getData);
+    const data =
+      queryClient.getQueryData<Response>(query.queryKey!) ??
+      (await queryClient.fetchQuery(query));
+    return data;
+  };
 
 const Profile = ({}: ProfileProps) => {
   const { user: activeUser } = useAuth();
-  const { setUser } = useContext(HeaderProfileContext);
-  const res = useLoaderData() as LoaderData<
-    typeof profileLoader,
-    ReturnType<typeof useRequest>["getData"]
-  >;
-  const user = res.data!.user;
+  const { setUserHeader } = useContext(HeaderProfileContext);
+  const params = useParams();
+  const { getData } = useRequest();
+
+  const res = useQuery(getProfileQuery(params.username!, getData));
+  const user = res.data?.data?.user!;
 
   useLayoutEffect(() => {
-    const user = res.data?.user!;
-    setUser(user);
-  }, [res, setUser]);
+    setUserHeader(user);
+  }, [user, setUserHeader]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   let actionButton = (

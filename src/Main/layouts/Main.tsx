@@ -24,13 +24,13 @@ export type HeaderProfileUser = Pick<
   "name" | "totalTweets" | "isVerified"
 > | null;
 export const HeaderProfileContext = createContext<{
-  setUser: React.Dispatch<SetStateAction<HeaderProfileUser>>;
+  setUserHeader: React.Dispatch<SetStateAction<HeaderProfileUser>>;
 }>({
-  setUser: () => {},
+  setUserHeader: () => {},
 });
 
 const Main = () => {
-  const [user, setUser] = useState<HeaderProfileUser>(null);
+  const [userHeader, setUserHeader] = useState<HeaderProfileUser>(null);
   const { isErrorPage: isErrorPageContext } = useContext(ErrorPageContext);
 
   const isErrorPage = useRouteMatch(getPagePath("error")) || isErrorPageContext;
@@ -41,7 +41,7 @@ const Main = () => {
   if (path === getPagePath("explore")) {
     header = <HeaderExplore />;
   } else if (isProfilePage) {
-    header = <HeaderProfile user={user} />;
+    header = <HeaderProfile user={userHeader} />;
   }
 
   let headerLayout;
@@ -68,7 +68,7 @@ const Main = () => {
     <main>
       <HeaderProfileContext.Provider
         value={{
-          setUser,
+          setUserHeader,
         }}
       >
         {!isErrorPage && headerLayout}

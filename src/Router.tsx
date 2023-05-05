@@ -18,6 +18,7 @@ import { useAuth } from "./util/hooks/useAuth";
 import { getPagePath } from "./util/paths";
 import Profile, { profileLoader } from "./Main/routes/Profile/Profile";
 import useRequest from "./util/hooks/useRequest";
+import { QueryClient } from "react-query";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const { user } = useAuth();
@@ -29,61 +30,59 @@ const RequireAuth = ({ children }: { children: JSX.Element }) => {
   );
 };
 
-const Router = () => {
+const Router = ({ queryClient }: { queryClient: QueryClient }) => {
   const { user } = useAuth();
   const { getData } = useRequest();
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <>
-        <Route path="/" element={<App />}>
-          <Route
-            path={getPagePath("home")}
-            element={
-              <RequireAuth>
-                <Home />
-              </RequireAuth>
-            }
-          />
-          <Route path={getPagePath("explore")} element={<Explore />} />
-          <Route
-            path={getPagePath("notifications")}
-            element={
-              <RequireAuth>
-                <Notifications />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path={getPagePath("notificationsVerified")}
-            element={
-              <RequireAuth>
-                <NotificationsVerified />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path={getPagePath("notificationsMentions")}
-            element={
-              <RequireAuth>
-                <NotificationsMentions />
-              </RequireAuth>
-            }
-          />
-          {/* <Route index element={<Navigate to={paths.notifications.self} />} /> */}
-          <Route path={getPagePath("messages")} />
-          <Route path={getPagePath("bookmarks")} />
-          <Route path={getPagePath("lists", user)} />
-          <Route
-            path={getPagePath("profileAny")}
-            element={<Profile />}
-            id={getPagePath("profileAny")}
-            loader={(args) => profileLoader(args, getData)}
-            errorElement={<ErrorPage />}
-          />
-          <Route index element={<Navigate to={getPagePath("home")} />} />
-          <Route path="*" id={getPagePath("error")} element={<ErrorPage />} />
-        </Route>
-      </>
+      <Route path="/" element={<App />}>
+        <Route
+          path={getPagePath("home")}
+          element={
+            <RequireAuth>
+              <Home />
+            </RequireAuth>
+          }
+        />
+        <Route path={getPagePath("explore")} element={<Explore />} />
+        <Route
+          path={getPagePath("notifications")}
+          element={
+            <RequireAuth>
+              <Notifications />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path={getPagePath("notificationsVerified")}
+          element={
+            <RequireAuth>
+              <NotificationsVerified />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path={getPagePath("notificationsMentions")}
+          element={
+            <RequireAuth>
+              <NotificationsMentions />
+            </RequireAuth>
+          }
+        />
+        {/* <Route index element={<Navigate to={paths.notifications.self} />} /> */}
+        <Route path={getPagePath("messages")} />
+        <Route path={getPagePath("bookmarks")} />
+        <Route path={getPagePath("lists", user)} />
+        <Route
+          path={getPagePath("profileAny")}
+          element={<Profile />}
+          id={getPagePath("profileAny")}
+          loader={profileLoader(getData, queryClient)}
+          errorElement={<ErrorPage />}
+        />
+        <Route index element={<Navigate to={getPagePath("home")} />} />
+        <Route path="*" id={getPagePath("error")} element={<ErrorPage />} />
+      </Route>
     )
   );
 
