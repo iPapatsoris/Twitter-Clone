@@ -18,6 +18,7 @@ const EditProfilePhotos = ({
   const coverStyle: React.CSSProperties = coverPic
     ? { backgroundImage: "url(" + coverPic + ")" }
     : { backgroundColor: "background-color: rgb(207, 217, 222)" };
+
   return (
     <>
       <div className={styles.Cover} style={coverStyle}>
@@ -26,7 +27,7 @@ const EditProfilePhotos = ({
       <div
         className={styles.Avatar}
         style={{
-          backgroundImage: "url(" + avatar || defaultAvatar + ")",
+          backgroundImage: "url(" + (avatar || defaultAvatar) + ")",
         }}
       >
         <AddPhotoButton alt="Change avatar" onClick={focusOnAvatar} />
