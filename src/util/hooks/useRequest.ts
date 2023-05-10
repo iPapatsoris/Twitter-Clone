@@ -1,8 +1,13 @@
+import { shallow } from "zustand/shallow";
 import { NormalResponse } from "../../../backend/src/api/common";
-import { useAuth } from "./useAuth";
+import { useAuthStore } from "../../store/AuthStore";
 
 const useRequest = () => {
-  const { user, setUser } = useAuth();
+  const loggedInUser = useAuthStore(
+    (state) => state.loggedInUser && { id: state.loggedInUser.id },
+    shallow
+  );
+  const setLoggedInUser = useAuthStore((state) => state.setLoggedInUser);
 
   const buildURL = <T extends string>(path: string, params: readonly T[]) => {
     const base = import.meta.env.VITE_API_PATH;
@@ -32,8 +37,8 @@ const useRequest = () => {
     const res = await fetch(buildURL(path, params), options);
 
     const data: NormalResponse = await res.json();
-    if (user && data.loggedOut) {
-      setUser(null);
+    if (loggedInUser && data.loggedOut) {
+      setLoggedInUser(null);
     }
 
     return data as any;

@@ -17,10 +17,12 @@ import settingsIcon from "../../assets/icons/settings.png";
 import settingsIconActive from "../../assets/icons/nav/settings-active.png";
 import NavItem from "./NavItem";
 import { getPagePath } from "../../util/paths";
-import { useAuth } from "../../util/hooks/useAuth";
+import { useAuthStore } from "../../store/AuthStore";
 
 const Nav = () => {
-  const { user } = useAuth();
+  const loggedInUser = useAuthStore(
+    (state) => state.loggedInUser && { username: state.loggedInUser.username }
+  );
 
   let itemPath = getPagePath("explore");
   const explore = (
@@ -47,7 +49,7 @@ const Nav = () => {
 
   return (
     <nav>
-      {!user ? (
+      {!loggedInUser ? (
         guestNav
       ) : (
         <>
@@ -80,13 +82,13 @@ const Nav = () => {
             icon={listIcon}
             iconActive={listIconActive}
             title="Lists"
-            path={getPagePath("lists", user)}
+            path={getPagePath("lists", loggedInUser.username)}
           />
           <NavItem
             icon={profileIcon}
             iconActive={profileIconActive}
             title="Profile"
-            path={getPagePath("profileLoggedIn", user)}
+            path={getPagePath("profileLoggedIn", loggedInUser.username)}
           />
           <NavItem icon={moreIcon} title="More" isPopup />
         </>

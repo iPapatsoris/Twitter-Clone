@@ -6,15 +6,17 @@ import { useLocation } from "react-router-dom";
 import SiteInfo from "../../components/SiteInfo/SiteInfo";
 import { useRef } from "react";
 import useDynamicSticky from "../../../util/hooks/useDynamicSticky";
-import { useAuth } from "../../../util/hooks/useAuth";
 import GuestPrompt from "../../components/GuestPrompt/GuestPrompt";
 import { getPagePath } from "../../../util/paths";
+import { useAuthStore } from "../../../store/AuthStore";
 
 const ContentRight = () => {
   const path = useLocation().pathname;
   const ref = useRef<HTMLDivElement>(null);
   useDynamicSticky(ref);
-  const { user } = useAuth();
+  const loggedInUser = useAuthStore(
+    (state) => state.loggedInUser && { id: state.loggedInUser?.id }
+  );
 
   const guestView = <GuestPrompt />;
   const regularView = (
@@ -32,7 +34,7 @@ const ContentRight = () => {
 
   return (
     <div className={styles.ContentRight} ref={ref}>
-      {user ? regularView : guestView}
+      {loggedInUser ? regularView : guestView}
       <SiteInfo />
     </div>
   );

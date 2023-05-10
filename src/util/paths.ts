@@ -1,5 +1,4 @@
 import { useMatches } from "react-router-dom";
-import { LoggedInUser } from "../Auth";
 
 type Page =
   | "home"
@@ -18,7 +17,7 @@ type Page =
   | "privacy"
   | "cookies";
 
-export const getPagePath = (page: Page, user: LoggedInUser = null) => {
+export const getPagePath = (page: Page, username: string = "") => {
   const paths: {
     [key in Page]: string;
   } = {
@@ -29,8 +28,8 @@ export const getPagePath = (page: Page, user: LoggedInUser = null) => {
     notificationsMentions: "/notifications/mentions",
     messages: "/messages",
     bookmarks: "/i/bookmarks",
-    lists: "/" + user?.username + "/lists",
-    profileLoggedIn: "/" + user?.username,
+    lists: "/" + username + "/lists",
+    profileLoggedIn: "/" + username,
     profileAny: "/:username",
     error: "/error",
     settings: "/settings",
@@ -53,8 +52,8 @@ export const useRouteMatch = (idToMatch: string) => {
 };
 
 export const isNotificationsPage = (path: string) =>
-  path === getPagePath("notifications", null) ||
-  path === getPagePath("notificationsMentions", null) ||
-  path === getPagePath("notificationsVerified", null);
+  path === getPagePath("notifications") ||
+  path === getPagePath("notificationsMentions") ||
+  path === getPagePath("notificationsVerified");
 
 export const webPath = (path: string) => "//www." + path;

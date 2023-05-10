@@ -5,16 +5,17 @@ import Icon from "../../util/components/Icon/Icon";
 import OptionsPopup from "../../util/components/OptionsPopup/OptionsPopup";
 import { useRef, useState } from "react";
 import { OptionWithNested } from "../../util/components/OptionsPopup/Option";
-import { useAuth } from "../../util/hooks/useAuth";
 import { useMutation } from "react-query";
 import { NormalResponse } from "../../../backend/src/api/common";
 import useRequest from "../../util/hooks/useRequest";
+import { useAuthStore } from "../../store/AuthStore";
 
 const ProfileButton = () => {
   const [showOptions, setShowOptions] = useState(false);
 
   const profileButtonRef = useRef(null);
-  const { user, setUser } = useAuth();
+  const user = useAuthStore((state) => state.loggedInUser);
+  const setUser = useAuthStore((state) => state.setLoggedInUser);
   const { deleteData } = useRequest();
   const { mutate } = useMutation<NormalResponse>(
     ["logout"],

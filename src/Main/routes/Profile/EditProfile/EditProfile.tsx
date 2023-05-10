@@ -5,8 +5,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import { charLimits, UpdateUser } from "../../../../../backend/src/api/user";
 import { UpdateUserFields } from "../../../../../backend/src/permissions";
+import { useAuthStore } from "../../../../store/AuthStore";
 import Form from "../../../../util/components/Form/Form";
-import { useAuth } from "../../../../util/hooks/useAuth";
 import useRequest from "../../../../util/hooks/useRequest";
 import Minipage from "../../../../util/layouts/Minipage/Minipage";
 import yup from "../../../../util/yup";
@@ -42,7 +42,9 @@ const EditProfile = ({ user }: EditProfileProps) => {
   const [year, setYear] = useState(birthDate ? birthDate.year() : -1);
 
   const { patchData } = useRequest();
-  const { user: LoggedInUser, setUser: setLoggedInUser } = useAuth();
+  const setLoggedInUserMiniInfo = useAuthStore(
+    (state) => state.setLoggedInUserMiniInfo
+  );
   const queryClient = useQueryClient();
 
   const schema: yup.ObjectSchema<ProfileInfoT> = yup.object().shape({
@@ -98,8 +100,7 @@ const EditProfile = ({ user }: EditProfileProps) => {
           queryClient.invalidateQueries({
             queryKey: [profileQueryKey, user.username],
           });
-          setLoggedInUser({
-            ...user,
+          setLoggedInUserMiniInfo({
             avatar: newUser.avatar,
             name: newUser.name,
           });

@@ -14,16 +14,20 @@ import Explore from "./Main/routes/Explore/Explore";
 import Notifications from "./Main/routes/Notifications/Notifications";
 import NotificationsVerified from "./Main/routes/Notifications/NotificationsVerified";
 import NotificationsMentions from "./Main/routes/Notifications/NotificationsMentions";
-import { useAuth } from "./util/hooks/useAuth";
 import { getPagePath } from "./util/paths";
 import Profile, { profileLoader } from "./Main/routes/Profile/Profile";
 import useRequest from "./util/hooks/useRequest";
 import { QueryClient } from "react-query";
+import { shallow } from "zustand/shallow";
+import { LoggedInUser, useAuthStore } from "./store/AuthStore";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
-  const { user } = useAuth();
+  const loggedInUser: Pick<LoggedInUser, "id"> | null = useAuthStore(
+    (state) => state.loggedInUser && { id: state.loggedInUser.id },
+    shallow
+  );
   const location = useLocation();
-  return user ? (
+  return loggedInUser ? (
     children
   ) : (
     <Navigate to={getPagePath("explore")} state={{ from: location }} />
@@ -31,8 +35,13 @@ const RequireAuth = ({ children }: { children: JSX.Element }) => {
 };
 
 const Router = ({ queryClient }: { queryClient: QueryClient }) => {
-  const { user } = useAuth();
+  const loggedInUser = useAuthStore(
+    (state) => state.loggedInUser && { username: state.loggedInUser.username },
+    shallow
+  );
   const { getData } = useRequest();
+  console.log("rendering router");
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<App />}>
@@ -72,7 +81,7 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
         {/* <Route index element={<Navigate to={paths.notifications.self} />} /> */}
         <Route path={getPagePath("messages")} />
         <Route path={getPagePath("bookmarks")} />
-        <Route path={getPagePath("lists", user)} />
+        <Route path={getPagePath("lists", loggedInUser?.username)} />
         <Route
           path={getPagePath("profileAny")}
           element={<Profile />}

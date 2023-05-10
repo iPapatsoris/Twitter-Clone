@@ -8,7 +8,6 @@ import optionsIcon from "../../../assets/icons/dots.png";
 import notificationsIcon from "../../../assets/icons/notifications.png";
 import verifiedIcon from "../../../assets/icons/verified.png";
 import Button from "../../../util/components/Button/Button";
-import { useAuth } from "../../../util/hooks/useAuth";
 import useRequest from "../../../util/hooks/useRequest";
 import Info from "./Info/Info";
 import Modal from "../../../util/components/Modal/Modal";
@@ -16,6 +15,8 @@ import EditProfile from "./EditProfile/EditProfile";
 import { GetUserFields } from "../../../../backend/src/permissions";
 import { defaultAvatar, defaultCoverColor } from "./defaultPics";
 import { FetchQueryOptions, QueryClient, useQuery } from "react-query";
+import { useAuthStore } from "../../../store/AuthStore";
+import { shallow } from "zustand/shallow";
 
 interface ProfileProps {}
 
@@ -74,7 +75,10 @@ export const profileLoader =
   };
 
 const Profile = ({}: ProfileProps) => {
-  const { user: activeUser } = useAuth();
+  const loggedInUser = useAuthStore(
+    (state) => state.loggedInUser && { id: state.loggedInUser.id },
+    shallow
+  );
   const { setUserHeader } = useContext(HeaderProfileContext);
   const params = useParams();
   const { getData } = useRequest();
@@ -92,7 +96,7 @@ const Profile = ({}: ProfileProps) => {
       Follow
     </Button>
   );
-  if (activeUser && user.isFollowedByActiveUser) {
+  if (loggedInUser && user.isFollowedByActiveUser) {
     actionButton = (
       <Button
         color="white"
@@ -104,7 +108,7 @@ const Profile = ({}: ProfileProps) => {
         Following
       </Button>
     );
-  } else if (activeUser && activeUser.id === user.id) {
+  } else if (loggedInUser && loggedInUser.id === user.id) {
     actionButton = (
       <Button color="white" onClick={() => setIsModalOpen(true)} key={user.id}>
         Edit profile
