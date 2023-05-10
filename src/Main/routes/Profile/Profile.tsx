@@ -132,7 +132,7 @@ const Profile = ({}: ProfileProps) => {
     <>
       {isModalOpen && (
         <Modal withCloseIcon={false} setIsActive={setIsModalOpen}>
-          <EditProfile user={user} />
+          <EditProfile user={user} closeModal={() => setIsModalOpen(false)} />
         </Modal>
       )}
       <div className={styles.Profile}>

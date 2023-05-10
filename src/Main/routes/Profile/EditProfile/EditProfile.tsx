@@ -20,6 +20,7 @@ import EditProfilePhotos from "./EditProfilePhotos/EditProfilePhotos";
 
 interface EditProfileProps {
   user: UserProfileT;
+  closeModal: VoidFunction;
 }
 const requestFields = [
   "name",
@@ -35,7 +36,7 @@ export type ProfileInfoT = Omit<
   "birthDate"
 >;
 
-const EditProfile = ({ user }: EditProfileProps) => {
+const EditProfile = ({ user, closeModal }: EditProfileProps) => {
   const birthDate = dayjs(user.birthDate);
   const [month, setMonth] = useState(birthDate ? birthDate.month() : -1);
   const [day, setDay] = useState(birthDate ? birthDate.date() : -1);
@@ -104,6 +105,7 @@ const EditProfile = ({ user }: EditProfileProps) => {
             avatar: newUser.avatar,
             name: newUser.name,
           });
+          closeModal();
         },
       }
     );
