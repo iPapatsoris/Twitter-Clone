@@ -5,7 +5,7 @@ import Icon from "../../util/components/Icon/Icon";
 import OptionsPopup from "../../util/components/OptionsPopup/OptionsPopup";
 import { useRef, useState } from "react";
 import { OptionWithNested } from "../../util/components/OptionsPopup/Option";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { NormalResponse } from "../../../backend/src/api/common";
 import useRequest from "../../util/hooks/useRequest";
 import { useAuthStore } from "../../store/AuthStore";

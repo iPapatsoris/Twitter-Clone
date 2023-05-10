@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { LoginUser } from "../../backend/src/api/auth";
 import Button from "../util/components/Button/Button";
 import Form from "../util/components/Form/Form";

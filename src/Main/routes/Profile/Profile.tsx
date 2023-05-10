@@ -14,7 +14,12 @@ import Modal from "../../../util/components/Modal/Modal";
 import EditProfile from "./EditProfile/EditProfile";
 import { GetUserFields } from "../../../../backend/src/permissions";
 import { defaultAvatar, defaultCoverColor } from "./defaultPics";
-import { FetchQueryOptions, QueryClient, useQuery } from "react-query";
+import {
+  FetchQueryOptions,
+  QueryClient,
+  QueryKey,
+  useQuery,
+} from "@tanstack/react-query";
 import { useAuthStore } from "../../../store/AuthStore";
 import { shallow } from "zustand/shallow";
 
@@ -68,9 +73,12 @@ export const profileLoader =
   ) =>
   async ({ params }: LoaderFunctionArgs) => {
     const query = getProfileQuery(params.username!, getData);
-    const data =
-      queryClient.getQueryData<Response>(query.queryKey!) ??
-      (await queryClient.fetchQuery(query));
+    const data = await queryClient.ensureQueryData<
+      Response,
+      unknown,
+      Response,
+      any
+    >({ queryKey: query.queryKey, queryFn: query.queryFn });
     return data;
   };
 

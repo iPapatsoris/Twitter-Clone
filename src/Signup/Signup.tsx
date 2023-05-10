@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { CreateUser } from "../../backend/src/api/user";
 import useRequest from "../util/hooks/useRequest";
 import useStepper from "../util/hooks/useStepper";

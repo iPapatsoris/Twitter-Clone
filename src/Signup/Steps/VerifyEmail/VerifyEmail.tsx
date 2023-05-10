@@ -6,7 +6,7 @@ import NextStepButton from "../NextStepButton";
 import StepHeader from "../StepHeader";
 import Helper from "./Helper";
 import styles from "./VerifyEmail.module.scss";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { VerifyEmailCode } from "../../../../backend/src/api/email";
 import useSendEmailCode from "./useSendEmailCode";
 import Form from "../../../util/components/Form/Form";

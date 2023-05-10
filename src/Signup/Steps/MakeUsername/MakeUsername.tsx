@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SetStateAction } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { GetUsernameExists } from "../../../../backend/src/api/user";
 import Form from "../../../util/components/Form/Form";
 import FormInput from "../../../util/components/Input/FormInput";

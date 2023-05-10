@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { CreateEmailCode } from "../../../../backend/src/api/email";
 import useRequest from "../../../util/hooks/useRequest";
 

@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import dayjs from "dayjs";
 import { RefObject, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { charLimits, UpdateUser } from "../../../../../backend/src/api/user";
 import { UpdateUserFields } from "../../../../../backend/src/permissions";
 import { useAuthStore } from "../../../../store/AuthStore";

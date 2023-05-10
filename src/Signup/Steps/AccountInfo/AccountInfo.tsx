@@ -10,7 +10,7 @@ import NextStepButton from "../NextStepButton";
 import StepHeader from "../StepHeader";
 import Minipage from "../../../util/layouts/Minipage/Minipage";
 import Form from "../../../util/components/Form/Form";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { GetEmail } from "../../../../backend/src/api/email";
 import yup, { yupSequentialStringSchema } from "../../../util/yup";
 import useRequest from "../../../util/hooks/useRequest";

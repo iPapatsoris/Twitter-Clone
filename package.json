@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.11",
+    "@tanstack/react-query": "^4.29.5",
     "@types/node": "^18.11.17",
     "dayjs": "^1.11.7",
     "path": "^0.12.7",
@@ -19,7 +20,6 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.2",
     "react-loader-spinner": "^5.3.4",
-    "react-query": "^3.39.3",
     "react-router-dom": "^6.5.0",
     "vite-plugin-sass-dts": "^1.2.9",
     "yup": "^1.0.2",
