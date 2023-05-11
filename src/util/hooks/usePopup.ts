@@ -1,10 +1,10 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { OptionsPopupProps } from "../components/OptionsPopup/OptionsPopup";
+import React, { useLayoutEffect, useState } from "react";
+import { PopupProps } from "../components/Popup/Popup";
 import { toPixels } from "../string";
 import useWindowDimensions from "./useWindowDimensions";
 
 const usePopup = (
-  params: Omit<OptionsPopupProps, "options" | "extraStyles"> & {
+  params: Pick<PopupProps, "targetAreaRef" | "position" | "autoMaxHeight"> & {
     popupRef: React.RefObject<HTMLDivElement>;
   }
 ) => {

@@ -53,10 +53,12 @@ const ProfileButton = () => {
       {showOptions && (
         <OptionsPopup
           options={options}
-          setIsActive={setShowOptions}
-          targetAreaRef={profileButtonRef}
-          position={{ block: "top", inline: "leftCover" }}
-          extraPopupStyles={[styles.PopupStyles]}
+          popupProps={{
+            setIsActive: setShowOptions,
+            targetAreaRef: profileButtonRef,
+            position: { block: "top", inline: "leftCover" },
+            extraPopupStyles: [styles.PopupStyles],
+          }}
         />
       )}
       <div

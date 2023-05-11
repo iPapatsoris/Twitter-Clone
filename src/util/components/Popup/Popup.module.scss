@@ -1,0 +1,8 @@
+.Popup {
+  box-shadow: var(--box-shadow);
+  border-radius: 16px;
+  background-color: white;
+  pointer-events: all;
+  overflow-y: auto;
+  position: absolute;
+}

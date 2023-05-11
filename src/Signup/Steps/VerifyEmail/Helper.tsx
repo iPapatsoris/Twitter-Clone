@@ -39,8 +39,10 @@ const Helper = ({ onResendCode }: HelperProps) => {
       {isPopupActive && (
         <OptionsPopup
           options={options}
-          targetAreaRef={ref}
-          setIsActive={setIsPopupActive}
+          popupProps={{
+            targetAreaRef: ref,
+            setIsActive: setIsPopupActive,
+          }}
         />
       )}
     </>

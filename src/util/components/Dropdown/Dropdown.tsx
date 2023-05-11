@@ -5,12 +5,13 @@ import dropdownStyles from "./Dropdown.module.scss";
 import Icon from "../Icon/Icon";
 import downArrowIcon from "../../../assets/icons/options/down-arrow.png";
 import { SimpleOption } from "../OptionsPopup/Option";
+import Popup from "../Popup/Popup";
 
 interface DropdownProps {
   name: string;
   selectedOptionID: number | null;
   options: SimpleOption[];
-  position?: React.ComponentProps<typeof OptionsPopup>["position"];
+  position?: React.ComponentProps<typeof Popup>["position"];
   extraStyles: string[];
 }
 
@@ -61,12 +62,13 @@ const Dropdown = (props: DropdownProps) => {
       {isActive && dropdownRef && (
         <OptionsPopup
           options={options}
-          setIsActive={setIsActive}
-          targetAreaRef={dropdownRef}
-          extraPopupStyles={[dropdownStyles.Popup]}
           extraOptionStyles={[dropdownStyles.Option]}
-          position={position}
-          onMouseDown
+          popupProps={{
+            setIsActive,
+            targetAreaRef: dropdownRef,
+            extraPopupStyles: [dropdownStyles.Popup],
+            position,
+          }}
         />
       )}
     </div>

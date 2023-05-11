@@ -19,10 +19,12 @@ const MoreOptionsNavItem = ({ children }: MoreOptionsNavItemProps) => {
       {showOptions && popupTargetAreaRef && (
         <OptionsPopup
           options={navMoreOptionsList}
-          setIsActive={setShowOptions}
-          targetAreaRef={popupTargetAreaRef}
-          autoMaxHeight
-          extraPopupStyles={[styles.PopupStyles]}
+          popupProps={{
+            setIsActive: setShowOptions,
+            targetAreaRef: popupTargetAreaRef,
+            autoMaxHeight: true,
+            extraPopupStyles: [styles.PopupStyles],
+          }}
         />
       )}
     </>

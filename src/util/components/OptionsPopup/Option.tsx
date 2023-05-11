@@ -1,6 +1,6 @@
 import Icon from "../Icon/Icon";
 import downArrowIcon from "../../../assets/icons/options/down-arrow.png";
-import styles from "./OptionsPopup.module.scss";
+import styles from "./Option.module.scss";
 
 export type SimpleOption = {
   component: React.ReactNode;

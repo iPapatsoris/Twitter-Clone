@@ -44,10 +44,12 @@ const Trend = () => {
     <>
       {showOptions && (
         <OptionsPopup
-          targetAreaRef={iconRef}
           options={options}
-          setIsActive={setShowOptions}
-          position={{ block: "bottomCover", inline: "rightCover" }}
+          popupProps={{
+            targetAreaRef: iconRef,
+            setIsActive: setShowOptions,
+            position: { block: "bottomCover", inline: "rightCover" },
+          }}
         />
       )}
       <div className={styles.Trend}>
