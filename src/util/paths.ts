@@ -1,6 +1,6 @@
 import { useMatches } from "react-router-dom";
 
-type Page =
+export type Page =
   | "home"
   | "explore"
   | "notifications"

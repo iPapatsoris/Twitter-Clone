@@ -1,4 +1,4 @@
-.NotificationCategories {
+.Items {
   flex-basis: 100%;
   grid-area: header-main-extension;
   position: sticky;
@@ -11,7 +11,7 @@
     display: contents;
   }
 
-  .NotificationCategory {
+  .Item {
     flex: 1;
     transition: var(--transition-duration);
     cursor: pointer;
