@@ -1,6 +1,6 @@
 import { ReactElement, useRef, useState } from "react";
 import styles from "./MoreOptionsNavItem.module.scss";
-import OptionsPopup from "../../../util/components/OptionsPopup/OptionsPopup";
+import OptionsPopup from "../../../util/components/Popup/OptionsPopup/OptionsPopup";
 import { navMoreOptionsList } from "./navMoreOptionsList";
 
 interface MoreOptionsNavItemProps {

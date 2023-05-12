@@ -9,8 +9,8 @@ import helpIcon from "../../../assets/icons/options/help.png";
 import displayIcon from "../../../assets/icons/options/display.png";
 import shortcutsIcon from "../../../assets/icons/options/shortcuts.png";
 import monetizationIcon from "../../../assets/icons/options/monetization.png";
-import IconAndTitle from "../../../util/components/OptionsPopup/IconAndTitle/IconAndTitle";
-import { OptionWithNested } from "../../../util/components/OptionsPopup/Option";
+import IconAndTitle from "../../../util/components/Popup/OptionsPopup/IconAndTitle/IconAndTitle";
+import { OptionWithNested } from "../../../util/components/Popup/OptionsPopup/Option";
 
 const onSelect = () => {};
 export const navMoreOptionsList: OptionWithNested[] = [

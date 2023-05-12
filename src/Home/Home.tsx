@@ -1,4 +1,4 @@
-import HoverPopup from "../util/components/HoverPopup/HoverPopup";
+import HoverPopup from "../util/components/Popup/HoverPopup/HoverPopup";
 import Profile from "../Main/routes/Profile/Profile";
 import "./Home.scss";
 

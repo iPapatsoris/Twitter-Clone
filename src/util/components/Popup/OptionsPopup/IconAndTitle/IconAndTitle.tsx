@@ -1,5 +1,5 @@
 import styles from "./IconAndTitle.module.scss";
-import Icon from "../../Icon/Icon";
+import Icon from "../../../Icon/Icon";
 
 interface IconAndTitleProps {
   icon: string;

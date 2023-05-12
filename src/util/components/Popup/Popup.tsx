@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import usePopup from "../../hooks/usePopup";
-import ModalWrapper from "../ModalWrapper/ModalWrapper";
+import ModalWrapper from "../Modal/ModalWrapper/ModalWrapper";
 import styles from "./Popup.module.scss";
 
 export interface PopupProps {

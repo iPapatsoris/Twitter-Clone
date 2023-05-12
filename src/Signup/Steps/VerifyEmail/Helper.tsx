@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import OptionsPopup from "../../../util/components/OptionsPopup/OptionsPopup";
+import OptionsPopup from "../../../util/components/Popup/OptionsPopup/OptionsPopup";
 import styles from "./Helper.module.scss";
 
 interface HelperProps {

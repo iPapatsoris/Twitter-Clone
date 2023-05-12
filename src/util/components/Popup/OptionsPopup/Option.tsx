@@ -1,5 +1,5 @@
-import Icon from "../Icon/Icon";
-import downArrowIcon from "../../../assets/icons/options/down-arrow.png";
+import Icon from "../../Icon/Icon";
+import downArrowIcon from "../../../../assets/icons/options/down-arrow.png";
 import styles from "./Option.module.scss";
 
 export type SimpleOption = {

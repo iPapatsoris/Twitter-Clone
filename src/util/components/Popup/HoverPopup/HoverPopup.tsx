@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Popup, { PopupProps } from "../Popup/Popup";
+import Popup, { PopupProps } from "../Popup";
 
 type HoverPopupProps = {
   popupTarget: React.ReactElement | React.ReactElement[];

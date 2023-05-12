@@ -3,7 +3,7 @@ import styles, { ModalNames } from "./Modal.module.scss";
 import closeIcon from "../../../assets/icons/close.png";
 import React, { createContext, useEffect } from "react";
 import { toPixels } from "../../string";
-import ModalWrapper from "../ModalWrapper/ModalWrapper";
+import ModalWrapper from "./ModalWrapper/ModalWrapper";
 
 interface ModalProps {
   withCloseIcon?: boolean;

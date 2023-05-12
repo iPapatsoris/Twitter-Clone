@@ -2,9 +2,9 @@ import Icon from "../../../util/components/Icon/Icon";
 import DotsIcon from "../../../assets/icons/dots-gray.png";
 import styles from "./Trend.module.scss";
 import { useRef, useState } from "react";
-import OptionsPopup from "../../../util/components/OptionsPopup/OptionsPopup";
-import { OptionWithNested } from "../../../util/components/OptionsPopup/Option";
-import IconAndTitle from "../../../util/components/OptionsPopup/IconAndTitle/IconAndTitle";
+import OptionsPopup from "../../../util/components/Popup/OptionsPopup/OptionsPopup";
+import { OptionWithNested } from "../../../util/components/Popup/OptionsPopup/Option";
+import IconAndTitle from "../../../util/components/Popup/OptionsPopup/IconAndTitle/IconAndTitle";
 import sadFaceIcon from "../../../assets/icons/options/sad-face.png";
 
 const Trend = () => {

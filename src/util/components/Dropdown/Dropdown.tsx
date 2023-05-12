@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
-import OptionsPopup from "../OptionsPopup/OptionsPopup";
+import OptionsPopup from "../Popup/OptionsPopup/OptionsPopup";
 import styles from "../Input/InputWrapper.module.scss";
 import dropdownStyles from "./Dropdown.module.scss";
 import Icon from "../Icon/Icon";
 import downArrowIcon from "../../../assets/icons/options/down-arrow.png";
-import { SimpleOption } from "../OptionsPopup/Option";
+import { SimpleOption } from "../Popup/OptionsPopup/Option";
 import Popup from "../Popup/Popup";
 
 interface DropdownProps {

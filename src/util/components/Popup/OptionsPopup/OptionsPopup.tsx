@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Popup, { PopupProps } from "../Popup/Popup";
+import Popup, { PopupProps } from "../Popup";
 import Option, { OptionWithNested } from "./Option";
 
 // Note: If OptionsPopup is placed as the child of the element that opens it
