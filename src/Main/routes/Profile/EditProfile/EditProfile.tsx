@@ -11,7 +11,7 @@ import useRequest from "../../../../util/hooks/useRequest";
 import Minipage from "../../../../util/layouts/Minipage/Minipage";
 import yup from "../../../../util/yup";
 import { profileQueryKey, UserProfileT } from "../Profile";
-import styles from "./EditProfile.module.scss";
+import profileStyles from "../Profile.module.scss";
 import EditProfileHeader from "./EditProfileHeader/EditProfileHeader";
 import EditProfileInfo, {
   PhotoInputRefs,
@@ -126,7 +126,7 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
         alignHeaderWithContent={false}
         header={<EditProfileHeader disableUpdate={!isValidForm} />}
       >
-        <div className={styles.EditProfile}>
+        <div className={profileStyles.Profile}>
           <EditProfilePhotos
             coverPic={user.coverPic}
             avatar={user.avatar}

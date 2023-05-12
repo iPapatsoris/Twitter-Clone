@@ -137,21 +137,17 @@ const Profile = ({}: ProfileProps) => {
       )}
       <div className={styles.Profile}>
         <div className={styles.Cover} style={coverStyle} />
-        <div className={styles.AvatarAndActions}>
-          <div className={styles.AvatarContainer}>
-            <img
-              className={styles.Avatar}
-              src={user.avatar || defaultAvatar}
-              alt="The avatar of the user"
-            />
-            <div className={styles.Actions}>
-              <Icon src={optionsIcon} withBorder title="More" />
-              {user.isFollowedByActiveUser && (
-                <Icon src={notificationsIcon} withBorder title="Notify" />
-              )}
-              {actionButton}
-            </div>
-          </div>
+        <img
+          className={styles.Avatar}
+          src={user.avatar || defaultAvatar}
+          alt="The avatar of the user"
+        />
+        <div className={styles.Actions}>
+          <Icon src={optionsIcon} withBorder title="More" />
+          {user.isFollowedByActiveUser && (
+            <Icon src={notificationsIcon} withBorder title="Notify" />
+          )}
+          {actionButton}
         </div>
         <div className={styles.ProfileInfo}>
           <div className={styles.Title}>

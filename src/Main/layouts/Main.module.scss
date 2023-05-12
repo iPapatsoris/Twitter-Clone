@@ -10,7 +10,7 @@ main {
 .ContentMain {
   grid-area: content-main;
   border-inline: var(--border);
-  padding-inline: var(--main-content-padding);
+  // padding-inline: var(--main-content-padding);
 }
 
 .ErrorPage {
