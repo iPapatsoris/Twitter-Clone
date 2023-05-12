@@ -17,13 +17,18 @@ import { defaultAvatar, defaultCoverColor } from "./defaultPics";
 import {
   FetchQueryOptions,
   QueryClient,
-  QueryKey,
   useQuery,
 } from "@tanstack/react-query";
 import { useAuthStore } from "../../../store/AuthStore";
 import { shallow } from "zustand/shallow";
 
-interface ProfileProps {}
+interface ProfileProps {
+  // If preview is provided, take username from it instead of router path
+  // and show a preview instead of the full profile
+  preview?: {
+    username: string;
+  };
+}
 
 const userFields = [
   "avatar",
@@ -82,23 +87,31 @@ export const profileLoader =
     return data;
   };
 
-const Profile = ({}: ProfileProps) => {
+const Profile = ({ preview }: ProfileProps) => {
   const loggedInUser = useAuthStore(
     (state) => state.loggedInUser && { id: state.loggedInUser.id },
     shallow
   );
   const { setUserHeader } = useContext(HeaderProfileContext);
-  const params = useParams();
   const { getData } = useRequest();
+  const params = useParams();
+  const username = preview ? preview.username : params.username!;
 
-  const res = useQuery(getProfileQuery(params.username!, getData));
-  const user = res.data?.data?.user!;
+  const { data, isLoading } = useQuery(getProfileQuery(username, getData));
+  const user = data?.data?.user!;
 
   useLayoutEffect(() => {
-    setUserHeader(user);
-  }, [user, setUserHeader]);
+    if (!isLoading && !preview) {
+      setUserHeader(user);
+    }
+  }, [user, setUserHeader, preview, isLoading]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  if (isLoading) {
+    return null;
+  }
+
   let actionButton = (
     <Button color="black" key={user.id}>
       Follow
@@ -116,7 +129,7 @@ const Profile = ({}: ProfileProps) => {
         Following
       </Button>
     );
-  } else if (loggedInUser && loggedInUser.id === user.id) {
+  } else if (!preview && loggedInUser && loggedInUser.id === user.id) {
     actionButton = (
       <Button color="white" onClick={() => setIsModalOpen(true)} key={user.id}>
         Edit profile
@@ -135,17 +148,23 @@ const Profile = ({}: ProfileProps) => {
           <EditProfile user={user} closeModal={() => setIsModalOpen(false)} />
         </Modal>
       )}
-      <div className={styles.Profile}>
-        <div className={styles.Cover} style={coverStyle} />
+      <div
+        className={[styles.Profile, preview ? styles.Preview : ""].join(" ")}
+      >
+        {!preview && <div className={styles.Cover} style={coverStyle} />}
         <img
           className={styles.Avatar}
           src={user.avatar || defaultAvatar}
           alt="The avatar of the user"
         />
         <div className={styles.Actions}>
-          <Icon src={optionsIcon} withBorder title="More" />
-          {user.isFollowedByActiveUser && (
-            <Icon src={notificationsIcon} withBorder title="Notify" />
+          {!preview && (
+            <>
+              <Icon src={optionsIcon} withBorder title="More" />
+              {user.isFollowedByActiveUser && (
+                <Icon src={notificationsIcon} withBorder title="Notify" />
+              )}
+            </>
           )}
           {actionButton}
         </div>
@@ -162,7 +181,7 @@ const Profile = ({}: ProfileProps) => {
             </div>
           </div>
           <div className={styles.Bio}>{user.bio}</div>
-          <Info user={user} />
+          {!preview && <Info user={user} />}
           <div className={styles.Friendship}>
             <div>
               <b>{user.totalFollowees}</b>{" "}

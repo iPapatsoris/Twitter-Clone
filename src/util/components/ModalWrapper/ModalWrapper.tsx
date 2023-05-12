@@ -14,6 +14,7 @@ interface ModalWrapperProps {
   children: React.ReactElement | React.ReactElement[];
   innerRef?: React.RefObject<HTMLDivElement>;
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
+  allowOuterEvents?: boolean;
 }
 
 const ModalWrapper = ({
@@ -22,6 +23,7 @@ const ModalWrapper = ({
   children,
   innerRef,
   setIsActive,
+  allowOuterEvents = false,
 }: ModalWrapperProps) => {
   let mostRecentMousedown = useRef<Element | null>(null);
 
@@ -54,20 +56,26 @@ const ModalWrapper = ({
   //   e.stopPropagation();
   // };
 
-  const modalWrapper = (
+  const innerWrapper = (
+    <div
+      ref={innerRef}
+      className={innerStyles.join(" ")}
+      onMouseUp={onInnerMouseup}
+      // onClick={onClick}
+    >
+      {children}
+    </div>
+  );
+
+  const modalWrapper = allowOuterEvents ? (
+    innerWrapper
+  ) : (
     <div
       className={[styles.OuterWrapper, ...outerStyles].join(" ")}
       onMouseUp={onOuterMouseup}
       // onClick={onClick}
     >
-      <div
-        ref={innerRef}
-        className={innerStyles.join(" ")}
-        onMouseUp={onInnerMouseup}
-        // onClick={onClick}
-      >
-        {children}
-      </div>
+      {innerWrapper}
     </div>
   );
 

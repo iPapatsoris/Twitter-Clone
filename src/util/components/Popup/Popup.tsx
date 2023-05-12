@@ -20,6 +20,7 @@ export interface PopupProps {
   // Allow custom styling
   extraPopupStyles?: string[];
   children: React.ReactElement[] | React.ReactElement;
+  allowOuterEvents?: boolean;
 }
 
 const Popup = ({
@@ -32,6 +33,7 @@ const Popup = ({
   autoMaxHeight = false,
   extraPopupStyles = [],
   children,
+  allowOuterEvents = false,
 }: PopupProps) => {
   const popupRef = useRef<HTMLDivElement>(null);
 
@@ -47,6 +49,7 @@ const Popup = ({
       innerRef={popupRef}
       innerStyles={[styles.Popup, ...extraPopupStyles]}
       setIsActive={setIsActive}
+      allowOuterEvents={allowOuterEvents}
     >
       {children}
     </ModalWrapper>

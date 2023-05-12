@@ -3,7 +3,6 @@ import globalClassNames, {
 } from "../../../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly AddPhoto: "AddPhoto";
-  readonly Avatar: "Avatar";
 };
 export = classNames;
-export type EditProfilePhotosNames = "AddPhoto" | "Avatar" | GlobalClassNames;
+export type EditProfilePhotosNames = "AddPhoto" | GlobalClassNames;

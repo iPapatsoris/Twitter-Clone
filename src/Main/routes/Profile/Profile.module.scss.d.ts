@@ -3,8 +3,10 @@ import globalClassNames, {
 } from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly Profile: "Profile";
+  readonly Preview: "Preview";
   readonly Cover: "Cover";
   readonly Avatar: "Avatar";
+  readonly Edit: "Edit";
   readonly Actions: "Actions";
   readonly FollowButton: "FollowButton";
   readonly ProfileInfo: "ProfileInfo";
@@ -18,8 +20,10 @@ declare const classNames: typeof globalClassNames & {
 export = classNames;
 export type ProfileNames =
   | "Profile"
+  | "Preview"
   | "Cover"
   | "Avatar"
+  | "Edit"
   | "Actions"
   | "FollowButton"
   | "ProfileInfo"

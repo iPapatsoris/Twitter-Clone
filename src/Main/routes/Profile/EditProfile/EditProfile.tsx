@@ -126,7 +126,7 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
         alignHeaderWithContent={false}
         header={<EditProfileHeader disableUpdate={!isValidForm} />}
       >
-        <div className={profileStyles.Profile}>
+        <div className={[profileStyles.Profile, profileStyles.Edit].join(" ")}>
           <EditProfilePhotos
             coverPic={user.coverPic}
             avatar={user.avatar}
