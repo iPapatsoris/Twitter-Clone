@@ -1,8 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import Popup from "../../../util/components/Popup/Popup";
-import Profile from "./Profile";
+import Popup, { PopupProps } from "../Popup/Popup";
 
-const TestProfilePreview = () => {
+type HoverPopupProps = {
+  popupTarget: React.ReactElement | React.ReactElement[];
+  children: React.ReactElement | React.ReactElement[];
+  popupProps: Omit<
+    PopupProps,
+    "setIsActive" | "targetAreaRef" | "children" | "allowOuterEvents"
+  >;
+};
+
+const HoverPopup = ({ popupTarget, children, popupProps }: HoverPopupProps) => {
   const [showProfilePreview, setShowProfilePreview] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
   const popupTriggerRef = useRef<HTMLDivElement>(null);
@@ -33,24 +41,22 @@ const TestProfilePreview = () => {
            setIsActive function. However, we still keep this prop mandatory, 
            because in most use cases it is needed.
         */
+          {...popupProps}
           setIsActive={() => null}
           targetAreaRef={popupTriggerRef}
-          position={{ block: "bottom", inline: "leftCover" }}
           allowOuterEvents
         >
-          <div ref={popupRef}>
-            <Profile preview={{ username: "lel" }} />
-          </div>
+          <div ref={popupRef}>{popupTarget}</div>
         </Popup>
       )}
       <div
         ref={popupTriggerRef}
         onMouseEnter={() => setShowProfilePreview(true)}
       >
-        Hover me!
+        {children}
       </div>
     </>
   );
 };
 
-export default TestProfilePreview;
+export default HoverPopup;
