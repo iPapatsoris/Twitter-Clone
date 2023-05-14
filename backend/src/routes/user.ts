@@ -257,38 +257,44 @@ router
   );
 
 router.get(
-  "/:userID/followers",
+  "/:username/followers",
   (
-    req: TypedRequestQuery<{ userID: string }>,
+    req: TypedRequestQuery<{ username: string }>,
     res: Response<GetUserFollowers["response"]>
   ) => {
-    const { userID } = req.params;
+    const { username } = req.params;
     const query =
-      "SELECT user.id as id, username, name, isVerified, avatar, bio \
-       FROM user_follows, user \
-       WHERE followeeID = ? AND followerID = user.id";
+      "SELECT follower.id as id, follower.username as username, \
+              follower.name as name, follower.isVerified as isVerified, \
+              follower.avatar as avatar, follower.bio as bio \
+       FROM user_follows, user as follower, user as followee \
+       WHERE followee.username = ? AND followeeID = followee.id AND \
+             followerID = follower.id";
     const sendResult = (result: any) => {
       res.send({ ok: true, data: { followers: result } });
     };
-    simpleQuery(res, query, [userID], sendResult);
+    simpleQuery(res, query, [username], sendResult);
   }
 );
 
 router.get(
-  "/:userID/followees",
+  "/:username/followees",
   (
-    req: TypedRequestQuery<{ userID: string }>,
+    req: TypedRequestQuery<{ username: string }>,
     res: Response<GetUserFollowees["response"]>
   ) => {
-    const { userID } = req.params;
+    const { username } = req.params;
     const query =
-      "SELECT user.id as id, username, name, isVerified, avatar, bio \
-       FROM user_follows, user \
-       WHERE followerID = ? AND followeeID = user.id";
+      "SELECT followee.id as id, followee.username as username, \
+              followee.name as name, followee.isVerified as isVerified, \
+              followee.avatar as avatar, followee.bio as bio \
+       FROM user_follows, user as follower, user as followee \
+       WHERE follower.username = ? AND followerID = follower.id AND \
+             followeeID = followee.id";
     const sendResult = (result: any) => {
       res.send({ ok: true, data: { followees: result } });
     };
-    simpleQuery(res, query, [userID], sendResult);
+    simpleQuery(res, query, [username], sendResult);
   }
 );
 
