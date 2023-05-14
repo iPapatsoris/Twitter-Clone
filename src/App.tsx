@@ -2,7 +2,11 @@ import styles from "./App.module.scss";
 import Main from "./Main/layouts/Main";
 import Sidebar from "./Sidebar/Sidebar";
 import { useLocation } from "react-router-dom";
-import { getPagePath, isNotificationsPage } from "./util/paths";
+import {
+  getPagePath,
+  isNotificationsPage,
+  useRouteMatches,
+} from "./util/paths";
 import { createContext, SetStateAction, useMemo, useState } from "react";
 import useScrollToTop from "./util/hooks/useScrollToTop";
 
@@ -29,13 +33,18 @@ const App = () => {
     []
   );
 
+  const isCirclePage = useRouteMatches([
+    getPagePath("followers"),
+    getPagePath("following"),
+  ]);
+
   let extraClasses = [];
   // Modify grid layout for different pages
   if (isErrorPage) {
     extraClasses.push(styles.ErrorPage);
   } else if (path === getPagePath("explore")) {
     extraClasses.push(styles.NoHeaderRight);
-  } else if (isNotificationsPage(path)) {
+  } else if (isNotificationsPage(path) || isCirclePage) {
     extraClasses.push(styles.ExtendedHeaderMain);
   }
 

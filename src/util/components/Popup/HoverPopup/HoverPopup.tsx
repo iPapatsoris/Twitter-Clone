@@ -17,8 +17,6 @@ const HoverPopup = ({ popupTarget, children, popupProps }: HoverPopupProps) => {
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      console.log(e.target);
-
       if (
         e.target instanceof Node &&
         !popupRef.current?.contains(e.target) &&

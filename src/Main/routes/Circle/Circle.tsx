@@ -1,7 +1,14 @@
-import { FetchQueryOptions, QueryClient } from "@tanstack/react-query";
-import { LoaderFunctionArgs } from "react-router-dom";
+import {
+  FetchQueryOptions,
+  QueryClient,
+  useQuery,
+} from "@tanstack/react-query";
+import { useContext, useLayoutEffect } from "react";
+import { LoaderFunctionArgs, useParams } from "react-router-dom";
 import { GetUserFollowers } from "../../../../backend/src/api/user";
 import useRequest from "../../../util/hooks/useRequest";
+import { getPagePath, useRouteMatch } from "../../../util/paths";
+import { HeaderProfileContext } from "../../layouts/Main";
 import styles from "./Circle.module.scss";
 
 interface CircleProps {}
@@ -43,6 +50,26 @@ export const circleLoader =
   };
 
 const Circle = ({}: CircleProps) => {
+  const isFollowersPage = useRouteMatch(getPagePath("followers"));
+  const circle: Circle = isFollowersPage ? "followers" : "followees";
+  const { username } = useParams();
+  const { getData } = useRequest();
+  const { data, isSuccess } = useQuery(
+    getCircleQuery(username!, getData, circle)
+  );
+  const { setUserHeader } = useContext(HeaderProfileContext);
+
+  useLayoutEffect(() => {
+    if (isSuccess) {
+      setUserHeader({
+        totalTweets: -1,
+        username: username!,
+        isVerified: false,
+        name: "fix me",
+      });
+    }
+  }, [username, setUserHeader, isSuccess]);
+
   return <span>circle</span>;
 };
 

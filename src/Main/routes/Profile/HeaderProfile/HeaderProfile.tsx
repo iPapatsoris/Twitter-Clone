@@ -7,11 +7,17 @@ import { useNavigate } from "react-router-dom";
 
 interface HeaderProfileProps {
   user: HeaderProfileUser;
+  showTweets: boolean;
 }
 
-const HeaderProfile = ({ user }: HeaderProfileProps) => {
+const HeaderProfile = ({ user, showTweets }: HeaderProfileProps) => {
   const navitage = useNavigate();
   const handleBackClick = () => navitage(-1);
+  const subtitle = showTweets ? (
+    <>{user?.totalTweets} Tweets</>
+  ) : (
+    <>@{user?.username}</>
+  );
 
   return (
     <div className={styles.HeaderProfile}>
@@ -22,7 +28,7 @@ const HeaderProfile = ({ user }: HeaderProfileProps) => {
           {user?.isVerified ? <Icon src={verifiedIcon} hover="none" /> : null}
         </div>
         <div className={[styles.SmallerText, styles.LightColor].join(" ")}>
-          {user?.totalTweets} Tweets
+          {subtitle}
         </div>
       </div>
     </div>

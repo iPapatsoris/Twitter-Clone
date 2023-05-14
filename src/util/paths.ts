@@ -44,15 +44,13 @@ export const getPagePath = (page: Page, username: string = "") => {
   return paths[page];
 };
 
-export const useRouteMatch = (idToMatch: string) => {
-  const matches = useMatches();
-  for (let match of matches) {
-    if (match.id === idToMatch) {
-      return true;
-    }
-  }
-  return false;
-};
+// Return true if current router ID matches any of the ones in ids array
+export const useRouteMatches = (ids: string[]) =>
+  useMatches().findIndex(
+    (match) => ids.findIndex((item) => item === match.id) !== -1
+  ) !== -1;
+
+export const useRouteMatch = (id: string) => useRouteMatches([id]);
 
 export const isNotificationsPage = (path: string) =>
   path === getPagePath("notifications") ||

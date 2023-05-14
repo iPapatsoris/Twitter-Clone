@@ -6,8 +6,9 @@ import { Outlet, useLocation } from "react-router-dom";
 import styles from "./Main.module.scss";
 import {
   getPagePath,
-  isNotificationsPage,
+  isNotificationsPage as checkIsNotificationsPage,
   useRouteMatch,
+  useRouteMatches,
 } from "../../util/paths";
 import HeaderHome from "../routes/Home/HeaderHome/HeaderHome";
 import HeaderExplore from "../routes/Explore/HeaderExplore/HeaderExplore";
@@ -18,10 +19,11 @@ import { User } from "../../../backend/src/entities/user";
 import { createContext, SetStateAction, useContext, useState } from "react";
 import HeaderProfile from "../routes/Profile/HeaderProfile/HeaderProfile";
 import { ErrorPageContext } from "../../App";
+import HeaderExtendedCircle from "../routes/Circle/HeaderCircle/HeaderExtendedCircle";
 
 export type HeaderProfileUser = Pick<
   User,
-  "name" | "totalTweets" | "isVerified"
+  "name" | "totalTweets" | "isVerified" | "username"
 > | null;
 export const HeaderProfileContext = createContext<{
   setUserHeader: React.Dispatch<SetStateAction<HeaderProfileUser>>;
@@ -35,21 +37,36 @@ const Main = () => {
 
   const isErrorPage = useRouteMatch(getPagePath("error")) || isErrorPageContext;
   const isProfilePage = useRouteMatch(getPagePath("profile"));
+  const isCirclePage = useRouteMatches([
+    getPagePath("followers"),
+    getPagePath("following"),
+  ]);
 
   const path = useLocation().pathname;
   let header = <HeaderHome />;
   if (path === getPagePath("explore")) {
     header = <HeaderExplore />;
   } else if (isProfilePage) {
-    header = <HeaderProfile user={userHeader} />;
+    header = <HeaderProfile user={userHeader} showTweets />;
   }
 
+  const isNotificationsPage = checkIsNotificationsPage(path);
+  const isPageWithExtendedHeader = isNotificationsPage || isCirclePage;
+
   let headerLayout;
-  if (isNotificationsPage(path)) {
+  if (isPageWithExtendedHeader) {
+    let headerMainChild, headerExtendedChild;
+    if (isNotificationsPage) {
+      headerMainChild = <HeaderNotifications />;
+      headerExtendedChild = <HeaderExtendedNotifications />;
+    } else if (isCirclePage) {
+      headerMainChild = <HeaderProfile user={userHeader} showTweets={false} />;
+      headerExtendedChild = <HeaderExtendedCircle />;
+    }
     headerLayout = (
       <HeaderMainExtension
-        headerMainChild={<HeaderNotifications />}
-        headerExtendedChild={<HeaderExtendedNotifications />}
+        headerMainChild={headerMainChild}
+        headerExtendedChild={headerExtendedChild}
       />
     );
   } else {
