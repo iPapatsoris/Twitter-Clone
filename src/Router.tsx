@@ -20,6 +20,7 @@ import useRequest from "./util/hooks/useRequest";
 import { QueryClient } from "@tanstack/react-query";
 import { shallow } from "zustand/shallow";
 import { LoggedInUser, useAuthStore } from "./store/AuthStore";
+import Circle, { circleLoader } from "./Main/routes/Circle/Circle";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const loggedInUser: Pick<LoggedInUser, "id"> | null = useAuthStore(
@@ -81,13 +82,27 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
         {/* <Route index element={<Navigate to={paths.notifications.self} />} /> */}
         <Route path={getPagePath("messages")} />
         <Route path={getPagePath("bookmarks")} />
-        <Route path={getPagePath("lists", loggedInUser?.username)} />
+        <Route path={getPagePath("lists")} />
         <Route
-          path={getPagePath("profileAny")}
+          path={getPagePath("profile")}
           element={<Profile />}
-          id={getPagePath("profileAny")}
+          id={getPagePath("profile")}
           loader={profileLoader(getData, queryClient)}
-          errorElement={<ErrorPage />}
+          errorElement={<ErrorPage />} // is this needed? can i have it globally?
+        />
+        <Route
+          path={getPagePath("followers")}
+          element={<Circle />}
+          id={getPagePath("followers")}
+          loader={circleLoader(getData, queryClient, "followers")}
+          errorElement={<ErrorPage />} // is this needed?
+        />
+        <Route
+          path={getPagePath("following")}
+          element={<Circle />}
+          id={getPagePath("following")}
+          loader={circleLoader(getData, queryClient, "followees")}
+          errorElement={<ErrorPage />} // is this needed?
         />
         <Route index element={<Navigate to={getPagePath("home")} />} />
         <Route path="*" id={getPagePath("error")} element={<ErrorPage />} />

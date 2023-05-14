@@ -1,5 +1,3 @@
-import { Link, useLocation } from "react-router-dom";
-import { getPagePath } from "../../../../../util/paths";
 import HeaderLinkMenu from "../../../../layouts/Header/HeaderMain/HeaderMainExtension/HeaderLinkMenu/HeaderLinkMenu";
 
 const HeaderExtendedNotifications = () => {

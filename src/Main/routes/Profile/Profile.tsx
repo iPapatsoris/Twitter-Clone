@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, useParams } from "react-router-dom";
+import { Link, LoaderFunctionArgs, useParams } from "react-router-dom";
 import styles from "./Profile.module.scss";
 import { GetUser } from "../../../../backend/src/api/user";
 import { useContext, useLayoutEffect, useState } from "react";
@@ -21,6 +21,7 @@ import {
 } from "@tanstack/react-query";
 import { useAuthStore } from "../../../store/AuthStore";
 import { shallow } from "zustand/shallow";
+import { getPagePath } from "../../../util/paths";
 
 interface ProfileProps {
   // If preview is provided, take username from it instead of router path
@@ -183,14 +184,14 @@ const Profile = ({ preview }: ProfileProps) => {
           <div className={styles.Bio}>{user.bio}</div>
           {!preview && <Info user={user} />}
           <div className={styles.Friendship}>
-            <div>
+            <Link to={getPagePath("following", user.username)}>
               <b>{user.totalFollowees}</b>{" "}
-              <span className={styles.LightColor}>Following</span>{" "}
-            </div>
-            <div>
+              <span className={styles.LightColor}>Followees</span>
+            </Link>
+            <Link to={getPagePath("followers", user.username)}>
               <b>{user.totalFollowers}</b>{" "}
               <span className={styles.LightColor}>Followers</span>
-            </div>
+            </Link>
           </div>
         </div>
       </div>

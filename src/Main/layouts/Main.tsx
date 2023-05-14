@@ -34,7 +34,7 @@ const Main = () => {
   const { isErrorPage: isErrorPageContext } = useContext(ErrorPageContext);
 
   const isErrorPage = useRouteMatch(getPagePath("error")) || isErrorPageContext;
-  const isProfilePage = useRouteMatch(getPagePath("profileAny"));
+  const isProfilePage = useRouteMatch(getPagePath("profile"));
 
   const path = useLocation().pathname;
   let header = <HeaderHome />;

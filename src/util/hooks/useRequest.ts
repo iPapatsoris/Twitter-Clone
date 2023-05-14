@@ -44,7 +44,7 @@ const useRequest = () => {
     return data as any;
   };
 
-  const getData = async <Res, T extends string>(
+  const getData = async <Res, T extends string = string>(
     path: string,
     params: readonly T[] = []
   ): Promise<Res> => {

@@ -9,15 +9,17 @@ export type Page =
   | "messages"
   | "bookmarks"
   | "lists"
-  | "profileLoggedIn"
-  | "profileAny"
+  | "profile"
   | "error"
   | "settings"
   | "tos"
   | "privacy"
-  | "cookies";
+  | "cookies"
+  | "followers"
+  | "following";
 
 export const getPagePath = (page: Page, username: string = "") => {
+  const usernameInPath = username ? username : ":username";
   const paths: {
     [key in Page]: string;
   } = {
@@ -28,14 +30,15 @@ export const getPagePath = (page: Page, username: string = "") => {
     notificationsMentions: "/notifications/mentions",
     messages: "/messages",
     bookmarks: "/i/bookmarks",
-    lists: "/" + username + "/lists",
-    profileLoggedIn: "/" + username,
-    profileAny: "/:username",
+    lists: "/" + usernameInPath + "/lists",
+    profile: "/" + usernameInPath,
     error: "/error",
     settings: "/settings",
     tos: "/tos",
     privacy: "/privacy",
     cookies: "/cookies",
+    followers: "/" + usernameInPath + "/followers",
+    following: "/" + usernameInPath + "/following",
   };
 
   return paths[page];

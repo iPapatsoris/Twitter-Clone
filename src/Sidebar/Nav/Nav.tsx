@@ -88,7 +88,7 @@ const Nav = () => {
             icon={profileIcon}
             iconActive={profileIconActive}
             title="Profile"
-            path={getPagePath("profileLoggedIn", loggedInUser.username)}
+            path={getPagePath("profile", loggedInUser.username)}
           />
           <NavItem icon={moreIcon} title="More" isPopup />
         </>

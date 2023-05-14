@@ -32,6 +32,10 @@
     grid-template-columns: defineGridColumns(var(--avatar-small-height));
     row-gap: 1rem;
   }
+
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
 .Cover {
