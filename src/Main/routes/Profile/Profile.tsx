@@ -1,7 +1,7 @@
 import { Link, LoaderFunctionArgs, useParams } from "react-router-dom";
 import styles, { ProfileNames } from "./Profile.module.scss";
 import { GetUser } from "../../../../backend/src/api/user";
-import { useContext, useLayoutEffect, useState } from "react";
+import { ComponentProps, useContext, useLayoutEffect, useState } from "react";
 import { HeaderProfileContext } from "../../layouts/Main";
 import Icon from "../../../util/components/Icon/Icon";
 import optionsIcon from "../../../assets/icons/dots.png";
@@ -114,33 +114,29 @@ const Profile = ({ preview }: ProfileProps) => {
     return null;
   }
 
-  let actionButton = (
-    <Button
-      color="black"
-      key={user.id}
-      size={preview && preview.size === "small" ? "small" : undefined}
-    >
-      Follow
-    </Button>
-  );
+  let actionButtonProps: ComponentProps<typeof Button> = {
+    children: "Follow",
+    color: "black",
+    size: preview && preview.size === "small" ? "small" : undefined,
+    key: user.id,
+  };
+
   if (loggedInUser && user.isFollowedByActiveUser) {
-    actionButton = (
-      <Button
-        color="white"
-        hoverColor="red"
-        hoverText="Unfollow"
-        extraClasses={[styles.FollowButton]}
-        key={user.id}
-      >
-        Following
-      </Button>
-    );
+    actionButtonProps = {
+      children: "Following",
+      color: "white",
+      hoverColor: "red",
+      hoverText: "Unfollow",
+      extraClasses: [styles.FollowButton],
+      key: user.id,
+    };
   } else if (!preview && loggedInUser && loggedInUser.id === user.id) {
-    actionButton = (
-      <Button color="white" onClick={() => setIsModalOpen(true)} key={user.id}>
-        Edit profile
-      </Button>
-    );
+    actionButtonProps = {
+      children: "Edit profile",
+      color: "white",
+      onClick: () => setIsModalOpen(true),
+      key: user.id,
+    };
   }
 
   const coverStyle: React.CSSProperties = user.coverPic
@@ -178,7 +174,7 @@ const Profile = ({ preview }: ProfileProps) => {
               )}
             </>
           )}
-          {actionButton}
+          <Button {...actionButtonProps} />
         </div>
         <div className={styles.Title}>
           <div className={styles.NameAndVerified}>

@@ -118,14 +118,20 @@
   padding-block: 1rem;
 }
 
-.Preview .NameAndVerified h1 {
-  font-weight: 700;
-  font-size: 15px;
+.Preview.Medium .Title .NameAndVerified h1 {
+  font-size: 18px;
 }
 
-.Preview.Small .NameAndVerified .Verified {
-  width: 18px;
-  height: 18px;
+.Preview.Small .Title .NameAndVerified {
+  h1 {
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .Verified {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 .Title {
@@ -138,10 +144,6 @@
     h1 {
       font-size: 20px;
       font-weight: 800;
-    }
-
-    .Preview h1 {
-      font-size: 18px;
     }
   }
 
