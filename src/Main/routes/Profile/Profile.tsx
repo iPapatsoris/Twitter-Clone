@@ -18,6 +18,7 @@ import {
   FetchQueryOptions,
   QueryClient,
   useQuery,
+  UseQueryOptions,
 } from "@tanstack/react-query";
 import { useAuthStore } from "../../../store/AuthStore";
 import { shallow } from "zustand/shallow";
@@ -30,40 +31,60 @@ interface ProfileProps {
     username: string;
     size: "medium" | "small";
   };
+  noFetch?: boolean;
 }
 
-const userFields = [
+// Fields to query in small preview mode
+export const smallPreviewProfileFields = [
   "avatar",
   "bio",
-  "birthDate",
-  "joinedDate",
-  "coverPic",
   "id",
   "isVerified",
-  "location",
   "name",
   "username",
-  "totalFollowees",
-  "totalFollowers",
-  "totalTweets",
-  "website",
   "isFollowedByActiveUser",
 ] as const satisfies Readonly<Array<GetUserFields>>;
 
-export type RequestFields = typeof userFields[number];
-type Response = GetUser<RequestFields>["response"];
-export type UserProfileT = NonNullable<Response["data"]>["user"];
+// Fields to query in medium preview mode
+const mediumPreviewProfileFields = [
+  ...smallPreviewProfileFields,
+  "totalFollowees",
+  "totalFollowers",
+] as const satisfies Readonly<Array<GetUserFields>>;
+
+// Fields to query in full profile mode
+const fullProfileFields = [
+  ...mediumPreviewProfileFields,
+  "birthDate",
+  "joinedDate",
+  "coverPic",
+  "location",
+  "totalTweets",
+  "website",
+] as const satisfies Readonly<Array<GetUserFields>>;
+
+type FullProfileRequestFields = typeof fullProfileFields[number];
+type FullProfileResponse = GetUser<FullProfileRequestFields>["response"];
+
+// User prop passed to EditProfile
+export type UserProfileT = NonNullable<FullProfileResponse["data"]>["user"];
+
 export const profileQueryKey = "userProfile";
 
-const getProfileQuery: (
+// Get specific user profile information, according to fieldsToQuery.
+// Type safety ensures that the query result's properties will be limited only
+// to the ones mentioned on fieldsToQuery.
+export const getProfileQuery = <T extends Readonly<Array<GetUserFields>>>(
   username: string,
-  getData: ReturnType<typeof useRequest>["getData"]
-) => FetchQueryOptions<Response> = (username, getData) => ({
-  queryKey: [profileQueryKey, username],
+  getData: ReturnType<typeof useRequest>["getData"],
+  fieldsToQuery: T,
+  noFetch = false
+): UseQueryOptions<FullProfileResponse> => ({
+  queryKey: [profileQueryKey, username, ...fieldsToQuery],
   queryFn: async () => {
-    const res = await getData<Response, RequestFields>(
+    const res = await getData<GetUser<T[number]>["response"], T[number]>(
       "user/" + username,
-      userFields
+      fieldsToQuery
     );
 
     if (!res.ok) {
@@ -71,25 +92,29 @@ const getProfileQuery: (
     }
     return res;
   },
+  enabled: !noFetch,
 });
 
+// On profile load from URL, fetch the full profile
 export const profileLoader =
   (
     getData: ReturnType<typeof useRequest>["getData"],
     queryClient: QueryClient
   ) =>
   async ({ params }: LoaderFunctionArgs) => {
-    const query = getProfileQuery(params.username!, getData);
+    const query = getProfileQuery(params.username!, getData, fullProfileFields);
     const data = await queryClient.ensureQueryData<
-      Response,
+      FullProfileResponse,
       unknown,
-      Response,
+      FullProfileResponse,
       any
     >({ queryKey: query.queryKey, queryFn: query.queryFn });
     return data;
   };
 
-const Profile = ({ preview }: ProfileProps) => {
+const Profile = ({ preview, noFetch = false }: ProfileProps) => {
+  console.log("profile render");
+
   const loggedInUser = useAuthStore(
     (state) => state.loggedInUser && { id: state.loggedInUser.id },
     shallow
@@ -99,10 +124,20 @@ const Profile = ({ preview }: ProfileProps) => {
   const params = useParams();
   const username = preview ? preview.username : params.username!;
 
-  const { data, isLoading } = useQuery(getProfileQuery(username, getData));
+  let fieldsToQuery: Readonly<Array<GetUserFields>> = fullProfileFields;
+  if (preview && preview.size === "medium") {
+    fieldsToQuery = mediumPreviewProfileFields;
+  } else if (preview && preview.size === "small") {
+    fieldsToQuery = smallPreviewProfileFields;
+  }
+
+  const { data, isLoading } = useQuery(
+    getProfileQuery(username, getData, fieldsToQuery, noFetch)
+  );
   const user = data?.data?.user!;
 
   useLayoutEffect(() => {
+    // Set header context after we fetch user information
     if (!isLoading && !preview) {
       setUserHeader(user);
     }
