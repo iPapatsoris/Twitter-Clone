@@ -22,17 +22,6 @@ const App = () => {
   const path = useLocation().pathname;
   useScrollToTop();
 
-  // Avoid useless re-rendering when simply a popup becomes active
-  const innerContent = useMemo(
-    () => (
-      <>
-        <Sidebar />
-        <Main />
-      </>
-    ),
-    []
-  );
-
   const isCirclePage = useRouteMatches([
     getPagePath("followers"),
     getPagePath("following"),
@@ -51,7 +40,10 @@ const App = () => {
   return (
     <ErrorPageContext.Provider value={{ setIsErrorPage, isErrorPage }}>
       <div className={[styles.App, ...extraClasses].join(" ")}>
-        {innerContent}
+        <>
+          <Sidebar />
+          <Main />
+        </>
       </div>
     </ErrorPageContext.Provider>
   );
