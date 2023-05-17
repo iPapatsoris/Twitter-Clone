@@ -33,7 +33,7 @@
       ". sidebar-left content-main content-right ."
       ". sidebar-left .             sticky-inbox sticky-inbox";
 
-    grid-template-rows: 53px auto auto auto auto;
+    grid-template-rows: 53px 53px auto auto;
   }
 
   &.ErrorPage {

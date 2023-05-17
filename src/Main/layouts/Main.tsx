@@ -1,5 +1,4 @@
 import ContentRight from "./ContentRight/ContentRight";
-import HeaderMain from "./Header/HeaderMain/HeaderMain";
 import HeaderRight from "./Header/HeaderRight/HeaderRight";
 import StickyInbox from "../components/Inbox/StickyInbox/StickyInbox";
 import { Outlet, useLocation } from "react-router-dom";
@@ -10,16 +9,18 @@ import {
   useRouteMatch,
   useRouteMatches,
 } from "../../util/paths";
-import HeaderHome from "../routes/Home/HeaderHome/HeaderHome";
-import HeaderExplore from "../routes/Explore/HeaderExplore/HeaderExplore";
-import HeaderNotifications from "../routes/Notifications/HeaderNotifications/HeaderNotifications";
 import HeaderExtendedNotifications from "../routes/Notifications/HeaderNotifications/HeaderExtendedNotifications/HeaderExtendedNotifications";
-import HeaderMainExtension from "./Header/HeaderMain/HeaderMainExtension/HeaderMainExtension";
 import { User } from "../../../backend/src/entities/user";
 import { createContext, SetStateAction, useContext, useState } from "react";
-import HeaderProfile from "../routes/Profile/HeaderProfile/HeaderProfile";
 import { ErrorPageContext } from "../../App";
 import HeaderExtendedCircle from "../routes/Circle/HeaderCircle/HeaderExtendedCircle";
+import NewHeader from "./Header/HeaderMain/HeaderMain";
+import Icon from "../../util/components/Icon/Icon";
+import sparkIcon from "../../assets/icons/spark.png";
+import settingsIcon from "../../assets/icons/settings.png";
+import verifiedIcon from "../../assets/icons/verified.png";
+import Search from "../components/Search/Search";
+import HeaderMainHub from "./Header/HeaderMain/HeaderMainHub";
 
 export type HeaderProfileUser = Pick<
   User,
@@ -34,44 +35,8 @@ export const HeaderProfileContext = createContext<{
 const Main = () => {
   const [userHeader, setUserHeader] = useState<HeaderProfileUser>(null);
   const { isErrorPage: isErrorPageContext } = useContext(ErrorPageContext);
-
   const isErrorPage = useRouteMatch(getPagePath("error")) || isErrorPageContext;
-  const isProfilePage = useRouteMatch(getPagePath("profile"));
-  const isCirclePage = useRouteMatches([
-    getPagePath("followers"),
-    getPagePath("following"),
-  ]);
-
   const path = useLocation().pathname;
-  let header = <HeaderHome />;
-  if (path === getPagePath("explore")) {
-    header = <HeaderExplore />;
-  } else if (isProfilePage) {
-    header = <HeaderProfile user={userHeader} showTweets />;
-  }
-
-  const isNotificationsPage = checkIsNotificationsPage(path);
-  const isPageWithExtendedHeader = isNotificationsPage || isCirclePage;
-
-  let headerLayout;
-  if (isPageWithExtendedHeader) {
-    let headerMainChild, headerExtendedChild;
-    if (isNotificationsPage) {
-      headerMainChild = <HeaderNotifications />;
-      headerExtendedChild = <HeaderExtendedNotifications />;
-    } else if (isCirclePage) {
-      headerMainChild = <HeaderProfile user={userHeader} showTweets={false} />;
-      headerExtendedChild = <HeaderExtendedCircle />;
-    }
-    headerLayout = (
-      <HeaderMainExtension
-        headerMainChild={headerMainChild}
-        headerExtendedChild={headerExtendedChild}
-      />
-    );
-  } else {
-    headerLayout = <HeaderMain>{header}</HeaderMain>;
-  }
 
   const placeholderJSX = [];
   for (let count = 0; count < 100; count++)
@@ -88,7 +53,7 @@ const Main = () => {
           setUserHeader,
         }}
       >
-        {!isErrorPage && headerLayout}
+        {!isErrorPage && <HeaderMainHub user={userHeader} />}
         <div className={isErrorPage ? styles.ErrorPage : styles.ContentMain}>
           <Outlet />
           {/* {!isErrorPage && placeholderJSX} */}

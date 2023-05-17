@@ -1,18 +1,39 @@
 .HeaderMain {
-  display: flex;
-  align-items: center;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
   border-inline: var(--border);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
-  /** We have relatively positioned elements below the header
-   * (eg: user avatar), which create their own stacking context,
-   * so we need relative position here too to prevent them from laying on top of 
-   * the header.
-   */
-  position: relative;
+  .Main {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-grow: 1;
+
+    .TitleSubtitle {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .Title {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+  }
 }
 
 .HeaderMainGridArea {
   grid-area: header-main;
+}
+
+.HeaderExtendedGridArea {
+  grid-area: header-main-extension;
+}
+
+.SearchContainer {
+  width: 80%;
 }

@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { getPagePath, Page } from "../../../../../../util/paths";
+import { getPagePath, Page } from "../../../../../util/paths";
 import styles from "./HeaderLinkMenu.module.scss";
 
 type HeaderLinkMenuProps = {
