@@ -1,36 +1,56 @@
 .Profile {
   --cover-height: 200px;
   --avatar-height: 133px;
-  --avatar-small-height: 75px;
+  --avatar-medium-height: 75px;
+  --avatar-small-height: 48px;
 
+  // Columns for normal profile and medium preview
   @function defineGridColumns($avatar-width) {
     @return 1rem $avatar-width 1fr 1rem;
+  }
+  // Columns for small preview
+  @function defineGridColumnsSmall() {
+    @return 1rem var(--avatar-small-height) 1rem 1fr 1fr 1rem;
   }
 
   display: grid;
   grid-template-areas:
     "cover1  cover1  cover1  cover1 "
     "cover2  avatar  cover3  cover3 "
-    ".       avatar  actions ."
-    ".       content content .     ";
+    ".       avatar  actions .      "
+    ".       title   .       .      "
+    ".       content content .      ";
 
   grid-template-rows:
     calc(var(--cover-height) - var(--avatar-height) / 2)
     calc(var(--avatar-height) / 2)
     calc(var(--avatar-height) / 2)
+    auto
     auto;
 
   grid-template-columns: defineGridColumns(var(--avatar-height));
 
   &.Preview {
-    max-width: 300px;
     padding-block: 1rem;
-    grid-template-areas:
-      ". avatar actions ."
-      ". content content .";
-    grid-template-rows: var(--avatar-small-height);
-    grid-template-columns: defineGridColumns(var(--avatar-small-height));
-    row-gap: 1rem;
+
+    &.Medium {
+      row-gap: 0.5rem;
+      grid-template-areas:
+        ". avatar actions  ."
+        ". title  title    ."
+        ". content content .";
+      max-width: 300px;
+      grid-template-rows: var(--avatar-medium-height) auto auto;
+      grid-template-columns: defineGridColumns(var(--avatar-medium-height));
+    }
+
+    &.Small {
+      grid-template-areas:
+        ". avatar . title actions  ."
+        ". . . content content .";
+      grid-template-rows: var(--avatar-small-height) auto;
+      grid-template-columns: defineGridColumnsSmall();
+    }
   }
 
   a:hover {
@@ -94,31 +114,47 @@
   }
 }
 
+:not(.Preview) > .Title {
+  padding-block: 1rem;
+}
+
+.Preview .NameAndVerified h1 {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.Preview.Small .NameAndVerified .Verified {
+  width: 18px;
+  height: 18px;
+}
+
+.Title {
+  grid-area: title;
+
+  .NameAndVerified {
+    display: flex;
+    gap: 0.5rem;
+
+    h1 {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .Preview h1 {
+      font-size: 18px;
+    }
+  }
+
+  .Username {
+    font-size: 15px;
+  }
+}
+
 .ProfileInfo {
   grid-area: content;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-
-  .Title {
-    .NameAndVerified {
-      display: flex;
-      gap: 0.5rem;
-
-      h1 {
-        font-size: 20px;
-        font-weight: 800;
-      }
-
-      .Preview h1 {
-        font-size: 18px;
-      }
-    }
-
-    .Username {
-      font-size: 15px;
-    }
-  }
 
   .Bio {
     font-size: 15px;

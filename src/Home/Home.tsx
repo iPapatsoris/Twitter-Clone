@@ -8,7 +8,7 @@ const Home = () => {
       <div className="Home">this is my Home</div>
       <HoverPopup
         popupProps={{ position: { block: "bottom", inline: "leftCover" } }}
-        popupTarget={<Profile preview={{ username: "lel" }} />}
+        popupTarget={<Profile preview={{ size: "medium", username: "lel" }} />}
       >
         <span>Hover me!</span>
       </HoverPopup>

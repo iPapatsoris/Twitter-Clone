@@ -1,5 +1,5 @@
 import { Link, LoaderFunctionArgs, useParams } from "react-router-dom";
-import styles from "./Profile.module.scss";
+import styles, { ProfileNames } from "./Profile.module.scss";
 import { GetUser } from "../../../../backend/src/api/user";
 import { useContext, useLayoutEffect, useState } from "react";
 import { HeaderProfileContext } from "../../layouts/Main";
@@ -24,10 +24,11 @@ import { shallow } from "zustand/shallow";
 import { getPagePath } from "../../../util/paths";
 
 interface ProfileProps {
-  // If preview is provided, take username from it instead of router path
+  // If preview is provided, take username from it instead of from router path
   // and show a preview instead of the full profile
   preview?: {
     username: string;
+    size: "medium" | "small";
   };
 }
 
@@ -114,7 +115,11 @@ const Profile = ({ preview }: ProfileProps) => {
   }
 
   let actionButton = (
-    <Button color="black" key={user.id}>
+    <Button
+      color="black"
+      key={user.id}
+      size={preview && preview.size === "small" ? "small" : undefined}
+    >
       Follow
     </Button>
   );
@@ -142,6 +147,14 @@ const Profile = ({ preview }: ProfileProps) => {
     ? { backgroundImage: "url(" + user.coverPic + ")" }
     : { backgroundColor: defaultCoverColor };
 
+  let previewStyles: ProfileNames[] = [];
+  if (preview) {
+    previewStyles = [
+      styles.Preview,
+      preview.size === "medium" ? styles.Medium : styles.Small,
+    ];
+  }
+
   return (
     <>
       {isModalOpen && (
@@ -149,9 +162,7 @@ const Profile = ({ preview }: ProfileProps) => {
           <EditProfile user={user} closeModal={() => setIsModalOpen(false)} />
         </Modal>
       )}
-      <div
-        className={[styles.Profile, preview ? styles.Preview : ""].join(" ")}
-      >
+      <div className={[styles.Profile, ...previewStyles].join(" ")}>
         {!preview && <div className={styles.Cover} style={coverStyle} />}
         <img
           className={styles.Avatar}
@@ -169,30 +180,36 @@ const Profile = ({ preview }: ProfileProps) => {
           )}
           {actionButton}
         </div>
-        <div className={styles.ProfileInfo}>
-          <div className={styles.Title}>
-            <div className={styles.NameAndVerified}>
-              <h1>{user.name}</h1>
-              {user.isVerified ? (
-                <Icon src={verifiedIcon} hover="none" />
-              ) : null}
-            </div>
-            <div className={[styles.LightColor, styles.Username].join(" ")}>
-              @{user.username}
-            </div>
+        <div className={styles.Title}>
+          <div className={styles.NameAndVerified}>
+            <h1>{user.name}</h1>
+            {user.isVerified ? (
+              <Icon
+                src={verifiedIcon}
+                hover="none"
+                extraStyles={[styles.Verified]}
+              />
+            ) : null}
           </div>
+          <div className={[styles.LightColor, styles.Username].join(" ")}>
+            @{user.username}
+          </div>
+        </div>
+        <div className={styles.ProfileInfo}>
           <div className={styles.Bio}>{user.bio}</div>
           {!preview && <Info user={user} />}
-          <div className={styles.Friendship}>
-            <Link to={getPagePath("following", user.username)}>
-              <b>{user.totalFollowees}</b>{" "}
-              <span className={styles.LightColor}>Followees</span>
-            </Link>
-            <Link to={getPagePath("followers", user.username)}>
-              <b>{user.totalFollowers}</b>{" "}
-              <span className={styles.LightColor}>Followers</span>
-            </Link>
-          </div>
+          {(!preview || (preview && preview.size === "medium")) && (
+            <div className={styles.Friendship}>
+              <Link to={getPagePath("following", user.username)}>
+                <b>{user.totalFollowees}</b>{" "}
+                <span className={styles.LightColor}>Followees</span>
+              </Link>
+              <Link to={getPagePath("followers", user.username)}>
+                <b>{user.totalFollowers}</b>{" "}
+                <span className={styles.LightColor}>Followers</span>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </>

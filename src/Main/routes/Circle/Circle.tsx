@@ -9,6 +9,7 @@ import { GetUserFollowers } from "../../../../backend/src/api/user";
 import useRequest from "../../../util/hooks/useRequest";
 import { getPagePath, useRouteMatch } from "../../../util/paths";
 import { HeaderProfileContext } from "../../layouts/Main";
+import Profile from "../Profile/Profile";
 import styles from "./Circle.module.scss";
 
 interface CircleProps {}
@@ -70,7 +71,7 @@ const Circle = ({}: CircleProps) => {
     }
   }, [username, setUserHeader, isSuccess]);
 
-  return <span>circle</span>;
+  return <Profile preview={{ username: "lel", size: "small" }} />;
 };
 
 export default Circle;
