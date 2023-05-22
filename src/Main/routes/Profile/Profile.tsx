@@ -78,7 +78,7 @@ export const getProfileQuery = <T extends Readonly<Array<GetUserFields>>>(
   username: string,
   getData: ReturnType<typeof useRequest>["getData"],
   fieldsToQuery: T,
-  noFetch = false
+  enabled = true
 ): UseQueryOptions<FullProfileResponse> => ({
   queryKey: [profileQueryKey, username, ...fieldsToQuery],
   queryFn: async () => {
@@ -92,7 +92,7 @@ export const getProfileQuery = <T extends Readonly<Array<GetUserFields>>>(
     }
     return res;
   },
-  enabled: !noFetch,
+  enabled,
 });
 
 // On profile load from URL, fetch the full profile
@@ -132,7 +132,7 @@ const Profile = ({ preview, noFetch = false }: ProfileProps) => {
   }
 
   const { data, isLoading } = useQuery(
-    getProfileQuery(username, getData, fieldsToQuery, noFetch)
+    getProfileQuery(username, getData, fieldsToQuery, !noFetch)
   );
   const user = data?.data?.user!;
 
