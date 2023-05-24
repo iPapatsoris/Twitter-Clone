@@ -14,7 +14,7 @@ import {
   fullProfileFields,
   getProfileQueryKey,
   UserProfileT,
-} from "../Profile";
+} from "../profileLoader";
 import profileStyles from "../Profile.module.scss";
 import EditProfileHeader from "./EditProfileHeader/EditProfileHeader";
 import EditProfileInfo, {

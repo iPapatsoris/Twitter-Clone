@@ -15,12 +15,14 @@ import Notifications from "./Main/routes/Notifications/Notifications";
 import NotificationsVerified from "./Main/routes/Notifications/NotificationsVerified";
 import NotificationsMentions from "./Main/routes/Notifications/NotificationsMentions";
 import { getPagePath } from "./util/paths";
-import Profile, { profileLoader } from "./Main/routes/Profile/Profile";
+import Profile from "./Main/routes/Profile/Profile";
+import { profileLoader } from "./Main/routes/Profile/profileLoader";
 import useRequest from "./util/hooks/requests/useRequest";
 import { QueryClient } from "@tanstack/react-query";
 import { shallow } from "zustand/shallow";
 import { LoggedInUser, useAuthStore } from "./store/AuthStore";
-import Circle, { circleLoader } from "./Main/routes/Circle/Circle";
+import Circle from "./Main/routes/Circle/Circle";
+import { circleLoader } from "./Main/routes/Circle/circleLoader";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const loggedInUser: Pick<LoggedInUser, "id"> | null = useAuthStore(
