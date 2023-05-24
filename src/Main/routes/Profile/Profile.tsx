@@ -1,7 +1,18 @@
-import { Link, LoaderFunctionArgs, useParams } from "react-router-dom";
+import {
+  Link,
+  LoaderFunctionArgs,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import styles, { ProfileNames } from "./Profile.module.scss";
 import { GetUser } from "../../../../backend/src/api/user";
-import { useContext, useLayoutEffect, useState } from "react";
+import {
+  ComponentProps,
+  useContext,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { HeaderProfileContext } from "../../layouts/Main";
 import Icon from "../../../util/components/Icon/Icon";
 import optionsIcon from "../../../assets/icons/dots.png";
@@ -120,6 +131,7 @@ const Profile = ({ preview, noFetch = false }: ProfileProps) => {
   );
   const { setUserHeader } = useContext(HeaderProfileContext);
   const { getData } = useRequest();
+  const navigate = useNavigate();
   const params = useParams();
   const username = preview ? preview.username : params.username!;
 
@@ -148,20 +160,28 @@ const Profile = ({ preview, noFetch = false }: ProfileProps) => {
   }, [user, setUserHeader, preview, isLoading]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   if (isLoading) {
     return null;
   }
 
-  const actionButtonKey =
+  const circleButtonKey =
     user.id.toString() +
     (user.isFollowedByActiveUser ? "followed" : "not followed");
+
+  const circleButtonProps: Partial<ComponentProps<typeof Button>> = {
+    key: circleButtonKey,
+    extraClasses: [styles.FollowButton],
+    ref: buttonRef,
+  };
+
   let actionButton: React.ReactElement | null = (
     <Button
       color="black"
       size={preview && preview.size === "small" ? "small" : undefined}
-      key={user.id.toString() + user.isFollowedByActiveUser}
       onClick={() => useFollowMutation.mutate()}
+      {...circleButtonProps}
     >
       Follow
     </Button>
@@ -173,8 +193,7 @@ const Profile = ({ preview, noFetch = false }: ProfileProps) => {
         color="white"
         hoverColor="red"
         hoverText="Unfollow"
-        extraClasses={[styles.FollowButton]}
-        key={actionButtonKey}
+        {...circleButtonProps}
         onClick={() => useUnfollowMutation.mutate()}
       >
         Following
@@ -208,6 +227,12 @@ const Profile = ({ preview, noFetch = false }: ProfileProps) => {
     ];
   }
 
+  const visitFullProfile = (e: any) => {
+    if (preview && preview.size === "small" && e.target !== buttonRef.current) {
+      navigate(getPagePath("profile", username));
+    }
+  };
+
   return (
     <>
       {isModalOpen && (
@@ -215,7 +240,10 @@ const Profile = ({ preview, noFetch = false }: ProfileProps) => {
           <EditProfile user={user} closeModal={() => setIsModalOpen(false)} />
         </Modal>
       )}
-      <div className={[styles.Profile, ...previewStyles].join(" ")}>
+      <div
+        onClick={visitFullProfile}
+        className={[styles.Profile, ...previewStyles].join(" ")}
+      >
         {!preview && <div className={styles.Cover} style={coverStyle} />}
         <img
           className={styles.Avatar}

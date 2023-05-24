@@ -50,6 +50,8 @@
         ". . . content content .";
       grid-template-rows: var(--avatar-small-height) auto;
       grid-template-columns: defineGridColumnsSmall();
+
+      cursor: pointer;
     }
   }
 
