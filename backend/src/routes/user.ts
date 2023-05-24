@@ -1,7 +1,6 @@
 /* eslint-disable no-multi-str */
 import express, { Request, Response } from "express";
 import { sha256 } from "js-sha256";
-import { currentUserID } from "../index.js";
 import { NormalResponse } from "../api/common.js";
 import ErrorCodes from "../api/errorCodes.js";
 import { GetTweets, Thread } from "../api/tweet.js";
@@ -14,23 +13,15 @@ import {
   GetUserThreadsAndRetweets,
   GetUserTweetsAndRetweets,
   UpdateUser,
-  UserWithExtra,
 } from "../api/user.js";
 import {
   checkPermissions,
   GetUserFields,
   UpdateUserFields,
 } from "../permissions.js";
-import {
-  Fields,
-  removeArrayFields,
-  runQuery,
-  simpleQuery,
-  TypedRequestQuery,
-} from "../util.js";
+import { Fields, runQuery, simpleQuery, TypedRequestQuery } from "../util.js";
 import { Tweet } from "../entities/tweet.js";
 import {
-  getTotalUserTweets,
   getTweet,
   getTweets,
   getUniqueThreads,
@@ -39,7 +30,9 @@ import {
   mergeTweetsAndRetweets,
 } from "../services/tweet.js";
 import {
-  checkUserFollowedByActiveUser,
+  getUser,
+  getUserCircle,
+  prepareUserQuery,
   usernameExists,
 } from "../services/user.js";
 import { requireAuth } from "../middleware/auth.js";
@@ -128,173 +121,118 @@ router.get(
     res: Response<GetUser<GetUserFields>["response"]>
   ) => {
     const fields = Object.keys(req.query) as GetUserFields[];
-    // Make sure request has included some fields to query about
-    if (!fields.length) {
-      res.send({ ok: false, errorCode: ErrorCodes.NoFieldsSpecified });
+    const optionsResult = prepareUserQuery({ fields, res });
+    if (!optionsResult.ok) {
+      res.send({ ok: false, errorCode: optionsResult.errorCode });
       return;
     }
 
-    // Allow only whitelisted fields
-    if (!checkPermissions("GetUser", fields)) {
-      console.log("Failed permissions test");
-      res.send({ ok: false, errorCode: ErrorCodes.PermissionDenied });
-      return;
-    }
-
-    // Frienship fields will be handled on seperate queries, so remove them
-    const seperateFields = removeArrayFields<typeof fields[0]>(fields, [
-      "totalFollowees",
-      "totalFollowers",
-      "totalTweets",
-      "isFollowedByActiveUser",
-    ]);
-
-    // Set flags for seperate fields to query
-    let getTotalFollowees = false;
-    let getTotalFollowers = false;
-    let getTotalTweets = false;
-    let getIsFollowedByActiveUser = false;
-    seperateFields.forEach((field) => {
-      if (field === "totalFollowees") {
-        getTotalFollowees = true;
-      } else if (field === "totalFollowers") {
-        getTotalFollowers = true;
-      } else if (field === "totalTweets") {
-        getTotalTweets = true;
-      } else if (field === "isFollowedByActiveUser") {
-        getIsFollowedByActiveUser = true;
-      }
+    const userResult = await getUser({
+      username: req.params.username,
+      session: req.session,
+      ...optionsResult.data!,
     });
-
-    // Adjust query fields to select
-    const views = fields.map((f) => "," + f);
-    const username = req.params.username;
-
-    // Query regular fields
-    const [user] = await runQuery<Pick<UserWithExtra, GetUserFields>>(
-      "SELECT id" + views.join("") + " FROM user WHERE username = ?",
-      [username]
-    );
-
-    if (!user) {
-      res.send({ ok: false });
+    if (!userResult.ok) {
+      res.send({ ok: false, errorCode: userResult.errorCode });
       return;
     }
-    const { id: userID } = user;
 
-    if (getTotalTweets) {
-      user.totalTweets = await getTotalUserTweets(Number(userID));
-    }
-    if (getTotalFollowers || getTotalFollowees) {
-      // Query friendship fields
-      const totalFollowersQuery =
-        "SELECT COUNT(*) as totalFollowers \
-         FROM user_follows as friendship \
-         WHERE friendship.followeeID = ?";
-      const totalFolloweesQuery =
-        "SELECT COUNT(*) as totalFollowees \
-         FROM user_follows as friendship \
-         WHERE friendship.followerID = ?";
-
-      if (getTotalFollowees) {
-        user.totalFollowees = (
-          await runQuery<{ totalFollowees: number }>(totalFolloweesQuery, [
-            userID,
-          ])
-        )[0].totalFollowees;
-      }
-
-      if (getTotalFollowers) {
-        user.totalFollowers = (
-          await runQuery<{ totalFollowers: number }>(totalFollowersQuery, [
-            userID,
-          ])
-        )[0].totalFollowers;
-      }
-    }
-
-    const activeUserID = req.session.userID;
-    user.isFollowedByActiveUser = false;
-    console.log(req.session);
-    console.log(getIsFollowedByActiveUser);
-
-    if (req.session.isLoggedIn && getIsFollowedByActiveUser) {
-      user.isFollowedByActiveUser = await checkUserFollowedByActiveUser(
-        userID,
-        activeUserID!
-      );
-    }
-
-    res.send({ ok: true, data: { user } });
+    res.send({ ok: true, data: { user: userResult.data?.user! } });
   }
 );
 
 router
-  .route("/:userID/follow")
+  .route("/:username/follow")
   .post(
+    requireAuth,
     (
-      req: TypedRequestQuery<{ userID: string }>,
+      req: TypedRequestQuery<{ username: string }>,
       res: Response<NormalResponse>
     ) => {
       simpleQuery(
         res,
-        "INSERT INTO user_follows (followerID, followeeID) VALUES (?, ?)",
-        [currentUserID, req.params.userID]
+        "INSERT INTO user_follows (followerID, followeeID) VALUES (?, (SELECT id FROM user WHERE username = ?))",
+        [req.session.userID, req.params.username]
       );
     }
   )
   .delete(
+    requireAuth,
     (
-      req: TypedRequestQuery<{ userID: string }>,
+      req: TypedRequestQuery<{ username: string }>,
       res: Response<NormalResponse>
     ) => {
       simpleQuery(
         res,
-        "DELETE FROM user_follows WHERE followerID = ? AND followeeID = ?",
-        [currentUserID, req.params.userID]
+        "DELETE FROM user_follows WHERE followerID = ? AND followeeID = (SELECT id FROM user WHERE username = ?)",
+        [req.session.userID, req.params.username]
       );
     }
   );
 
 router.get(
   "/:username/followers",
-  (
-    req: TypedRequestQuery<{ username: string }>,
-    res: Response<GetUserFollowers["response"]>
+  async (
+    req: TypedRequestQuery<{ username: string }, Fields<GetUserFields>>,
+    res: Response<GetUserFollowers<GetUserFields>["response"]>
   ) => {
-    const { username } = req.params;
+    const fields = Object.keys(req.query) as GetUserFields[];
+    const optionsResult = prepareUserQuery({ fields, res });
+    if (!optionsResult.ok) {
+      res.send({ ok: false, errorCode: optionsResult.errorCode });
+      return;
+    }
+
     const query =
-      "SELECT follower.id as id, follower.username as username, \
-              follower.name as name, follower.isVerified as isVerified, \
-              follower.avatar as avatar, follower.bio as bio \
+      "SELECT follower.username as username \
        FROM user_follows, user as follower, user as followee \
        WHERE followee.username = ? AND followeeID = followee.id AND \
              followerID = follower.id";
-    const sendResult = (result: any) => {
-      res.send({ ok: true, data: { followers: result } });
-    };
-    simpleQuery(res, query, [username], sendResult);
+
+    const circleResult = await getUserCircle({
+      query,
+      username: req.params.username,
+      optionsResult,
+      session: req.session,
+    });
+
+    if (!circleResult.ok) {
+      res.send({ ok: false, errorCode: circleResult.errorCode });
+    }
+    res.send({ ok: true, data: { followers: circleResult.data! } });
   }
 );
 
 router.get(
   "/:username/followees",
-  (
-    req: TypedRequestQuery<{ username: string }>,
-    res: Response<GetUserFollowees["response"]>
+  async (
+    req: TypedRequestQuery<{ username: string }, Fields<GetUserFields>>,
+    res: Response<GetUserFollowees<GetUserFields>["response"]>
   ) => {
-    const { username } = req.params;
+    const fields = Object.keys(req.query) as GetUserFields[];
+    const optionsResult = prepareUserQuery({ fields, res });
+    if (!optionsResult.ok) {
+      res.send({ ok: false, errorCode: optionsResult.errorCode });
+      return;
+    }
+
     const query =
-      "SELECT followee.id as id, followee.username as username, \
-              followee.name as name, followee.isVerified as isVerified, \
-              followee.avatar as avatar, followee.bio as bio \
+      "SELECT followee.username as username \
        FROM user_follows, user as follower, user as followee \
        WHERE follower.username = ? AND followerID = follower.id AND \
              followeeID = followee.id";
-    const sendResult = (result: any) => {
-      res.send({ ok: true, data: { followees: result } });
-    };
-    simpleQuery(res, query, [username], sendResult);
+
+    const circleResult = await getUserCircle({
+      query,
+      username: req.params.username,
+      optionsResult,
+      session: req.session,
+    });
+
+    if (!circleResult.ok) {
+      res.send({ ok: false, errorCode: circleResult.errorCode });
+    }
+    res.send({ ok: true, data: { followees: circleResult.data! } });
   }
 );
 

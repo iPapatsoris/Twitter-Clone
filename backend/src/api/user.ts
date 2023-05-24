@@ -32,20 +32,15 @@ export type GetUser<T extends GetUserFields> = {
 
 export type CreateUserFields = keyof CreateUser["request"];
 
-type MiniUserInfo = Pick<
-  User,
-  "id" | "username" | "name" | "avatar" | "isVerified" | "bio"
->;
-
-export type GetUserFollowees = {
+export type GetUserFollowees<T extends GetUserFields> = {
   response: NormalResponse<{
-    followees: MiniUserInfo[];
+    followees: Array<Pick<UserWithExtra, T>>;
   }>;
 };
 
-export type GetUserFollowers = {
+export type GetUserFollowers<T extends GetUserFields> = {
   response: NormalResponse<{
-    followers: MiniUserInfo[];
+    followers: Array<Pick<UserWithExtra, T>>;
   }>;
 };
 
