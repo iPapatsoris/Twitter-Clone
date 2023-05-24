@@ -31,6 +31,7 @@
   grid-template-columns: defineGridColumns(var(--avatar-height));
 
   &.Preview {
+    cursor: pointer;
     padding-block: 1rem;
 
     &.Medium {
@@ -50,8 +51,6 @@
         ". . . content content .";
       grid-template-rows: var(--avatar-small-height) auto;
       grid-template-columns: defineGridColumnsSmall();
-
-      cursor: pointer;
     }
   }
 

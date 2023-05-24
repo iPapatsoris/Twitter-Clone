@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import styles, { ProfileNames } from "./Profile.module.scss";
 import { GetUser } from "../../../../backend/src/api/user";
-import {
+import React, {
   ComponentProps,
   useContext,
   useLayoutEffect,
@@ -160,11 +160,30 @@ const Profile = ({ preview, noFetch = false }: ProfileProps) => {
   }, [user, setUserHeader, preview, isLoading]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Action / navigation refs to detect clicking on profile preview except those
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const followersRef = useRef<HTMLAnchorElement>(null);
+  const followingRef = useRef<HTMLAnchorElement>(null);
 
   if (isLoading) {
     return null;
   }
+
+  const visitFullProfile = (e: any) => {
+    if (
+      preview &&
+      e.target instanceof Node &&
+      !buttonRef.current?.contains(e.target) &&
+      !followersRef.current?.contains(e.target) &&
+      !followingRef.current?.contains(e.target)
+    ) {
+      console.log(e.target);
+      console.log(followersRef);
+
+      navigate(getPagePath("profile", username));
+    }
+  };
 
   const circleButtonKey =
     user.id.toString() +
@@ -227,12 +246,6 @@ const Profile = ({ preview, noFetch = false }: ProfileProps) => {
     ];
   }
 
-  const visitFullProfile = (e: any) => {
-    if (preview && preview.size === "small" && e.target !== buttonRef.current) {
-      navigate(getPagePath("profile", username));
-    }
-  };
-
   return (
     <>
       {isModalOpen && (
@@ -281,11 +294,17 @@ const Profile = ({ preview, noFetch = false }: ProfileProps) => {
           {!preview && <Info user={user} />}
           {(!preview || (preview && preview.size === "medium")) && (
             <div className={styles.Friendship}>
-              <Link to={getPagePath("following", user.username)}>
+              <Link
+                ref={followersRef}
+                to={getPagePath("following", user.username)}
+              >
                 <b>{user.totalFollowees}</b>{" "}
                 <span className={styles.LightColor}>Followees</span>
               </Link>
-              <Link to={getPagePath("followers", user.username)}>
+              <Link
+                ref={followingRef}
+                to={getPagePath("followers", user.username)}
+              >
                 <b>{user.totalFollowers}</b>{" "}
                 <span className={styles.LightColor}>Followers</span>
               </Link>
