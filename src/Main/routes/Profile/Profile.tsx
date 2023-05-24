@@ -39,10 +39,9 @@ interface ProfileProps {
     username: string;
     size: "medium" | "small";
   };
-  noFetch?: boolean;
 }
 
-const Profile = ({ preview, noFetch = false }: ProfileProps) => {
+const Profile = ({ preview }: ProfileProps) => {
   const loggedInUser = useAuthStore(
     (state) => state.loggedInUser && { id: state.loggedInUser.id },
     shallow
@@ -61,7 +60,7 @@ const Profile = ({ preview, noFetch = false }: ProfileProps) => {
   }
 
   const { data, isLoading } = useQuery(
-    getProfileQuery(username, getData, fieldsToQuery, !noFetch)
+    getProfileQuery(username, getData, fieldsToQuery)
   );
   const user = data?.data?.user!;
 
