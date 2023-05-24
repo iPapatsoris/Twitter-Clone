@@ -7,7 +7,7 @@ import Button from "../util/components/Button/Button";
 import Form from "../util/components/Form/Form";
 import { ModalContext } from "../util/components/Modal/Modal";
 import FormInput from "../util/components/Input/FormInput";
-import useRequest from "../util/hooks/useRequest";
+import useRequest from "../util/hooks/requests/useRequest";
 import LogoHeader from "../util/layouts/Minipage/LogoHeader/LogoHeader";
 import Minipage from "../util/layouts/Minipage/Minipage";
 import yup from "../util/yup";

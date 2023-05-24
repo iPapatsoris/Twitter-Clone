@@ -1,34 +1,28 @@
-import {
-  FetchQueryOptions,
-  QueryClient,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { useContext, useEffect, useLayoutEffect } from "react";
+import { QueryClient, useQuery, UseQueryOptions } from "@tanstack/react-query";
+import { useContext, useLayoutEffect } from "react";
 import { LoaderFunctionArgs, useParams } from "react-router-dom";
-import { NormalResponse } from "../../../../backend/src/api/common";
 import {
   GetUser,
   GetUserFollowees,
   GetUserFollowers,
-  UserWithExtra,
 } from "../../../../backend/src/api/user";
 import { GetUserFields } from "../../../../backend/src/permissions";
-import useRequest from "../../../util/hooks/useRequest";
+import useRequest from "../../../util/hooks/requests/useRequest";
 import { getPagePath, useRouteMatch } from "../../../util/paths";
 import { HeaderProfileContext } from "../../layouts/Main";
 import Profile, {
   getProfileQuery,
-  profileQueryKey,
+  getProfileQueryKey,
   smallPreviewProfileFields,
+  SmallProfileRequestFields,
 } from "../Profile/Profile";
 import styles from "./Circle.module.scss";
 
 interface CircleProps {}
 
 type CircleResponse =
-  | GetUserFollowees["response"]
-  | GetUserFollowers["response"];
+  | GetUserFollowees<SmallProfileRequestFields>["response"]
+  | GetUserFollowers<SmallProfileRequestFields>["response"];
 type Circle = "followers" | "followees";
 const circleHeaderFields = [
   "username",
@@ -43,11 +37,12 @@ const getCircleQuery: (
   username: string,
   getData: ReturnType<typeof useRequest>["getData"],
   circle: Circle
-) => FetchQueryOptions<CircleResponse> = (username, getData, circle) => ({
+) => UseQueryOptions<CircleResponse> = (username, getData, circle) => ({
   queryKey: [circle, username],
   queryFn: async () => {
     const res = await getData<CircleResponse>(
-      "user/" + username + "/" + circle
+      "user/" + username + "/" + circle,
+      smallPreviewProfileFields
     );
 
     if (!res.ok) {
@@ -75,7 +70,7 @@ export const circleLoader =
     // User circle query
     const circleQuery = getCircleQuery(params.username!, getData, circle);
 
-    return await Promise.all([
+    const promsieResults = await Promise.all([
       queryClient.ensureQueryData<
         UserHeaderResponse,
         unknown,
@@ -86,6 +81,27 @@ export const circleLoader =
         { queryKey: circleQuery.queryKey, queryFn: circleQuery.queryFn }
       ),
     ]);
+    const circleResult = promsieResults[1];
+
+    const list =
+      circle === "followers"
+        ? (circleResult.data as GetUserFollowers<SmallProfileRequestFields>["response"]["data"])!
+            .followers
+        : (circleResult.data as GetUserFollowees<SmallProfileRequestFields>["response"]["data"])!
+            .followees;
+
+    // Populate profile cache for each follower / followee to not re-fetch
+    list.forEach((user) => {
+      queryClient.setQueryData(
+        getProfileQueryKey(user.username, smallPreviewProfileFields),
+        {
+          ...circleResult,
+          data: { user },
+        }
+      );
+    });
+
+    return promsieResults;
   };
 
 const Circle = ({}: CircleProps) => {
@@ -93,7 +109,6 @@ const Circle = ({}: CircleProps) => {
   const circle: Circle = isFollowersPage ? "followers" : "followees";
   const { username } = useParams();
   const { getData } = useRequest();
-  const queryClient = useQueryClient();
 
   const { data: headerData, isSuccess: isHeaderSuccess } = useQuery(
     getProfileQuery(username!, getData, circleHeaderFields)
@@ -103,25 +118,6 @@ const Circle = ({}: CircleProps) => {
     getCircleQuery(username!, getData, circle)
   );
   const { setUserHeader } = useContext(HeaderProfileContext);
-
-  useEffect(() => {
-    const list =
-      circle === "followers"
-        ? (circleData!.data as GetUserFollowers["response"]["data"])!.followers
-        : (circleData!.data as GetUserFollowees["response"]["data"])!.followees;
-    type ni = NormalResponse<{
-      user: Pick<UserWithExtra, typeof smallPreviewProfileFields[number]>;
-    }>;
-    list.forEach((user) => {
-      queryClient.setQueryData<ni>(
-        [profileQueryKey, user.username, ...smallPreviewProfileFields],
-        {
-          ...circleData!,
-          data: { user: { ...user, isFollowedByActiveUser: true } },
-        }
-      );
-    });
-  }, [circleData, isCircleSuccess, circle, queryClient]);
 
   useLayoutEffect(() => {
     if (isHeaderSuccess) {
@@ -140,15 +136,13 @@ const Circle = ({}: CircleProps) => {
 
   const userList =
     circle === "followers"
-      ? (circleData.data as GetUserFollowers["response"]["data"])!.followers
-      : (circleData.data as GetUserFollowees["response"]["data"])!.followees;
+      ? (circleData.data as GetUserFollowers<SmallProfileRequestFields>["response"]["data"])!
+          .followers
+      : (circleData.data as GetUserFollowees<SmallProfileRequestFields>["response"]["data"])!
+          .followees;
 
   const userCircle = userList.map((f) => (
-    <Profile
-      noFetch
-      key={f.id}
-      preview={{ username: f.username, size: "small" }}
-    />
+    <Profile key={f.id} preview={{ username: f.username, size: "small" }} />
   ));
 
   return <div className={styles.Circle}>{userCircle}</div>;

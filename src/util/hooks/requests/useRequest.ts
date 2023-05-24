@@ -1,6 +1,6 @@
 import { shallow } from "zustand/shallow";
-import { NormalResponse } from "../../../backend/src/api/common";
-import { useAuthStore } from "../../store/AuthStore";
+import { NormalResponse } from "../../../../backend/src/api/common";
+import { useAuthStore } from "../../../store/AuthStore";
 
 const useRequest = () => {
   const loggedInUser = useAuthStore(

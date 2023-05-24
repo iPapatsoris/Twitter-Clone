@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GetUsernameExists } from "../../../../backend/src/api/user";
 import Form from "../../../util/components/Form/Form";
 import FormInput from "../../../util/components/Input/FormInput";
-import useRequest from "../../../util/hooks/useRequest";
+import useRequest from "../../../util/hooks/requests/useRequest";
 import useStepper from "../../../util/hooks/useStepper";
 import Minipage from "../../../util/layouts/Minipage/Minipage";
 import yup, { yupSequentialStringSchema } from "../../../util/yup";

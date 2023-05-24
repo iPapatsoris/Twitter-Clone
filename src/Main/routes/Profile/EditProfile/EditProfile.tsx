@@ -7,10 +7,14 @@ import { charLimits, UpdateUser } from "../../../../../backend/src/api/user";
 import { UpdateUserFields } from "../../../../../backend/src/permissions";
 import { useAuthStore } from "../../../../store/AuthStore";
 import Form from "../../../../util/components/Form/Form";
-import useRequest from "../../../../util/hooks/useRequest";
+import useRequest from "../../../../util/hooks/requests/useRequest";
 import Minipage from "../../../../util/layouts/Minipage/Minipage";
 import yup from "../../../../util/yup";
-import { profileQueryKey, UserProfileT } from "../Profile";
+import {
+  fullProfileFields,
+  getProfileQueryKey,
+  UserProfileT,
+} from "../Profile";
 import profileStyles from "../Profile.module.scss";
 import EditProfileHeader from "./EditProfileHeader/EditProfileHeader";
 import EditProfileInfo, {
@@ -99,7 +103,7 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
-            queryKey: [profileQueryKey, user.username],
+            queryKey: getProfileQueryKey(user.username, fullProfileFields),
           });
           setLoggedInUserMiniInfo({
             avatar: newUser.avatar,

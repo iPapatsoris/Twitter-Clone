@@ -1,28 +1,24 @@
 import { Link, LoaderFunctionArgs, useParams } from "react-router-dom";
 import styles, { ProfileNames } from "./Profile.module.scss";
 import { GetUser } from "../../../../backend/src/api/user";
-import { ComponentProps, useContext, useLayoutEffect, useState } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { HeaderProfileContext } from "../../layouts/Main";
 import Icon from "../../../util/components/Icon/Icon";
 import optionsIcon from "../../../assets/icons/dots.png";
 import notificationsIcon from "../../../assets/icons/notifications.png";
 import verifiedIcon from "../../../assets/icons/verified.png";
 import Button from "../../../util/components/Button/Button";
-import useRequest from "../../../util/hooks/useRequest";
+import useRequest from "../../../util/hooks/requests/useRequest";
 import Info from "./Info/Info";
 import Modal from "../../../util/components/Modal/Modal";
 import EditProfile from "./EditProfile/EditProfile";
 import { GetUserFields } from "../../../../backend/src/permissions";
 import { defaultAvatar, defaultCoverColor } from "./defaultPics";
-import {
-  FetchQueryOptions,
-  QueryClient,
-  useQuery,
-  UseQueryOptions,
-} from "@tanstack/react-query";
+import { QueryClient, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { useAuthStore } from "../../../store/AuthStore";
 import { shallow } from "zustand/shallow";
 import { getPagePath } from "../../../util/paths";
+import { useCircleRequest } from "../../../util/hooks/requests/useCircleRequest";
 
 interface ProfileProps {
   // If preview is provided, take username from it instead of from router path
@@ -53,7 +49,7 @@ const mediumPreviewProfileFields = [
 ] as const satisfies Readonly<Array<GetUserFields>>;
 
 // Fields to query in full profile mode
-const fullProfileFields = [
+export const fullProfileFields = [
   ...mediumPreviewProfileFields,
   "birthDate",
   "joinedDate",
@@ -64,12 +60,17 @@ const fullProfileFields = [
 ] as const satisfies Readonly<Array<GetUserFields>>;
 
 type FullProfileRequestFields = typeof fullProfileFields[number];
+export type SmallProfileRequestFields =
+  typeof smallPreviewProfileFields[number];
 type FullProfileResponse = GetUser<FullProfileRequestFields>["response"];
 
 // User prop passed to EditProfile
 export type UserProfileT = NonNullable<FullProfileResponse["data"]>["user"];
 
-export const profileQueryKey = "userProfile";
+export const getProfileQueryKey = <T extends Readonly<Array<GetUserFields>>>(
+  username: string,
+  fieldsToQuery: T
+) => ["userProfile", username, ...fieldsToQuery];
 
 // Get specific user profile information, according to fieldsToQuery.
 // Type safety ensures that the query result's properties will be limited only
@@ -80,7 +81,7 @@ export const getProfileQuery = <T extends Readonly<Array<GetUserFields>>>(
   fieldsToQuery: T,
   enabled = true
 ): UseQueryOptions<FullProfileResponse> => ({
-  queryKey: [profileQueryKey, username, ...fieldsToQuery],
+  queryKey: getProfileQueryKey(username, fieldsToQuery),
   queryFn: async () => {
     const res = await getData<GetUser<T[number]>["response"], T[number]>(
       "user/" + username,
@@ -113,8 +114,6 @@ export const profileLoader =
   };
 
 const Profile = ({ preview, noFetch = false }: ProfileProps) => {
-  console.log("profile render");
-
   const loggedInUser = useAuthStore(
     (state) => state.loggedInUser && { id: state.loggedInUser.id },
     shallow
@@ -136,6 +135,11 @@ const Profile = ({ preview, noFetch = false }: ProfileProps) => {
   );
   const user = data?.data?.user!;
 
+  const { useFollowMutation, useUnfollowMutation } = useCircleRequest({
+    username,
+    queryKeyToInvalidate: getProfileQueryKey(username, fieldsToQuery),
+  });
+
   useLayoutEffect(() => {
     // Set header context after we fetch user information
     if (!isLoading && !preview) {
@@ -149,29 +153,47 @@ const Profile = ({ preview, noFetch = false }: ProfileProps) => {
     return null;
   }
 
-  let actionButtonProps: ComponentProps<typeof Button> = {
-    children: "Follow",
-    color: "black",
-    size: preview && preview.size === "small" ? "small" : undefined,
-    key: user.id,
-  };
+  const actionButtonKey =
+    user.id.toString() +
+    (user.isFollowedByActiveUser ? "followed" : "not followed");
+  let actionButton: React.ReactElement | null = (
+    <Button
+      color="black"
+      size={preview && preview.size === "small" ? "small" : undefined}
+      key={user.id.toString() + user.isFollowedByActiveUser}
+      onClick={() => useFollowMutation.mutate()}
+    >
+      Follow
+    </Button>
+  );
 
   if (loggedInUser && user.isFollowedByActiveUser) {
-    actionButtonProps = {
-      children: "Following",
-      color: "white",
-      hoverColor: "red",
-      hoverText: "Unfollow",
-      extraClasses: [styles.FollowButton],
-      key: user.id,
-    };
-  } else if (!preview && loggedInUser && loggedInUser.id === user.id) {
-    actionButtonProps = {
-      children: "Edit profile",
-      color: "white",
-      onClick: () => setIsModalOpen(true),
-      key: user.id,
-    };
+    actionButton = (
+      <Button
+        color="white"
+        hoverColor="red"
+        hoverText="Unfollow"
+        extraClasses={[styles.FollowButton]}
+        key={actionButtonKey}
+        onClick={() => useUnfollowMutation.mutate()}
+      >
+        Following
+      </Button>
+    );
+  } else if (loggedInUser && loggedInUser.id === user.id) {
+    if (!preview) {
+      actionButton = (
+        <Button
+          color="white"
+          onClick={() => setIsModalOpen(true)}
+          key={user.id}
+        >
+          Edit profile
+        </Button>
+      );
+    } else {
+      actionButton = null;
+    }
   }
 
   const coverStyle: React.CSSProperties = user.coverPic
@@ -209,7 +231,7 @@ const Profile = ({ preview, noFetch = false }: ProfileProps) => {
               )}
             </>
           )}
-          <Button {...actionButtonProps} />
+          {actionButton}
         </div>
         <div className={styles.Title}>
           <div className={styles.NameAndVerified}>

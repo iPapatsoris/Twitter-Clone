@@ -7,7 +7,7 @@ import { useRef, useState } from "react";
 import { OptionWithNested } from "../../util/components/Popup/OptionsPopup/Option";
 import { useMutation } from "@tanstack/react-query";
 import { NormalResponse } from "../../../backend/src/api/common";
-import useRequest from "../../util/hooks/useRequest";
+import useRequest from "../../util/hooks/requests/useRequest";
 import { useAuthStore } from "../../store/AuthStore";
 
 const ProfileButton = () => {
