@@ -26,9 +26,11 @@ const Circle = () => {
     getProfileQuery(username!, getData, circleHeaderFields)
   );
 
-  const { data: circleData, isSuccess: isCircleSuccess } = useQuery(
-    getCircleQuery(username!, getData, circle)
-  );
+  const {
+    data: circleData,
+    isSuccess: isCircleSuccess,
+    isFetching,
+  } = useQuery(getCircleQuery(username!, getData, circle));
   const { setUserHeader } = useContext(HeaderProfileContext);
 
   useLayoutEffect(() => {
@@ -42,7 +44,7 @@ const Circle = () => {
     }
   }, [headerData, username, setUserHeader, isHeaderSuccess]);
 
-  if (!isHeaderSuccess || !isCircleSuccess) {
+  if (!isHeaderSuccess || !isCircleSuccess || isFetching) {
     return null;
   }
 
