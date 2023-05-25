@@ -16,13 +16,13 @@ import NotificationsVerified from "./Main/routes/Notifications/NotificationsVeri
 import NotificationsMentions from "./Main/routes/Notifications/NotificationsMentions";
 import { getPagePath } from "./util/paths";
 import Profile from "./Main/routes/Profile/Profile";
-import { profileLoader } from "./Main/routes/Profile/profileLoader";
+import { profileLoader } from "./Main/routes/Profile/queries";
 import useRequest from "./util/hooks/requests/useRequest";
 import { QueryClient } from "@tanstack/react-query";
 import { shallow } from "zustand/shallow";
 import { LoggedInUser, useAuthStore } from "./store/AuthStore";
 import Circle from "./Main/routes/Circle/Circle";
-import { circleLoader } from "./Main/routes/Circle/circleLoader";
+import { circleLoader } from "./Main/routes/Circle/queries";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const loggedInUser: Pick<LoggedInUser, "id"> | null = useAuthStore(

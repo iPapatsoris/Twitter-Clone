@@ -3,6 +3,10 @@ import { GetUser } from "../../../../backend/src/api/user";
 import { GetUserFields } from "../../../../backend/src/permissions";
 import { QueryClient, UseQueryOptions } from "@tanstack/react-query";
 import useRequest from "../../../util/hooks/requests/useRequest";
+import {
+  createQueryKeys,
+  createQueryKeyStore,
+} from "@lukemorales/query-key-factory";
 
 // Fields to query in small preview mode
 export const smallPreviewProfileFields = [
@@ -33,7 +37,7 @@ export const fullProfileFields = [
   "website",
 ] as const satisfies Readonly<Array<GetUserFields>>;
 
-type FullProfileRequestFields = typeof fullProfileFields[number];
+export type FullProfileRequestFields = typeof fullProfileFields[number];
 export type SmallProfileRequestFields =
   typeof smallPreviewProfileFields[number];
 type FullProfileResponse = GetUser<FullProfileRequestFields>["response"];
@@ -41,20 +45,33 @@ type FullProfileResponse = GetUser<FullProfileRequestFields>["response"];
 // User prop passed to EditProfile
 export type UserProfileT = NonNullable<FullProfileResponse["data"]>["user"];
 
-export const getProfileQueryKey = <T extends Readonly<Array<GetUserFields>>>(
-  username: string,
-  fieldsToQuery: T
-) => ["userProfile", username, ...fieldsToQuery];
+export const profileKeys = createQueryKeys("userProfile", {
+  username: (username: string) => ({
+    queryKey: [username],
+    contextQueries: {
+      fields: (fields: any) => ({ queryKey: [fields] }),
+    },
+  }),
+});
+
+// export const profileKeys = {
+//   all: ["userProfile"],
+//   username: (username: string) => [...profileKeys.all, username],
+//   usernameWithFields: <T extends Readonly<FullProfileRequestFields[]>>(
+//     username: string,
+//     fieldsToQuery: T
+//   ) => [...profileKeys.username(username), { fields: fieldsToQuery }],
+// };
 
 // Get specific user profile information, according to fieldsToQuery.
 // Type safety ensures that the query result's properties will be limited only
 // to the ones mentioned on fieldsToQuery.
-export const getProfileQuery = <T extends Readonly<Array<GetUserFields>>>(
+export const getProfileQuery = <T extends Readonly<FullProfileRequestFields[]>>(
   username: string,
   getData: ReturnType<typeof useRequest>["getData"],
   fieldsToQuery: T
 ): UseQueryOptions<FullProfileResponse> => ({
-  queryKey: getProfileQueryKey(username, fieldsToQuery),
+  queryKey: profileKeys.username(username)._ctx.fields(fieldsToQuery).queryKey,
   queryFn: async () => {
     const res = await getData<GetUser<T[number]>["response"], T[number]>(
       "user/" + username,

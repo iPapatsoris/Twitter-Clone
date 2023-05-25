@@ -1,3 +1,4 @@
+import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { QueryClient, UseQueryOptions } from "@tanstack/react-query";
 import { LoaderFunctionArgs } from "react-router-dom";
 import {
@@ -9,10 +10,10 @@ import { GetUserFields } from "../../../../backend/src/permissions";
 import useRequest from "../../../util/hooks/requests/useRequest";
 import {
   getProfileQuery,
-  getProfileQueryKey,
+  profileKeys,
   smallPreviewProfileFields,
   SmallProfileRequestFields,
-} from "../Profile/profileLoader";
+} from "../Profile/queries";
 
 type CircleResponse =
   | GetUserFollowees<SmallProfileRequestFields>["response"]
@@ -28,12 +29,29 @@ type UserHeaderResponse = GetUser<
   typeof circleHeaderFields[number]
 >["response"];
 
+export const circleKeys = createQueryKeys("circle", {
+  circleType: (circle: CircleType) => ({
+    queryKey: [circle],
+    contextQueries: {
+      username: (username) => ({ queryKey: [username] }),
+    },
+  }),
+});
+
+// export const circleKeys = {
+//   all: (circle: CircleType) => [circle],
+//   username: (circle: CircleType, username: string) => [
+//     ...circleKeys.all(circle),
+//     username,
+//   ],
+// };
+
 export const getCircleQuery: (
   username: string,
   getData: ReturnType<typeof useRequest>["getData"],
   circle: CircleType
 ) => UseQueryOptions<CircleResponse> = (username, getData, circle) => ({
-  queryKey: [circle, username],
+  queryKey: circleKeys.circleType(circle)._ctx.username(username).queryKey,
   queryFn: async () => {
     const res = await getData<CircleResponse>(
       "user/" + username + "/" + circle,
@@ -88,7 +106,9 @@ export const circleLoader =
     // Populate profile cache for each follower / followee to not re-fetch
     list.forEach((user) => {
       queryClient.setQueryData(
-        getProfileQueryKey(user.username, smallPreviewProfileFields),
+        profileKeys
+          .username(user.username)
+          ._ctx.fields(smallPreviewProfileFields).queryKey,
         {
           ...circleResult,
           data: { user },

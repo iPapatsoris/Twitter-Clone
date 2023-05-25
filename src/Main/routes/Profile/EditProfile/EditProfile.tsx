@@ -10,11 +10,7 @@ import Form from "../../../../util/components/Form/Form";
 import useRequest from "../../../../util/hooks/requests/useRequest";
 import Minipage from "../../../../util/layouts/Minipage/Minipage";
 import yup from "../../../../util/yup";
-import {
-  fullProfileFields,
-  getProfileQueryKey,
-  UserProfileT,
-} from "../profileLoader";
+import { fullProfileFields, profileKeys, UserProfileT } from "../queries";
 import profileStyles from "../Profile.module.scss";
 import EditProfileHeader from "./EditProfileHeader/EditProfileHeader";
 import EditProfileInfo, {
@@ -103,7 +99,9 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
-            queryKey: getProfileQueryKey(user.username, fullProfileFields),
+            queryKey: profileKeys
+              .username(user.username)
+              ._ctx.fields(fullProfileFields).queryKey,
           });
           setLoggedInUserMiniInfo({
             avatar: newUser.avatar,

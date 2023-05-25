@@ -7,7 +7,7 @@ export const useCircleRequest = ({
   queryKeyToInvalidate,
 }: {
   username: string;
-  queryKeyToInvalidate: string[];
+  queryKeyToInvalidate: readonly string[];
 }) => {
   const { postData, deleteData } = useRequest();
   const queryClient = useQueryClient();
@@ -23,12 +23,10 @@ export const useCircleRequest = ({
 
   return {
     useFollowMutation: useMutation<NormalResponse, unknown, void>(
-      ["follow", username],
       () => postData("user/" + username + "/follow", {}),
       options
     ),
     useUnfollowMutation: useMutation<NormalResponse, unknown, void>(
-      ["unfollow", username],
       () => deleteData("user/" + username + "/follow"),
       options
     ),

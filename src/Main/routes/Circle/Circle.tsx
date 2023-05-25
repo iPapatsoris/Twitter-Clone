@@ -8,12 +8,9 @@ import {
 import useRequest from "../../../util/hooks/requests/useRequest";
 import { getPagePath, useRouteMatch } from "../../../util/paths";
 import { HeaderProfileContext } from "../../layouts/Main";
-import {
-  getProfileQuery,
-  SmallProfileRequestFields,
-} from "../Profile/profileLoader";
+import { getProfileQuery, SmallProfileRequestFields } from "../Profile/queries";
 import Profile from "../Profile/Profile";
-import { CircleType, circleHeaderFields, getCircleQuery } from "./circleLoader";
+import { CircleType, circleHeaderFields, getCircleQuery } from "./queries";
 import styles from "./Circle.module.scss";
 
 const Circle = () => {

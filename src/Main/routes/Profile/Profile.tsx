@@ -23,14 +23,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "../../../store/AuthStore";
 import { shallow } from "zustand/shallow";
 import { getPagePath } from "../../../util/paths";
-import { useCircleRequest } from "../../../util/hooks/requests/useCircleRequest";
+import { useCircleRequest } from "../../../util/hooks/requests/useCircleQuery";
 import {
   fullProfileFields,
+  FullProfileRequestFields,
   getProfileQuery,
-  getProfileQueryKey,
   mediumPreviewProfileFields,
+  profileKeys,
   smallPreviewProfileFields,
-} from "./profileLoader";
+} from "./queries";
 
 interface ProfileProps {
   // If preview is provided, take username from it instead of from router path
@@ -52,7 +53,7 @@ const Profile = ({ preview }: ProfileProps) => {
   const params = useParams();
   const username = preview ? preview.username : params.username!;
 
-  let fieldsToQuery: Readonly<Array<GetUserFields>> = fullProfileFields;
+  let fieldsToQuery: Readonly<FullProfileRequestFields[]> = fullProfileFields;
   if (preview && preview.size === "medium") {
     fieldsToQuery = mediumPreviewProfileFields;
   } else if (preview && preview.size === "small") {
@@ -66,7 +67,9 @@ const Profile = ({ preview }: ProfileProps) => {
 
   const { useFollowMutation, useUnfollowMutation } = useCircleRequest({
     username,
-    queryKeyToInvalidate: getProfileQueryKey(username, fieldsToQuery),
+    queryKeyToInvalidate: profileKeys
+      .username(username)
+      ._ctx.fields(fieldsToQuery).queryKey,
   });
 
   useLayoutEffect(() => {
