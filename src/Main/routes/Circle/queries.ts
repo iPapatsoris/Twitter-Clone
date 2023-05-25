@@ -1,6 +1,12 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import { QueryClient, UseQueryOptions } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import { LoaderFunctionArgs } from "react-router-dom";
+import { NormalResponse } from "../../../../backend/src/api/common";
 import {
   GetUser,
   GetUserFollowees,
@@ -118,3 +124,34 @@ export const circleLoader =
 
     return promsieResults;
   };
+
+export const useCircleMutation = ({
+  username,
+  queryKeyToInvalidate,
+}: {
+  username: string;
+  queryKeyToInvalidate: readonly string[];
+}) => {
+  const { postData, deleteData } = useRequest();
+  const queryClient = useQueryClient();
+  const options: Parameters<typeof useMutation<NormalResponse>>["2"] = {
+    onSuccess: async (data) => {
+      if (data.ok) {
+        await queryClient.invalidateQueries({
+          queryKey: queryKeyToInvalidate,
+        });
+      }
+    },
+  };
+
+  return {
+    useFollowMutation: useMutation<NormalResponse, unknown, void>(
+      () => postData("user/" + username + "/follow", {}),
+      options
+    ),
+    useUnfollowMutation: useMutation<NormalResponse, unknown, void>(
+      () => deleteData("user/" + username + "/follow"),
+      options
+    ),
+  };
+};

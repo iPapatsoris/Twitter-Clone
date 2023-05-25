@@ -17,13 +17,11 @@ import useRequest from "../../../util/hooks/requests/useRequest";
 import Info from "./Info/Info";
 import Modal from "../../../util/components/Modal/Modal";
 import EditProfile from "./EditProfile/EditProfile";
-import { GetUserFields } from "../../../../backend/src/permissions";
 import { defaultAvatar, defaultCoverColor } from "./defaultPics";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "../../../store/AuthStore";
 import { shallow } from "zustand/shallow";
 import { getPagePath } from "../../../util/paths";
-import { useCircleRequest } from "../../../util/hooks/requests/useCircleQuery";
 import {
   fullProfileFields,
   FullProfileRequestFields,
@@ -32,6 +30,7 @@ import {
   profileKeys,
   smallPreviewProfileFields,
 } from "./queries";
+import { useCircleMutation } from "../Circle/queries";
 
 interface ProfileProps {
   // If preview is provided, take username from it instead of from router path
@@ -65,7 +64,7 @@ const Profile = ({ preview }: ProfileProps) => {
   );
   const user = data?.data?.user!;
 
-  const { useFollowMutation, useUnfollowMutation } = useCircleRequest({
+  const { useFollowMutation, useUnfollowMutation } = useCircleMutation({
     username,
     queryKeyToInvalidate: profileKeys
       .username(username)
