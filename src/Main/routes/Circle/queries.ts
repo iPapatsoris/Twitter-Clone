@@ -3,7 +3,6 @@ import {
   QueryClient,
   useMutation,
   useQueryClient,
-  UseQueryOptions,
 } from "@tanstack/react-query";
 import { LoaderFunctionArgs } from "react-router-dom";
 import { NormalResponse } from "../../../../backend/src/api/common";
@@ -15,7 +14,6 @@ import {
 import { GetUserFields } from "../../../../backend/src/permissions";
 import { deleteData, getData, postData } from "../../../util/request";
 import {
-  getProfileQuery,
   profileKeys,
   smallPreviewProfileFields,
   SmallProfileRequestFields,
@@ -39,57 +37,49 @@ export const circleKeys = createQueryKeys("circle", {
   circleType: (circle: CircleType) => ({
     queryKey: [circle],
     contextQueries: {
-      username: (username) => ({ queryKey: [username] }),
+      username: (username) => ({
+        queryKey: [username],
+        queryFn: () => circleQuery(username, circle),
+      }),
     },
   }),
 });
 
-// export const circleKeys = {
-//   all: (circle: CircleType) => [circle],
-//   username: (circle: CircleType, username: string) => [
-//     ...circleKeys.all(circle),
-//     username,
-//   ],
-// };
+const circleQuery = async (username: string, circle: CircleType) => {
+  const res = await getData<CircleResponse>(
+    "user/" + username + "/" + circle,
+    smallPreviewProfileFields
+  );
 
-export const getCircleQuery: (
-  username: string,
-  circle: CircleType
-) => UseQueryOptions<CircleResponse> = (username, circle) => ({
-  queryKey: circleKeys.circleType(circle)._ctx.username(username).queryKey,
-  queryFn: async () => {
-    const res = await getData<CircleResponse>(
-      "user/" + username + "/" + circle,
-      smallPreviewProfileFields
-    );
-
-    if (!res.ok) {
-      throw new Error();
-    }
-    return res;
-  },
-});
+  if (!res.ok) {
+    throw new Error();
+  }
+  return res;
+};
 
 // Fetch user header info and circle
 export const circleLoader =
   (queryClient: QueryClient, circle: CircleType) =>
   async ({ params }: LoaderFunctionArgs) => {
     // User header query
-    const query = getProfileQuery(params.username!, circleHeaderFields);
+    const { queryKey: headerQueryKey, queryFn: headerQueryFn } = profileKeys
+      .username(params.username!)
+      ._ctx.fields(circleHeaderFields);
 
     // User circle query
-    const circleQuery = getCircleQuery(params.username!, circle);
+    const { queryKey: circleQueryKey, queryFn: circleQueryFn } = circleKeys
+      .circleType(circle)
+      ._ctx.username(params.username!);
 
     const promsieResults = await Promise.all([
-      queryClient.ensureQueryData<
-        UserHeaderResponse,
-        unknown,
-        UserHeaderResponse,
-        any
-      >({ queryKey: query.queryKey, queryFn: query.queryFn }),
-      queryClient.ensureQueryData<CircleResponse, unknown, CircleResponse, any>(
-        { queryKey: circleQuery.queryKey, queryFn: circleQuery.queryFn }
-      ),
+      queryClient.ensureQueryData({
+        queryKey: headerQueryKey,
+        queryFn: headerQueryFn,
+      }),
+      queryClient.ensureQueryData({
+        queryKey: circleQueryKey,
+        queryFn: circleQueryFn,
+      }),
     ]);
     const circleResult = promsieResults[1];
 

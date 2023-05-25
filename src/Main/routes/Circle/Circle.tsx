@@ -7,9 +7,9 @@ import {
 } from "../../../../backend/src/api/user";
 import { getPagePath, useRouteMatch } from "../../../util/paths";
 import { HeaderProfileContext } from "../../layouts/Main";
-import { getProfileQuery, SmallProfileRequestFields } from "../Profile/queries";
+import { profileKeys, SmallProfileRequestFields } from "../Profile/queries";
 import Profile from "../Profile/Profile";
-import { CircleType, circleHeaderFields, getCircleQuery } from "./queries";
+import { CircleType, circleHeaderFields, circleKeys } from "./queries";
 import styles from "./Circle.module.scss";
 
 const Circle = () => {
@@ -18,14 +18,14 @@ const Circle = () => {
   const { username } = useParams();
 
   const { data: headerData, isSuccess: isHeaderSuccess } = useQuery(
-    getProfileQuery(username!, circleHeaderFields)
+    profileKeys.username(username!)._ctx.fields(circleHeaderFields)
   );
 
   const {
     data: circleData,
     isSuccess: isCircleSuccess,
     isFetching,
-  } = useQuery(getCircleQuery(username!, circle));
+  } = useQuery(circleKeys.circleType(circle)._ctx.username(username!));
   const { setUserHeader } = useContext(HeaderProfileContext);
 
   useLayoutEffect(() => {

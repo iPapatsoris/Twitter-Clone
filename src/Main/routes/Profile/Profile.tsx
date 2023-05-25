@@ -24,7 +24,6 @@ import { getPagePath } from "../../../util/paths";
 import {
   fullProfileFields,
   FullProfileRequestFields,
-  getProfileQuery,
   mediumPreviewProfileFields,
   profileKeys,
   smallPreviewProfileFields,
@@ -58,7 +57,7 @@ const Profile = ({ preview }: ProfileProps) => {
   }
 
   const { data, isLoading } = useQuery(
-    getProfileQuery(username, fieldsToQuery)
+    profileKeys.username(username)._ctx.fields(fieldsToQuery)
   );
   const user = data?.data?.user!;
 
