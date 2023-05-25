@@ -2,7 +2,7 @@ import { LoaderFunctionArgs } from "react-router-dom";
 import { GetUser } from "../../../../backend/src/api/user";
 import { GetUserFields } from "../../../../backend/src/permissions";
 import { QueryClient, UseQueryOptions } from "@tanstack/react-query";
-import useRequest from "../../../util/hooks/requests/useRequest";
+import useRequest from "../../../util/hooks/useRequest";
 import {
   createQueryKeys,
   createQueryKeyStore,

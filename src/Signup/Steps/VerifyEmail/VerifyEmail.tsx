@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 import { VerifyEmailCode } from "../../../../backend/src/api/email";
 import useSendEmailCode from "./useSendEmailCode";
 import Form from "../../../util/components/Form/Form";
-import useRequest from "../../../util/hooks/requests/useRequest";
+import useRequest from "../../../util/hooks/useRequest";
 
 interface VerifyEmailProps {
   email: string;

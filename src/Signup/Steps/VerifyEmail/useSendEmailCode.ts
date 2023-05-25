@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { CreateEmailCode } from "../../../../backend/src/api/email";
-import useRequest from "../../../util/hooks/requests/useRequest";
+import useRequest from "../../../util/hooks/useRequest";
 
 const useSendEmailCode = (key: string) => {
   const { postData } = useRequest();

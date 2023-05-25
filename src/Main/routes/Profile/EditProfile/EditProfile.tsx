@@ -7,7 +7,7 @@ import { charLimits, UpdateUser } from "../../../../../backend/src/api/user";
 import { UpdateUserFields } from "../../../../../backend/src/permissions";
 import { useAuthStore } from "../../../../store/AuthStore";
 import Form from "../../../../util/components/Form/Form";
-import useRequest from "../../../../util/hooks/requests/useRequest";
+import useRequest from "../../../../util/hooks/useRequest";
 import Minipage from "../../../../util/layouts/Minipage/Minipage";
 import yup from "../../../../util/yup";
 import { fullProfileFields, profileKeys, UserProfileT } from "../queries";

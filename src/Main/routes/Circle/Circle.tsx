@@ -5,7 +5,7 @@ import {
   GetUserFollowees,
   GetUserFollowers,
 } from "../../../../backend/src/api/user";
-import useRequest from "../../../util/hooks/requests/useRequest";
+import useRequest from "../../../util/hooks/useRequest";
 import { getPagePath, useRouteMatch } from "../../../util/paths";
 import { HeaderProfileContext } from "../../layouts/Main";
 import { getProfileQuery, SmallProfileRequestFields } from "../Profile/queries";

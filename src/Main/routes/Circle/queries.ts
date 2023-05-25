@@ -13,7 +13,7 @@ import {
   GetUserFollowers,
 } from "../../../../backend/src/api/user";
 import { GetUserFields } from "../../../../backend/src/permissions";
-import useRequest from "../../../util/hooks/requests/useRequest";
+import useRequest from "../../../util/hooks/useRequest";
 import {
   getProfileQuery,
   profileKeys,

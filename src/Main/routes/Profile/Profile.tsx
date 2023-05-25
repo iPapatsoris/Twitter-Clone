@@ -13,7 +13,7 @@ import optionsIcon from "../../../assets/icons/dots.png";
 import notificationsIcon from "../../../assets/icons/notifications.png";
 import verifiedIcon from "../../../assets/icons/verified.png";
 import Button from "../../../util/components/Button/Button";
-import useRequest from "../../../util/hooks/requests/useRequest";
+import useRequest from "../../../util/hooks/useRequest";
 import Info from "./Info/Info";
 import Modal from "../../../util/components/Modal/Modal";
 import EditProfile from "./EditProfile/EditProfile";
