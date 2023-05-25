@@ -13,9 +13,9 @@ import Form from "../../../util/components/Form/Form";
 import { useQuery } from "@tanstack/react-query";
 import { GetEmail } from "../../../../backend/src/api/email";
 import yup, { yupSequentialStringSchema } from "../../../util/yup";
-import useRequest from "../../../util/hooks/useRequest";
 import DatePicker from "../../../util/components/DatePicker/DatePicker";
 import { charLimits } from "../../../../backend/src/api/user";
+import { getData } from "../../../util/request";
 
 interface AccountInfoProps {
   accountInfo: AccountInfoT;
@@ -36,7 +36,6 @@ const AccountInfo = ({
   const [day, setDay] = useState(birthDate ? birthDate.date() : -1);
   const [year, setYear] = useState(birthDate ? birthDate.year() : -1);
 
-  const { getData } = useRequest();
   const { refetch } = useQuery<GetEmail["response"]>(
     ["emailExists"],
     () => {

@@ -2,7 +2,6 @@ import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { CreateUser } from "../../backend/src/api/user";
-import useRequest from "../util/hooks/useRequest";
 import useStepper from "../util/hooks/useStepper";
 import AccountInfo from "./Steps/AccountInfo/AccountInfo";
 import MakePassword from "./Steps/MakePassword/MakePassword";
@@ -10,6 +9,7 @@ import MakeUsername from "./Steps/MakeUsername/MakeUsername";
 import Settings from "./Steps/Settings/Settings";
 import VerifyAccountInfo from "./Steps/VerifyAccountInfo/VerifyAccountInfo";
 import VerifyEmail from "./Steps/VerifyEmail/VerifyEmail";
+import { postData } from "../util/request";
 
 interface SignupProps {}
 
@@ -43,7 +43,6 @@ const Signup = ({}: SignupProps) => {
   const [performRegistration, setPerformRegistration] = useState(false);
   const [inputToFocus, setInputToFocus] = useState<keyof AccountInfoT>("name");
 
-  const { postData } = useRequest();
   const { mutate } = useMutation<
     CreateUser["response"],
     unknown,

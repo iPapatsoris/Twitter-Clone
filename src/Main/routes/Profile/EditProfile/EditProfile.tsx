@@ -7,7 +7,6 @@ import { charLimits, UpdateUser } from "../../../../../backend/src/api/user";
 import { UpdateUserFields } from "../../../../../backend/src/permissions";
 import { useAuthStore } from "../../../../store/AuthStore";
 import Form from "../../../../util/components/Form/Form";
-import useRequest from "../../../../util/hooks/useRequest";
 import Minipage from "../../../../util/layouts/Minipage/Minipage";
 import yup from "../../../../util/yup";
 import { fullProfileFields, profileKeys, UserProfileT } from "../queries";
@@ -17,6 +16,7 @@ import EditProfileInfo, {
   PhotoInputRefs,
 } from "./EditProfileInfo/EditProfileInfo";
 import EditProfilePhotos from "./EditProfilePhotos/EditProfilePhotos";
+import { patchData } from "../../../../util/request";
 
 interface EditProfileProps {
   user: UserProfileT;
@@ -42,7 +42,6 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
   const [day, setDay] = useState(birthDate ? birthDate.date() : -1);
   const [year, setYear] = useState(birthDate ? birthDate.year() : -1);
 
-  const { patchData } = useRequest();
   const setLoggedInUserMiniInfo = useAuthStore(
     (state) => state.setLoggedInUserMiniInfo
   );

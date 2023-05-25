@@ -5,7 +5,6 @@ import {
   GetUserFollowees,
   GetUserFollowers,
 } from "../../../../backend/src/api/user";
-import useRequest from "../../../util/hooks/useRequest";
 import { getPagePath, useRouteMatch } from "../../../util/paths";
 import { HeaderProfileContext } from "../../layouts/Main";
 import { getProfileQuery, SmallProfileRequestFields } from "../Profile/queries";
@@ -17,17 +16,16 @@ const Circle = () => {
   const isFollowersPage = useRouteMatch(getPagePath("followers"));
   const circle: CircleType = isFollowersPage ? "followers" : "followees";
   const { username } = useParams();
-  const { getData } = useRequest();
 
   const { data: headerData, isSuccess: isHeaderSuccess } = useQuery(
-    getProfileQuery(username!, getData, circleHeaderFields)
+    getProfileQuery(username!, circleHeaderFields)
   );
 
   const {
     data: circleData,
     isSuccess: isCircleSuccess,
     isFetching,
-  } = useQuery(getCircleQuery(username!, getData, circle));
+  } = useQuery(getCircleQuery(username!, circle));
   const { setUserHeader } = useContext(HeaderProfileContext);
 
   useLayoutEffect(() => {

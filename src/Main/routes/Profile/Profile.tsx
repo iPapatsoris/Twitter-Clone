@@ -13,7 +13,6 @@ import optionsIcon from "../../../assets/icons/dots.png";
 import notificationsIcon from "../../../assets/icons/notifications.png";
 import verifiedIcon from "../../../assets/icons/verified.png";
 import Button from "../../../util/components/Button/Button";
-import useRequest from "../../../util/hooks/useRequest";
 import Info from "./Info/Info";
 import Modal from "../../../util/components/Modal/Modal";
 import EditProfile from "./EditProfile/EditProfile";
@@ -47,7 +46,6 @@ const Profile = ({ preview }: ProfileProps) => {
     shallow
   );
   const { setUserHeader } = useContext(HeaderProfileContext);
-  const { getData } = useRequest();
   const navigate = useNavigate();
   const params = useParams();
   const username = preview ? preview.username : params.username!;
@@ -60,7 +58,7 @@ const Profile = ({ preview }: ProfileProps) => {
   }
 
   const { data, isLoading } = useQuery(
-    getProfileQuery(username, getData, fieldsToQuery)
+    getProfileQuery(username, fieldsToQuery)
   );
   const user = data?.data?.user!;
 

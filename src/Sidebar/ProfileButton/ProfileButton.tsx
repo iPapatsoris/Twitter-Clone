@@ -7,8 +7,8 @@ import { useRef, useState } from "react";
 import { OptionWithNested } from "../../util/components/Popup/OptionsPopup/Option";
 import { useMutation } from "@tanstack/react-query";
 import { NormalResponse } from "../../../backend/src/api/common";
-import useRequest from "../../util/hooks/useRequest";
 import { useAuthStore } from "../../store/AuthStore";
+import { deleteData } from "../../util/request";
 
 const ProfileButton = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -16,7 +16,6 @@ const ProfileButton = () => {
   const profileButtonRef = useRef(null);
   const user = useAuthStore((state) => state.loggedInUser);
   const setUser = useAuthStore((state) => state.setLoggedInUser);
-  const { deleteData } = useRequest();
   const { mutate } = useMutation<NormalResponse>(
     ["logout"],
     () => deleteData("auth/logout"),

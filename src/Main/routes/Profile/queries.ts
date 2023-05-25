@@ -2,11 +2,8 @@ import { LoaderFunctionArgs } from "react-router-dom";
 import { GetUser } from "../../../../backend/src/api/user";
 import { GetUserFields } from "../../../../backend/src/permissions";
 import { QueryClient, UseQueryOptions } from "@tanstack/react-query";
-import useRequest from "../../../util/hooks/useRequest";
-import {
-  createQueryKeys,
-  createQueryKeyStore,
-} from "@lukemorales/query-key-factory";
+import { createQueryKeys } from "@lukemorales/query-key-factory";
+import { getData } from "../../../util/request";
 
 // Fields to query in small preview mode
 export const smallPreviewProfileFields = [
@@ -68,7 +65,6 @@ export const profileKeys = createQueryKeys("userProfile", {
 // to the ones mentioned on fieldsToQuery.
 export const getProfileQuery = <T extends Readonly<FullProfileRequestFields[]>>(
   username: string,
-  getData: ReturnType<typeof useRequest>["getData"],
   fieldsToQuery: T
 ): UseQueryOptions<FullProfileResponse> => ({
   queryKey: profileKeys.username(username)._ctx.fields(fieldsToQuery).queryKey,
@@ -87,12 +83,9 @@ export const getProfileQuery = <T extends Readonly<FullProfileRequestFields[]>>(
 
 // On profile load from URL, fetch the full profile
 export const profileLoader =
-  (
-    getData: ReturnType<typeof useRequest>["getData"],
-    queryClient: QueryClient
-  ) =>
+  (queryClient: QueryClient) =>
   async ({ params }: LoaderFunctionArgs) => {
-    const query = getProfileQuery(params.username!, getData, fullProfileFields);
+    const query = getProfileQuery(params.username!, fullProfileFields);
     const data = await queryClient.ensureQueryData<
       FullProfileResponse,
       unknown,

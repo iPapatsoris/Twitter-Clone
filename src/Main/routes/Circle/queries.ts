@@ -13,7 +13,7 @@ import {
   GetUserFollowers,
 } from "../../../../backend/src/api/user";
 import { GetUserFields } from "../../../../backend/src/permissions";
-import useRequest from "../../../util/hooks/useRequest";
+import { deleteData, getData, postData } from "../../../util/request";
 import {
   getProfileQuery,
   profileKeys,
@@ -54,9 +54,8 @@ export const circleKeys = createQueryKeys("circle", {
 
 export const getCircleQuery: (
   username: string,
-  getData: ReturnType<typeof useRequest>["getData"],
   circle: CircleType
-) => UseQueryOptions<CircleResponse> = (username, getData, circle) => ({
+) => UseQueryOptions<CircleResponse> = (username, circle) => ({
   queryKey: circleKeys.circleType(circle)._ctx.username(username).queryKey,
   queryFn: async () => {
     const res = await getData<CircleResponse>(
@@ -73,21 +72,13 @@ export const getCircleQuery: (
 
 // Fetch user header info and circle
 export const circleLoader =
-  (
-    getData: ReturnType<typeof useRequest>["getData"],
-    queryClient: QueryClient,
-    circle: CircleType
-  ) =>
+  (queryClient: QueryClient, circle: CircleType) =>
   async ({ params }: LoaderFunctionArgs) => {
     // User header query
-    const query = getProfileQuery(
-      params.username!,
-      getData,
-      circleHeaderFields
-    );
+    const query = getProfileQuery(params.username!, circleHeaderFields);
 
     // User circle query
-    const circleQuery = getCircleQuery(params.username!, getData, circle);
+    const circleQuery = getCircleQuery(params.username!, circle);
 
     const promsieResults = await Promise.all([
       queryClient.ensureQueryData<
@@ -132,7 +123,6 @@ export const useCircleMutation = ({
   username: string;
   queryKeyToInvalidate: readonly string[];
 }) => {
-  const { postData, deleteData } = useRequest();
   const queryClient = useQueryClient();
   const options: Parameters<typeof useMutation<NormalResponse>>["2"] = {
     onSuccess: async (data) => {

@@ -7,16 +7,15 @@ import Button from "../util/components/Button/Button";
 import Form from "../util/components/Form/Form";
 import { ModalContext } from "../util/components/Modal/Modal";
 import FormInput from "../util/components/Input/FormInput";
-import useRequest from "../util/hooks/useRequest";
 import LogoHeader from "../util/layouts/Minipage/LogoHeader/LogoHeader";
 import Minipage from "../util/layouts/Minipage/Minipage";
 import yup from "../util/yup";
 import styles from "./Login.module.scss";
 import { useAuthStore } from "../store/AuthStore";
+import { postData } from "../util/request";
 
 const Login = () => {
   const setLoggedInUser = useAuthStore((state) => state.setLoggedInUser);
-  const { postData } = useRequest();
   const { mutate, isLoading } = useMutation<
     LoginUser["response"],
     unknown,

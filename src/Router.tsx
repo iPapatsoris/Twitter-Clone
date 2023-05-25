@@ -17,12 +17,12 @@ import NotificationsMentions from "./Main/routes/Notifications/NotificationsMent
 import { getPagePath } from "./util/paths";
 import Profile from "./Main/routes/Profile/Profile";
 import { profileLoader } from "./Main/routes/Profile/queries";
-import useRequest from "./util/hooks/useRequest";
 import { QueryClient } from "@tanstack/react-query";
 import { shallow } from "zustand/shallow";
 import { LoggedInUser, useAuthStore } from "./store/AuthStore";
 import Circle from "./Main/routes/Circle/Circle";
 import { circleLoader } from "./Main/routes/Circle/queries";
+import { getData } from "./util/request";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const loggedInUser: Pick<LoggedInUser, "id"> | null = useAuthStore(
@@ -42,7 +42,6 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
     (state) => state.loggedInUser && { username: state.loggedInUser.username },
     shallow
   );
-  const { getData } = useRequest();
   console.log("rendering router");
 
   const router = createBrowserRouter(
@@ -89,21 +88,21 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
           path={getPagePath("profile")}
           element={<Profile />}
           id={getPagePath("profile")}
-          loader={profileLoader(getData, queryClient)}
+          loader={profileLoader(queryClient)}
           errorElement={<ErrorPage />} // is this needed? can i have it globally?
         />
         <Route
           path={getPagePath("followers")}
           element={<Circle />}
           id={getPagePath("followers")}
-          loader={circleLoader(getData, queryClient, "followers")}
+          loader={circleLoader(queryClient, "followers")}
           errorElement={<ErrorPage />} // is this needed?
         />
         <Route
           path={getPagePath("following")}
           element={<Circle />}
           id={getPagePath("following")}
-          loader={circleLoader(getData, queryClient, "followees")}
+          loader={circleLoader(queryClient, "followees")}
           errorElement={<ErrorPage />} // is this needed?
         />
         <Route index element={<Navigate to={getPagePath("home")} />} />
