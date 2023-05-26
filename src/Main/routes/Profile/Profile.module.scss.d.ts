@@ -10,7 +10,7 @@ declare const classNames: typeof globalClassNames & {
   readonly Avatar: "Avatar";
   readonly Edit: "Edit";
   readonly Actions: "Actions";
-  readonly FollowButton: "FollowButton";
+  readonly FixedWidthButton: "FixedWidthButton";
   readonly Title: "Title";
   readonly NameAndVerified: "NameAndVerified";
   readonly Verified: "Verified";
@@ -30,7 +30,7 @@ export type ProfileNames =
   | "Avatar"
   | "Edit"
   | "Actions"
-  | "FollowButton"
+  | "FixedWidthButton"
   | "Title"
   | "NameAndVerified"
   | "Verified"

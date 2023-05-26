@@ -10,7 +10,7 @@
   }
   // Columns for small preview
   @function defineGridColumnsSmall() {
-    @return 1rem var(--avatar-small-height) 1rem 1fr 1fr 1rem;
+    @return var(--avatar-small-height) 1rem 1fr 1fr;
   }
 
   display: grid;
@@ -47,8 +47,8 @@
 
     &.Small {
       grid-template-areas:
-        ". avatar . title actions  ."
-        ". . . content content .";
+        "avatar . title actions"
+        ". . content content";
       grid-template-rows: var(--avatar-small-height) auto;
       grid-template-columns: defineGridColumnsSmall();
     }
@@ -105,15 +105,30 @@
   display: flex;
   justify-content: end;
   gap: 0.5rem;
+  align-items: center;
 
-  &:not(.Preview &) {
-    align-items: center;
-  }
-
-  .FollowButton {
-    width: 7rem;
+  .FixedWidthButton {
+    width: 6.5rem;
   }
 }
+
+/* Within a List of Profiles, if the user decides to follow some people, the
+   Follow / Following buttons of the profiles will not stay aligned with each
+   other, because they are of different width depending on their text.
+
+   Possible apporaches:
+    - Give a fixed width to the buttons. Drawback is that the "Follow" button 
+      could look a little longer than optimal (current solution).
+    - Use a global grid for the whole List including the Profiles, instead of 
+      individual grids for each Profile. Drawback is that we are not reusing 
+      our List and Profile components.
+    - Keep the Button grid item centered in its column. Drawback is that we 
+      introduce more horizontal space from the right edge of the List.  
+*/
+
+// .Preview .Actions {
+//   justify-content: center;
+// }
 
 :not(.Preview) > .Title {
   padding-block: 1rem;

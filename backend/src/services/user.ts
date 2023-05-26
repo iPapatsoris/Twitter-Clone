@@ -4,12 +4,7 @@ import { Session, SessionData } from "express-session";
 import { sha256 } from "js-sha256";
 import { NormalResponse, extraQueryFields } from "../api/common.js";
 import ErrorCodes from "../api/errorCodes.js";
-import {
-  GetUser,
-  GetUserFollowers,
-  UserResponse,
-  UserWithExtra,
-} from "../api/user.js";
+import { GetUser, GetUserFollowers, UserResponse } from "../api/user.js";
 import { User } from "../entities/user.js";
 import { checkPermissions, GetUserFields } from "../permissions.js";
 import { removeArrayFields, runQuery } from "../util.js";

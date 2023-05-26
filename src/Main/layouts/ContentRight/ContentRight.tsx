@@ -1,5 +1,5 @@
 import styles from "./ContentRight.module.scss";
-import ContentRightSection from "./ContentRightSection/ContentRightSection";
+import List from "./List/List";
 import Trends from "../../components/Trends/Trends";
 import WhoToFollow from "../../components/WhoToFollow/WhoToFollow";
 import { useLocation } from "react-router-dom";
@@ -22,13 +22,13 @@ const ContentRight = () => {
   const regularView = (
     <div>
       {path !== getPagePath("explore") && (
-        <ContentRightSection title="Trends for you">
+        <List title="Trends for you" withBackgroundColor>
           <Trends />
-        </ContentRightSection>
+        </List>
       )}
-      <ContentRightSection title="Who to follow">
+      <List title="Who to follow" withBackgroundColor>
         <WhoToFollow />
-      </ContentRightSection>
+      </List>
     </div>
   );
 

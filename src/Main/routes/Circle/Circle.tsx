@@ -10,7 +10,7 @@ import { HeaderProfileContext } from "../../layouts/Main";
 import { profileKeys, SmallProfileRequestFields } from "../Profile/queries";
 import Profile from "../Profile/Profile";
 import { CircleType, circleHeaderFields, circleKeys } from "./queries";
-import styles from "./Circle.module.scss";
+import List from "../../layouts/ContentRight/List/List";
 
 const Circle = () => {
   const isFollowersPage = useRouteMatch(getPagePath("followers"));
@@ -51,10 +51,13 @@ const Circle = () => {
           .followees;
 
   const userCircle = userList.map((f) => (
-    <Profile key={f.id} preview={{ username: f.username, size: "small" }} />
+    <Profile
+      key={f.id}
+      preview={{ username: f.username, size: "small", noBio: false }}
+    />
   ));
 
-  return <div className={styles.Circle}>{userCircle}</div>;
+  return <List>{userCircle}</List>;
 };
 
 export default Circle;
