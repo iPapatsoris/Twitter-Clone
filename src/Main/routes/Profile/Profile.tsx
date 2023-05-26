@@ -36,7 +36,9 @@ interface ProfileProps {
   preview?: {
     username: string;
     size: "medium" | "small";
-    noBio: boolean;
+    includeBio?: boolean;
+    iconAction?: React.ReactElement;
+    noNavOnClick?: boolean;
   };
 }
 
@@ -90,6 +92,7 @@ const Profile = ({ preview }: ProfileProps) => {
   const visitFullProfile = (e: any) => {
     if (
       preview &&
+      !preview.noNavOnClick &&
       e.target instanceof Node &&
       !buttonRef.current?.contains(e.target) &&
       !followersRef.current?.contains(e.target) &&
@@ -188,7 +191,7 @@ const Profile = ({ preview }: ProfileProps) => {
               )}
             </>
           )}
-          {actionButton}
+          {preview && preview.iconAction ? preview.iconAction : actionButton}
         </div>
         <div className={styles.Title}>
           <div className={styles.NameAndVerified}>
@@ -206,7 +209,7 @@ const Profile = ({ preview }: ProfileProps) => {
           </div>
         </div>
         <div className={styles.ProfileInfo}>
-          {(!preview || !preview.noBio) && (
+          {(!preview || preview.includeBio) && (
             <div className={styles.Bio}>{user.bio}</div>
           )}
           {!preview && <Info user={user} />}

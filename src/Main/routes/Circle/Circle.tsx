@@ -53,7 +53,7 @@ const Circle = () => {
   const userCircle = userList.map((f) => (
     <Profile
       key={f.id}
-      preview={{ username: f.username, size: "small", noBio: false }}
+      preview={{ username: f.username, size: "small", includeBio: true }}
     />
   ));
 

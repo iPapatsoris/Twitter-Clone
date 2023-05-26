@@ -1,6 +1,16 @@
 .ProfileButton {
   margin-top: auto;
   margin-bottom: 1rem;
+
+  .Wrapper {
+    padding-inline: 1rem;
+    border-radius: 40px;
+    transition: var(--transition-duration);
+
+    &:hover {
+      background-color: var(--hover-bg);
+    }
+  }
 }
 
 .PopupStyles {
