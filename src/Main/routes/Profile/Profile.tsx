@@ -36,6 +36,7 @@ interface ProfileProps {
   preview?: {
     username: string;
     size: "medium" | "small";
+    noBio: boolean;
   };
 }
 
@@ -203,7 +204,9 @@ const Profile = ({ preview }: ProfileProps) => {
           </div>
         </div>
         <div className={styles.ProfileInfo}>
-          <div className={styles.Bio}>{user.bio}</div>
+          {(!preview || !preview.noBio) && (
+            <div className={styles.Bio}>{user.bio}</div>
+          )}
           {!preview && <Info user={user} />}
           {(!preview || (preview && preview.size === "medium")) && (
             <div className={styles.Friendship}>
