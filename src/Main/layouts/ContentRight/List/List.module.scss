@@ -9,7 +9,7 @@
     background-color: rgb(247, 249, 249);
   }
 
-  h2 {
+  .Title {
     font-weight: 800;
     margin: 0;
     cursor: auto;
@@ -21,7 +21,7 @@
     transition: var(--transition-duration);
   }
 
-  & > :not(:first-child):hover {
+  & > :not(.Title):hover {
     background-color: rgb(0, 0, 0, 0.03);
   }
 

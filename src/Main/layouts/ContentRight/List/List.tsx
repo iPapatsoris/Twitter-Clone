@@ -5,9 +5,15 @@ interface ListProps {
   children: React.ReactNode;
   title?: string;
   withBackgroundColor?: boolean;
+  withExpand?: boolean;
 }
 
-const List = ({ children, title, withBackgroundColor }: ListProps) => {
+const List = ({
+  children,
+  title,
+  withBackgroundColor,
+  withExpand,
+}: ListProps) => {
   const classes: styles.ListNames[] = [];
 
   if (withBackgroundColor) {
@@ -16,9 +22,9 @@ const List = ({ children, title, withBackgroundColor }: ListProps) => {
 
   return (
     <div className={[styles.List, ...classes].join(" ")}>
-      <h2>{title}</h2>
+      {title && <h2 className={styles.Title}>{title}</h2>}
       {children}
-      <span className={styles.ShowMore}>Show more</span>
+      {withExpand && <span className={styles.ShowMore}>Show more</span>}
     </div>
   );
 };
