@@ -1,3 +1,4 @@
+import { ExtraQueryFields, extraQueryFields } from "./api/common.js";
 import { UserWithExtra } from "./api/user.js";
 import { User } from "./entities/user.js";
 
@@ -19,7 +20,8 @@ const getUserFieldWhitelist = [
   "totalFollowers",
   "totalTweets",
   "isFollowedByActiveUser",
-] as const satisfies Readonly<Array<keyof UserWithExtra>>;
+  ...extraQueryFields,
+] as const satisfies Readonly<Array<keyof (UserWithExtra & ExtraQueryFields)>>;
 
 const updateUserFieldWhitelist = [
   "name",
@@ -41,7 +43,6 @@ export const checkPermissions = (
   let fieldWhitelist:
     | typeof getUserFieldWhitelist
     | typeof updateUserFieldWhitelist;
-  console.log(fields);
 
   if (endpoint === "GetUser") {
     fieldWhitelist = getUserFieldWhitelist;

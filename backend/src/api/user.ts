@@ -1,6 +1,6 @@
 import { Retweet, Tweet } from "../entities/tweet.js";
 import { User } from "../entities/user.js";
-import { NormalResponse } from "./common.js";
+import { ExtraQueryFields, NormalResponse } from "./common.js";
 import { Thread } from "./tweet.js";
 import { GetUserFields, UpdateUserFields } from "../permissions.js";
 
@@ -20,13 +20,19 @@ export type UpdateUser<T extends UpdateUserFields> = {
   }>;
 };
 
+// TODO: include this in normal User entity?
 export type UserWithExtra = User & {
   isFollowedByActiveUser: boolean;
 };
 
+export type UserResponse<T extends GetUserFields> = Pick<
+  UserWithExtra,
+  Exclude<T, keyof ExtraQueryFields>
+>;
+
 export type GetUser<T extends GetUserFields> = {
   response: NormalResponse<{
-    user: Pick<UserWithExtra, T>;
+    user: UserResponse<T>;
   }>;
 };
 
@@ -34,13 +40,19 @@ export type CreateUserFields = keyof CreateUser["request"];
 
 export type GetUserFollowees<T extends GetUserFields> = {
   response: NormalResponse<{
-    followees: Array<Pick<UserWithExtra, T>>;
+    followees: UserResponse<T>[];
   }>;
 };
 
 export type GetUserFollowers<T extends GetUserFields> = {
   response: NormalResponse<{
-    followers: Array<Pick<UserWithExtra, T>>;
+    followers: UserResponse<T>[];
+  }>;
+};
+
+export type GetUserFolloweeSuggestions<T extends GetUserFields> = {
+  response: NormalResponse<{
+    followeeSuggestions: UserResponse<T>[];
   }>;
 };
 

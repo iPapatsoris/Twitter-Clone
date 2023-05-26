@@ -2,9 +2,14 @@
 import { Response } from "express";
 import { Session, SessionData } from "express-session";
 import { sha256 } from "js-sha256";
-import { NormalResponse } from "../api/common.js";
+import { NormalResponse, extraQueryFields } from "../api/common.js";
 import ErrorCodes from "../api/errorCodes.js";
-import { GetUser, GetUserFollowers, UserWithExtra } from "../api/user.js";
+import {
+  GetUser,
+  GetUserFollowers,
+  UserResponse,
+  UserWithExtra,
+} from "../api/user.js";
 import { User } from "../entities/user.js";
 import { checkPermissions, GetUserFields } from "../permissions.js";
 import { removeArrayFields, runQuery } from "../util.js";
@@ -68,7 +73,7 @@ export const getUser = async ({
   getIsFollowedByActiveUser: boolean;
 }): Promise<Omit<GetUser<GetUserFields>["response"], "isLoggedOut">> => {
   // Query regular fields
-  const [user] = await runQuery<Pick<UserWithExtra, GetUserFields>>(
+  const [user] = await runQuery<UserResponse<GetUserFields>>(
     "SELECT id" + views.join("") + " FROM user WHERE username = ?",
     [username]
   );
@@ -145,12 +150,14 @@ export const prepareUserQuery = ({
     return { ok: false, errorCode: ErrorCodes.PermissionDenied };
   }
 
-  // Frienship fields will be handled on seperate queries, so remove them
-  const seperateFields = removeArrayFields<typeof fields[0]>(fields, [
+  // Remove parameters that are not direct user properties, but will
+  // be retrived by separate queries. Also remove extra generic query options.
+  const seperatedFields = removeArrayFields<typeof fields[0]>(fields, [
     "totalFollowees",
     "totalFollowers",
     "totalTweets",
     "isFollowedByActiveUser",
+    ...extraQueryFields,
   ]);
 
   // Set flags for seperate fields to query
@@ -158,7 +165,7 @@ export const prepareUserQuery = ({
   let getTotalFollowers = false;
   let getTotalTweets = false;
   let getIsFollowedByActiveUser = false;
-  seperateFields.forEach((field) => {
+  seperatedFields.forEach((field) => {
     if (field === "totalFollowees") {
       getTotalFollowees = true;
     } else if (field === "totalFollowers") {
@@ -171,7 +178,7 @@ export const prepareUserQuery = ({
   });
 
   // Adjust query fields to select
-  const views = fields.map((f) => "," + f);
+  const views = fields.map((f) => ",user." + f);
   return {
     ok: true,
     data: {

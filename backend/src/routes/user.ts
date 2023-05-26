@@ -1,13 +1,14 @@
 /* eslint-disable no-multi-str */
 import express, { Request, Response } from "express";
 import { sha256 } from "js-sha256";
-import { NormalResponse } from "../api/common.js";
+import { ExtraQueryFields, NormalResponse } from "../api/common.js";
 import ErrorCodes from "../api/errorCodes.js";
 import { GetTweets, Thread } from "../api/tweet.js";
 import {
   CreateUser,
   GetUser,
   GetUserFollowees,
+  GetUserFolloweeSuggestions,
   GetUserFollowers,
   GetUsernameExists,
   GetUserThreadsAndRetweets,
@@ -235,6 +236,48 @@ router.get(
     res.send({ ok: true, data: { followees: circleResult.data! } });
   }
 );
+
+// Normally a recommendation algorithm would be used, for simplicity we just
+// return any users that the currently logged-in user not following.
+router
+  .route("/followees/suggestions")
+  .get(
+    requireAuth,
+    async (
+      req: Request<{}, {}, {}, Fields<GetUserFields, ExtraQueryFields>>,
+      res: Response<GetUserFolloweeSuggestions<GetUserFields>["response"]>
+    ) => {
+      let limit = req.query.limit;
+      if (limit === undefined) {
+        limit = 3;
+      }
+
+      const fields = Object.keys(req.query) as GetUserFields[];
+
+      const optionsResult = prepareUserQuery({ fields, res });
+      if (!optionsResult.ok) {
+        res.send({ ok: false, errorCode: optionsResult.errorCode });
+        return;
+      }
+
+      const query =
+        "SELECT user.id " +
+        optionsResult.data?.views.join("") +
+        " FROM user \
+       WHERE user.id != ? AND user.id NOT IN ( \
+        SELECT user_follows.followeeID \
+        FROM user_follows WHERE user_follows.followerID = ?  \
+       ) LIMIT ?";
+
+      const result = await runQuery<
+        NonNullable<
+          GetUserFolloweeSuggestions<GetUserFields>["response"]["data"]
+        >["followeeSuggestions"][0]
+      >(query, [req.session.userID, req.session.userID, limit]);
+
+      res.send({ ok: true, data: { followeeSuggestions: result } });
+    }
+  );
 
 // Return user's tweets and retweets
 // Don't include replies

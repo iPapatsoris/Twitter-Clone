@@ -4,3 +4,9 @@ export type NormalResponse<T = {}> = {
   loggedOut?: boolean;
   data?: T;
 };
+
+export type ExtraQueryFields = {
+  limit?: number;
+};
+
+export const extraQueryFields: Array<keyof ExtraQueryFields> = ["limit"];
