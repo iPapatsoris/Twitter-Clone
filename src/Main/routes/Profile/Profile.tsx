@@ -231,9 +231,11 @@ const Profile = ({ preview }: ProfileProps) => {
           )}
         </div>
       </div>
-      <div className={styles.Tweets}>
-        {!preview && <Tweets userID={user.id} />}
-      </div>
+      {!preview && (
+        <div className={styles.Tweets}>
+          <Tweets userID={user.id} />
+        </div>
+      )}
     </>
   );
 };
