@@ -30,6 +30,7 @@ import {
 } from "./queries";
 import { useCircleMutation } from "../Circle/queries";
 import Avatar from "./Avatar/Avatar";
+import Tweets from "./Tweets/Tweets";
 
 interface ProfileProps {
   // If preview is provided, take username from it instead of from router path
@@ -229,6 +230,9 @@ const Profile = ({ preview }: ProfileProps) => {
             </div>
           )}
         </div>
+      </div>
+      <div className={styles.Tweets}>
+        {!preview && <Tweets userID={user.id} />}
       </div>
     </>
   );

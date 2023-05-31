@@ -1,8 +1,14 @@
-.Profile {
-  --cover-height: 200px;
+/* Defined globally because they are also used in Tweet. We don't limit their
+scope to the Avatar component, as they are also used here to define the 
+Profile grid */
+:root {
   --avatar-height: 133px;
   --avatar-medium-height: 75px;
   --avatar-small-height: 48px;
+}
+
+.Profile {
+  --cover-height: 200px;
 
   // Columns for normal profile and medium preview
   @function defineGridColumns($avatar-width) {
@@ -167,4 +173,8 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+
+.Tweets {
+  margin-top: 1rem;
 }

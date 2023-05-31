@@ -1,0 +1,44 @@
+.Tweet {
+  display: flex;
+  gap: 1rem;
+
+  .Avatar {
+    width: var(--avatar-small-height);
+    height: var(--avatar-small-height);
+  }
+
+  .Wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .Info {
+      display: flex;
+      gap: 1rem;
+
+      .Name {
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .Username {
+        font-size: 15px;
+      }
+
+      .Verified {
+        width: 18px;
+        height: 18px;
+      }
+
+      .MoreIcon {
+        margin-left: auto;
+      }
+    }
+
+    .Content {
+    }
+
+    .Actions {
+    }
+  }
+}

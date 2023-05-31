@@ -4,7 +4,7 @@ import { UserProfileT } from "../queries";
 
 interface AvatarProps {
   src: UserProfileT["avatar"];
-  withBorder: boolean;
+  withBorder?: boolean;
   children?: React.ReactElement;
   extraClasses?: string[];
 }

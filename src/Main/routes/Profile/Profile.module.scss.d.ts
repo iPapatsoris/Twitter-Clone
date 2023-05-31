@@ -19,6 +19,7 @@ declare const classNames: typeof globalClassNames & {
   readonly Bio: "Bio";
   readonly Friendship: "Friendship";
   readonly Loading: "Loading";
+  readonly Tweets: "Tweets";
 };
 export = classNames;
 export type ProfileNames =
@@ -39,4 +40,5 @@ export type ProfileNames =
   | "Bio"
   | "Friendship"
   | "Loading"
+  | "Tweets"
   | GlobalClassNames;
