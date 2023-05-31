@@ -7,8 +7,8 @@ declare const classNames: typeof globalClassNames & {
   readonly Medium: "Medium";
   readonly Small: "Small";
   readonly Cover: "Cover";
-  readonly Avatar: "Avatar";
   readonly Edit: "Edit";
+  readonly EditAvatar: "EditAvatar";
   readonly Actions: "Actions";
   readonly FixedWidthButton: "FixedWidthButton";
   readonly Title: "Title";
@@ -27,8 +27,8 @@ export type ProfileNames =
   | "Medium"
   | "Small"
   | "Cover"
-  | "Avatar"
   | "Edit"
+  | "EditAvatar"
   | "Actions"
   | "FixedWidthButton"
   | "Title"

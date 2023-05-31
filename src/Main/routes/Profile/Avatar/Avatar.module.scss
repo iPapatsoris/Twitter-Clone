@@ -1,0 +1,20 @@
+.Avatar {
+  box-sizing: border-box;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 100px;
+  grid-area: avatar;
+
+  &.Border {
+    border: 4px solid white;
+  }
+
+  &.AsBackground {
+    background-size: cover;
+    background-position: center;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+  }
+}

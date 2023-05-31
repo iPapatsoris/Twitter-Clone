@@ -1,6 +1,7 @@
 import { defaultAvatar } from "../../defaultPics";
 import AddPhotoButton from "./AddPhotoButton";
 import profileStyles from "../../Profile.module.scss";
+import Avatar from "../../Avatar/Avatar";
 
 interface EditProfilePhotosProps {
   coverPic?: string;
@@ -24,14 +25,9 @@ const EditProfilePhotos = ({
       <div className={profileStyles.Cover} style={coverStyle}>
         <AddPhotoButton alt="Change cover" onClick={focusOnCover} />
       </div>
-      <div
-        className={profileStyles.Avatar}
-        style={{
-          backgroundImage: "url(" + (avatar || defaultAvatar) + ")",
-        }}
-      >
+      <Avatar src={avatar} withBorder extraClasses={[profileStyles.EditAvatar]}>
         <AddPhotoButton alt="Change avatar" onClick={focusOnAvatar} />
-      </div>
+      </Avatar>
     </>
   );
 };

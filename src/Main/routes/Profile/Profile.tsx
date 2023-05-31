@@ -16,7 +16,7 @@ import Button from "../../../util/components/Button/Button";
 import Info from "./Info/Info";
 import Modal from "../../../util/components/Modal/Modal";
 import EditProfile from "./EditProfile/EditProfile";
-import { defaultAvatar, defaultCoverColor } from "./defaultPics";
+import { defaultCoverColor } from "./defaultPics";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "../../../store/AuthStore";
 import { shallow } from "zustand/shallow";
@@ -29,6 +29,7 @@ import {
   smallPreviewProfileFields,
 } from "./queries";
 import { useCircleMutation } from "../Circle/queries";
+import Avatar from "./Avatar/Avatar";
 
 interface ProfileProps {
   // If preview is provided, take username from it instead of from router path
@@ -177,11 +178,7 @@ const Profile = ({ preview }: ProfileProps) => {
         className={[styles.Profile, ...previewStyles].join(" ")}
       >
         {!preview && <div className={styles.Cover} style={coverStyle} />}
-        <img
-          className={styles.Avatar}
-          src={user.avatar || defaultAvatar}
-          alt="The avatar of the user"
-        />
+        <Avatar src={user.avatar} withBorder={!preview} />
         <div className={styles.Actions}>
           {!preview && (
             <>
