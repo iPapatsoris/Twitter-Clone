@@ -29,9 +29,6 @@ export const circleHeaderFields = [
   "name",
   "isVerified",
 ] as const satisfies Readonly<Array<GetUserFields>>;
-type UserHeaderResponse = GetUser<
-  typeof circleHeaderFields[number]
->["response"];
 
 export const circleKeys = createQueryKeys("circle", {
   circleType: (circle: CircleType) => ({

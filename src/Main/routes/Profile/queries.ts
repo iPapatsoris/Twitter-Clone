@@ -46,8 +46,8 @@ export const profileKeys = createQueryKeys("userProfile", {
   username: (username: string) => ({
     queryKey: [username],
     contextQueries: {
-      fields: (fields: any) => ({
-        queryKey: [fields],
+      fields: <T extends Readonly<FullProfileRequestFields[]>>(fields: T) => ({
+        queryKey: [fields as any],
         queryFn: () => profileQuery(username, fields),
       }),
     },
