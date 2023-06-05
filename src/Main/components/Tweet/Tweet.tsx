@@ -5,6 +5,7 @@ import styles from "./Tweet.module.scss";
 import verifiedIcon from "../../../assets/icons/verified.png";
 import dotsIcon from "../../../assets/icons/dots-gray.png";
 import dayjs from "dayjs";
+import TweetActions from "./TweetActions/TweetActions";
 
 interface TweetProps {
   tweet: TweetT;
@@ -43,8 +44,8 @@ const Tweet = ({ tweet }: TweetProps) => {
             />
           </div>
         </div>
-        <div className={styles.Content}>{tweet.text}</div>
-        <div className={styles.Actions}>{}</div>
+        <div>{tweet.text}</div>
+        <TweetActions tweetStats={tweet.stats} />
       </div>
     </div>
   );

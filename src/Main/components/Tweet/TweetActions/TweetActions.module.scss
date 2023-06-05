@@ -1,0 +1,10 @@
+.TweetActions {
+  display: flex;
+  gap: 2.5rem;
+
+  .TweetAction {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+}

@@ -10,7 +10,7 @@ export interface IconProps {
   extraStyles?: Array<string>;
   extraWrapperStyles?: Array<string>;
   onClick?: React.MouseEventHandler<HTMLImageElement>;
-  exactHorizontalPlacement?: boolean;
+  exactLeftPlacement?: boolean;
   exactVerticalPlacement?: boolean;
 }
 
@@ -25,7 +25,7 @@ const Icon = forwardRef(
       extraStyles = [],
       extraWrapperStyles = [],
       onClick = () => {},
-      exactHorizontalPlacement,
+      exactLeftPlacement,
       exactVerticalPlacement,
     }: IconProps,
     ref: React.ForwardedRef<HTMLImageElement>
@@ -37,8 +37,8 @@ const Icon = forwardRef(
       hoverClassname = styles.NoHover;
     }
 
-    if (exactHorizontalPlacement) {
-      extraWrapperStyles.push(styles.ExactHorizontalPlacement);
+    if (exactLeftPlacement) {
+      extraWrapperStyles.push(styles.ExactLeftPlacement);
     }
     if (exactVerticalPlacement) {
       extraWrapperStyles.push(styles.ExactVerticalPlacement);
