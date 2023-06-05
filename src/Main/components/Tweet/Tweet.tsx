@@ -26,18 +26,18 @@ const Tweet = ({ tweet }: TweetProps) => {
               extraStyles={[styles.Verified]}
             />
           ) : null}
-          <span className={[styles.LightColor, styles.Username].join(" ")}>
-            @{tweet.author.username}
-          </span>
-          <span className={[styles.LightColor, styles.Username].join(" ")}>
-            {dayjs(tweet.creationDate).format("MMM D, YYYY")}
-          </span>
+          <div className={[styles.LightColor, styles.Subinfo].join(" ")}>
+            <span>@{tweet.author.username}</span>
+            <span>·</span>
+            <span>{dayjs(tweet.creationDate).format("MMM D, YYYY")}</span>
+          </div>
           <div className={styles.MoreIcon}>
             <Icon
               src={dotsIcon}
               title="More"
               alt="More options"
               hover="primary"
+              exactVerticalPlacement
               // onClick={() => setShowOptions(true)}
               // ref={iconRef}
             />

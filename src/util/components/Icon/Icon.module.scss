@@ -8,8 +8,11 @@
   width: min-content;
   cursor: pointer;
 
-  &.ExactPlacement {
-    margin-left: calc(-1 * var(--icon-wrapper-padding));
+  &.ExactHorizontalPlacement {
+    margin-inline: calc(-1 * var(--icon-wrapper-padding));
+  }
+  &.ExactVerticalPlacement {
+    margin-block: calc(-1 * var(--icon-wrapper-padding));
   }
 
   &.Hover:hover {

@@ -6,8 +6,8 @@ declare const classNames: typeof globalClassNames & {
   readonly Avatar: "Avatar";
   readonly Wrapper: "Wrapper";
   readonly Info: "Info";
+  readonly Subinfo: "Subinfo";
   readonly Name: "Name";
-  readonly Username: "Username";
   readonly Verified: "Verified";
   readonly MoreIcon: "MoreIcon";
 };
@@ -17,8 +17,8 @@ export type TweetNames =
   | "Avatar"
   | "Wrapper"
   | "Info"
+  | "Subinfo"
   | "Name"
-  | "Username"
   | "Verified"
   | "MoreIcon"
   | GlobalClassNames;

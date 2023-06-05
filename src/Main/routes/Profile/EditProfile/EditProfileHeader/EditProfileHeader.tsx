@@ -17,7 +17,6 @@ const EditProfileHeader = ({ disableUpdate }: EditProfileHeaderProps) => {
         src={closeIcon}
         extraWrapperStyles={[styles.Icon]}
         onClick={() => setIsActive(false)}
-        exactPlacement
       />
       <div className={styles.Header}>
         <h2 className={styles.Text}>Edit profile</h2>
