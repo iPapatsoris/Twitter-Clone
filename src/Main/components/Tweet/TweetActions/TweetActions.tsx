@@ -5,7 +5,6 @@ import replyIcon from "../../../../assets/icons/tweet/reply.png";
 import likeIcon from "../../../../assets/icons/tweet/like.png";
 import viewsIcon from "../../../../assets/icons/tweet/views.png";
 import shareIcon from "../../../../assets/icons/tweet/share.png";
-import Icon from "../../../../util/components/Icon/Icon";
 import { GetTweet } from "../../../../../backend/src/api/tweet";
 
 interface TweetActionsProps {
@@ -16,22 +15,27 @@ const TweetActions = ({ tweetStats }: TweetActionsProps) => {
   return (
     <div className={styles.TweetActions}>
       <TweetAction
-        icon={<Icon src={replyIcon} title="Reply" exactLeftPlacement />}
+        iconProps={{
+          src: replyIcon,
+          title: "Reply",
+          exactLeftPlacement: true,
+          hover: "primary",
+        }}
         stat={tweetStats.totalReplies}
       />
       <TweetAction
-        icon={<Icon src={retweetIcon} title="Retweet" />}
+        iconProps={{ src: retweetIcon, title: "Retweet", hover: "green" }}
         stat={tweetStats.totalRetweets}
       />
       <TweetAction
-        icon={<Icon src={likeIcon} title="Like" />}
+        iconProps={{ src: likeIcon, title: "Like", hover: "pink" }}
         stat={tweetStats.totalLikes}
       />
       <TweetAction
-        icon={<Icon src={viewsIcon} title="Views" />}
+        iconProps={{ src: viewsIcon, title: "Views", hover: "primary" }}
         stat={tweetStats.views}
       />
-      <TweetAction icon={<Icon src={shareIcon} title="Share" />} />
+      <TweetAction iconProps={{ src: shareIcon, title: "Share" }} />
     </div>
   );
 };

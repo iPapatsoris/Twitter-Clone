@@ -1,11 +1,12 @@
 import React, { forwardRef } from "react";
-import styles from "./Icon.module.scss";
+import styles, { IconNames } from "./Icon.module.scss";
 
 export interface IconProps {
   src: string;
   title?: string;
   alt?: string;
-  hover?: "normal" | "primary" | "none";
+  hover?: "normal" | "primary" | "green" | "pink" | "none";
+  forceHover?: boolean;
   withBorder?: boolean;
   extraStyles?: Array<string>;
   extraWrapperStyles?: Array<string>;
@@ -14,6 +15,24 @@ export interface IconProps {
   exactVerticalPlacement?: boolean;
 }
 
+export const getHoverClass = (
+  hover: IconProps["hover"],
+  styles: { [key in IconNames]: string }
+) => {
+  let hoverClassname = styles.Hover;
+  if (hover === "primary") {
+    hoverClassname = styles.HoverPrimary;
+  } else if (hover === "none") {
+    hoverClassname = styles.NoHover;
+  } else if (hover === "green") {
+    hoverClassname = styles.HoverGreen;
+  } else if (hover === "pink") {
+    hoverClassname = styles.HoverPink;
+  }
+
+  return hoverClassname;
+};
+
 const Icon = forwardRef(
   (
     {
@@ -21,7 +40,8 @@ const Icon = forwardRef(
       title = "",
       alt = "",
       hover = "normal",
-      withBorder = false,
+      forceHover,
+      withBorder,
       extraStyles = [],
       extraWrapperStyles = [],
       onClick = () => {},
@@ -30,13 +50,6 @@ const Icon = forwardRef(
     }: IconProps,
     ref: React.ForwardedRef<HTMLImageElement>
   ) => {
-    let hoverClassname: styles.IconNames = styles.Hover;
-    if (hover === "primary") {
-      hoverClassname = styles.HoverPrimary;
-    } else if (hover === "none") {
-      hoverClassname = styles.NoHover;
-    }
-
     if (exactLeftPlacement) {
       extraWrapperStyles.push(styles.ExactLeftPlacement);
     }
@@ -45,6 +58,8 @@ const Icon = forwardRef(
     }
 
     const withBorderClass = withBorder ? styles.WithBorder : "";
+    const forceHoverClass = forceHover ? styles.hover : "";
+    const hoverClassname = getHoverClass(hover, styles);
 
     return (
       <div
@@ -55,6 +70,7 @@ const Icon = forwardRef(
         className={[
           hoverClassname,
           withBorderClass,
+          forceHoverClass,
           styles.IconWrapper,
           ...extraWrapperStyles,
         ].join(" ")}
