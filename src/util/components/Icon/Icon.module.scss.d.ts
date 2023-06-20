@@ -2,28 +2,30 @@ import globalClassNames, {
   ClassNames as GlobalClassNames,
 } from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly IconWrapper: "IconWrapper";
-  readonly ExactLeftPlacement: "ExactLeftPlacement";
-  readonly ExactVerticalPlacement: "ExactVerticalPlacement";
+  readonly IconAndTextWrapper: "IconAndTextWrapper";
+  readonly Text: "Text";
   readonly Hover: "Hover";
-  readonly hover: "hover";
+  readonly IconWrapper: "IconWrapper";
   readonly HoverPrimary: "HoverPrimary";
   readonly HoverGreen: "HoverGreen";
   readonly HoverPink: "HoverPink";
+  readonly ExactLeftPlacement: "ExactLeftPlacement";
+  readonly ExactVerticalPlacement: "ExactVerticalPlacement";
   readonly NoHover: "NoHover";
   readonly Icon: "Icon";
   readonly WithBorder: "WithBorder";
 };
 export = classNames;
 export type IconNames =
-  | "IconWrapper"
-  | "ExactLeftPlacement"
-  | "ExactVerticalPlacement"
+  | "IconAndTextWrapper"
+  | "Text"
   | "Hover"
-  | "hover"
+  | "IconWrapper"
   | "HoverPrimary"
   | "HoverGreen"
   | "HoverPink"
+  | "ExactLeftPlacement"
+  | "ExactVerticalPlacement"
   | "NoHover"
   | "Icon"
   | "WithBorder"

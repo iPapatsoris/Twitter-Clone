@@ -1,38 +1,4 @@
-@import "../../../../util/components/Icon/Icon.module.scss";
-
 .TweetActions {
   display: flex;
   gap: 2.5rem;
-
-  .TweetAction {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    transition: var(--transition-duration);
-
-    span {
-      transition: var(--transition-duration);
-    }
-
-    @include HoverNormal {
-      &.hover span {
-        color: var(--hover-bg);
-      }
-    }
-    @include HoverPrimary {
-      &.hover span {
-        color: var(--primary-color);
-      }
-    }
-    @include HoverGreen {
-      &.hover span {
-        color: var(--green-color);
-      }
-    }
-    @include HoverPink {
-      &.hover span {
-        color: var(--pink-color);
-      }
-    }
-  }
 }

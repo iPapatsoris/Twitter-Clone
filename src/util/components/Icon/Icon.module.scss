@@ -1,86 +1,72 @@
-@mixin HoverNormal {
-  &.Hover {
-    @content;
-  }
-}
-
-@mixin HoverPrimary {
-  &.HoverPrimary {
-    @content;
-  }
-}
-
-@mixin HoverGreen {
-  &.HoverGreen {
-    @content;
-  }
-}
-
-@mixin HoverPink {
-  &.HoverPink {
-    @content;
-  }
-}
-
-.IconWrapper {
-  --icon-wrapper-padding: 8px;
-  padding: var(--icon-wrapper-padding);
-  border-radius: 40px;
-  transition: var(--transition-duration);
+.IconAndTextWrapper {
   display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
   align-items: center;
-  width: min-content;
-  cursor: pointer;
 
-  &.ExactLeftPlacement {
-    margin-left: calc(-1 * var(--icon-wrapper-padding));
-  }
-  &.ExactVerticalPlacement {
-    margin-block: calc(-1 * var(--icon-wrapper-padding));
+  .Text {
+    transition: var(--transition-duration);
   }
 
-  @include HoverNormal {
-    &:hover,
-    &.hover {
-      background-color: var(--hover-bg);
-    }
-  }
-  @include HoverPrimary {
-    &:hover,
-    &.hover {
-      background-color: var(--primary-color-transparent);
-    }
-  }
-  @include HoverGreen {
-    &:hover,
-    &.hover {
-      background-color: var(--green-color-transparent);
+  @mixin Hover($bg-color, $color) {
+    &:hover {
+      .IconWrapper {
+        background-color: $bg-color;
+      }
+
+      .Text {
+        color: $color;
+      }
     }
   }
 
-  @include HoverPink {
-    &:hover,
-    &.hover {
-      background-color: var(--pink-color-transparent);
-    }
+  &.Hover {
+    @include Hover(var(--hover-bg), var(--hover-bg));
+  }
+  &.HoverPrimary {
+    @include Hover(var(--primary-color-transparent), var(--primary-color));
+  }
+  &.HoverGreen {
+    @include Hover(var(--green-color-transparent), var(--green-color));
+  }
+  &.HoverPink {
+    @include Hover(var(--pink-color-transparent), var(--pink-color));
   }
 
-  &.NoHover {
-    padding: 0;
-    transition: none;
+  .IconWrapper {
+    --icon-wrapper-padding: 8px;
+    padding: var(--icon-wrapper-padding);
+    border-radius: 40px;
+    transition: var(--transition-duration);
+    display: flex;
+    align-items: center;
+    width: min-content;
+    cursor: pointer;
+
+    &.ExactLeftPlacement {
+      margin-left: calc(-1 * var(--icon-wrapper-padding));
+    }
+    &.ExactVerticalPlacement {
+      margin-block: calc(-1 * var(--icon-wrapper-padding));
+    }
+
+    &.NoHover {
+      padding: 0;
+      transition: none;
+
+      .Icon {
+        cursor: pointer;
+      }
+    }
+
+    &.WithBorder {
+      border: 1px solid rgb(207, 217, 222);
+    }
 
     .Icon {
       cursor: pointer;
+      width: 20px;
+      height: 20px;
     }
-  }
-
-  &.WithBorder {
-    border: 1px solid rgb(207, 217, 222);
-  }
-
-  .Icon {
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
   }
 }

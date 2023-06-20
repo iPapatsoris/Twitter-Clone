@@ -1,4 +1,3 @@
-import TweetAction from "./TweetAction";
 import styles from "./TweetActions.module.scss";
 import retweetIcon from "../../../../assets/icons/tweet/retweet.png";
 import replyIcon from "../../../../assets/icons/tweet/reply.png";
@@ -6,6 +5,7 @@ import likeIcon from "../../../../assets/icons/tweet/like.png";
 import viewsIcon from "../../../../assets/icons/tweet/views.png";
 import shareIcon from "../../../../assets/icons/tweet/share.png";
 import { GetTweet } from "../../../../../backend/src/api/tweet";
+import Icon from "../../../../util/components/Icon/Icon";
 
 interface TweetActionsProps {
   tweetStats: NonNullable<GetTweet["response"]["data"]>["tweet"]["stats"];
@@ -14,28 +14,32 @@ interface TweetActionsProps {
 const TweetActions = ({ tweetStats }: TweetActionsProps) => {
   return (
     <div className={styles.TweetActions}>
-      <TweetAction
-        iconProps={{
-          src: replyIcon,
-          title: "Reply",
-          exactLeftPlacement: true,
-          hover: "primary",
-        }}
-        stat={tweetStats.totalReplies}
+      <Icon
+        src={replyIcon}
+        hover="primary"
+        title="Reply"
+        exactLeftPlacement
+        text={tweetStats.totalReplies.toString()}
       />
-      <TweetAction
-        iconProps={{ src: retweetIcon, title: "Retweet", hover: "green" }}
-        stat={tweetStats.totalRetweets}
+      <Icon
+        src={retweetIcon}
+        hover="green"
+        title="Retweet"
+        text={tweetStats.totalRetweets.toString()}
       />
-      <TweetAction
-        iconProps={{ src: likeIcon, title: "Like", hover: "pink" }}
-        stat={tweetStats.totalLikes}
+      <Icon
+        src={likeIcon}
+        hover="pink"
+        title="Like"
+        text={tweetStats.totalLikes.toString()}
       />
-      <TweetAction
-        iconProps={{ src: viewsIcon, title: "Views", hover: "primary" }}
-        stat={tweetStats.views}
+      <Icon
+        src={viewsIcon}
+        hover="primary"
+        title="Views"
+        text={tweetStats.views.toString()}
       />
-      <TweetAction iconProps={{ src: shareIcon, title: "Share" }} />
+      <Icon src={shareIcon} hover="primary" title="Share" />
     </div>
   );
 };

@@ -6,20 +6,17 @@ export interface IconProps {
   title?: string;
   alt?: string;
   hover?: "normal" | "primary" | "green" | "pink" | "none";
-  forceHover?: boolean;
   withBorder?: boolean;
   extraStyles?: Array<string>;
   extraWrapperStyles?: Array<string>;
   onClick?: React.MouseEventHandler<HTMLImageElement>;
   exactLeftPlacement?: boolean;
   exactVerticalPlacement?: boolean;
+  text?: string;
 }
 
-export const getHoverClass = (
-  hover: IconProps["hover"],
-  styles: { [key in IconNames]: string }
-) => {
-  let hoverClassname = styles.Hover;
+const getHoverClass = (hover: IconProps["hover"]) => {
+  let hoverClassname: IconNames = styles.Hover;
   if (hover === "primary") {
     hoverClassname = styles.HoverPrimary;
   } else if (hover === "none") {
@@ -40,13 +37,13 @@ const Icon = forwardRef(
       title = "",
       alt = "",
       hover = "normal",
-      forceHover,
       withBorder,
       extraStyles = [],
       extraWrapperStyles = [],
       onClick = () => {},
       exactLeftPlacement,
       exactVerticalPlacement,
+      text,
     }: IconProps,
     ref: React.ForwardedRef<HTMLImageElement>
   ) => {
@@ -58,35 +55,36 @@ const Icon = forwardRef(
     }
 
     const withBorderClass = withBorder ? styles.WithBorder : "";
-    const forceHoverClass = forceHover ? styles.hover : "";
-    const hoverClassname = getHoverClass(hover, styles);
+    const hoverClassname = getHoverClass(hover);
 
     return (
-      <div
-        onClick={onClick}
-        // Prevent losing cursor position when an icon is clicked within an
-        // input, like a password reveal toggle
-        onMouseUp={(e) => e.preventDefault()}
-        className={[
-          hoverClassname,
-          withBorderClass,
-          forceHoverClass,
-          styles.IconWrapper,
-          ...extraWrapperStyles,
-        ].join(" ")}
-      >
-        <img
-          src={src}
-          title={title}
-          alt={alt}
+      <div className={[styles.IconAndTextWrapper, hoverClassname].join(" ")}>
+        <div
+          onClick={onClick}
+          // Prevent losing cursor position when an icon is clicked within an
+          // input, like a password reveal toggle
+          onMouseUp={(e) => e.preventDefault()}
           className={[
-            styles.Icon,
-            styles.NoHighlighting,
-            hoverClassname,
-            ...extraStyles,
+            withBorderClass,
+            styles.IconWrapper,
+            hoverClassname === styles.NoHover ? styles.NoHover : "",
+
+            ...extraWrapperStyles,
           ].join(" ")}
-          ref={ref}
-        />
+        >
+          <img
+            src={src}
+            title={title}
+            alt={alt}
+            className={[
+              styles.Icon,
+              styles.NoHighlighting,
+              ...extraStyles,
+            ].join(" ")}
+            ref={ref}
+          />
+        </div>
+        {text && <span className={styles.Text}>{text}</span>}
       </div>
     );
   }
