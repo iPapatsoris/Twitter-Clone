@@ -21,6 +21,7 @@ export interface PopupProps {
   extraPopupStyles?: string[];
   children: React.ReactElement[] | React.ReactElement;
   allowOuterEvents?: boolean;
+  disableOnHoverOut?: boolean;
 }
 
 const Popup = ({
@@ -34,6 +35,7 @@ const Popup = ({
   extraPopupStyles = [],
   children,
   allowOuterEvents = false,
+  disableOnHoverOut = false,
 }: PopupProps) => {
   const popupRef = useRef<HTMLDivElement>(null);
 
@@ -42,6 +44,8 @@ const Popup = ({
     targetAreaRef,
     position,
     autoMaxHeight,
+    disableOnHoverOut,
+    setIsActive,
   });
 
   return (

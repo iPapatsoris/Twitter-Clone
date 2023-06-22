@@ -1,14 +1,28 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { PopupProps } from "../components/Popup/Popup";
 import { toPixels } from "../string";
 import useWindowDimensions from "./useWindowDimensions";
 
 const usePopup = (
-  params: Pick<PopupProps, "targetAreaRef" | "position" | "autoMaxHeight"> & {
+  params: Pick<
+    PopupProps,
+    | "targetAreaRef"
+    | "position"
+    | "autoMaxHeight"
+    | "disableOnHoverOut"
+    | "setIsActive"
+  > & {
     popupRef: React.RefObject<HTMLDivElement>;
   }
 ) => {
-  const { popupRef, targetAreaRef, position, autoMaxHeight = false } = params;
+  const {
+    popupRef,
+    targetAreaRef,
+    position,
+    autoMaxHeight = false,
+    disableOnHoverOut,
+    setIsActive,
+  } = params;
 
   // Listen to window height updates to handle resizing
   const { height: windowHeight } = useWindowDimensions(autoMaxHeight);
@@ -71,6 +85,44 @@ const usePopup = (
       );
     }
   }, [justPlacedPopup, windowHeight, autoMaxHeight, popupRef]);
+
+  useEffect(() => {
+    const popupRefCurrent = popupRef.current;
+    const targetAreaRefCurrent = targetAreaRef.current;
+
+    const onMouseLeavePopupHandler = (e: any) => {
+      if (!targetAreaRefCurrent?.contains(e.relatedTarget)) {
+        setIsActive(false);
+      }
+    };
+
+    const onMouseLeaveTargetAreaHandler = (e: any) => {
+      if (!popupRefCurrent?.contains(e.relatedTarget)) {
+        setIsActive(false);
+      }
+    };
+
+    if (disableOnHoverOut && targetAreaRefCurrent && popupRefCurrent) {
+      popupRefCurrent.addEventListener("mouseleave", onMouseLeavePopupHandler);
+      targetAreaRef.current.addEventListener(
+        "mouseleave",
+        onMouseLeaveTargetAreaHandler
+      );
+    }
+
+    return () => {
+      if (disableOnHoverOut && targetAreaRefCurrent && popupRefCurrent) {
+        popupRefCurrent.removeEventListener(
+          "mouseleave",
+          onMouseLeavePopupHandler
+        );
+        targetAreaRefCurrent.removeEventListener(
+          "mouseleave",
+          onMouseLeaveTargetAreaHandler
+        );
+      }
+    };
+  }, [targetAreaRef, disableOnHoverOut, popupRef, setIsActive]);
 };
 
 export default usePopup;

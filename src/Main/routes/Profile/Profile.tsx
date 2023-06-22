@@ -31,6 +31,7 @@ import {
 import { useCircleMutation } from "../Circle/queries";
 import Avatar from "./Avatar/Avatar";
 import Tweets from "./Tweets/Tweets";
+import Popup from "../../../util/components/Popup/Popup";
 
 interface ProfileProps {
   // If preview is provided, take username from it instead of from router path
@@ -80,7 +81,15 @@ const Profile = ({ preview }: ProfileProps) => {
     }
   }, [user, setUserHeader, preview, isLoading]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isHoverPopupOpen, setIsHoverPopupOpen] = useState(false);
+  const onMouseEnter = () => {
+    if (preview && preview.size !== "medium") {
+      setIsHoverPopupOpen(true);
+    }
+  };
+
+  const profileRef = useRef<HTMLDivElement>(null);
 
   // Action / navigation refs to detect clicking on profile preview except those
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -144,7 +153,7 @@ const Profile = ({ preview }: ProfileProps) => {
       actionButton = (
         <Button
           color="white"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => setIsEditModalOpen(true)}
           key={user.id}
         >
           Edit profile
@@ -169,14 +178,35 @@ const Profile = ({ preview }: ProfileProps) => {
 
   return (
     <>
-      {isModalOpen && (
-        <Modal withCloseIcon={false} setIsActive={setIsModalOpen}>
-          <EditProfile user={user} closeModal={() => setIsModalOpen(false)} />
+      {isEditModalOpen && (
+        <Modal withCloseIcon={false} setIsActive={setIsEditModalOpen}>
+          <EditProfile
+            user={user}
+            closeModal={() => setIsEditModalOpen(false)}
+          />
         </Modal>
+      )}
+      {isHoverPopupOpen && (
+        <Popup
+          position={{ block: "bottom", inline: "leftCover" }}
+          setIsActive={setIsHoverPopupOpen}
+          targetAreaRef={profileRef}
+          allowOuterEvents
+          disableOnHoverOut
+        >
+          <Profile
+            preview={{
+              size: "medium",
+              username: user.username,
+              includeBio: true,
+            }}
+          />
+        </Popup>
       )}
       <div
         onClick={visitFullProfile}
         className={[styles.Profile, ...previewStyles].join(" ")}
+        ref={profileRef}
       >
         {!preview && <div className={styles.Cover} style={coverStyle} />}
         <Avatar src={user.avatar} withBorder={!preview} />
@@ -191,7 +221,7 @@ const Profile = ({ preview }: ProfileProps) => {
           )}
           {preview && preview.iconAction ? preview.iconAction : actionButton}
         </div>
-        <div className={styles.Title}>
+        <div className={styles.Title} onMouseEnter={onMouseEnter}>
           <div className={styles.NameAndVerified}>
             <h1>{user.name}</h1>
             {user.isVerified ? (
