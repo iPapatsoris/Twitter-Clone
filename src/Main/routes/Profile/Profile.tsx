@@ -88,7 +88,6 @@ const Profile = ({ preview }: ProfileProps) => {
       setIsHoverPopupOpen(true);
     }
   };
-
   const profileRef = useRef<HTMLDivElement>(null);
 
   // Action / navigation refs to detect clicking on profile preview except those

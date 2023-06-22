@@ -24,6 +24,7 @@ const MoreOptionsNavItem = ({ children }: MoreOptionsNavItemProps) => {
             targetAreaRef: popupTargetAreaRef,
             autoMaxHeight: true,
             extraPopupStyles: [styles.PopupStyles],
+            isFixed: true,
           }}
         />
       )}

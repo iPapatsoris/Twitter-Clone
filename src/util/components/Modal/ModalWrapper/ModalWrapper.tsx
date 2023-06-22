@@ -15,6 +15,7 @@ interface ModalWrapperProps {
   innerRef?: React.RefObject<HTMLDivElement>;
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
   allowOuterEvents?: boolean;
+  isFixed?: boolean;
 }
 
 const ModalWrapper = ({
@@ -24,6 +25,7 @@ const ModalWrapper = ({
   innerRef,
   setIsActive,
   allowOuterEvents = false,
+  isFixed = false,
 }: ModalWrapperProps) => {
   let mostRecentMousedown = useRef<Element | null>(null);
 
@@ -65,7 +67,11 @@ const ModalWrapper = ({
     innerWrapper
   ) : (
     <div
-      className={[styles.OuterWrapper, ...outerStyles].join(" ")}
+      className={[
+        styles.OuterWrapper,
+        isFixed ? styles.Fixed : "",
+        ...outerStyles,
+      ].join(" ")}
       onMouseUp={onOuterMouseup}
     >
       {innerWrapper}

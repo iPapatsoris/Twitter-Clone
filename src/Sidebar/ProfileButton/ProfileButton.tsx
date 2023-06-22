@@ -57,6 +57,7 @@ const ProfileButton = () => {
             targetAreaRef: profileButtonRef,
             position: { block: "top", inline: "leftCover" },
             extraPopupStyles: [styles.PopupStyles],
+            isFixed: true,
           }}
         />
       )}

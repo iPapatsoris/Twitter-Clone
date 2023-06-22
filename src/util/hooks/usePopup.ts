@@ -47,17 +47,23 @@ const usePopup = (
       const { height: popupHeight, width: popupWidth } =
         popupRef.current.getBoundingClientRect();
 
+      const targetTopWithScroll = targetTop + window.scrollY;
+
       // Vertical placement
       if (position?.block === "bottomCover") {
-        popupRef.current.style.top = toPixels(targetTop);
+        popupRef.current.style.top = toPixels(targetTopWithScroll);
       } else if (position?.block === "bottom") {
-        popupRef.current.style.top = toPixels(targetTop + targetHeight);
+        popupRef.current.style.top = toPixels(
+          targetTopWithScroll + targetHeight
+        );
       } else if (position?.block === "topCover") {
         popupRef.current.style.top = toPixels(
-          targetTop - popupHeight + targetHeight
+          targetTopWithScroll - popupHeight + targetHeight
         );
       } else if (position?.block === "top") {
-        popupRef.current.style.top = toPixels(targetTop - popupHeight);
+        popupRef.current.style.top = toPixels(
+          targetTopWithScroll - popupHeight
+        );
       }
 
       // Horizontal placement

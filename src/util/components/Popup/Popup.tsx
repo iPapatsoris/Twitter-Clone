@@ -22,6 +22,7 @@ export interface PopupProps {
   children: React.ReactElement[] | React.ReactElement;
   allowOuterEvents?: boolean;
   disableOnHoverOut?: boolean;
+  isFixed?: boolean;
 }
 
 const Popup = ({
@@ -36,6 +37,7 @@ const Popup = ({
   children,
   allowOuterEvents = false,
   disableOnHoverOut = false,
+  isFixed = false,
 }: PopupProps) => {
   const popupRef = useRef<HTMLDivElement>(null);
 
@@ -54,6 +56,7 @@ const Popup = ({
       innerStyles={[styles.Popup, ...extraPopupStyles]}
       setIsActive={setIsActive}
       allowOuterEvents={allowOuterEvents}
+      isFixed={isFixed}
     >
       {children}
     </ModalWrapper>
