@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import styles from "./ModalWrapper.module.scss";
 
 /**
- * Fixed positioned transparent element that covers the whole screen to serve
+ * Transparent element that covers the whole screen to serve
  * as a wrapper for modals and popups. Clicking anywhere outside the modal /
  * popup closes it. The wrapper covers elements below it, thus pointer events
  * outside the modal / popup are disabled automatically.

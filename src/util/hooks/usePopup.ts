@@ -50,37 +50,45 @@ const usePopup = (
       const targetTopWithScroll = targetTop + window.scrollY;
 
       // Vertical placement
-      if (position?.block === "bottomCover") {
-        popupRef.current.style.top = toPixels(targetTopWithScroll);
-      } else if (position?.block === "bottom") {
-        popupRef.current.style.top = toPixels(
-          targetTopWithScroll + targetHeight
-        );
-      } else if (position?.block === "topCover") {
-        popupRef.current.style.top = toPixels(
-          targetTopWithScroll - popupHeight + targetHeight
-        );
-      } else if (position?.block === "top") {
-        popupRef.current.style.top = toPixels(
-          targetTopWithScroll - popupHeight
-        );
+      let finalTop = 0;
+      if (position?.block === "bottomCover" || position?.block === "bottom") {
+        finalTop =
+          position?.block === "bottomCover"
+            ? targetTopWithScroll
+            : targetTopWithScroll + targetHeight;
+
+        if (
+          !autoMaxHeight &&
+          finalTop + popupHeight >= window.innerHeight + window.scrollY
+        ) {
+          // If placing popup below target element would put it outside of
+          // view, place it above instead
+          position.block = "top";
+        }
       }
+      if (position?.block === "topCover") {
+        finalTop = targetTopWithScroll - popupHeight + targetHeight;
+      } else if (position?.block === "top") {
+        finalTop = targetTopWithScroll - popupHeight;
+      }
+      popupRef.current.style.top = toPixels(finalTop);
 
       // Horizontal placement
+      let finalLeft = 0;
       if (position?.inline === "leftCover") {
-        popupRef.current.style.left = toPixels(targetLeft);
+        finalLeft = targetLeft;
       } else if (position?.inline === "right") {
-        popupRef.current.style.left = toPixels(targetLeft + targetWidth);
+        finalLeft = targetLeft + targetWidth;
       } else if (position?.inline === "rightCover") {
-        popupRef.current.style.left = toPixels(
-          targetLeft - popupWidth + targetWidth
-        );
+        finalLeft = targetLeft - popupWidth + targetWidth;
       } else if (position?.inline === "left") {
-        popupRef.current.style.left = toPixels(targetLeft - popupWidth);
+        finalLeft = targetLeft - popupWidth;
       }
+
+      popupRef.current.style.left = toPixels(finalLeft);
       setJustPlacedPopup(true);
     }
-  }, [popupRef, targetAreaRef, position]);
+  }, [popupRef, targetAreaRef, position, autoMaxHeight]);
 
   // Limit popup's max-height to the max available space just before it goes
   // off screen. Adjust on window resizing.
