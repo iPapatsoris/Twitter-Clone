@@ -31,7 +31,7 @@ import {
 import { useCircleMutation } from "../Circle/queries";
 import Avatar from "./Avatar/Avatar";
 import Tweets from "./Tweets/Tweets";
-import Popup from "../../../util/components/Popup/Popup";
+import ProfileHoverPreview from "./ProfileHoverPreview";
 
 interface ProfileProps {
   // If preview is provided, take username from it instead of from router path
@@ -185,23 +185,12 @@ const Profile = ({ preview }: ProfileProps) => {
           />
         </Modal>
       )}
-      {isHoverPopupOpen && (
-        <Popup
-          position={{ block: "bottom", inline: "leftCover" }}
-          setIsActive={setIsHoverPopupOpen}
-          targetAreaRef={profileRef}
-          allowOuterEvents
-          disableOnHoverOut
-        >
-          <Profile
-            preview={{
-              type: "hover",
-              username: user.username,
-              includeBio: true,
-            }}
-          />
-        </Popup>
-      )}
+      <ProfileHoverPreview
+        isOpen={isHoverPopupOpen}
+        setIsOpen={setIsHoverPopupOpen}
+        targetAreaRef={profileRef}
+        username={user.username}
+      />
       <div
         onClick={visitFullProfile}
         className={[styles.Profile, ...previewStyles].join(" ")}
