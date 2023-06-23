@@ -58,7 +58,13 @@ const Icon = forwardRef(
     const hoverClassname = getHoverClass(hover);
 
     return (
-      <div className={[styles.IconAndTextWrapper, hoverClassname].join(" ")}>
+      <div
+        className={[
+          styles.IconAndTextWrapper,
+          hoverClassname,
+          ...extraWrapperStyles,
+        ].join(" ")}
+      >
         <div
           onClick={onClick}
           // Prevent losing cursor position when an icon is clicked within an
@@ -68,8 +74,6 @@ const Icon = forwardRef(
             withBorderClass,
             styles.IconWrapper,
             hoverClassname === styles.NoHover ? styles.NoHover : "",
-
-            ...extraWrapperStyles,
           ].join(" ")}
         >
           <img
