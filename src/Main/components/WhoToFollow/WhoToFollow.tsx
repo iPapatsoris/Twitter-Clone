@@ -31,7 +31,7 @@ const WhoToFollow = () => {
       {data.data?.followeeSuggestions.map((user) => (
         <Profile
           key={user.id}
-          preview={{ size: "small", username: user.username }}
+          preview={{ type: "user-list", username: user.username }}
         />
       ))}
     </>

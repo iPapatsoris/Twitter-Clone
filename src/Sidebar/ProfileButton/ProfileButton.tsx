@@ -72,7 +72,7 @@ const ProfileButton = () => {
           <Profile
             preview={{
               username: user.username,
-              size: "small",
+              type: "user-list",
               noNavOnClick: true,
               iconAction: (
                 <Icon src={dots} title="" hover="none" alt="Account options" />

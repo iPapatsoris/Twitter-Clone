@@ -38,7 +38,7 @@ interface ProfileProps {
   // and show a preview instead of the full profile
   preview?: {
     username: string;
-    size: "medium" | "small";
+    type: "hover" | "user-list";
     includeBio?: boolean;
     iconAction?: React.ReactElement;
     noNavOnClick?: boolean;
@@ -56,9 +56,9 @@ const Profile = ({ preview }: ProfileProps) => {
   const username = preview ? preview.username : params.username!;
 
   let fieldsToQuery: Readonly<FullProfileRequestFields[]> = fullProfileFields;
-  if (preview && preview.size === "medium") {
+  if (preview && preview.type === "hover") {
     fieldsToQuery = mediumPreviewProfileFields;
-  } else if (preview && preview.size === "small") {
+  } else if (preview && preview.type === "user-list") {
     fieldsToQuery = smallPreviewProfileFields;
   }
 
@@ -84,7 +84,7 @@ const Profile = ({ preview }: ProfileProps) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isHoverPopupOpen, setIsHoverPopupOpen] = useState(false);
   const onMouseEnter = () => {
-    if (preview && preview.size !== "medium") {
+    if (preview && preview.type !== "hover") {
       setIsHoverPopupOpen(true);
     }
   };
@@ -126,7 +126,7 @@ const Profile = ({ preview }: ProfileProps) => {
   let actionButton: React.ReactElement | null = (
     <Button
       color="black"
-      size={preview && preview.size === "small" ? "small" : undefined}
+      size={preview && preview.type === "user-list" ? "small" : undefined}
       onClick={() => useFollowMutation.mutate()}
       {...circleButtonProps}
     >
@@ -171,7 +171,7 @@ const Profile = ({ preview }: ProfileProps) => {
   if (preview) {
     previewStyles = [
       styles.Preview,
-      preview.size === "medium" ? styles.Medium : styles.Small,
+      preview.type === "hover" ? styles.Hover : styles.Small,
     ];
   }
 
@@ -195,7 +195,7 @@ const Profile = ({ preview }: ProfileProps) => {
         >
           <Profile
             preview={{
-              size: "medium",
+              type: "hover",
               username: user.username,
               includeBio: true,
             }}
@@ -240,7 +240,7 @@ const Profile = ({ preview }: ProfileProps) => {
             <div className={styles.Bio}>{user.bio}</div>
           )}
           {!preview && <Info user={user} />}
-          {(!preview || (preview && preview.size === "medium")) && (
+          {(!preview || (preview && preview.type === "hover")) && (
             <div className={styles.Friendship}>
               <Link
                 ref={followersRef}

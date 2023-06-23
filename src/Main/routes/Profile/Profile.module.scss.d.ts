@@ -4,7 +4,7 @@ import globalClassNames, {
 declare const classNames: typeof globalClassNames & {
   readonly Profile: "Profile";
   readonly Preview: "Preview";
-  readonly Medium: "Medium";
+  readonly Hover: "Hover";
   readonly Small: "Small";
   readonly Cover: "Cover";
   readonly Edit: "Edit";
@@ -25,7 +25,7 @@ export = classNames;
 export type ProfileNames =
   | "Profile"
   | "Preview"
-  | "Medium"
+  | "Hover"
   | "Small"
   | "Cover"
   | "Edit"

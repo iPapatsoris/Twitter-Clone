@@ -40,7 +40,7 @@ Profile grid */
     cursor: pointer;
     padding-block: 1rem;
 
-    &.Medium {
+    &.Hover {
       row-gap: 0.5rem;
       grid-template-areas:
         ". avatar actions  ."
@@ -119,7 +119,7 @@ Profile grid */
   padding-block: 1rem;
 }
 
-.Preview.Medium .Title .NameAndVerified h1 {
+.Preview.Hover .Title .NameAndVerified h1 {
   font-size: 18px;
 }
 

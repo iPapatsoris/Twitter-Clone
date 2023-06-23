@@ -5,7 +5,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { getData } from "../../../util/request";
 
-// Fields to query in small preview mode
+// Fields to query in user-list, tweet-list, tweet-view preview modes
 export const smallPreviewProfileFields = [
   "avatar",
   "bio",
@@ -16,7 +16,7 @@ export const smallPreviewProfileFields = [
   "isFollowedByActiveUser",
 ] as const satisfies Readonly<Array<GetUserFields>>;
 
-// Fields to query in medium preview mode
+// Fields to query in hover preview mode
 export const mediumPreviewProfileFields = [
   ...smallPreviewProfileFields,
   "totalFollowees",
