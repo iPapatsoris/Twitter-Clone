@@ -47,11 +47,12 @@ const Icon = forwardRef(
     }: IconProps,
     ref: React.ForwardedRef<HTMLImageElement>
   ) => {
+    const exactPlacementClasses = [];
     if (exactLeftPlacement) {
-      extraWrapperStyles.push(styles.ExactLeftPlacement);
+      exactPlacementClasses.push(styles.ExactLeftPlacement);
     }
     if (exactVerticalPlacement) {
-      extraWrapperStyles.push(styles.ExactVerticalPlacement);
+      exactPlacementClasses.push(styles.ExactVerticalPlacement);
     }
 
     const withBorderClass = withBorder ? styles.WithBorder : "";
@@ -74,6 +75,7 @@ const Icon = forwardRef(
             withBorderClass,
             styles.IconWrapper,
             hoverClassname === styles.NoHover ? styles.NoHover : "",
+            ...exactPlacementClasses,
           ].join(" ")}
         >
           <img
