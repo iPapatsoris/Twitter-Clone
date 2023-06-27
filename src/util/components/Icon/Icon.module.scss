@@ -46,6 +46,9 @@
     &.ExactLeftPlacement {
       margin-left: calc(-1 * var(--icon-wrapper-padding));
     }
+    &.ExactRightPlacement {
+      margin-right: calc(-1 * var(--icon-wrapper-padding));
+    }
     &.ExactVerticalPlacement {
       margin-block: calc(-1 * var(--icon-wrapper-padding));
     }

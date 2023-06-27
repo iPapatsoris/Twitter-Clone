@@ -25,7 +25,7 @@ export const getPagePath = (
   tweet: number | undefined = undefined
 ) => {
   const usernameInPath = username ? username : ":username";
-  const tweetInPath = tweet ? tweet : ":tweet";
+  const tweetInPath = tweet ? tweet : ":tweetID";
   const paths: {
     [key in Page]: string;
   } = {

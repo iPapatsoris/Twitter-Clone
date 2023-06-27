@@ -6,10 +6,17 @@ import verifiedIcon from "../../../assets/icons/verified.png";
 import dotsIcon from "../../../assets/icons/dots-gray.png";
 import dayjs from "dayjs";
 import TweetActions from "./TweetActions/TweetActions";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ProfileHoverPreview from "../../routes/Profile/ProfileHoverPreview";
 import { useNavigate } from "react-router-dom";
 import { getPagePath } from "../../../util/paths";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  mediumPreviewProfileFields,
+  profileKeys,
+  smallPreviewProfileFields,
+} from "../../routes/Profile/queries";
+import { GetUser } from "../../../../backend/src/api/user";
 
 interface TweetProps {
   tweet: TweetT;
@@ -87,7 +94,13 @@ const Tweet = ({ tweet }: TweetProps) => {
             </div>
           </div>
           <div onClick={visitTweetThread}>{tweet.text}</div>
-          <TweetActions tweetStats={tweet.stats} />
+          <TweetActions
+            includeText
+            bookmarkInsteadOfViews={false}
+            justifyContent="space-between"
+            leftAlignFirstIcon
+            tweetStats={tweet.stats}
+          />
         </div>
       </div>
     </>

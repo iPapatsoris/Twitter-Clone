@@ -1,4 +1,11 @@
 .TweetActions {
   display: flex;
-  gap: 2.5rem;
+
+  &.SpaceAround {
+    justify-content: space-around;
+  }
+
+  &.SpaceBetween {
+    justify-content: space-between;
+  }
 }

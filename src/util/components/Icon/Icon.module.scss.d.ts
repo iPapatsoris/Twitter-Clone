@@ -8,6 +8,7 @@ declare const classNames: typeof globalClassNames & {
   readonly HoverGreen: "HoverGreen";
   readonly HoverPink: "HoverPink";
   readonly ExactLeftPlacement: "ExactLeftPlacement";
+  readonly ExactRightPlacement: "ExactRightPlacement";
   readonly ExactVerticalPlacement: "ExactVerticalPlacement";
   readonly NoHover: "NoHover";
   readonly Icon: "Icon";

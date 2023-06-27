@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import styles, { IconNames } from "./Icon.module.scss";
+import styles from "./Icon.module.scss";
 
 export interface IconProps {
   src: string;
@@ -11,12 +11,13 @@ export interface IconProps {
   extraWrapperStyles?: Array<string>;
   onClick?: React.MouseEventHandler<HTMLImageElement>;
   exactLeftPlacement?: boolean;
+  exactRightPlacement?: boolean;
   exactVerticalPlacement?: boolean;
   text?: string;
 }
 
 const getHoverClass = (hover: IconProps["hover"]) => {
-  let hoverClassname: IconNames = styles.Hover;
+  let hoverClassname: keyof typeof styles = styles.Hover;
   if (hover === "primary") {
     hoverClassname = styles.HoverPrimary;
   } else if (hover === "none") {
@@ -42,6 +43,7 @@ const Icon = forwardRef(
       extraWrapperStyles = [],
       onClick = () => {},
       exactLeftPlacement,
+      exactRightPlacement,
       exactVerticalPlacement,
       text,
     }: IconProps,
@@ -50,6 +52,9 @@ const Icon = forwardRef(
     const exactPlacementClasses = [];
     if (exactLeftPlacement) {
       exactPlacementClasses.push(styles.ExactLeftPlacement);
+    }
+    if (exactRightPlacement) {
+      exactPlacementClasses.push(styles.ExactRightPlacement);
     }
     if (exactVerticalPlacement) {
       exactPlacementClasses.push(styles.ExactVerticalPlacement);

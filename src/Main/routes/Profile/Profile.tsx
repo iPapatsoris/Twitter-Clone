@@ -197,7 +197,7 @@ const Profile = ({ preview }: ProfileProps) => {
         ref={profileRef}
       >
         {!preview && <div className={styles.Cover} style={coverStyle} />}
-        <div onMouseEnter={onMouseEnter}>
+        <div className={styles.Semantic} onMouseEnter={onMouseEnter}>
           <Avatar src={user.avatar} withBorder={!preview} />
         </div>
         <div className={styles.Actions}>

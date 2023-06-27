@@ -4,7 +4,7 @@ Profile grid */
 :root {
   --avatar-height: 133px;
   --avatar-medium-height: 75px;
-  --avatar-small-height: 48px;
+  --avatar-small-height: 46px;
 }
 
 .Profile {
@@ -38,9 +38,9 @@ Profile grid */
 
   &.Preview {
     cursor: pointer;
-    padding-block: 1rem;
 
     &.Hover {
+      padding-block: 1rem;
       row-gap: 0.5rem;
       grid-template-areas:
         ". avatar actions  ."
@@ -137,6 +137,9 @@ Profile grid */
 
 .Title {
   grid-area: title;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 
   .NameAndVerified {
     display: flex;
