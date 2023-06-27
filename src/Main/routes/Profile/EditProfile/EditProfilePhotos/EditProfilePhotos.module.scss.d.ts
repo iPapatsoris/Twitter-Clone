@@ -1,8 +1,5 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../../../style.d";
+import globalClassNames from "../../../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly AddPhoto: "AddPhoto";
+  readonly AddPhoto: EditProfilePhotosNames;
 };
 export = classNames;
-export type EditProfilePhotosNames = "AddPhoto" | GlobalClassNames;

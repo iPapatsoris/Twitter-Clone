@@ -1,18 +1,9 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../style.d";
+import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Minipage: "Minipage";
-  readonly AlignHeaderWithContent: "AlignHeaderWithContent";
-  readonly Content: "Content";
-  readonly Footer: "Footer";
-  readonly Wrapper: "Wrapper";
+  readonly Minipage: MinipageNames;
+  readonly AlignHeaderWithContent: MinipageNames;
+  readonly Content: MinipageNames;
+  readonly Footer: MinipageNames;
+  readonly Wrapper: MinipageNames;
 };
 export = classNames;
-export type MinipageNames =
-  | "Minipage"
-  | "AlignHeaderWithContent"
-  | "Content"
-  | "Footer"
-  | "Wrapper"
-  | GlobalClassNames;

@@ -1,14 +1,7 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../../../style.d";
+import globalClassNames from "../../../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Items: "Items";
-  readonly Item: "Item";
-  readonly Active: "Active";
+  readonly Items: HeaderLinkMenuNames;
+  readonly Item: HeaderLinkMenuNames;
+  readonly Active: HeaderLinkMenuNames;
 };
 export = classNames;
-export type HeaderLinkMenuNames =
-  | "Items"
-  | "Item"
-  | "Active"
-  | GlobalClassNames;

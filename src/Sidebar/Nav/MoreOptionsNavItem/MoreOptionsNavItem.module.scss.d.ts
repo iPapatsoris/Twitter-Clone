@@ -1,8 +1,5 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../style.d";
+import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly PopupStyles: "PopupStyles";
+  readonly PopupStyles: MoreOptionsNavItemNames;
 };
 export = classNames;
-export type MoreOptionsNavItemNames = "PopupStyles" | GlobalClassNames;

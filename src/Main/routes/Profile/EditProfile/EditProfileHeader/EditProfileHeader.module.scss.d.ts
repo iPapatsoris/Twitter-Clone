@@ -1,16 +1,8 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../../../style.d";
+import globalClassNames from "../../../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Header: "Header";
-  readonly Text: "Text";
-  readonly Action: "Action";
-  readonly Icon: "Icon";
+  readonly Header: EditProfileHeaderNames;
+  readonly Text: EditProfileHeaderNames;
+  readonly Action: EditProfileHeaderNames;
+  readonly Icon: EditProfileHeaderNames;
 };
 export = classNames;
-export type EditProfileHeaderNames =
-  | "Header"
-  | "Text"
-  | "Action"
-  | "Icon"
-  | GlobalClassNames;

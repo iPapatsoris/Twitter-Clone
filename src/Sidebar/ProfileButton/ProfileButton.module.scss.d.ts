@@ -1,14 +1,7 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../style.d";
+import globalClassNames from "../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly ProfileButton: "ProfileButton";
-  readonly Wrapper: "Wrapper";
-  readonly PopupStyles: "PopupStyles";
+  readonly ProfileButton: ProfileButtonNames;
+  readonly Wrapper: ProfileButtonNames;
+  readonly PopupStyles: ProfileButtonNames;
 };
 export = classNames;
-export type ProfileButtonNames =
-  | "ProfileButton"
-  | "Wrapper"
-  | "PopupStyles"
-  | GlobalClassNames;

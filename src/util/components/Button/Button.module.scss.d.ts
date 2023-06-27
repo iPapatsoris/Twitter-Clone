@@ -1,32 +1,16 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../style.d";
+import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Button: "Button";
-  readonly Primary: "Primary";
-  readonly Black: "Black";
-  readonly Disabled: "Disabled";
-  readonly White: "White";
-  readonly Red: "Red";
-  readonly HoverRed: "HoverRed";
-  readonly Small: "Small";
-  readonly Medium: "Medium";
-  readonly Large: "Large";
-  readonly Stretch: "Stretch";
-  readonly LargeFont: "LargeFont";
+  readonly Button: ButtonNames;
+  readonly Primary: ButtonNames;
+  readonly Black: ButtonNames;
+  readonly Disabled: ButtonNames;
+  readonly White: ButtonNames;
+  readonly Red: ButtonNames;
+  readonly HoverRed: ButtonNames;
+  readonly Small: ButtonNames;
+  readonly Medium: ButtonNames;
+  readonly Large: ButtonNames;
+  readonly Stretch: ButtonNames;
+  readonly LargeFont: ButtonNames;
 };
 export = classNames;
-export type ButtonNames =
-  | "Button"
-  | "Primary"
-  | "Black"
-  | "Disabled"
-  | "White"
-  | "Red"
-  | "HoverRed"
-  | "Small"
-  | "Medium"
-  | "Large"
-  | "Stretch"
-  | "LargeFont"
-  | GlobalClassNames;

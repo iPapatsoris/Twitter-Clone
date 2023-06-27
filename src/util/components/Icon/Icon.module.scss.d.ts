@@ -1,32 +1,16 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../style.d";
+import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly IconAndTextWrapper: "IconAndTextWrapper";
-  readonly Text: "Text";
-  readonly Hover: "Hover";
-  readonly IconWrapper: "IconWrapper";
-  readonly HoverPrimary: "HoverPrimary";
-  readonly HoverGreen: "HoverGreen";
-  readonly HoverPink: "HoverPink";
-  readonly ExactLeftPlacement: "ExactLeftPlacement";
-  readonly ExactVerticalPlacement: "ExactVerticalPlacement";
-  readonly NoHover: "NoHover";
-  readonly Icon: "Icon";
-  readonly WithBorder: "WithBorder";
+  readonly IconAndTextWrapper: IconNames;
+  readonly Text: IconNames;
+  readonly Hover: IconNames;
+  readonly IconWrapper: IconNames;
+  readonly HoverPrimary: IconNames;
+  readonly HoverGreen: IconNames;
+  readonly HoverPink: IconNames;
+  readonly ExactLeftPlacement: IconNames;
+  readonly ExactVerticalPlacement: IconNames;
+  readonly NoHover: IconNames;
+  readonly Icon: IconNames;
+  readonly WithBorder: IconNames;
 };
 export = classNames;
-export type IconNames =
-  | "IconAndTextWrapper"
-  | "Text"
-  | "Hover"
-  | "IconWrapper"
-  | "HoverPrimary"
-  | "HoverGreen"
-  | "HoverPink"
-  | "ExactLeftPlacement"
-  | "ExactVerticalPlacement"
-  | "NoHover"
-  | "Icon"
-  | "WithBorder"
-  | GlobalClassNames;

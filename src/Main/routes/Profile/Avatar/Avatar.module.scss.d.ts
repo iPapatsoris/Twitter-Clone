@@ -1,14 +1,7 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../../style.d";
+import globalClassNames from "../../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Avatar: "Avatar";
-  readonly Border: "Border";
-  readonly AsBackground: "AsBackground";
+  readonly Avatar: AvatarNames;
+  readonly Border: AvatarNames;
+  readonly AsBackground: AvatarNames;
 };
 export = classNames;
-export type AvatarNames =
-  | "Avatar"
-  | "Border"
-  | "AsBackground"
-  | GlobalClassNames;

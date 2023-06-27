@@ -1,14 +1,7 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../style.d";
+import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly VerifyEmail: "VerifyEmail";
-  readonly Info: "Info";
-  readonly Hint: "Hint";
+  readonly VerifyEmail: VerifyEmailNames;
+  readonly Info: VerifyEmailNames;
+  readonly Hint: VerifyEmailNames;
 };
 export = classNames;
-export type VerifyEmailNames =
-  | "VerifyEmail"
-  | "Info"
-  | "Hint"
-  | GlobalClassNames;

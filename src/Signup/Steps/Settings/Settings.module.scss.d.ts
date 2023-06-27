@@ -1,9 +1,6 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../style.d";
+import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Settings: "Settings";
-  readonly SettingsList: "SettingsList";
+  readonly Settings: SettingsNames;
+  readonly SettingsList: SettingsNames;
 };
 export = classNames;
-export type SettingsNames = "Settings" | "SettingsList" | GlobalClassNames;

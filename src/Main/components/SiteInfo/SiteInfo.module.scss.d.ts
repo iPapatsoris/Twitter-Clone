@@ -1,16 +1,8 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../style.d";
+import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly SiteInfo: "SiteInfo";
-  readonly Copyright: "Copyright";
-  readonly More: "More";
-  readonly Icon: "Icon";
+  readonly SiteInfo: SiteInfoNames;
+  readonly Copyright: SiteInfoNames;
+  readonly More: SiteInfoNames;
+  readonly Icon: SiteInfoNames;
 };
 export = classNames;
-export type SiteInfoNames =
-  | "SiteInfo"
-  | "Copyright"
-  | "More"
-  | "Icon"
-  | GlobalClassNames;

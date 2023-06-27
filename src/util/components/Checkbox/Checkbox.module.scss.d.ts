@@ -1,8 +1,5 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../style.d";
+import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly CheckboxArea: "CheckboxArea";
+  readonly CheckboxArea: CheckboxNames;
 };
 export = classNames;
-export type CheckboxNames = "CheckboxArea" | GlobalClassNames;

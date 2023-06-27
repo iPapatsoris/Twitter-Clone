@@ -1,8 +1,5 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../../style.d";
+import globalClassNames from "../../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly HeaderRight: "HeaderRight";
+  readonly HeaderRight: HeaderRightNames;
 };
 export = classNames;
-export type HeaderRightNames = "HeaderRight" | GlobalClassNames;

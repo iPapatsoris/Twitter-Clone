@@ -1,9 +1,6 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../../style.d";
+import globalClassNames from "../../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly OuterWrapper: "OuterWrapper";
-  readonly Fixed: "Fixed";
+  readonly OuterWrapper: ModalWrapperNames;
+  readonly Fixed: ModalWrapperNames;
 };
 export = classNames;
-export type ModalWrapperNames = "OuterWrapper" | "Fixed" | GlobalClassNames;

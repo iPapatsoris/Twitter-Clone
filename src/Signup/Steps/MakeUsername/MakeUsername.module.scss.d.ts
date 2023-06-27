@@ -1,9 +1,6 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../style.d";
+import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly MakeUsername: "MakeUsername";
-  readonly Info: "Info";
+  readonly MakeUsername: MakeUsernameNames;
+  readonly Info: MakeUsernameNames;
 };
 export = classNames;
-export type MakeUsernameNames = "MakeUsername" | "Info" | GlobalClassNames;

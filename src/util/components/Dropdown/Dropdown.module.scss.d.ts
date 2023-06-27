@@ -1,16 +1,8 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../style.d";
+import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Wrapper: "Wrapper";
-  readonly Value: "Value";
-  readonly Popup: "Popup";
-  readonly Option: "Option";
+  readonly Wrapper: DropdownNames;
+  readonly Value: DropdownNames;
+  readonly Popup: DropdownNames;
+  readonly Option: DropdownNames;
 };
 export = classNames;
-export type DropdownNames =
-  | "Wrapper"
-  | "Value"
-  | "Popup"
-  | "Option"
-  | GlobalClassNames;

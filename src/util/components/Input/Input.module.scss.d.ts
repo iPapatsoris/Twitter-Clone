@@ -1,26 +1,13 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../style.d";
+import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Placeholder: "Placeholder";
-  readonly TypingArea: "TypingArea";
-  readonly Info: "Info";
-  readonly Focused: "Focused";
-  readonly Empty: "Empty";
-  readonly Input: "Input";
-  readonly Leader: "Leader";
-  readonly Error: "Error";
-  readonly InheritCursor: "InheritCursor";
+  readonly Placeholder: InputNames;
+  readonly TypingArea: InputNames;
+  readonly Info: InputNames;
+  readonly Focused: InputNames;
+  readonly Empty: InputNames;
+  readonly Input: InputNames;
+  readonly Leader: InputNames;
+  readonly Error: InputNames;
+  readonly InheritCursor: InputNames;
 };
 export = classNames;
-export type InputNames =
-  | "Placeholder"
-  | "TypingArea"
-  | "Info"
-  | "Focused"
-  | "Empty"
-  | "Input"
-  | "Leader"
-  | "Error"
-  | "InheritCursor"
-  | GlobalClassNames;
