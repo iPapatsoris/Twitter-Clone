@@ -10,6 +10,7 @@ export type Page =
   | "bookmarks"
   | "lists"
   | "profile"
+  | "tweet"
   | "error"
   | "settings"
   | "tos"
@@ -18,8 +19,13 @@ export type Page =
   | "followers"
   | "following";
 
-export const getPagePath = (page: Page, username: string = "") => {
+export const getPagePath = (
+  page: Page,
+  username: string = "",
+  tweet: string = ""
+) => {
   const usernameInPath = username ? username : ":username";
+  const tweetInPath = tweet ? tweet : ":tweet";
   const paths: {
     [key in Page]: string;
   } = {
@@ -32,6 +38,7 @@ export const getPagePath = (page: Page, username: string = "") => {
     bookmarks: "/i/bookmarks",
     lists: "/" + usernameInPath + "/lists",
     profile: "/" + usernameInPath,
+    tweet: "/" + usernameInPath + "/status/" + tweetInPath,
     error: "/error",
     settings: "/settings",
     tos: "/tos",

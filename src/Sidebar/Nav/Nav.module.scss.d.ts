@@ -1,7 +1,7 @@
 import globalClassNames from "../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly NavItem: NavNames;
-  readonly IconAndTitle: NavNames;
-  readonly Icon: NavNames;
+  readonly NavItem: "NavItem";
+  readonly IconAndTitle: "IconAndTitle";
+  readonly Icon: "Icon";
 };
 export = classNames;

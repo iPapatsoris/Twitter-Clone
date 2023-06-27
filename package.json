@@ -23,7 +23,7 @@
     "react-hook-form": "^7.43.2",
     "react-loader-spinner": "^5.3.4",
     "react-router-dom": "^6.5.0",
-    "vite-plugin-sass-dts": "^1.2.9",
+    "vite-plugin-sass-dts": "1.2.9",
     "yup": "^1.0.2",
     "zustand": "^4.3.8"
   },

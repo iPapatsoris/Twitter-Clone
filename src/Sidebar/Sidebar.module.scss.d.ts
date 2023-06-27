@@ -1,8 +1,8 @@
 import globalClassNames from "../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Sidebar: SidebarNames;
-  readonly Logo: SidebarNames;
-  readonly Icon: SidebarNames;
-  readonly TweetButton: SidebarNames;
+  readonly Sidebar: "Sidebar";
+  readonly Logo: "Logo";
+  readonly Icon: "Icon";
+  readonly TweetButton: "TweetButton";
 };
 export = classNames;

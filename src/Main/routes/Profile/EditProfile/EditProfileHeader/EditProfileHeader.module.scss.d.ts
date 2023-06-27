@@ -1,8 +1,8 @@
 import globalClassNames from "../../../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Header: EditProfileHeaderNames;
-  readonly Text: EditProfileHeaderNames;
-  readonly Action: EditProfileHeaderNames;
-  readonly Icon: EditProfileHeaderNames;
+  readonly Header: "Header";
+  readonly Text: "Text";
+  readonly Action: "Action";
+  readonly Icon: "Icon";
 };
 export = classNames;

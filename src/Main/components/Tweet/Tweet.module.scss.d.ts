@@ -1,12 +1,12 @@
 import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Tweet: TweetNames;
-  readonly Avatar: TweetNames;
-  readonly Wrapper: TweetNames;
-  readonly Info: TweetNames;
-  readonly Subinfo: TweetNames;
-  readonly Name: TweetNames;
-  readonly Verified: TweetNames;
-  readonly MoreIcon: TweetNames;
+  readonly Tweet: "Tweet";
+  readonly Avatar: "Avatar";
+  readonly Wrapper: "Wrapper";
+  readonly Info: "Info";
+  readonly Subinfo: "Subinfo";
+  readonly Name: "Name";
+  readonly Verified: "Verified";
+  readonly MoreIcon: "MoreIcon";
 };
 export = classNames;

@@ -1,8 +1,8 @@
 import globalClassNames from "./style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly App: AppNames;
-  readonly NoHeaderRight: AppNames;
-  readonly ExtendedHeaderMain: AppNames;
-  readonly ErrorPage: AppNames;
+  readonly App: "App";
+  readonly NoHeaderRight: "NoHeaderRight";
+  readonly ExtendedHeaderMain: "ExtendedHeaderMain";
+  readonly ErrorPage: "ErrorPage";
 };
 export = classNames;

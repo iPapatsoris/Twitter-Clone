@@ -1,5 +1,5 @@
 import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Helper: HelperNames;
+  readonly Helper: "Helper";
 };
 export = classNames;

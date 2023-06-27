@@ -1,6 +1,6 @@
 import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly VerifyAccountInfo: VerifyAccountInfoNames;
-  readonly Terms: VerifyAccountInfoNames;
+  readonly VerifyAccountInfo: "VerifyAccountInfo";
+  readonly Terms: "Terms";
 };
 export = classNames;

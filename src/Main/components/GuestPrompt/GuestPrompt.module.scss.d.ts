@@ -1,6 +1,6 @@
 import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly GuestPrompt: GuestPromptNames;
-  readonly Text: GuestPromptNames;
+  readonly GuestPrompt: "GuestPrompt";
+  readonly Text: "Text";
 };
 export = classNames;

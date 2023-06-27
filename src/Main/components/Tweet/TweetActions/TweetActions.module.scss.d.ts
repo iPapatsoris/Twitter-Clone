@@ -1,5 +1,5 @@
 import globalClassNames from "../../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly TweetActions: TweetActionsNames;
+  readonly TweetActions: "TweetActions";
 };
 export = classNames;

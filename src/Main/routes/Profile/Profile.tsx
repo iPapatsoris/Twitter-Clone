@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import styles, { ProfileNames } from "./Profile.module.scss";
+import styles from "./Profile.module.scss";
 import React, {
   ComponentProps,
   useContext,
@@ -167,7 +167,7 @@ const Profile = ({ preview }: ProfileProps) => {
     ? { backgroundImage: "url(" + user.coverPic + ")" }
     : { backgroundColor: defaultCoverColor };
 
-  let previewStyles: ProfileNames[] = [];
+  let previewStyles: Array<keyof typeof styles> = [];
   if (preview) {
     previewStyles = [
       styles.Preview,

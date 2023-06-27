@@ -1,6 +1,6 @@
 import globalClassNames from "../../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly OuterWrapper: ModalWrapperNames;
-  readonly Fixed: ModalWrapperNames;
+  readonly OuterWrapper: "OuterWrapper";
+  readonly Fixed: "Fixed";
 };
 export = classNames;

@@ -1,5 +1,5 @@
 import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Search: SearchNames;
+  readonly Search: "Search";
 };
 export = classNames;
