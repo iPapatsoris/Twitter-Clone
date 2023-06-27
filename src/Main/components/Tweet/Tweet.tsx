@@ -27,6 +27,10 @@ const Tweet = ({ tweet }: TweetProps) => {
     navigate(getPagePath("profile", tweet.author.username));
   };
 
+  const visitTweetThread = () => {
+    navigate(getPagePath("tweet", tweet.author.username, tweet.id));
+  };
+
   return (
     <>
       <ProfileHoverPreview
@@ -66,7 +70,9 @@ const Tweet = ({ tweet }: TweetProps) => {
                 @{tweet.author.username}
               </span>
               <span>·</span>
-              <span>{dayjs(tweet.creationDate).format("MMM D, YYYY")}</span>
+              <span onClick={visitTweetThread}>
+                {dayjs(tweet.creationDate).format("MMM D, YYYY")}
+              </span>
             </div>
             <div className={styles.MoreIcon}>
               <Icon
@@ -80,7 +86,7 @@ const Tweet = ({ tweet }: TweetProps) => {
               />
             </div>
           </div>
-          <div>{tweet.text}</div>
+          <div onClick={visitTweetThread}>{tweet.text}</div>
           <TweetActions tweetStats={tweet.stats} />
         </div>
       </div>

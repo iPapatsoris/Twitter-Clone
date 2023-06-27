@@ -22,6 +22,7 @@ import { shallow } from "zustand/shallow";
 import { LoggedInUser, useAuthStore } from "./store/AuthStore";
 import Circle from "./Main/routes/Circle/Circle";
 import { circleLoader } from "./Main/routes/Circle/queries";
+import TweetThread from "./Main/components/Tweet/TweetThread/TweetThread";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const loggedInUser: Pick<LoggedInUser, "id"> | null = useAuthStore(
@@ -88,6 +89,13 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
           element={<Profile />}
           id={getPagePath("profile")}
           loader={profileLoader(queryClient)}
+          errorElement={<ErrorPage />} // is this needed? can i have it globally?
+        />
+        <Route
+          path={getPagePath("tweet")}
+          element={<TweetThread />}
+          id={getPagePath("tweet")}
+          // loader={}
           errorElement={<ErrorPage />} // is this needed? can i have it globally?
         />
         <Route

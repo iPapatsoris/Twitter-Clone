@@ -27,6 +27,7 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
     getPagePath("followers"),
     getPagePath("following"),
   ]);
+  const isTweetPage = useRouteMatch(getPagePath("tweet"));
 
   const userTitle = (
     <>
@@ -99,6 +100,8 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
         leftCornerBackIcon
       />
     );
+  } else if (isTweetPage) {
+    header = <HeaderMain title={<h2>Tweet</h2>} leftCornerBackIcon />;
   }
 
   return header;

@@ -22,7 +22,7 @@ export type Page =
 export const getPagePath = (
   page: Page,
   username: string = "",
-  tweet: string = ""
+  tweet: number | undefined = undefined
 ) => {
   const usernameInPath = username ? username : ":username";
   const tweetInPath = tweet ? tweet : ":tweet";
