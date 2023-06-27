@@ -8,6 +8,8 @@ import dayjs from "dayjs";
 import TweetActions from "./TweetActions/TweetActions";
 import { useRef, useState } from "react";
 import ProfileHoverPreview from "../../routes/Profile/ProfileHoverPreview";
+import { useNavigate } from "react-router-dom";
+import { getPagePath } from "../../../util/paths";
 
 interface TweetProps {
   tweet: TweetT;
@@ -19,6 +21,11 @@ const Tweet = ({ tweet }: TweetProps) => {
   const onMouseEnter = () => {
     setIsProfilePreviewOpen(true);
   };
+  const navigate = useNavigate();
+
+  const visitProfile = () => {
+    navigate(getPagePath("profile", tweet.author.username));
+  };
 
   return (
     <>
@@ -29,16 +36,24 @@ const Tweet = ({ tweet }: TweetProps) => {
         username={tweet.author.username}
       />
       <div className={styles.Tweet} ref={tweetRef}>
-        <div className={styles.Avatar} onMouseEnter={onMouseEnter}>
+        <div
+          className={styles.Avatar}
+          onClick={visitProfile}
+          onMouseEnter={onMouseEnter}
+        >
           <Avatar src={tweet.author.avatar} />
         </div>
         <div className={styles.Wrapper}>
           <div className={styles.Info}>
-            <span className={styles.Name} onMouseEnter={onMouseEnter}>
+            <span
+              className={styles.Name}
+              onClick={visitProfile}
+              onMouseEnter={onMouseEnter}
+            >
               {tweet.author.name}
             </span>
             {tweet.author.isVerified ? (
-              <div onMouseEnter={onMouseEnter}>
+              <div onMouseEnter={onMouseEnter} onClick={visitProfile}>
                 <Icon
                   src={verifiedIcon}
                   hover="none"
@@ -47,7 +62,9 @@ const Tweet = ({ tweet }: TweetProps) => {
               </div>
             ) : null}
             <div className={[styles.LightColor, styles.Subinfo].join(" ")}>
-              <span onMouseEnter={onMouseEnter}>@{tweet.author.username}</span>
+              <span onClick={visitProfile} onMouseEnter={onMouseEnter}>
+                @{tweet.author.username}
+              </span>
               <span>·</span>
               <span>{dayjs(tweet.creationDate).format("MMM D, YYYY")}</span>
             </div>
