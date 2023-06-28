@@ -22,10 +22,12 @@ const TweetThread = ({}: TweetThreadProps) => {
   const repliesJSX: React.ReactElement[] = [];
   replies.forEach((reply) => {
     const hasNestedReplies = reply.tweets.length > 1;
+    const getKey = (id: number, hasNestedReplies: boolean) =>
+      id.toString() + " nested " + hasNestedReplies;
 
     repliesJSX.push(
       <Tweet
-        key={reply.tweets[0].id}
+        key={getKey(reply.tweets[0].id, hasNestedReplies)}
         tweet={reply.tweets[0]}
         drawReplyLine={hasNestedReplies}
       />
@@ -33,7 +35,7 @@ const TweetThread = ({}: TweetThreadProps) => {
     if (hasNestedReplies) {
       repliesJSX.push(
         <Tweet
-          key={reply.tweets[1].id}
+          key={getKey(reply.tweets[1].id, false)}
           tweet={reply.tweets[1]}
           drawReplyLine={false}
         />
