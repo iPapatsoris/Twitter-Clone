@@ -1,4 +1,6 @@
-import globalClassNames from "../../../style.d";
+import globalClassNames, {
+  ClassNames as GlobalClassNames,
+} from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly NoFlexItem: "NoFlexItem";
   readonly Trend: "Trend";
@@ -8,3 +10,11 @@ declare const classNames: typeof globalClassNames & {
   readonly MoreIcon: "MoreIcon";
 };
 export = classNames;
+export type ClassNames =
+  | "NoFlexItem"
+  | "Trend"
+  | "TrendInfo"
+  | "Title"
+  | "Subtitle"
+  | "MoreIcon"
+  | GlobalClassNames;

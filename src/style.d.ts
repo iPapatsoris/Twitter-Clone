@@ -14,3 +14,17 @@ declare const classNames: {
   readonly NoHighlighting: "NoHighlighting";
 };
 export = classNames;
+export type ClassNames =
+  | "Sticky"
+  | "Bold"
+  | "BiggerText"
+  | "SmallerText"
+  | "Flex"
+  | "CenterAligned"
+  | "PushRight"
+  | "ShowOpacity"
+  | "Hide"
+  | "Semantic"
+  | "Blue"
+  | "LightColor"
+  | "NoHighlighting";

@@ -1,4 +1,6 @@
-import globalClassNames from "../../../style.d";
+import globalClassNames, {
+  ClassNames as GlobalClassNames,
+} from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly Profile: "Profile";
   readonly Preview: "Preview";
@@ -20,3 +22,23 @@ declare const classNames: typeof globalClassNames & {
   readonly Tweets: "Tweets";
 };
 export = classNames;
+export type ClassNames =
+  | "Profile"
+  | "Preview"
+  | "Hover"
+  | "Small"
+  | "Cover"
+  | "Edit"
+  | "EditAvatar"
+  | "Actions"
+  | "FixedWidthButton"
+  | "Title"
+  | "NameAndVerified"
+  | "Verified"
+  | "Username"
+  | "ProfileInfo"
+  | "Bio"
+  | "Friendship"
+  | "Loading"
+  | "Tweets"
+  | GlobalClassNames;

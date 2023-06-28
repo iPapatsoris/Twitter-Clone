@@ -14,7 +14,7 @@ const List = ({
   withBackgroundColor,
   withExpand,
 }: ListProps) => {
-  const classes: styles.ListNames[] = [];
+  const classes: Array<keyof typeof styles> = [];
 
   if (withBackgroundColor) {
     classes.push(styles.BackgroundColor);

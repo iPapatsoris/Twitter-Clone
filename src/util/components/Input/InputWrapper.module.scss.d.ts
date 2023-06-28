@@ -1,4 +1,6 @@
-import globalClassNames from "../../../style.d";
+import globalClassNames, {
+  ClassNames as GlobalClassNames,
+} from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly Wrapper: "Wrapper";
   readonly Error: "Error";
@@ -8,3 +10,11 @@ declare const classNames: typeof globalClassNames & {
   readonly HelperBox: "HelperBox";
 };
 export = classNames;
+export type ClassNames =
+  | "Wrapper"
+  | "Error"
+  | "Info"
+  | "Focused"
+  | "Empty"
+  | "HelperBox"
+  | GlobalClassNames;

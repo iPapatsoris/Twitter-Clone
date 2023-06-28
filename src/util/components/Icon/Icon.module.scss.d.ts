@@ -1,4 +1,6 @@
-import globalClassNames from "../../../style.d";
+import globalClassNames, {
+  ClassNames as GlobalClassNames,
+} from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly IconAndTextWrapper: "IconAndTextWrapper";
   readonly Text: "Text";
@@ -15,3 +17,18 @@ declare const classNames: typeof globalClassNames & {
   readonly WithBorder: "WithBorder";
 };
 export = classNames;
+export type ClassNames =
+  | "IconAndTextWrapper"
+  | "Text"
+  | "Hover"
+  | "IconWrapper"
+  | "HoverPrimary"
+  | "HoverGreen"
+  | "HoverPink"
+  | "ExactLeftPlacement"
+  | "ExactRightPlacement"
+  | "ExactVerticalPlacement"
+  | "NoHover"
+  | "Icon"
+  | "WithBorder"
+  | GlobalClassNames;
