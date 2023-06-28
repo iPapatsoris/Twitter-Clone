@@ -6,6 +6,12 @@
     flex-shrink: 0;
     width: var(--avatar-small-height);
     height: var(--avatar-small-height);
+    position: relative;
+
+    .ReplyLine {
+      position: absolute;
+      border-left: solid rgb(207, 217, 222) 2px;
+    }
   }
 
   .Wrapper {

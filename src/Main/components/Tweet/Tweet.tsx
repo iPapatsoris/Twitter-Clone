@@ -6,24 +6,21 @@ import verifiedIcon from "../../../assets/icons/verified.png";
 import dotsIcon from "../../../assets/icons/dots-gray.png";
 import dayjs from "dayjs";
 import TweetActions from "./TweetActions/TweetActions";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ProfileHoverPreview from "../../routes/Profile/ProfileHoverPreview";
 import { useNavigate } from "react-router-dom";
 import { getPagePath } from "../../../util/paths";
-import { useQueryClient } from "@tanstack/react-query";
-import {
-  mediumPreviewProfileFields,
-  profileKeys,
-  smallPreviewProfileFields,
-} from "../../routes/Profile/queries";
-import { GetUser } from "../../../../backend/src/api/user";
+import { useReplyLine } from "./TweetThread/useReplyLine";
 
 interface TweetProps {
   tweet: TweetT;
+  drawReplyLine?: boolean;
 }
 
-const Tweet = ({ tweet }: TweetProps) => {
+const Tweet = ({ tweet, drawReplyLine = false }: TweetProps) => {
   const tweetRef = useRef<HTMLDivElement>(null);
+  const avatarRef = useRef<HTMLDivElement>(null);
+  const replyLineRef = useRef<HTMLDivElement>(null);
   const [isProfilePreviewOpen, setIsProfilePreviewOpen] = useState(false);
   const onMouseEnter = () => {
     setIsProfilePreviewOpen(true);
@@ -38,6 +35,8 @@ const Tweet = ({ tweet }: TweetProps) => {
     navigate(getPagePath("tweet", tweet.author.username, tweet.id));
   };
 
+  useReplyLine(drawReplyLine, tweetRef, avatarRef, replyLineRef);
+
   return (
     <>
       <ProfileHoverPreview
@@ -51,8 +50,10 @@ const Tweet = ({ tweet }: TweetProps) => {
           className={styles.Avatar}
           onClick={visitProfile}
           onMouseEnter={onMouseEnter}
+          ref={avatarRef}
         >
           <Avatar src={tweet.author.avatar} />
+          <div className={styles.ReplyLine} ref={replyLineRef}></div>
         </div>
         <div className={styles.Wrapper}>
           <div className={styles.Info}>
