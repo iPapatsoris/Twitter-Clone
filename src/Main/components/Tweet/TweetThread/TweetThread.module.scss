@@ -1,30 +1,7 @@
 .TweetThread {
-  .MainTweet {
-    margin: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-
-    .MainInfo {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .Stats {
-      display: flex;
-      gap: 1.5rem;
-      border-block: var(--border);
-      padding-block: 1rem;
-    }
-
-    .MainTweetActionIcon {
-      width: 23px;
-      height: 23px;
-    }
-
-    .CreateTweet {
-      border-top: var(--border);
-    }
+  .CreateTweet {
+    border-bottom: var(--border);
+    padding-bottom: 1rem;
+    padding-inline: 1rem;
   }
 }
