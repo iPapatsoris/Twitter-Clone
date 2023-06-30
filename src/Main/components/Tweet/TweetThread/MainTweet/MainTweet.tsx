@@ -2,7 +2,7 @@ import { Tweet } from "../../../../../../backend/src/entities/tweet";
 import Icon from "../../../../../util/components/Icon/Icon";
 import Profile from "../../../../routes/Profile/Profile";
 import styles from "./MainTweet.module.scss";
-import dotsIcon from "../../../../../assets/icons/dots.png";
+import dotsIcon from "../../../../../assets/icons/dots-gray.png";
 import dayjs from "dayjs";
 import TweetActions from "../../TweetActions/TweetActions";
 
