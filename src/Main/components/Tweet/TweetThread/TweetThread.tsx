@@ -18,7 +18,15 @@ const TweetThread = ({}: TweetThreadProps) => {
   if (!isSuccess) {
     return null;
   }
+
   const { tweet, replies, previousReplies } = data.data!;
+  const previousRepliesJSX: React.ReactElement[] = [];
+
+  previousReplies.forEach((reply) => {
+    previousRepliesJSX.push(
+      <Tweet key={reply.id} tweet={reply} drawReplyLine />
+    );
+  });
 
   const repliesJSX: React.ReactElement[] = [];
   replies.forEach((reply, replyIndex) => {
@@ -49,6 +57,7 @@ const TweetThread = ({}: TweetThreadProps) => {
 
   return (
     <div className={styles.TweetThread}>
+      <List>{previousRepliesJSX}</List>
       <MainTweet tweet={tweet} />
       <div className={styles.CreateTweet}>Create tweet!</div>
       <List>{repliesJSX}</List>
