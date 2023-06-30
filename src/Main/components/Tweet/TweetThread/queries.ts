@@ -1,6 +1,9 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { getData } from "../../../../util/request";
-import { GetTweet } from "../../../../../backend/src/api/tweet";
+import {
+  ExpandTweetReplies,
+  GetTweet,
+} from "../../../../../backend/src/api/tweet";
 import { QueryClient } from "@tanstack/react-query";
 import { LoaderFunctionArgs } from "react-router-dom";
 
@@ -8,6 +11,12 @@ export const tweetThreadKeys = createQueryKeys("tweetThread", {
   tweetID: (id: number) => ({
     queryKey: [id],
     queryFn: () => tweetThreadQuery(id),
+    contextQueries: {
+      expandReply: (replyToExpand) => ({
+        queryKey: ["expand", replyToExpand],
+        queryFn: () => expandTweetRepliesQuery(replyToExpand),
+      }),
+    },
   }),
 });
 
@@ -31,3 +40,14 @@ export const tweetThreadLoader =
     const data = await queryClient.ensureQueryData({ queryKey, queryFn });
     return data;
   };
+
+const expandTweetRepliesQuery = async (replyToExpand: number) => {
+  const res = await getData<ExpandTweetReplies["response"]>(
+    "tweet/" + replyToExpand + "/expandRepliesDownward"
+  );
+
+  if (!res.ok) {
+    throw new Error();
+  }
+  return res;
+};

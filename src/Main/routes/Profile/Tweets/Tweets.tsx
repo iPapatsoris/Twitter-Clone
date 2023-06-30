@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import styles from "./Tweets.module.scss";
 import { userTweetsKeys } from "./queries";
 import Tweet from "../../../components/Tweet/Tweet";
 import List from "../../../layouts/ContentRight/List/List";

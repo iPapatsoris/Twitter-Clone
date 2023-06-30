@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import MainTweet from "./MainTweet/MainTweet";
 import Tweet from "../Tweet";
 import List from "../../../layouts/ContentRight/List/List";
+import ShowMoreTweets from "../ShowMoreTweets";
 
 interface TweetThreadProps {}
 
@@ -20,9 +21,9 @@ const TweetThread = ({}: TweetThreadProps) => {
   const { tweet, replies, previousReplies } = data.data!;
 
   const repliesJSX: React.ReactElement[] = [];
-  replies.forEach((reply) => {
-    reply.tweets.forEach((nestedReply, index) => {
-      const isFinalReply = index === reply.tweets.length - 1;
+  replies.forEach((reply, replyIndex) => {
+    reply.tweets.forEach((nestedReply, nestedReplyIndex, array) => {
+      const isFinalReply = nestedReplyIndex === reply.tweets.length - 1;
       const getKey = (id: number, isFinalReply: boolean) =>
         id.toString() + " final " + isFinalReply;
       repliesJSX.push(
@@ -34,7 +35,14 @@ const TweetThread = ({}: TweetThreadProps) => {
         />
       );
       if (isFinalReply && reply.hasMoreNestedReplies) {
-        repliesJSX.push(<Tweet key={"more "} showMoreTweets />);
+        repliesJSX.push(
+          <ShowMoreTweets
+            key={"more"}
+            replyToExpand={array[array.length - 1].id}
+            originalTweetID={tweet.id}
+            replyIndex={replyIndex}
+          />
+        );
       }
     });
   });

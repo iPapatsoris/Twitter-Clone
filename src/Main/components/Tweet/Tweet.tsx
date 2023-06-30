@@ -13,24 +13,18 @@ import { getPagePath } from "../../../util/paths";
 import { useReplyLine } from "./TweetThread/useReplyLine";
 
 interface TweetProps {
-  tweet?: TweetT;
-  // Connect a tweet with its reply with a line
+  tweet: TweetT;
+  // Conect a tweet with its reply with a line
   drawReplyLine?: boolean;
   // Make reply line stop at current tweet and not extend to next tweet.
   // Is typically used when the next tweet is a "showMoreTweets" option.
   noLineExtension?: boolean;
-  /* Display a "show more replies" option instead of an actual tweet.
-     We keep it under Tweet component because we want to maintain alignment
-     with other Tweets.
-  */
-  showMoreTweets?: boolean;
 }
 
 const Tweet = ({
   tweet,
   drawReplyLine = false,
   noLineExtension = false,
-  showMoreTweets = false,
 }: TweetProps) => {
   const tweetRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
@@ -50,101 +44,84 @@ const Tweet = ({
   );
 
   const visitProfile = () => {
-    navigate(getPagePath("profile", tweet!.author.username));
+    navigate(getPagePath("profile", tweet.author.username));
   };
 
   const visitTweetThread = () => {
-    navigate(getPagePath("tweet", tweet!.author.username, tweet!.id));
+    navigate(getPagePath("tweet", tweet.author.username, tweet.id));
   };
 
-  if (showMoreTweets) {
-    return (
-      <div className={styles.Tweet}>
-        <div className={styles.ShowMoreIcon}>
-          <div></div>
-          <div></div>
-          <div></div>
+  return (
+    <>
+      <ProfileHoverPreview
+        isOpen={isProfilePreviewOpen}
+        setIsOpen={setIsProfilePreviewOpen}
+        targetAreaRef={tweetRef}
+        username={tweet.author.username}
+      />
+      <div className={styles.Tweet} ref={tweetRef}>
+        <div
+          className={styles.Avatar}
+          onClick={visitProfile}
+          onMouseEnter={onMouseEnter}
+          ref={avatarRef}
+        >
+          <Avatar src={tweet.author.avatar} />
+          {drawReplyLine && (
+            <div className={styles.ReplyLine} ref={replyLineRef}></div>
+          )}
         </div>
         <div className={styles.Wrapper}>
-          <div className={styles.ShowMore}>Show replies</div>
-        </div>
-      </div>
-    );
-  } else if (tweet) {
-    return (
-      <>
-        <ProfileHoverPreview
-          isOpen={isProfilePreviewOpen}
-          setIsOpen={setIsProfilePreviewOpen}
-          targetAreaRef={tweetRef}
-          username={tweet!.author.username}
-        />
-        <div className={styles.Tweet} ref={tweetRef}>
-          <div
-            className={styles.Avatar}
-            onClick={visitProfile}
-            onMouseEnter={onMouseEnter}
-            ref={avatarRef}
-          >
-            <Avatar src={tweet!.author.avatar} />
-            {drawReplyLine && (
-              <div className={styles.ReplyLine} ref={replyLineRef}></div>
-            )}
-          </div>
-          <div className={styles.Wrapper}>
-            <>
-              <div className={styles.Info}>
-                <span
-                  className={styles.Name}
-                  onClick={visitProfile}
-                  onMouseEnter={onMouseEnter}
-                >
-                  {tweet!.author.name}
-                </span>
-                {tweet!.author.isVerified ? (
-                  <div onMouseEnter={onMouseEnter} onClick={visitProfile}>
-                    <Icon
-                      src={verifiedIcon}
-                      hover="none"
-                      extraStyles={[styles.Verified]}
-                    />
-                  </div>
-                ) : null}
-                <div className={[styles.LightColor, styles.Subinfo].join(" ")}>
-                  <span onClick={visitProfile} onMouseEnter={onMouseEnter}>
-                    @{tweet!.author.username}
-                  </span>
-                  <span>·</span>
-                  <span onClick={visitTweetThread}>
-                    {dayjs(tweet!.creationDate).format("MMM D, YYYY")}
-                  </span>
-                </div>
-                <div className={styles.MoreIcon}>
+          <>
+            <div className={styles.Info}>
+              <span
+                className={styles.Name}
+                onClick={visitProfile}
+                onMouseEnter={onMouseEnter}
+              >
+                {tweet.author.name}
+              </span>
+              {tweet.author.isVerified ? (
+                <div onMouseEnter={onMouseEnter} onClick={visitProfile}>
                   <Icon
-                    src={dotsIcon}
-                    title="More"
-                    alt="More options"
-                    hover="primary"
-                    exactVerticalPlacement
+                    src={verifiedIcon}
+                    hover="none"
+                    extraStyles={[styles.Verified]}
                   />
                 </div>
+              ) : null}
+              <div className={[styles.LightColor, styles.Subinfo].join(" ")}>
+                <span onClick={visitProfile} onMouseEnter={onMouseEnter}>
+                  @{tweet.author.username}
+                </span>
+                <span>·</span>
+                <span onClick={visitTweetThread}>
+                  {dayjs(tweet.creationDate).format("MMM D, YYYY")}
+                </span>
               </div>
-              <div onClick={visitTweetThread}>{tweet!.text}</div>
-              <TweetActions
-                includeText
-                bookmarkInsteadOfViews={false}
-                justifyContent="space-between"
-                leftAlignFirstIcon
-                tweetStats={tweet!.stats}
-              />
-            </>
-          </div>
+              <div className={styles.MoreIcon}>
+                <Icon
+                  src={dotsIcon}
+                  title="More"
+                  alt="More options"
+                  hover="primary"
+                  exactVerticalPlacement
+                />
+              </div>
+            </div>
+            <div onClick={visitTweetThread}>{tweet.text}</div>
+            <TweetActions
+              includeText
+              bookmarkInsteadOfViews={false}
+              justifyContent="space-between"
+              leftAlignFirstIcon
+              tweetStats={tweet.stats}
+            />
+          </>
         </div>
-      </>
-    );
-  } else {
-    return null;
-  }
+      </div>
+    </>
+  );
 };
 
 export default Tweet;
