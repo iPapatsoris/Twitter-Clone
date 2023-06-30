@@ -2,6 +2,9 @@
   display: flex;
   gap: 1rem;
 
+  $replyLineColor: rgb(207, 217, 222);
+  $replyLineWidth: 2px;
+
   .Avatar {
     flex-shrink: 0;
     width: var(--avatar-small-height);
@@ -10,7 +13,28 @@
 
     .ReplyLine {
       position: absolute;
-      border-left: solid rgb(207, 217, 222) 2px;
+      background-color: $replyLineColor;
+      width: $replyLineWidth;
+      left: calc((var(--avatar-small-height) - $replyLineWidth) / 2);
+      height: 100%;
+    }
+  }
+
+  .ShowMoreIcon {
+    width: var(--avatar-small-height);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    div {
+      width: $replyLineWidth;
+      height: $replyLineWidth;
+      background-color: $replyLineColor;
+    }
+
+    .Transform {
+      transform: rotate(90deg);
     }
   }
 
@@ -19,6 +43,10 @@
     flex-direction: column;
     flex-grow: 1;
     gap: 0.3rem;
+
+    .ShowMore {
+      color: var(--primary-color);
+    }
 
     .Info {
       display: flex;

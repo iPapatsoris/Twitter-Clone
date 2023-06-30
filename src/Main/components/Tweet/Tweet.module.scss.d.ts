@@ -5,7 +5,10 @@ declare const classNames: typeof globalClassNames & {
   readonly Tweet: "Tweet";
   readonly Avatar: "Avatar";
   readonly ReplyLine: "ReplyLine";
+  readonly ShowMoreIcon: "ShowMoreIcon";
+  readonly Transform: "Transform";
   readonly Wrapper: "Wrapper";
+  readonly ShowMore: "ShowMore";
   readonly Info: "Info";
   readonly Subinfo: "Subinfo";
   readonly Name: "Name";
@@ -17,7 +20,10 @@ export type ClassNames =
   | "Tweet"
   | "Avatar"
   | "ReplyLine"
+  | "ShowMoreIcon"
+  | "Transform"
   | "Wrapper"
+  | "ShowMore"
   | "Info"
   | "Subinfo"
   | "Name"

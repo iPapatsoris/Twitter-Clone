@@ -21,26 +21,22 @@ const TweetThread = ({}: TweetThreadProps) => {
 
   const repliesJSX: React.ReactElement[] = [];
   replies.forEach((reply) => {
-    const hasNestedReplies = reply.tweets.length > 1;
-    const getKey = (id: number, hasNestedReplies: boolean) =>
-      id.toString() + " nested " + hasNestedReplies;
-
-    repliesJSX.push(
-      <Tweet
-        key={getKey(reply.tweets[0].id, hasNestedReplies)}
-        tweet={reply.tweets[0]}
-        drawReplyLine={hasNestedReplies}
-      />
-    );
-    if (hasNestedReplies) {
+    reply.tweets.forEach((nestedReply, index) => {
+      const isFinalReply = index === reply.tweets.length - 1;
+      const getKey = (id: number, isFinalReply: boolean) =>
+        id.toString() + " final " + isFinalReply;
       repliesJSX.push(
         <Tweet
-          key={getKey(reply.tweets[1].id, false)}
-          tweet={reply.tweets[1]}
-          drawReplyLine={false}
+          key={getKey(nestedReply.id, isFinalReply)}
+          tweet={nestedReply}
+          drawReplyLine={!isFinalReply || reply.hasMoreNestedReplies}
+          noLineExtension={isFinalReply && reply.hasMoreNestedReplies}
         />
       );
-    }
+      if (isFinalReply && reply.hasMoreNestedReplies) {
+        repliesJSX.push(<Tweet key={"more "} showMoreTweets />);
+      }
+    });
   });
 
   return (
