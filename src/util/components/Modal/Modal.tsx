@@ -1,5 +1,5 @@
 import Icon from "../Icon/Icon";
-import styles, { ModalNames } from "./Modal.module.scss";
+import styles from "./Modal.module.scss";
 import closeIcon from "../../../assets/icons/close.png";
 import React, { createContext, useEffect } from "react";
 import { toPixels } from "../../string";
@@ -40,7 +40,7 @@ const Modal = ({ withCloseIcon = true, children, setIsActive }: ModalProps) => {
     </div>
   );
 
-  const modalStyles: ModalNames[] = [styles.Modal];
+  const modalStyles: Array<keyof typeof styles> = [styles.Modal];
   if (withCloseIcon) {
     modalStyles.push(styles.WithCloseIcon);
   }

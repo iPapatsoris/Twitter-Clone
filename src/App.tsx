@@ -7,7 +7,7 @@ import {
   isNotificationsPage,
   useRouteMatches,
 } from "./util/paths";
-import { createContext, SetStateAction, useMemo, useState } from "react";
+import { createContext, SetStateAction, useState } from "react";
 import useScrollToTop from "./util/hooks/useScrollToTop";
 
 export const ErrorPageContext = createContext<{

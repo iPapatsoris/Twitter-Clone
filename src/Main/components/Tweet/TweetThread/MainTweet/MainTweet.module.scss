@@ -5,6 +5,8 @@
   gap: 1rem;
   border-bottom: var(--border);
 
+  scroll-margin-top: var(--header-height);
+
   .MainInfo {
     display: flex;
     flex-direction: column;

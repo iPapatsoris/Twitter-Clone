@@ -62,7 +62,7 @@ const Profile = ({ preview }: ProfileProps) => {
     fieldsToQuery = smallPreviewProfileFields;
   }
 
-  const { data, isLoading } = useQuery(
+  const { data, isSuccess } = useQuery(
     profileKeys.username(username)._ctx.fields(fieldsToQuery)
   );
   const user = data?.data?.user!;
@@ -76,10 +76,10 @@ const Profile = ({ preview }: ProfileProps) => {
 
   useLayoutEffect(() => {
     // Set header context after we fetch user information
-    if (!isLoading && !preview) {
+    if (!isSuccess && !preview) {
       setUserHeader(user);
     }
-  }, [user, setUserHeader, preview, isLoading]);
+  }, [user, setUserHeader, preview, isSuccess]);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isHoverPopupOpen, setIsHoverPopupOpen] = useState(false);
@@ -95,7 +95,7 @@ const Profile = ({ preview }: ProfileProps) => {
   const followersRef = useRef<HTMLAnchorElement>(null);
   const followingRef = useRef<HTMLAnchorElement>(null);
 
-  if (isLoading) {
+  if (!isSuccess) {
     return null;
   }
 

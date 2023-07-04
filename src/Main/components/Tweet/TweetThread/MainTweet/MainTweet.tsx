@@ -5,20 +5,35 @@ import styles from "./MainTweet.module.scss";
 import dotsIcon from "../../../../../assets/icons/dots-gray.png";
 import dayjs from "dayjs";
 import TweetActions from "../../TweetActions/TweetActions";
+import { useLayoutEffect, useRef } from "react";
 
 interface MainTweetProps {
   tweet: Tweet;
+  tweetThreadRef: React.RefObject<HTMLDivElement>;
 }
 
-const MainTweet = ({ tweet }: MainTweetProps) => {
+const MainTweet = ({ tweet, tweetThreadRef }: MainTweetProps) => {
   const showStat = (name: string, stat: number) => (
     <span>
       <span className={styles.Bold}>{stat}</span> {name}
     </span>
   );
 
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Setup a min-height for the tweet thread so that we can scroll to
+  // specific tweet with it being at the top the screen
+  useLayoutEffect(() => {
+    if (tweetThreadRef && tweetThreadRef.current && ref && ref.current) {
+      const tweetCoordinates = ref.current.getBoundingClientRect();
+      tweetThreadRef.current.style.minHeight =
+        "calc(" + tweetCoordinates.y + "px + " + window.scrollY + "px + 82vh)";
+      ref.current?.scrollIntoView(true);
+    }
+  }, [tweetThreadRef, ref, tweet.id]);
+
   return (
-    <div className={styles.MainTweet}>
+    <div ref={ref} className={styles.MainTweet}>
       <div className={styles.MainInfo}>
         <Profile
           preview={{

@@ -6,6 +6,7 @@ import MainTweet from "./MainTweet/MainTweet";
 import Tweet from "../Tweet";
 import List from "../../../layouts/ContentRight/List/List";
 import ShowMoreTweets from "../ShowMoreTweets";
+import { useRef } from "react";
 
 interface TweetThreadProps {}
 
@@ -14,6 +15,8 @@ const TweetThread = ({}: TweetThreadProps) => {
   const { data, isSuccess } = useQuery(
     tweetThreadKeys.tweetID(parseInt(params.tweetID!))
   );
+
+  const ref = useRef<HTMLDivElement>(null);
 
   if (!isSuccess) {
     return null;
@@ -56,9 +59,9 @@ const TweetThread = ({}: TweetThreadProps) => {
   });
 
   return (
-    <div className={styles.TweetThread}>
+    <div ref={ref} className={styles.TweetThread}>
       <List>{previousRepliesJSX}</List>
-      <MainTweet tweet={tweet} />
+      <MainTweet tweetThreadRef={ref} tweet={tweet} />
       <div className={styles.CreateTweet}>Create tweet!</div>
       <List>{repliesJSX}</List>
     </div>
