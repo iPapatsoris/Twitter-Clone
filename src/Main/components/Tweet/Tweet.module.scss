@@ -5,6 +5,10 @@
   $replyLineColor: rgb(207, 217, 222);
   $replyLineWidth: 2px;
 
+  &.WithBorder {
+    border-bottom: var(--border);
+  }
+
   .Avatar {
     flex-shrink: 0;
     width: var(--avatar-small-height);

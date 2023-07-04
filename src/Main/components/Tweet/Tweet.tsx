@@ -51,6 +51,8 @@ const Tweet = ({
     navigate(getPagePath("tweet", tweet.author.username, tweet.id));
   };
 
+  const tweetBorderClass = drawReplyLine ? "" : styles.WithBorder;
+
   return (
     <>
       <ProfileHoverPreview
@@ -59,7 +61,10 @@ const Tweet = ({
         targetAreaRef={tweetRef}
         username={tweet.author.username}
       />
-      <div className={styles.Tweet} ref={tweetRef}>
+      <div
+        className={[styles.Tweet, tweetBorderClass].join(" ")}
+        ref={tweetRef}
+      >
         <div
           className={styles.Avatar}
           onClick={visitProfile}
