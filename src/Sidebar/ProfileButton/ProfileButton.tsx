@@ -74,6 +74,7 @@ const ProfileButton = () => {
               username: user.username,
               type: "user-list",
               noNavOnClick: true,
+              noPreviewOnHover: true,
               iconAction: (
                 <Icon src={dots} title="" hover="none" alt="Account options" />
               ),

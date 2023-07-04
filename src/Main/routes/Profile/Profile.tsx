@@ -42,6 +42,7 @@ interface ProfileProps {
     includeBio?: boolean;
     iconAction?: React.ReactElement;
     noNavOnClick?: boolean;
+    noPreviewOnHover?: boolean;
   };
 }
 
@@ -84,7 +85,7 @@ const Profile = ({ preview }: ProfileProps) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isHoverPopupOpen, setIsHoverPopupOpen] = useState(false);
   const onMouseEnter = () => {
-    if (preview && preview.type !== "hover") {
+    if (preview && preview.type !== "hover" && !preview.noPreviewOnHover) {
       setIsHoverPopupOpen(true);
     }
   };

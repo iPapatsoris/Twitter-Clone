@@ -11,6 +11,7 @@ const usePopup = (
     | "autoMaxHeight"
     | "disableOnHoverOut"
     | "setIsActive"
+    | "isFixed"
   > & {
     popupRef: React.RefObject<HTMLDivElement>;
   }
@@ -22,6 +23,7 @@ const usePopup = (
     autoMaxHeight = false,
     disableOnHoverOut,
     setIsActive,
+    isFixed,
   } = params;
 
   // Listen to window height updates to handle resizing
@@ -38,7 +40,7 @@ const usePopup = (
       targetAreaRef &&
       targetAreaRef.current
     ) {
-      const {
+      let {
         top: targetTop,
         left: targetLeft,
         height: targetHeight,
@@ -47,15 +49,15 @@ const usePopup = (
       const { height: popupHeight, width: popupWidth } =
         popupRef.current.getBoundingClientRect();
 
-      const targetTopWithScroll = targetTop + window.scrollY;
+      targetTop += isFixed ? 0 : window.scrollY;
 
       // Vertical placement
       let finalTop = 0;
       if (position?.block === "bottomCover" || position?.block === "bottom") {
         finalTop =
           position?.block === "bottomCover"
-            ? targetTopWithScroll
-            : targetTopWithScroll + targetHeight;
+            ? targetTop
+            : targetTop + targetHeight;
 
         if (
           !autoMaxHeight &&
@@ -67,9 +69,9 @@ const usePopup = (
         }
       }
       if (position?.block === "topCover") {
-        finalTop = targetTopWithScroll - popupHeight + targetHeight;
+        finalTop = targetTop - popupHeight + targetHeight;
       } else if (position?.block === "top") {
-        finalTop = targetTopWithScroll - popupHeight;
+        finalTop = targetTop - popupHeight;
       }
       popupRef.current.style.top = toPixels(finalTop);
 
@@ -88,7 +90,7 @@ const usePopup = (
       popupRef.current.style.left = toPixels(finalLeft);
       setJustPlacedPopup(true);
     }
-  }, [popupRef, targetAreaRef, position, autoMaxHeight]);
+  }, [popupRef, targetAreaRef, position, autoMaxHeight, isFixed]);
 
   // Limit popup's max-height to the max available space just before it goes
   // off screen. Adjust on window resizing.

@@ -48,6 +48,7 @@ const Popup = ({
     autoMaxHeight,
     disableOnHoverOut,
     setIsActive,
+    isFixed,
   });
 
   return (
