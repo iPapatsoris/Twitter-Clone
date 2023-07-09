@@ -396,9 +396,9 @@ router.get(
   ) => {
     const { username } = req.params;
     const tweetIDs = await runQuery<{ id: number }>(
-      "SELECT tweet.id \
-       FROM tweet, user \
-       WHERE authorID = user.id AND isLike = true AND user.username = ? \
+      "SELECT tweetID \
+       FROM user, user_reacts_to_tweet \
+       WHERE userID = user.id AND isLike = true AND user.username = ? \
        ORDER BY reactionDate DESC",
       [username]
     );
