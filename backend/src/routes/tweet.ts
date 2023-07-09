@@ -149,14 +149,16 @@ router.get(
     );
     const tweets = await Promise.all(tweetIDs.map(({ id }) => getTweet(id)));
 
-    const followedUsers = await runQuery<{ id: number }>(
-      "SELECT userID \
+    const followedUsers = await runQuery<{ username: string }>(
+      "SELECT username \
        FROM user_follows as friendship \
        WHERE userID = followeeID AND followerID = ?",
       [currentUserID]
     );
     const retweets = (
-      await Promise.all(followedUsers.map(({ id }) => getUserRetweets(id)))
+      await Promise.all(
+        followedUsers.map(({ username }) => getUserRetweets(username))
+      )
     ).flat();
 
     res.send({

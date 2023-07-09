@@ -110,21 +110,21 @@ export const getTweetTags = async (tweetID: number) => {
   );
 };
 
-export const getUserRetweets = async (userID: number): Promise<Retweet[]> => {
+export const getUserRetweets = async (username: string): Promise<Retweet[]> => {
   const query =
     "SELECT tweetID, reactionDate as retweetDate \
-     FROM user_reacts_to_tweet \
-     WHERE userID = ? AND isRetweet = true";
+     FROM user_reacts_to_tweet, user \
+     WHERE userID = user.id AND isRetweet = true AND user.username = ?";
   const retweets = await runQuery<{ tweetID: number; retweetDate: string }>(
     query,
-    [userID]
+    [username]
   );
   if (!retweets || !retweets.length) {
     return [];
   }
   const [retweeter] = await runQuery<Retweet["retweeter"]>(
-    "SELECT id, name FROM user WHERE id = ?",
-    [userID]
+    "SELECT id, name FROM user WHERE username = ?",
+    [username]
   );
   const tweets = await Promise.all(
     retweets.map((retweet) => getTweet(retweet.tweetID))

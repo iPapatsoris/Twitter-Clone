@@ -282,23 +282,23 @@ router
 // Return user's tweets and retweets
 // Don't include replies
 router.get(
-  "/:userID/tweets",
+  "/:username/tweets",
   async (
-    req: TypedRequestQuery<{ userID: string }>,
+    req: TypedRequestQuery<{ username: string }>,
     res: Response<GetUserTweetsAndRetweets["response"]>
   ) => {
-    const { userID } = req.params;
+    const { username } = req.params;
     const tweetIDs = await runQuery<{ id: number }>(
-      "SELECT id \
-       FROM tweet \
-       WHERE tweet.authorID = ? AND isReply = false",
-      [userID]
+      "SELECT tweet.id \
+       FROM tweet, user \
+       WHERE tweet.authorID = user.id AND isReply = false AND user.username = ? ",
+      [username]
     );
     const tweets = await Promise.all(
       tweetIDs.map(async ({ id }) => getTweet(id))
     );
 
-    const retweets = await getUserRetweets(Number(userID));
+    const retweets = await getUserRetweets(username);
     res.send({
       ok: true,
       data: {
@@ -320,17 +320,17 @@ router.get(
  * thread.
  */
 router.get(
-  "/:userID/replies",
+  "/:username/replies",
   async (
-    req: TypedRequestQuery<{ userID: string }>,
+    req: TypedRequestQuery<{ username: string }>,
     res: Response<GetUserThreadsAndRetweets["response"]>
   ) => {
-    const { userID } = req.params;
+    const { username } = req.params;
     const replyIDs = await runQuery<{ id: number }>(
-      "SELECT id \
-       FROM tweet \
-       WHERE authorID = ?",
-      [userID]
+      "SELECT tweet.id \
+       FROM tweet, user \
+       WHERE authorID = user.id AND user.username = ?",
+      [username]
     );
 
     const tweetsAndReplies = await getTweets(replyIDs.map(({ id }) => id));
@@ -374,7 +374,7 @@ router.get(
       })
     );
 
-    const retweets = await getUserRetweets(Number(req.params.userID));
+    const retweets = await getUserRetweets(username);
 
     res.send({
       ok: true,
@@ -389,18 +389,18 @@ router.get(
 );
 
 router.get(
-  "/:userID/likes",
+  "/:username/likes",
   async (
-    req: TypedRequestQuery<{ userID: string }>,
+    req: TypedRequestQuery<{ username: string }>,
     res: Response<GetTweets["response"]>
   ) => {
-    const { userID } = req.params;
+    const { username } = req.params;
     const tweetIDs = await runQuery<{ id: number }>(
-      "SELECT id \
-       FROM tweet \
-       WHERE authorID = ? AND isLike = true \
+      "SELECT tweet.id \
+       FROM tweet, user \
+       WHERE authorID = user.id AND isLike = true AND user.username = ? \
        ORDER BY reactionDate DESC",
-      [userID]
+      [username]
     );
     res.send({
       ok: true,
