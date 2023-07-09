@@ -13,16 +13,15 @@ import {
   smallPreviewProfileFields,
 } from "../../../routes/Profile/ProfileFace/queries";
 
+export type ExpansionDirection = "downward" | "upward";
 export const tweetThreadKeys = createQueryKeys("tweetThread", {
   tweetID: (id: number) => ({
     queryKey: [id],
     queryFn: () => tweetThreadQuery(id),
-    contextQueries: {
-      expandReply: (replyToExpand) => ({
-        queryKey: ["expand", replyToExpand],
-        queryFn: () => expandTweetRepliesQuery(replyToExpand),
-      }),
-    },
+  }),
+  expandReply: (replyToExpand: number, direction: ExpansionDirection) => ({
+    queryKey: ["expand", direction, replyToExpand],
+    queryFn: () => expandTweetRepliesQuery(replyToExpand, direction),
   }),
 });
 
@@ -62,9 +61,13 @@ export const tweetThreadLoader =
     return tweetThreadData;
   };
 
-const expandTweetRepliesQuery = async (replyToExpand: number) => {
+const expandTweetRepliesQuery = async (
+  replyToExpand: number,
+  direction: ExpansionDirection
+) => {
+  const directionPath = direction === "downward" ? "Downward" : "Upward";
   const res = await getData<ExpandTweetReplies["response"]>(
-    "tweet/" + replyToExpand + "/expandRepliesDownward"
+    "tweet/" + replyToExpand + "/expandReplies" + directionPath
   );
 
   if (!res.ok) {

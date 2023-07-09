@@ -24,6 +24,8 @@ import Circle from "./Main/routes/Circle/Circle";
 import { circleLoader } from "./Main/routes/Circle/queries";
 import TweetThread from "./Main/components/Tweet/TweetThread/TweetThread";
 import { tweetThreadLoader } from "./Main/components/Tweet/TweetThread/queries";
+import TweetsWithReplies from "./Main/routes/Profile/Tweets/TweetsWithReplies";
+import Tweets from "./Main/routes/Profile/Tweets/Tweets";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const loggedInUser: Pick<LoggedInUser, "id"> | null = useAuthStore(
@@ -91,7 +93,22 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
           id={getPagePath("profile")}
           loader={profileLoader(queryClient)}
           errorElement={<ErrorPage />} // is this needed? can i have it globally?
-        />
+        >
+          <Route
+            index
+            element={<Tweets />}
+            // id={getPagePath("profile")}
+            // loader={profileLoader(queryClient)}
+            errorElement={<ErrorPage />} // is this needed? can i have it globally?
+          />
+          <Route
+            path={getPagePath("profileWithReplies")} // FIX PATH
+            element={<TweetsWithReplies />}
+            // id={getPagePath("profile")}
+            // loader={profileLoader(queryClient)}
+            errorElement={<ErrorPage />} // is this needed? can i have it globally?
+          />
+        </Route>
         <Route
           path={getPagePath("tweet")}
           element={<TweetThread />}

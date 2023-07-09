@@ -4,9 +4,10 @@ import styles from "./HeaderLinkMenu.module.scss";
 
 type HeaderLinkMenuProps = {
   items: Array<{ page: Page; username?: string; title: string }>;
+  extraStyles: string[];
 };
 
-const HeaderLinkMenu = ({ items }: HeaderLinkMenuProps) => {
+const HeaderLinkMenu = ({ items, extraStyles }: HeaderLinkMenuProps) => {
   const path = useLocation().pathname;
   const menu = items.map((item) => {
     const itemPath = getPagePath(item.page, item.username);
@@ -23,7 +24,7 @@ const HeaderLinkMenu = ({ items }: HeaderLinkMenuProps) => {
     );
   });
 
-  return <div className={styles.Items}>{menu}</div>;
+  return <div className={[styles.Items, ...extraStyles].join(" ")}>{menu}</div>;
 };
 
 export default HeaderLinkMenu;

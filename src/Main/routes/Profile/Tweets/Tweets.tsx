@@ -2,12 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { userTweetsKeys } from "./queries";
 import Tweet from "../../../components/Tweet/Tweet";
 import List from "../../../layouts/ContentRight/List/List";
+import { useOutletContext } from "react-router-dom";
 
-interface TweetsProps {
-  username: string;
-}
-
-const Tweets = ({ username }: TweetsProps) => {
+const Tweets = () => {
+  const username: string = useOutletContext();
   const { data, isSuccess } = useQuery(
     userTweetsKeys.tweetsOfUsername(username)
   );

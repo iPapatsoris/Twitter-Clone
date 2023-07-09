@@ -10,6 +10,8 @@ export type Page =
   | "bookmarks"
   | "lists"
   | "profile"
+  | "profileWithReplies"
+  | "profileLikes"
   | "tweet"
   | "error"
   | "settings"
@@ -19,6 +21,7 @@ export type Page =
   | "followers"
   | "following";
 
+// TODO: improve code reusability for nested paths
 export const getPagePath = (
   page: Page,
   username: string = "",
@@ -38,6 +41,8 @@ export const getPagePath = (
     bookmarks: "/i/bookmarks",
     lists: "/" + usernameInPath + "/lists",
     profile: "/" + usernameInPath,
+    profileWithReplies: "/" + usernameInPath + "/with_replies",
+    profileLikes: "/" + usernameInPath + "/likes",
     tweet: "/" + usernameInPath + "/status/" + tweetInPath,
     error: "/error",
     settings: "/settings",
