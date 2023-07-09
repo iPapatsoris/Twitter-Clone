@@ -51,8 +51,7 @@ const TweetThread = ({}: TweetThreadProps) => {
             key={"more"}
             direction="downward"
             replyToExpand={array[array.length - 1].id}
-            originalTweetID={tweet.id}
-            replyIndex={replyIndex}
+            downwardProps={{ originalTweetID: tweet.id, replyIndex }}
           />
         );
       }

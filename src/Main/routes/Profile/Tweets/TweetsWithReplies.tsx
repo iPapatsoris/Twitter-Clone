@@ -32,7 +32,10 @@ const TweetsWithReplies = () => {
               <ShowMoreTweets
                 direction="upward"
                 replyToExpand={t.thread?.tweets[index + 1].id!}
-                threadIndex={threadIndex}
+                upwardProps={{
+                  username,
+                  threadIndex,
+                }}
               />
             );
           }
@@ -49,11 +52,7 @@ const TweetsWithReplies = () => {
     }
   });
 
-  return (
-    <div className={styles.Tweets}>
-      <List>{repliesJSX}</List>
-    </div>
-  );
+  return <List>{repliesJSX}</List>;
 };
 
 export default TweetsWithReplies;

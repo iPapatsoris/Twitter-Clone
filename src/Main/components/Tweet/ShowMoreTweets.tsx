@@ -6,23 +6,24 @@ import { GetUserThreadsAndRetweets } from "../../../../backend/src/api/user";
 import { userTweetsKeys } from "../../routes/Profile/Tweets/queries";
 
 interface ShowMoreTweetsProps {
-  originalTweetID?: number;
-  username?: string;
-  replyIndex?: number;
-  threadIndex?: number;
   replyToExpand: number;
   direction: ExpansionDirection;
+  downwardProps?: {
+    originalTweetID: number;
+    replyIndex: number;
+  };
+  upwardProps?: {
+    username: string;
+    threadIndex: number;
+  };
 }
 
 const ShowMoreTweets = ({
   replyToExpand,
-  originalTweetID,
-  replyIndex,
-  threadIndex,
   direction,
-  username,
+  downwardProps,
+  upwardProps,
 }: ShowMoreTweetsProps) => {
-  // TODO: Assert TS existence of originalTweetID / username / replyIndex / threadIndex depending on direction
   const { refetch } = useQuery({
     ...tweetThreadKeys.expandReply(replyToExpand, direction),
     enabled: false,
@@ -32,11 +33,8 @@ const ShowMoreTweets = ({
   const expandReplies = async () => {
     const res = await refetch();
     const expandedReplies = res.data?.data?.replies;
-    if (
-      direction === "downward" &&
-      originalTweetID !== undefined &&
-      replyIndex !== undefined
-    ) {
+    if (direction === "downward" && downwardProps) {
+      const { originalTweetID, replyIndex } = downwardProps;
       const originalTweet = queryClient.getQueryData<GetTweet["response"]>(
         tweetThreadKeys.tweetID(originalTweetID).queryKey
       );
@@ -59,11 +57,8 @@ const ShowMoreTweets = ({
           }
         );
       }
-    } else if (
-      direction === "upward" &&
-      username &&
-      threadIndex !== undefined
-    ) {
+    } else if (direction === "upward" && upwardProps) {
+      const { threadIndex, username } = upwardProps;
       const originalUserTweets = queryClient.getQueryData<
         GetUserThreadsAndRetweets["response"]
       >(userTweetsKeys.tweetsOfUsername(username).queryKey);
