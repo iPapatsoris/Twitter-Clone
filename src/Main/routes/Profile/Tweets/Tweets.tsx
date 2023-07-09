@@ -4,11 +4,13 @@ import Tweet from "../../../components/Tweet/Tweet";
 import List from "../../../layouts/ContentRight/List/List";
 
 interface TweetsProps {
-  userID: number;
+  username: string;
 }
 
-const Tweets = ({ userID }: TweetsProps) => {
-  const { data, isSuccess } = useQuery(userTweetsKeys.userID(userID));
+const Tweets = ({ username }: TweetsProps) => {
+  const { data, isSuccess } = useQuery(
+    userTweetsKeys.tweetsOfUsername(username)
+  );
 
   if (!isSuccess) {
     return null;

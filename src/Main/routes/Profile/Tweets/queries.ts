@@ -3,15 +3,15 @@ import { getData } from "../../../../util/request";
 import { GetUserTweetsAndRetweets } from "../../../../../backend/src/api/user";
 
 export const userTweetsKeys = createQueryKeys("userTweets", {
-  userID: (userID: number) => ({
-    queryKey: [userID],
-    queryFn: () => userTweetsQuery(userID),
+  tweetsOfUsername: (username: string) => ({
+    queryKey: [username],
+    queryFn: () => userTweetsQuery(username),
   }),
 });
 
-const userTweetsQuery = async (userID: number) => {
+const userTweetsQuery = async (username: string) => {
   const res = await getData<GetUserTweetsAndRetweets["response"]>(
-    "user/" + userID + "/tweets"
+    "user/" + username + "/tweets"
   );
 
   if (!res.ok) {

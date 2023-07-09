@@ -1,6 +1,6 @@
 import { SetStateAction } from "react";
-import Popup from "../../../util/components/Popup/Popup";
-import Profile from "./Profile";
+import Popup from "../../../../util/components/Popup/Popup";
+import Profile from "./ProfileFace";
 
 interface ProfileHoverPreviewProps {
   isOpen: boolean;

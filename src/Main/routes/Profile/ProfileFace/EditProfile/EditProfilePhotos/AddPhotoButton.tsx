@@ -1,4 +1,4 @@
-import photoIcon from "../../../../../assets/icons/photo.png";
+import photoIcon from "../../../../../../assets/icons/photo.png";
 import styles from "./EditProfilePhotos.module.scss";
 
 interface AddPhotoButtonProps {

@@ -7,7 +7,10 @@ import {
 } from "../../../../backend/src/api/user";
 import { getPagePath, useRouteMatch } from "../../../util/paths";
 import { HeaderProfileContext } from "../../layouts/Main";
-import { profileKeys, SmallProfileRequestFields } from "../Profile/queries";
+import {
+  profileKeys,
+  SmallProfileRequestFields,
+} from "../Profile/ProfileFace/queries";
 import Profile from "../Profile/Profile";
 import { CircleType, circleHeaderFields, circleKeys } from "./queries";
 import List from "../../layouts/ContentRight/List/List";

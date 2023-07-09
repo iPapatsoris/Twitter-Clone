@@ -1,5 +1,5 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import { FullProfileRequestFields } from "../../routes/Profile/queries";
+import { FullProfileRequestFields } from "../../routes/Profile/ProfileFace/queries";
 import { getData } from "../../../util/request";
 import { GetUserFolloweeSuggestions } from "../../../../backend/src/api/user";
 

@@ -6,9 +6,9 @@ import {
   useRef,
 } from "react";
 import { Control } from "react-hook-form";
-import { charLimits } from "../../../../../../backend/src/api/user";
-import DatePicker from "../../../../../util/components/DatePicker/DatePicker";
-import FormInput from "../../../../../util/components/Input/FormInput";
+import { charLimits } from "../../../../../../../backend/src/api/user";
+import DatePicker from "../../../../../../util/components/DatePicker/DatePicker";
+import FormInput from "../../../../../../util/components/Input/FormInput";
 import { ProfileInfoT } from "../EditProfile";
 import styles from "./EditProfileInfo.module.scss";
 

@@ -11,7 +11,7 @@ import {
   SmallProfileRequestFields,
   profileKeys,
   smallPreviewProfileFields,
-} from "../../../routes/Profile/queries";
+} from "../../../routes/Profile/ProfileFace/queries";
 
 export const tweetThreadKeys = createQueryKeys("tweetThread", {
   tweetID: (id: number) => ({

@@ -17,7 +17,7 @@ import {
   profileKeys,
   smallPreviewProfileFields,
   SmallProfileRequestFields,
-} from "../Profile/queries";
+} from "../Profile/ProfileFace/queries";
 
 type CircleResponse =
   | GetUserFollowees<SmallProfileRequestFields>["response"]

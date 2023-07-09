@@ -3,20 +3,20 @@ import dayjs from "dayjs";
 import { RefObject, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { charLimits, UpdateUser } from "../../../../../backend/src/api/user";
-import { UpdateUserFields } from "../../../../../backend/src/permissions";
-import { useAuthStore } from "../../../../store/AuthStore";
-import Form from "../../../../util/components/Form/Form";
-import Minipage from "../../../../util/layouts/Minipage/Minipage";
-import yup from "../../../../util/yup";
+import { charLimits, UpdateUser } from "../../../../../../backend/src/api/user";
+import { UpdateUserFields } from "../../../../../../backend/src/permissions";
+import { useAuthStore } from "../../../../../store/AuthStore";
+import Form from "../../../../../util/components/Form/Form";
+import Minipage from "../../../../../util/layouts/Minipage/Minipage";
+import yup from "../../../../../util/yup";
 import { fullProfileFields, profileKeys, UserProfileT } from "../queries";
-import profileStyles from "../Profile.module.scss";
+import profileStyles from "../../Profile.module.scss";
 import EditProfileHeader from "./EditProfileHeader/EditProfileHeader";
 import EditProfileInfo, {
   PhotoInputRefs,
 } from "./EditProfileInfo/EditProfileInfo";
 import EditProfilePhotos from "./EditProfilePhotos/EditProfilePhotos";
-import { patchData } from "../../../../util/request";
+import { patchData } from "../../../../../util/request";
 
 interface EditProfileProps {
   user: UserProfileT;
@@ -32,7 +32,7 @@ const requestFields = [
   "birthDate",
 ] as const satisfies Readonly<Array<UpdateUserFields>>;
 export type ProfileInfoT = Omit<
-  UpdateUser<typeof requestFields[number]>["request"]["user"],
+  UpdateUser<(typeof requestFields)[number]>["request"]["user"],
   "birthDate"
 >;
 
@@ -76,11 +76,11 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
   } = form;
 
   const { mutate } = useMutation<
-    UpdateUser<typeof requestFields[number]>["response"],
+    UpdateUser<(typeof requestFields)[number]>["response"],
     unknown,
     UpdateUser<UpdateUserFields>["request"]
   >(async (body) =>
-    patchData<typeof requestFields[number]>("user", body, requestFields)
+    patchData<(typeof requestFields)[number]>("user", body, requestFields)
   );
 
   const isValidForm = isValid && day !== -1 && month !== -1 && year !== -1;

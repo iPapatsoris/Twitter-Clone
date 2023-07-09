@@ -1,13 +1,13 @@
 import { Tweet as TweetT } from "../../../../backend/src/entities/tweet";
 import Icon from "../../../util/components/Icon/Icon";
-import Avatar from "../../routes/Profile/Avatar/Avatar";
+import Avatar from "../../routes/Profile/ProfileFace/Avatar/Avatar";
 import styles from "./Tweet.module.scss";
 import verifiedIcon from "../../../assets/icons/verified.png";
 import dotsIcon from "../../../assets/icons/dots-gray.png";
 import dayjs from "dayjs";
 import TweetActions from "./TweetActions/TweetActions";
 import { useRef, useState } from "react";
-import ProfileHoverPreview from "../../routes/Profile/ProfileHoverPreview";
+import ProfileHoverPreview from "../../routes/Profile/ProfileFace/ProfileHoverPreview";
 import { useNavigate } from "react-router-dom";
 import { getPagePath } from "../../../util/paths";
 import { useReplyLine } from "./TweetThread/useReplyLine";

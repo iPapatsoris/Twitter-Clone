@@ -1,6 +1,5 @@
-import { defaultAvatar } from "../../defaultPics";
 import AddPhotoButton from "./AddPhotoButton";
-import profileStyles from "../../Profile.module.scss";
+import profileStyles from "../../../Profile.module.scss";
 import Avatar from "../../Avatar/Avatar";
 
 interface EditProfilePhotosProps {

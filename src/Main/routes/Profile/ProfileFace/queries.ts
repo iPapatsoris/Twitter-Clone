@@ -1,9 +1,9 @@
 import { LoaderFunctionArgs } from "react-router-dom";
-import { GetUser } from "../../../../backend/src/api/user";
-import { GetUserFields } from "../../../../backend/src/permissions";
+import { GetUser } from "../../../../../backend/src/api/user";
+import { GetUserFields } from "../../../../../backend/src/permissions";
 import { QueryClient } from "@tanstack/react-query";
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import { getData } from "../../../util/request";
+import { getData } from "../../../../util/request";
 
 // Fields to query in user-list, tweet-list, tweet-view preview modes
 export const smallPreviewProfileFields = [
@@ -34,9 +34,9 @@ export const fullProfileFields = [
   "website",
 ] as const satisfies Readonly<Array<GetUserFields>>;
 
-export type FullProfileRequestFields = typeof fullProfileFields[number];
+export type FullProfileRequestFields = (typeof fullProfileFields)[number];
 export type SmallProfileRequestFields =
-  typeof smallPreviewProfileFields[number];
+  (typeof smallPreviewProfileFields)[number];
 type FullProfileResponse = GetUser<FullProfileRequestFields>["response"];
 
 // User prop passed to EditProfile

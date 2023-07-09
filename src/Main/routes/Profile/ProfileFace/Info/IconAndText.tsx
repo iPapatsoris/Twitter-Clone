@@ -1,4 +1,4 @@
-import Icon from "../../../../util/components/Icon/Icon";
+import Icon from "../../../../../util/components/Icon/Icon";
 import styles from "./Info.module.scss";
 
 interface IconAndTextProps {

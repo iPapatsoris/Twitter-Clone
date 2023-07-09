@@ -16,7 +16,7 @@ import NotificationsVerified from "./Main/routes/Notifications/NotificationsVeri
 import NotificationsMentions from "./Main/routes/Notifications/NotificationsMentions";
 import { getPagePath } from "./util/paths";
 import Profile from "./Main/routes/Profile/Profile";
-import { profileLoader } from "./Main/routes/Profile/queries";
+import { profileLoader } from "./Main/routes/Profile/ProfileFace/queries";
 import { QueryClient } from "@tanstack/react-query";
 import { shallow } from "zustand/shallow";
 import { LoggedInUser, useAuthStore } from "./store/AuthStore";

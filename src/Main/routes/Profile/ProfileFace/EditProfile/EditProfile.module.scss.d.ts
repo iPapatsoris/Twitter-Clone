@@ -1,6 +1,6 @@
 import globalClassNames, {
   ClassNames as GlobalClassNames,
-} from "../../../../style.d";
+} from "../../../../../style";
 declare const classNames: typeof globalClassNames & {
   readonly EditProfile: "EditProfile";
 };

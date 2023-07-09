@@ -1,9 +1,9 @@
-import Button from "../../../../../util/components/Button/Button";
-import Icon from "../../../../../util/components/Icon/Icon";
+import Button from "../../../../../../util/components/Button/Button";
+import Icon from "../../../../../../util/components/Icon/Icon";
 import styles from "./EditProfileHeader.module.scss";
-import closeIcon from "../../../../../assets/icons/close.png";
+import closeIcon from "../../../../../../assets/icons/close.png";
 import { useContext } from "react";
-import { ModalContext } from "../../../../../util/components/Modal/Modal";
+import { ModalContext } from "../../../../../../util/components/Modal/Modal";
 
 interface EditProfileHeaderProps {
   disableUpdate: boolean;
