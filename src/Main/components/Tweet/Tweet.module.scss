@@ -1,13 +1,37 @@
-.Tweet {
+.Tweet.WithBorder {
+  border-bottom: var(--border);
+}
+
+.Retweet {
+  display: flex;
+  gap: 1rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  .Retweeter {
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .RetweetIconWrapper {
+    flex-basis: var(--avatar-small-height);
+    justify-content: end;
+
+    .RetweetIcon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+.TweetWrapper {
   display: flex;
   gap: 1rem;
 
   $replyLineColor: rgb(207, 217, 222);
   $replyLineWidth: 2px;
-
-  &.WithBorder {
-    border-bottom: var(--border);
-  }
 
   .Avatar {
     flex-shrink: 0;

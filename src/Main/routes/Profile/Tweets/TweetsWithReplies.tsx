@@ -7,6 +7,7 @@ import { useOutletContext } from "react-router-dom";
 
 const TweetsWithReplies = () => {
   const username: string = useOutletContext();
+
   const { data, isSuccess } = useQuery(
     userTweetsKeys.tweetsOfUsername(username)._ctx.withReplies
   );
@@ -19,7 +20,7 @@ const TweetsWithReplies = () => {
   data.data!.threadsAndRetweets.forEach((t, threadIndex) => {
     if (t.retweet) {
       repliesJSX.push(
-        <Tweet key={"retweet " + t.retweet.tweet.id} tweet={t.retweet.tweet} />
+        <Tweet key={"retweet " + t.retweet.tweet.id} retweet={t.retweet} />
       );
     } else {
       t.thread?.tweets.forEach((tweet, index) => {

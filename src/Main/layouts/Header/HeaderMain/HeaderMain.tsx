@@ -35,7 +35,6 @@ const HeaderMain = ({
       )}
     </div>
   );
-  console.log(title);
 
   return (
     <div

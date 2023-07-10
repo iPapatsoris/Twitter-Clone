@@ -4,6 +4,11 @@ import globalClassNames, {
 declare const classNames: typeof globalClassNames & {
   readonly Tweet: "Tweet";
   readonly WithBorder: "WithBorder";
+  readonly Retweet: "Retweet";
+  readonly Retweeter: "Retweeter";
+  readonly RetweetIconWrapper: "RetweetIconWrapper";
+  readonly RetweetIcon: "RetweetIcon";
+  readonly TweetWrapper: "TweetWrapper";
   readonly Avatar: "Avatar";
   readonly ReplyLine: "ReplyLine";
   readonly ShowMoreIcon: "ShowMoreIcon";
@@ -20,6 +25,11 @@ export = classNames;
 export type ClassNames =
   | "Tweet"
   | "WithBorder"
+  | "Retweet"
+  | "Retweeter"
+  | "RetweetIconWrapper"
+  | "RetweetIcon"
+  | "TweetWrapper"
   | "Avatar"
   | "ReplyLine"
   | "ShowMoreIcon"
