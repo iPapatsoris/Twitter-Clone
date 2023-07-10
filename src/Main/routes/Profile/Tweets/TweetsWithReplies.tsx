@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { userTweetsKeys } from "./queries";
 import Tweet from "../../../components/Tweet/Tweet";
 import List from "../../../layouts/ContentRight/List/List";
-import styles from "../Profile.module.scss";
 import ShowMoreTweets from "../../../components/Tweet/ShowMoreTweets";
 import { useOutletContext } from "react-router-dom";
 
@@ -20,7 +19,7 @@ const TweetsWithReplies = () => {
   data.data!.threadsAndRetweets.forEach((t, threadIndex) => {
     if (t.retweet) {
       repliesJSX.push(
-        <Tweet key={t.retweet.tweet.id} tweet={t.retweet.tweet} />
+        <Tweet key={"retweet " + t.retweet.tweet.id} tweet={t.retweet.tweet} />
       );
     } else {
       t.thread?.tweets.forEach((tweet, index) => {

@@ -4,10 +4,10 @@ import styles from "./HeaderLinkMenu.module.scss";
 
 type HeaderLinkMenuProps = {
   items: Array<{ page: Page; username?: string; title: string }>;
-  extraStyles: string[];
+  extraStyles?: string[];
 };
 
-const HeaderLinkMenu = ({ items, extraStyles }: HeaderLinkMenuProps) => {
+const HeaderLinkMenu = ({ items, extraStyles = [] }: HeaderLinkMenuProps) => {
   const path = useLocation().pathname;
   const menu = items.map((item) => {
     const itemPath = getPagePath(item.page, item.username);
