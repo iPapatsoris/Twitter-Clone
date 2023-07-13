@@ -1,5 +1,5 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import { getData } from "../../../../util/request";
+import { getData, postData } from "../../../../util/request";
 import {
   ExpandTweetReplies,
   GetTweet,

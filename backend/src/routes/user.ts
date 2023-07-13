@@ -288,6 +288,7 @@ router.get(
     res: Response<GetUserTweetsAndRetweets["response"]>
   ) => {
     const { username } = req.params;
+    const currentUserID = req.session.userID || -1;
     const tweetIDs = await runQuery<{ id: number }>(
       "SELECT tweet.id \
        FROM tweet, user \
@@ -295,10 +296,10 @@ router.get(
       [username]
     );
     const tweets = await Promise.all(
-      tweetIDs.map(async ({ id }) => getTweet(id))
+      tweetIDs.map(async ({ id }) => getTweet(id, currentUserID))
     );
 
-    const retweets = await getUserRetweets(username);
+    const retweets = await getUserRetweets(username, currentUserID);
     res.send({
       ok: true,
       data: {
@@ -326,6 +327,7 @@ router.get(
     res: Response<GetUserThreadsAndRetweets["response"]>
   ) => {
     const { username } = req.params;
+    const currentUserID = req.session.userID || -1;
     const replyIDs = await runQuery<{ id: number }>(
       "SELECT tweet.id \
        FROM tweet, user \
@@ -333,7 +335,10 @@ router.get(
       [username]
     );
 
-    const tweetsAndReplies = await getTweets(replyIDs.map(({ id }) => id));
+    const tweetsAndReplies = await getTweets(
+      replyIDs.map(({ id }) => id),
+      currentUserID
+    );
 
     // Don't show a thread multiple times, if the user has multiple responses
     // within the thread
@@ -349,7 +354,10 @@ router.get(
           };
         }
         // Tweet is a reply; get referenced tweet
-        const previousReply = await getTweet(tweet.referencedTweetID);
+        const previousReply = await getTweet(
+          tweet.referencedTweetID,
+          currentUserID
+        );
         let originalTweet: Tweet | null = null;
         let hasMoreNestedReplies = false;
         if (!previousReply.isReply || !previousReply.referencedTweetID) {
@@ -360,10 +368,16 @@ router.get(
           };
         }
         // Referenced tweet is a reply; get referenced tweet of referenced tweet
-        originalTweet = await getTweet(previousReply.referencedTweetID);
+        originalTweet = await getTweet(
+          previousReply.referencedTweetID,
+          currentUserID
+        );
         if (originalTweet.isReply) {
           // Thread has more than 3 levels of reply depth; get thread root tweet
-          originalTweet = await getTweet(originalTweet.rootTweetID);
+          originalTweet = await getTweet(
+            originalTweet.rootTweetID,
+            currentUserID
+          );
           hasMoreNestedReplies = true;
         }
         // Return 3 tweets, and whether there exist more or not
@@ -374,7 +388,7 @@ router.get(
       })
     );
 
-    const retweets = await getUserRetweets(username);
+    const retweets = await getUserRetweets(username, currentUserID);
 
     res.send({
       ok: true,
@@ -395,8 +409,9 @@ router.get(
     res: Response<GetTweets["response"]>
   ) => {
     const { username } = req.params;
+    const currentUserID = req.session.userID || -1;
     const tweetIDs = await runQuery<{ id: number }>(
-      "SELECT tweetID \
+      "SELECT tweetID as id \
        FROM user, user_reacts_to_tweet \
        WHERE userID = user.id AND isLike = true AND user.username = ? \
        ORDER BY reactionDate DESC",
@@ -404,7 +419,12 @@ router.get(
     );
     res.send({
       ok: true,
-      data: { tweets: await getTweets(tweetIDs.map(({ id }) => id)) },
+      data: {
+        tweets: await getTweets(
+          tweetIDs.map(({ id }) => id),
+          currentUserID
+        ),
+      },
     });
   }
 );

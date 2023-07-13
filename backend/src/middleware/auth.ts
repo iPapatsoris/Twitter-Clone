@@ -28,7 +28,11 @@ export const requireAuth = (
   res: Response,
   next: NextFunction
 ): void => {
-  if (req.session && req.session.isLoggedIn === true) {
+  if (
+    req.session &&
+    req.session.isLoggedIn === true &&
+    req.session.userID !== undefined
+  ) {
     next();
     return;
   }

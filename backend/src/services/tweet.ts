@@ -5,11 +5,11 @@ import {
   Retweet,
   Tweet,
 } from "../entities/tweet.js";
-import { currentUserID } from "../index.js";
 import { Thread } from "../api/tweet.js";
 
 // Get past thread conversation that current tweet responds to
 export const getTweetPreviousReplies = async (
+  currentUserID: number,
   isReply: boolean,
   referencedTweetID?: number,
   accumulator: Tweet[] = []
@@ -18,12 +18,13 @@ export const getTweetPreviousReplies = async (
     return accumulator;
   }
 
-  const parentTweet = await getTweet(referencedTweetID);
+  const parentTweet = await getTweet(referencedTweetID, currentUserID);
   accumulator.push(parentTweet);
   const { isReply: parentIsReply, referencedTweetID: parentReferencedTweetID } =
     parentTweet;
 
   return getTweetPreviousReplies(
+    currentUserID,
     parentIsReply,
     parentReferencedTweetID,
     accumulator
@@ -42,6 +43,7 @@ export const getTweetPreviousReplies = async (
  */
 export const getTweetNestedReplies = async (
   tweetID: number,
+  currentUserID: number,
   // Tweet's actual reply depth
   tweetReplyDepth: number,
   // Max reply depth to look into.
@@ -65,11 +67,12 @@ export const getTweetNestedReplies = async (
     [tweetID]
   );
 
-  const parentTweet = await getTweet(parentTweetID);
+  const parentTweet = await getTweet(parentTweetID, currentUserID);
   accumulator.push(parentTweet);
 
   return getTweetNestedReplies(
     parentTweetID,
+    currentUserID,
     parentReplyDepth,
     maxDepth === -1 ? -1 : maxDepth - 1,
     accumulator
@@ -110,7 +113,10 @@ export const getTweetTags = async (tweetID: number) => {
   );
 };
 
-export const getUserRetweets = async (username: string): Promise<Retweet[]> => {
+export const getUserRetweets = async (
+  username: string,
+  currentUserID: number
+): Promise<Retweet[]> => {
   const query =
     "SELECT tweetID, reactionDate as retweetDate \
      FROM user_reacts_to_tweet, user \
@@ -127,7 +133,7 @@ export const getUserRetweets = async (username: string): Promise<Retweet[]> => {
     [username]
   );
   const tweets = await Promise.all(
-    retweets.map((retweet) => getTweet(retweet.tweetID))
+    retweets.map((retweet) => getTweet(retweet.tweetID, currentUserID))
   );
 
   return retweets.map((retweet, index) => ({
@@ -169,7 +175,16 @@ export const getTotalUserTweets = async (userID: number) => {
   )[0].totalTweets;
 };
 
-const getUserReactionsToTweet = async (tweetID: number) => {
+const getUserReactionsToTweet = async (
+  tweetID: number,
+  currentUserID: number
+): Promise<{ isRetweet: boolean; isLike: boolean }> => {
+  if (currentUserID === -1) {
+    return {
+      isRetweet: false,
+      isLike: false,
+    };
+  }
   const [reaction] = await runQuery<{
     isRetweet: boolean;
     isLike: boolean;
@@ -184,10 +199,12 @@ const getUserReactionsToTweet = async (tweetID: number) => {
   };
 };
 
-export const getTweets = async (tweetIDs: number[]) =>
-  await Promise.all(tweetIDs.map((tweetID) => getTweet(tweetID)));
+export const getTweets = async (tweetIDs: number[], currentUserID: number) =>
+  await Promise.all(
+    tweetIDs.map((tweetID) => getTweet(tweetID, currentUserID))
+  );
 
-export const getTweet = async (tweetID: number) => {
+export const getTweet = async (tweetID: number, currentUserID: number) => {
   const result = await runQuery<Tweet>(
     "SELECT tweet.*, username, name, avatar, isVerified \
          FROM tweet, user \
@@ -197,7 +214,7 @@ export const getTweet = async (tweetID: number) => {
 
   const [tweet] = convertQueryResultToTweets(result);
 
-  const reactions = await getUserReactionsToTweet(tweet.id);
+  const reactions = await getUserReactionsToTweet(tweet.id, currentUserID);
 
   tweet.usernameTags = await getTweetTags(tweet.id);
   tweet.stats = { ...tweet.stats, ...(await getTweetStats(tweet.id)) };

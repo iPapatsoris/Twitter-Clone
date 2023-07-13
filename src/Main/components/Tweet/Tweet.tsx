@@ -147,7 +147,13 @@ const Tweet = ({
                 bookmarkInsteadOfViews={false}
                 justifyContent="space-between"
                 leftAlignFirstIcon
-                tweetStats={tweet.stats}
+                tweet={{
+                  id: tweet.id,
+                  stats: tweet.stats,
+                  isLiked: tweet.isLiked,
+                  isRetweeted: tweet.isRetweeted,
+                  author: tweet.author,
+                }}
               />
             </>
           </div>

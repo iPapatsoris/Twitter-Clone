@@ -1,6 +1,5 @@
 /* eslint-disable no-multi-str */
 import express, { Request, Response } from "express";
-import { currentUserID } from "../index.js";
 import { NormalResponse } from "../api/common.js";
 import {
   CreateTweet,
@@ -20,16 +19,19 @@ import {
   updateParentTweetReplyDepth,
 } from "../services/tweet.js";
 import { GetUserTweetsAndRetweets } from "../api/user.js";
+import { requireAuth } from "../middleware/auth.js";
 
 const router = express.Router();
 
 router.post(
   "/",
+  requireAuth,
   async (
     req: Request<{}, {}, CreateTweet["request"]>,
     res: Response<CreateTweet["response"]>
   ) => {
     const { tweet } = req.body;
+    const currentUserID = req.session.userID!;
     let rootTweetID: number | null = null;
     if (tweet.isReply) {
       [{ rootTweetID }] = await runQuery<{ rootTweetID: number }>(
@@ -62,7 +64,10 @@ router.post(
         [currentUserID]
       );
       updateParentTweetReplyDepth(tweet.referencedTweetID, 1);
-      let { usernameTags } = await getTweet(tweet.referencedTweetID);
+      let { usernameTags } = await getTweet(
+        tweet.referencedTweetID,
+        currentUserID
+      );
       if (
         usernameTags &&
         usernameTags.findIndex((user) => user.id === currentUserID) === -1
@@ -101,6 +106,7 @@ router.patch(
 
 router.post(
   "/:tweetID/retweet",
+  requireAuth,
   (
     req: TypedRequestQuery<{ tweetID: string }>,
     res: Response<NormalResponse>
@@ -109,12 +115,13 @@ router.post(
       "INSERT INTO user_reacts_to_tweet \
       (tweetID, userID, reactionDate, isRetweet, isLike) \
        VALUES (?, ?, NOW(), true, false)";
-    simpleQuery(res, query, [req.params.tweetID, currentUserID]);
+    simpleQuery(res, query, [req.params.tweetID, req.session.userID]);
   }
 );
 
 router.post(
   "/:tweetID/like",
+  requireAuth,
   (
     req: TypedRequestQuery<{ tweetID: string }>,
     res: Response<NormalResponse>
@@ -123,7 +130,21 @@ router.post(
       "INSERT INTO user_reacts_to_tweet \
       (tweetID, userID, reactionDate, isRetweet, isLike) \
        VALUES (?, ?, NOW(), false, true)";
-    simpleQuery(res, query, [req.params.tweetID, currentUserID]);
+    simpleQuery(res, query, [req.params.tweetID, req.session.userID]);
+  }
+);
+
+router.delete(
+  "/:tweetID/like",
+  requireAuth,
+  (
+    req: TypedRequestQuery<{ tweetID: string }>,
+    res: Response<NormalResponse>
+  ) => {
+    const query =
+      "DELETE FROM user_reacts_to_tweet \
+       WHERE userID = ? AND tweetID = ? AND isLike = true";
+    simpleQuery(res, query, [req.session.userID, req.params.tweetID]);
   }
 );
 
@@ -137,17 +158,21 @@ router.post(
  */
 router.get(
   "/timeline",
+  requireAuth,
   async (
     req: TypedRequestQuery<{}>,
     res: Response<GetUserTweetsAndRetweets["response"]>
   ) => {
+    const currentUserID = req.session.userID || -1;
     const tweetIDs = await runQuery<{ id: number }>(
       "SELECT id \
        FROM tweet, user_follows as friendship \
        WHERE authorID = followeeID AND followerID = ? AND isReply = false",
       [currentUserID]
     );
-    const tweets = await Promise.all(tweetIDs.map(({ id }) => getTweet(id)));
+    const tweets = await Promise.all(
+      tweetIDs.map(({ id }) => getTweet(id, currentUserID))
+    );
 
     const followedUsers = await runQuery<{ username: string }>(
       "SELECT username \
@@ -157,7 +182,9 @@ router.get(
     );
     const retweets = (
       await Promise.all(
-        followedUsers.map(({ username }) => getUserRetweets(username))
+        followedUsers.map(({ username }) =>
+          getUserRetweets(username, currentUserID)
+        )
       )
     ).flat();
 
@@ -180,11 +207,12 @@ router.get(
     req: TypedRequestQuery<{ tweetID: string }>,
     res: Response<GetTweet["response"]>
   ) => {
+    const currentUserID = req.session.userID || -1;
     const { tweetID } = req.params;
     let middleTweet = {} as Tweet;
 
     // Get tweet information
-    middleTweet = await getTweet(Number(tweetID));
+    middleTweet = await getTweet(Number(tweetID), currentUserID);
     if (!middleTweet) {
       res.send({ ok: false });
       return;
@@ -192,6 +220,7 @@ router.get(
 
     // Get previous replies from the original tweet until the middle one
     const previousReplies: Array<Tweet> = await getTweetPreviousReplies(
+      currentUserID,
       middleTweet.isReply,
       middleTweet.referencedTweetID
     );
@@ -206,13 +235,18 @@ router.get(
       [tweetID]
     );
 
-    const replies = await getTweets(replyIDs.map(({ id }) => id));
+    const replies = await getTweets(
+      replyIDs.map(({ id }) => id),
+      currentUserID
+    );
 
     // Get nested replies of each reply, in parallel
     const promises: Promise<Tweet[]>[] = [];
     for (const replyIndex in replies) {
       const reply = replies[replyIndex];
-      promises.push(getTweetNestedReplies(reply.id, reply.replyDepth, 1));
+      promises.push(
+        getTweetNestedReplies(reply.id, currentUserID, reply.replyDepth, 1)
+      );
     }
 
     let nestedRepliesOfReplies: Tweet[][];
@@ -252,11 +286,12 @@ router.get(
     req: TypedRequestQuery<{ tweetID: string }>,
     res: Response<ExpandTweetReplies["response"]>
   ) => {
+    const currentUserID = req.session.userID || -1;
     const { tweetID } = req.params;
     let tweet = {} as Tweet;
 
     // Get tweet information
-    tweet = await getTweet(Number(tweetID));
+    tweet = await getTweet(Number(tweetID), currentUserID);
     if (!tweet) {
       res.send({ ok: false });
       return;
@@ -265,7 +300,12 @@ router.get(
     // Retrieve all nested replies
     let replies: Tweet[];
     try {
-      replies = await getTweetNestedReplies(tweet.id, tweet.replyDepth, -1);
+      replies = await getTweetNestedReplies(
+        tweet.id,
+        currentUserID,
+        tweet.replyDepth,
+        -1
+      );
     } catch (error) {
       res.send({ ok: false });
       return;
@@ -286,11 +326,12 @@ router.get(
     req: TypedRequestQuery<{ tweetID: string }>,
     res: Response<ExpandTweetReplies["response"]>
   ) => {
+    const currentUserID = req.session.userID || -1;
     const { tweetID } = req.params;
     let tweet = {} as Tweet;
 
     // Get tweet information
-    tweet = await getTweet(Number(tweetID));
+    tweet = await getTweet(Number(tweetID), currentUserID);
     if (!tweet) {
       res.send({ ok: false });
       return;
@@ -300,6 +341,7 @@ router.get(
     let replies: Tweet[];
     try {
       replies = await getTweetPreviousReplies(
+        currentUserID,
         tweet.isReply,
         tweet.referencedTweetID
       );

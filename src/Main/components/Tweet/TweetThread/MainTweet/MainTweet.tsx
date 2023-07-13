@@ -67,7 +67,13 @@ const MainTweet = ({ tweet, tweetThreadRef }: MainTweetProps) => {
         <TweetActions
           includeText={false}
           bookmarkInsteadOfViews
-          tweetStats={tweet.stats}
+          tweet={{
+            id: tweet.id,
+            stats: tweet.stats,
+            isLiked: tweet.isLiked,
+            isRetweeted: tweet.isRetweeted,
+            author: tweet.author,
+          }}
           justifyContent="space-around"
           extraIconProps={{
             exactVerticalPlacement: true,

@@ -35,8 +35,6 @@ app.use(
     cookie: { httpOnly: true, secure: false, sameSite: "lax" },
   })
 );
-// TODO: remove when auth is implemented
-export const currentUserID = 1;
 
 /**
  *

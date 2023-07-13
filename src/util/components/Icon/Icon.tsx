@@ -70,9 +70,9 @@ const Icon = forwardRef(
           hoverClassname,
           ...extraWrapperStyles,
         ].join(" ")}
+        onClick={onClick}
       >
         <div
-          onClick={onClick}
           // Prevent losing cursor position when an icon is clicked within an
           // input, like a password reveal toggle
           onMouseUp={(e) => e.preventDefault()}
