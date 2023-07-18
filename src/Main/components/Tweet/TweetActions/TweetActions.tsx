@@ -12,12 +12,11 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { tweetThreadKeys } from "../TweetThread/queries";
 import { Tweet } from "../../../../../backend/src/entities/tweet";
 import { NormalResponse } from "../../../../../backend/src/api/common";
-import { userTweetsKeys } from "../../../routes/Profile/Tweets/queries";
-import { useAuthStore } from "../../../../store/AuthStore";
 import { likeTweetQuery, unlikeTweetQuery } from "./queries";
+import { tweetKeys } from "../queries";
+import { LikeTweet } from "../../../../../backend/src/api/tweet";
 
 interface TweetActionsProps {
   includeText: boolean;
@@ -26,7 +25,6 @@ interface TweetActionsProps {
   justifyContent: "space-around" | "space-between";
   extraIconProps?: Partial<IconProps>;
   tweet: Pick<Tweet, "stats" | "isLiked" | "isRetweeted" | "id" | "author">;
-  originalTweetID?: number;
 }
 
 const TweetActions = ({
@@ -36,33 +34,20 @@ const TweetActions = ({
   justifyContent,
   extraIconProps = {},
   tweet,
-  originalTweetID,
 }: TweetActionsProps) => {
   const { stats, isLiked, isRetweeted, id, author } = tweet;
   const queryClient = useQueryClient();
-  const { loggedInUser } = useAuthStore();
 
   const onLikeOrUnlikeSuccess: UseMutationOptions<
-    NormalResponse,
+    LikeTweet["response"],
     unknown,
     { id: number }
-  >["onSuccess"] = (data) => {
-    if (data.ok) {
-      if (originalTweetID) {
-        queryClient.invalidateQueries(
-          tweetThreadKeys.tweetID(originalTweetID).queryKey
-        );
-      }
-      queryClient.invalidateQueries(
-        userTweetsKeys.tweetsOfUsername(author.username)
+  >["onSuccess"] = (resp) => {
+    if (resp.ok) {
+      queryClient.setQueryData<NormalResponse<Tweet>>(
+        tweetKeys.tweetID(tweet.id).queryKey,
+        { ok: true, data: resp.data }
       );
-      // TODO: refactor cache so that I can invalidate only the tweet
-      // and not the whole list
-      if (loggedInUser) {
-        queryClient.invalidateQueries(
-          userTweetsKeys.tweetsOfUsername(loggedInUser?.username)
-        );
-      }
     }
   };
 

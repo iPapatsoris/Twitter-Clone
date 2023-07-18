@@ -5,9 +5,11 @@ import {
   CreateTweet,
   ExpandTweetReplies,
   GetTweet,
+  GetTweetParams,
+  LikeTweet,
   Thread,
 } from "../api/tweet.js";
-import { runQuery, simpleQuery, TypedRequestQuery } from "../util.js";
+import { Fields, runQuery, simpleQuery, TypedRequestQuery } from "../util.js";
 import { Tweet } from "../entities/tweet.js";
 import {
   getTweet,
@@ -122,29 +124,41 @@ router.post(
 router.post(
   "/:tweetID/like",
   requireAuth,
-  (
+  async (
     req: TypedRequestQuery<{ tweetID: string }>,
-    res: Response<NormalResponse>
+    res: Response<LikeTweet["response"]>
   ) => {
+    const { tweetID } = req.params;
+    const { userID } = req.session;
     const query =
       "INSERT INTO user_reacts_to_tweet \
       (tweetID, userID, reactionDate, isRetweet, isLike) \
        VALUES (?, ?, NOW(), false, true)";
-    simpleQuery(res, query, [req.params.tweetID, req.session.userID]);
+    await runQuery(query, [tweetID, userID]);
+    res.send({
+      ok: true,
+      data: { ...(await getTweet(parseInt(tweetID), userID!)) },
+    });
   }
 );
 
 router.delete(
   "/:tweetID/like",
   requireAuth,
-  (
+  async (
     req: TypedRequestQuery<{ tweetID: string }>,
-    res: Response<NormalResponse>
+    res: Response<LikeTweet["response"]>
   ) => {
+    const { tweetID } = req.params;
+    const { userID } = req.session;
     const query =
       "DELETE FROM user_reacts_to_tweet \
        WHERE userID = ? AND tweetID = ? AND isLike = true";
-    simpleQuery(res, query, [req.session.userID, req.params.tweetID]);
+    await runQuery(query, [userID, tweetID]);
+    res.send({
+      ok: true,
+      data: { ...(await getTweet(parseInt(tweetID), userID!)) },
+    });
   }
 );
 
@@ -204,7 +218,7 @@ router.get(
 router.get(
   "/:tweetID",
   async (
-    req: TypedRequestQuery<{ tweetID: string }>,
+    req: TypedRequestQuery<{ tweetID: string }, Fields<GetTweetParams>>,
     res: Response<GetTweet["response"]>
   ) => {
     const currentUserID = req.session.userID || -1;
@@ -215,6 +229,14 @@ router.get(
     middleTweet = await getTweet(Number(tweetID), currentUserID);
     if (!middleTweet) {
       res.send({ ok: false });
+      return;
+    }
+
+    if (req.query.noThread) {
+      res.send({
+        ok: true,
+        data: { tweet: middleTweet, replies: [], previousReplies: [] },
+      });
       return;
     }
 

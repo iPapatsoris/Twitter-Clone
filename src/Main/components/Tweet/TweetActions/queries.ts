@@ -1,13 +1,13 @@
 import { MutateFunction } from "@tanstack/react-query";
-import { NormalResponse } from "../../../../../backend/src/api/common";
 import { deleteData, postData } from "../../../../util/request";
+import { LikeTweet } from "../../../../../backend/src/api/tweet";
 
 export const likeTweetQuery: MutateFunction<
-  NormalResponse,
+  LikeTweet["response"],
   unknown,
   { id: number }
 > = async (body) => {
-  const res = await postData<NormalResponse, "">(
+  const res = await postData<LikeTweet["response"], "">(
     "tweet/" + body.id + "/like",
     {}
   );
@@ -19,11 +19,11 @@ export const likeTweetQuery: MutateFunction<
 };
 
 export const unlikeTweetQuery: MutateFunction<
-  NormalResponse,
+  LikeTweet["response"],
   unknown,
   { id: number }
 > = async (body) => {
-  const res = await deleteData<NormalResponse, "">(
+  const res = await deleteData<LikeTweet["response"], "">(
     "tweet/" + body.id + "/like"
   );
 

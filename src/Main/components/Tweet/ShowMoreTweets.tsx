@@ -4,6 +4,7 @@ import { ExpansionDirection, tweetThreadKeys } from "./TweetThread/queries";
 import { GetTweet } from "../../../../backend/src/api/tweet";
 import { GetUserThreadsAndRetweets } from "../../../../backend/src/api/user";
 import { userTweetsKeys } from "../../routes/Profile/Tweets/queries";
+import { setTweet } from "./queries";
 
 interface ShowMoreTweetsProps {
   replyToExpand: number;
@@ -32,7 +33,10 @@ const ShowMoreTweets = ({
 
   const expandReplies = async () => {
     const res = await refetch();
-    const expandedReplies = res.data?.data?.replies;
+    const expandedReplies = res.data?.data?.replies!;
+
+    expandedReplies.forEach((r) => setTweet(r, queryClient));
+
     if (direction === "downward" && downwardProps) {
       const { originalTweetID, replyIndex } = downwardProps;
       const originalTweet = queryClient.getQueryData<GetTweet["response"]>(
@@ -40,7 +44,7 @@ const ShowMoreTweets = ({
       );
 
       if (originalTweet?.data && expandedReplies) {
-        // Update tweet with full reply list
+        // Immutably update tweet with full reply list
         const newReplies = [...originalTweet.data?.replies];
         newReplies[replyIndex] = {
           hasMoreNestedReplies: false,
@@ -61,10 +65,10 @@ const ShowMoreTweets = ({
       const { threadIndex, username } = upwardProps;
       const originalUserTweets = queryClient.getQueryData<
         GetUserThreadsAndRetweets["response"]
-      >(userTweetsKeys.tweetsOfUsername(username).queryKey);
+      >(userTweetsKeys.tweetsOfUsername(username)._ctx.withReplies.queryKey);
 
       if (originalUserTweets && expandedReplies) {
-        // Update user tweets with full conversation
+        // Immutably Update user tweets with full conversation
         const originalThread =
           originalUserTweets.data?.threadsAndRetweets[threadIndex].thread
             ?.tweets;
@@ -74,24 +78,23 @@ const ShowMoreTweets = ({
         ];
         const newThreadsAndRetweets: NonNullable<
           GetUserThreadsAndRetweets["response"]["data"]
-        >["threadsAndRetweets"] = [
-          ...originalUserTweets.data?.threadsAndRetweets!,
-        ];
+        >["threadsAndRetweets"] =
+          originalUserTweets.data?.threadsAndRetweets.map((t) => ({ ...t }))!;
         newThreadsAndRetweets[threadIndex].thread = {
           hasMoreNestedReplies: false,
           tweets: fullThread,
         };
 
         queryClient.setQueryData<GetUserThreadsAndRetweets["response"]>(
-          userTweetsKeys.tweetsOfUsername(username).queryKey,
-          { ok: true, data: { threadsAndRetweets: newThreadsAndRetweets } }
+          userTweetsKeys.tweetsOfUsername(username)._ctx.withReplies.queryKey,
+          { ok: true, data: { threadsAndRetweets: [...newThreadsAndRetweets] } }
         );
       }
     }
   };
 
   return (
-    <div className={styles.Tweet} onClick={expandReplies}>
+    <div className={styles.TweetWrapper} onClick={expandReplies}>
       <div className={styles.ShowMoreIcon}>
         <div></div>
         <div></div>

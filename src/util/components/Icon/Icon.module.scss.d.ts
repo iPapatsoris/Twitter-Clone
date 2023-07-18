@@ -11,7 +11,8 @@ declare const classNames: typeof globalClassNames & {
   readonly HoverPink: "HoverPink";
   readonly ExactLeftPlacement: "ExactLeftPlacement";
   readonly ExactRightPlacement: "ExactRightPlacement";
-  readonly ExactVerticalPlacement: "ExactVerticalPlacement";
+  readonly ExactTopPlacement: "ExactTopPlacement";
+  readonly ExactBottomPlacement: "ExactBottomPlacement";
   readonly NoHover: "NoHover";
   readonly Icon: "Icon";
   readonly WithBorder: "WithBorder";
@@ -27,7 +28,8 @@ export type ClassNames =
   | "HoverPink"
   | "ExactLeftPlacement"
   | "ExactRightPlacement"
-  | "ExactVerticalPlacement"
+  | "ExactTopPlacement"
+  | "ExactBottomPlacement"
   | "NoHover"
   | "Icon"
   | "WithBorder"

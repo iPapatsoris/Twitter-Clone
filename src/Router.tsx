@@ -27,6 +27,11 @@ import { tweetThreadLoader } from "./Main/components/Tweet/TweetThread/queries";
 import TweetsWithReplies from "./Main/routes/Profile/Tweets/TweetsWithReplies";
 import Tweets from "./Main/routes/Profile/Tweets/Tweets";
 import LikedTweets from "./Main/routes/Profile/Tweets/LikedTweets";
+import {
+  userLikedTweetsLoader,
+  userTweetsLoader,
+  userTweetsWithRepliesLoader,
+} from "./Main/routes/Profile/Tweets/queries";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const loggedInUser: Pick<LoggedInUser, "id"> | null = useAuthStore(
@@ -97,16 +102,19 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
         >
           <Route
             index
+            loader={userTweetsLoader(queryClient)}
             element={<Tweets />}
             errorElement={<ErrorPage />} // is this needed? can i have it globally?
           />
           <Route
             path={getPagePath("profileWithReplies")}
+            loader={userTweetsWithRepliesLoader(queryClient)}
             element={<TweetsWithReplies />}
             errorElement={<ErrorPage />} // is this needed? can i have it globally?
           />
           <Route
             path={getPagePath("profileLikes")}
+            loader={userLikedTweetsLoader(queryClient)}
             element={<LikedTweets />}
             errorElement={<ErrorPage />} // is this needed? can i have it globally?
           />

@@ -12,6 +12,7 @@ import {
   profileKeys,
   smallPreviewProfileFields,
 } from "../../../routes/Profile/ProfileFace/queries";
+import { setTweet } from "../queries";
 
 export type ExpansionDirection = "downward" | "upward";
 export const tweetThreadKeys = createQueryKeys("tweetThread", {
@@ -56,6 +57,15 @@ export const tweetThreadLoader =
         ok: true,
         data: { user: { ...tweetAuthor!, isFollowedByActiveUser: false } },
       }
+    );
+
+    const { tweet, previousReplies, replies } = tweetThreadData.data!;
+
+    setTweet(tweet, queryClient);
+
+    previousReplies.forEach((reply) => setTweet(reply, queryClient));
+    replies.forEach(({ tweets }) =>
+      tweets.forEach((reply) => setTweet(reply, queryClient))
     );
 
     return tweetThreadData;

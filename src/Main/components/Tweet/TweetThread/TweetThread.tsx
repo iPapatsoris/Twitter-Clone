@@ -27,7 +27,7 @@ const TweetThread = ({}: TweetThreadProps) => {
 
   previousReplies.forEach((reply) => {
     previousRepliesJSX.push(
-      <Tweet key={reply.id} tweet={reply} drawReplyLine />
+      <Tweet key={reply.id} tweetID={reply.id} drawReplyLine />
     );
   });
 
@@ -40,7 +40,7 @@ const TweetThread = ({}: TweetThreadProps) => {
       repliesJSX.push(
         <Tweet
           key={getKey(nestedReply.id, isFinalReply)}
-          tweet={nestedReply}
+          tweetID={nestedReply.id}
           drawReplyLine={!isFinalReply || reply.hasMoreNestedReplies}
           noLineExtension={isFinalReply && reply.hasMoreNestedReplies}
         />

@@ -31,3 +31,10 @@ export type GetTweet = {
 export type ExpandTweetReplies = {
   response: NormalResponse<{ replies: Tweet[] }>;
 };
+
+export type LikeTweet = {
+  response: NormalResponse<Tweet>;
+};
+
+export const getTweetParams = ["noThread"] as const;
+export type GetTweetParams = (typeof getTweetParams)[number];

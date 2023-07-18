@@ -33,8 +33,8 @@ const updateUserFieldWhitelist = [
   "birthDate",
 ] as const satisfies Readonly<Array<keyof User>>;
 
-export type GetUserFields = typeof getUserFieldWhitelist[number];
-export type UpdateUserFields = typeof updateUserFieldWhitelist[number];
+export type GetUserFields = (typeof getUserFieldWhitelist)[number];
+export type UpdateUserFields = (typeof updateUserFieldWhitelist)[number];
 
 export const checkPermissions = (
   endpoint: "GetUser" | "UpdateUser",

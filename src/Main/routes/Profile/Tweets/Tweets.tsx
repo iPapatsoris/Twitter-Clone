@@ -18,7 +18,7 @@ const Tweets = () => {
     return (
       <Tweet
         key={t.tweet ? t.tweet.id : t.retweet?.tweet.id}
-        tweet={t.tweet}
+        tweetID={t.tweet ? t.tweet.id : t.retweet?.tweet.id!}
         retweet={t.retweet}
       />
     );

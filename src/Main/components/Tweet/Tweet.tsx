@@ -1,7 +1,4 @@
-import {
-  Retweet,
-  Tweet as TweetT,
-} from "../../../../backend/src/entities/tweet";
+import { Retweet } from "../../../../backend/src/entities/tweet";
 import Icon from "../../../util/components/Icon/Icon";
 import Avatar from "../../routes/Profile/ProfileFace/Avatar/Avatar";
 import styles from "./Tweet.module.scss";
@@ -15,10 +12,12 @@ import ProfileHoverPreview from "../../routes/Profile/ProfileFace/ProfileHoverPr
 import { useNavigate } from "react-router-dom";
 import { getPagePath } from "../../../util/paths";
 import { useReplyLine } from "./TweetThread/useReplyLine";
+import { useQuery } from "@tanstack/react-query";
+import { tweetKeys } from "./queries";
 
 interface TweetProps {
-  tweet?: TweetT;
-  retweet?: Retweet;
+  tweetID: number;
+  retweet?: Pick<Retweet, "retweetDate" | "retweeter">;
   // Conect a tweet with its reply with a line
   drawReplyLine?: boolean;
   // Make reply line stop at current tweet and not extend to next tweet.
@@ -27,7 +26,7 @@ interface TweetProps {
 }
 
 const Tweet = ({
-  tweet: tweetProp,
+  tweetID,
   retweet,
   drawReplyLine = false,
   noLineExtension = false,
@@ -51,7 +50,15 @@ const Tweet = ({
     replyLineRef
   );
 
-  const tweet = tweetProp || (retweet?.tweet as TweetT);
+  const { data } = useQuery({
+    ...tweetKeys.tweetID(tweetID),
+    enabled: false,
+  });
+
+  if (!data || !data.data) {
+    return null;
+  }
+  const tweet = data.data;
 
   const visitProfile = () => {
     navigate(getPagePath("profile", tweet.author.username));

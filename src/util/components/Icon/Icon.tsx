@@ -13,6 +13,8 @@ export interface IconProps {
   exactLeftPlacement?: boolean;
   exactRightPlacement?: boolean;
   exactVerticalPlacement?: boolean;
+  exactBottomPlacement?: boolean;
+  exactTopPlacement?: boolean;
   text?: string;
 }
 
@@ -45,6 +47,8 @@ const Icon = forwardRef(
       exactLeftPlacement,
       exactRightPlacement,
       exactVerticalPlacement,
+      exactBottomPlacement,
+      exactTopPlacement,
       text,
     }: IconProps,
     ref: React.ForwardedRef<HTMLImageElement>
@@ -57,7 +61,16 @@ const Icon = forwardRef(
       exactPlacementClasses.push(styles.ExactRightPlacement);
     }
     if (exactVerticalPlacement) {
-      exactPlacementClasses.push(styles.ExactVerticalPlacement);
+      exactPlacementClasses.push(
+        styles.ExactTopPlacement,
+        styles.ExactBottomPlacement
+      );
+    }
+    if (exactTopPlacement) {
+      exactPlacementClasses.push(styles.ExactTopPlacement);
+    }
+    if (exactBottomPlacement) {
+      exactPlacementClasses.push(styles.ExactBottomPlacement);
     }
 
     const withBorderClass = withBorder ? styles.WithBorder : "";

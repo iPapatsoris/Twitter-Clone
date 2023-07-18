@@ -5,6 +5,9 @@ import {
   GetUserTweetsAndRetweets,
 } from "../../../../../backend/src/api/user";
 import { GetTweets } from "../../../../../backend/src/api/tweet";
+import { QueryClient } from "@tanstack/react-query";
+import { LoaderFunctionArgs } from "react-router-dom";
+import { setTweet } from "../../../components/Tweet/queries";
 
 export const userTweetsKeys = createQueryKeys("userTweets", {
   tweetsOfUsername: (username: string) => ({
@@ -55,3 +58,47 @@ const userLikedTweetsQuery = async (username: string) => {
   }
   return res;
 };
+
+export const userTweetsLoader =
+  (queryClient: QueryClient) =>
+  async ({ params }: LoaderFunctionArgs) => {
+    const { queryKey, queryFn } = userTweetsKeys.tweetsOfUsername(
+      params.username!
+    );
+
+    const data = await queryClient.ensureQueryData({ queryKey, queryFn });
+    data.data?.tweetsAndRetweets.forEach((t) =>
+      setTweet(t.tweet || t.retweet?.tweet!, queryClient)
+    );
+    return data;
+  };
+
+export const userTweetsWithRepliesLoader =
+  (queryClient: QueryClient) =>
+  async ({ params }: LoaderFunctionArgs) => {
+    const { queryKey, queryFn } = userTweetsKeys.tweetsOfUsername(
+      params.username!
+    )._ctx.withReplies;
+
+    const data = await queryClient.ensureQueryData({ queryKey, queryFn });
+    data.data?.threadsAndRetweets.forEach((t) => {
+      if (t.retweet) {
+        setTweet(t.retweet.tweet, queryClient);
+      } else {
+        t.thread?.tweets.forEach((tweet) => setTweet(tweet, queryClient));
+      }
+    });
+    return data;
+  };
+
+export const userLikedTweetsLoader =
+  (queryClient: QueryClient) =>
+  async ({ params }: LoaderFunctionArgs) => {
+    const { queryKey, queryFn } = userTweetsKeys.tweetsOfUsername(
+      params.username!
+    )._ctx.likedTweets;
+
+    const data = await queryClient.ensureQueryData({ queryKey, queryFn });
+    data.data?.tweets.forEach((t) => setTweet(t, queryClient));
+    return data;
+  };

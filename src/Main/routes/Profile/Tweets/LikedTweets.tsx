@@ -15,7 +15,7 @@ const LikedTweets = () => {
   }
 
   const tweets = data.data!.tweets.map((t) => {
-    return <Tweet key={t.id} tweet={t} />;
+    return <Tweet key={t.id} tweetID={t.id} />;
   });
 
   return <List>{tweets}</List>;
