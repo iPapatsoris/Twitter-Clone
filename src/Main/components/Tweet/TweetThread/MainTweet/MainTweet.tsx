@@ -4,8 +4,12 @@ import Profile from "../../../../routes/Profile/Profile";
 import styles from "./MainTweet.module.scss";
 import dotsIcon from "../../../../../assets/icons/dots-gray.png";
 import dayjs from "dayjs";
-import TweetActions from "../../TweetActions/TweetActions";
-import { useLayoutEffect, useRef } from "react";
+import TweetActions, {
+  getRefreshTweetCallback,
+} from "../../TweetActions/TweetActions";
+import { useEffect, useLayoutEffect, useRef } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addViewQuery } from "./queries";
 
 interface MainTweetProps {
   tweet: Tweet;
@@ -13,6 +17,15 @@ interface MainTweetProps {
 }
 
 const MainTweet = ({ tweet, tweetThreadRef }: MainTweetProps) => {
+  const queryClient = useQueryClient();
+  const { mutate: addViewMutation } = useMutation(addViewQuery, {
+    onSuccess: getRefreshTweetCallback(queryClient),
+  });
+
+  useEffect(() => {
+    addViewMutation({ tweetID: tweet.id });
+  }, [tweet, addViewMutation]);
+
   const showStat = (name: string, stat: number) => (
     <span>
       <span className={styles.Bold}>{stat}</span> {name}

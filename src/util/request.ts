@@ -49,11 +49,11 @@ export const deleteData = async <Res, T extends string>(
   params: T[] = []
 ): Promise<Res> => request(path, "DELETE", params);
 
-export const patchData = async <T extends string>(
+export const patchData = async <Res, T extends string>(
   path: string,
   body: any,
   params: readonly T[] = []
-) => request(path, "PATCH", params, body);
+): Promise<Res> => request(path, "PATCH", params, body);
 
 export const postData = async <Res, T extends string>(
   path: string,

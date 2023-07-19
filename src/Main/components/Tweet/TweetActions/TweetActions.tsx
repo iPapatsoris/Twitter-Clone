@@ -9,6 +9,7 @@ import shareIcon from "../../../../assets/icons/tweet/share.png";
 import bookmarkIcon from "../../../../assets/icons/tweet/bookmark.png";
 import Icon, { IconProps } from "../../../../util/components/Icon/Icon";
 import {
+  QueryClient,
   UseMutationOptions,
   useMutation,
   useQueryClient,
@@ -24,6 +25,22 @@ import {
 import { tweetKeys } from "../queries";
 import { SingleTweetResponse } from "../../../../../backend/src/api/tweet";
 
+export const getRefreshTweetCallback =
+  (
+    queryClient: QueryClient
+  ): UseMutationOptions<
+    SingleTweetResponse,
+    unknown,
+    { tweetID: number }
+  >["onSuccess"] =>
+  (resp, { tweetID }) => {
+    if (resp.ok) {
+      queryClient.setQueryData<NormalResponse<Tweet>>(
+        tweetKeys.tweetID(tweetID).queryKey,
+        { ok: true, data: resp.data }
+      );
+    }
+  };
 interface TweetActionsProps {
   includeText: boolean;
   bookmarkInsteadOfViews: boolean;
@@ -44,33 +61,20 @@ const TweetActions = ({
   const { stats, isLiked, isRetweeted, id, author } = tweet;
   const queryClient = useQueryClient();
 
-  const refreshTweet: UseMutationOptions<
-    SingleTweetResponse,
-    unknown,
-    { id: number }
-  >["onSuccess"] = (resp) => {
-    if (resp.ok) {
-      queryClient.setQueryData<NormalResponse<Tweet>>(
-        tweetKeys.tweetID(tweet.id).queryKey,
-        { ok: true, data: resp.data }
-      );
-    }
-  };
-
   const { mutate: likeTweetMutation } = useMutation(likeTweetQuery, {
-    onSuccess: refreshTweet,
+    onSuccess: getRefreshTweetCallback(queryClient),
   });
 
   const { mutate: unlikeTweetMutation } = useMutation(unlikeTweetQuery, {
-    onSuccess: refreshTweet,
+    onSuccess: getRefreshTweetCallback(queryClient),
   });
 
   const { mutate: retweetMutation } = useMutation(retweetQuery, {
-    onSuccess: refreshTweet,
+    onSuccess: getRefreshTweetCallback(queryClient),
   });
 
   const { mutate: undoRetweetMutation } = useMutation(undoRetweetQuery, {
-    onSuccess: refreshTweet,
+    onSuccess: getRefreshTweetCallback(queryClient),
   });
 
   return (
@@ -97,8 +101,8 @@ const TweetActions = ({
         text={includeText ? stats.totalRetweets.toString() : ""}
         onClick={() => {
           isRetweeted
-            ? undoRetweetMutation({ id: tweet.id })
-            : retweetMutation({ id: tweet.id });
+            ? undoRetweetMutation({ tweetID: tweet.id })
+            : retweetMutation({ tweetID: tweet.id });
         }}
         {...extraIconProps}
       />
@@ -109,8 +113,8 @@ const TweetActions = ({
         text={includeText ? stats.totalLikes.toString() : ""}
         onClick={() => {
           isLiked
-            ? unlikeTweetMutation({ id: tweet.id })
-            : likeTweetMutation({ id: tweet.id });
+            ? unlikeTweetMutation({ tweetID: tweet.id })
+            : likeTweetMutation({ tweetID: tweet.id });
         }}
         {...extraIconProps}
       />

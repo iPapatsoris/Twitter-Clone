@@ -5,10 +5,10 @@ import { SingleTweetResponse } from "../../../../../backend/src/api/tweet";
 export const likeTweetQuery: MutateFunction<
   SingleTweetResponse,
   unknown,
-  { id: number }
+  { tweetID: number }
 > = async (body) => {
   const res = await postData<SingleTweetResponse, "">(
-    "tweet/" + body.id + "/like",
+    "tweet/" + body.tweetID + "/like",
     {}
   );
 
@@ -21,10 +21,10 @@ export const likeTweetQuery: MutateFunction<
 export const unlikeTweetQuery: MutateFunction<
   SingleTweetResponse,
   unknown,
-  { id: number }
+  { tweetID: number }
 > = async (body) => {
   const res = await deleteData<SingleTweetResponse, "">(
-    "tweet/" + body.id + "/like"
+    "tweet/" + body.tweetID + "/like"
   );
 
   if (!res.ok) {
@@ -36,10 +36,10 @@ export const unlikeTweetQuery: MutateFunction<
 export const retweetQuery: MutateFunction<
   SingleTweetResponse,
   unknown,
-  { id: number }
+  { tweetID: number }
 > = async (body) => {
   const res = await postData<SingleTweetResponse, "">(
-    "tweet/" + body.id + "/retweet",
+    "tweet/" + body.tweetID + "/retweet",
     {}
   );
 
@@ -52,10 +52,10 @@ export const retweetQuery: MutateFunction<
 export const undoRetweetQuery: MutateFunction<
   SingleTweetResponse,
   unknown,
-  { id: number }
+  { tweetID: number }
 > = async (body) => {
   const res = await deleteData<SingleTweetResponse, "">(
-    "tweet/" + body.id + "/retweet"
+    "tweet/" + body.tweetID + "/retweet"
   );
 
   if (!res.ok) {
