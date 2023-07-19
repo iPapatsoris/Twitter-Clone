@@ -175,7 +175,7 @@ export const getTotalUserTweets = async (userID: number) => {
   )[0].totalTweets;
 };
 
-const getUserReactionsToTweet = async (
+export const getUserReactionsToTweet = async (
   tweetID: number,
   currentUserID: number
 ): Promise<{ isRetweet: boolean; isLike: boolean }> => {

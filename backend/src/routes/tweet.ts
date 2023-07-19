@@ -6,7 +6,7 @@ import {
   ExpandTweetReplies,
   GetTweet,
   GetTweetParams,
-  LikeTweet,
+  SingleTweetResponse,
   Thread,
 } from "../api/tweet.js";
 import { Fields, runQuery, simpleQuery, TypedRequestQuery } from "../util.js";
@@ -16,6 +16,7 @@ import {
   getTweetNestedReplies,
   getTweetPreviousReplies,
   getTweets,
+  getUserReactionsToTweet,
   getUserRetweets,
   mergeTweetsAndRetweets,
   updateParentTweetReplyDepth,
@@ -109,15 +110,76 @@ router.patch(
 router.post(
   "/:tweetID/retweet",
   requireAuth,
-  (
+  async (
     req: TypedRequestQuery<{ tweetID: string }>,
     res: Response<NormalResponse>
   ) => {
-    const query =
-      "INSERT INTO user_reacts_to_tweet \
-      (tweetID, userID, reactionDate, isRetweet, isLike) \
-       VALUES (?, ?, NOW(), true, false)";
-    simpleQuery(res, query, [req.params.tweetID, req.session.userID]);
+    const { tweetID } = req.params;
+    const { userID } = req.session;
+
+    const { isLike, isRetweet } = await getUserReactionsToTweet(
+      parseInt(tweetID),
+      userID!
+    );
+
+    let query = "";
+    if (isRetweet) {
+      res.send({ ok: false });
+      return;
+    } else if (isLike) {
+      query =
+        "UPDATE user_reacts_to_tweet \
+        SET isRetweet = true \
+        WHERE userID = ? AND tweetID = ?";
+    } else {
+      query =
+        "INSERT INTO user_reacts_to_tweet \
+        (userID, tweetID, reactionDate, isRetweet, isLike) \
+         VALUES (?, ?, NOW(), true, false)";
+    }
+
+    await runQuery(query, [userID, tweetID]);
+    res.send({
+      ok: true,
+      data: { ...(await getTweet(parseInt(tweetID), userID!)) },
+    });
+  }
+);
+
+router.delete(
+  "/:tweetID/retweet",
+  requireAuth,
+  async (
+    req: TypedRequestQuery<{ tweetID: string }>,
+    res: Response<NormalResponse>
+  ) => {
+    const { tweetID } = req.params;
+    const { userID } = req.session;
+    const { isLike, isRetweet } = await getUserReactionsToTweet(
+      parseInt(tweetID),
+      userID!
+    );
+
+    let query = "";
+    if (!isRetweet) {
+      res.send({ ok: false });
+      return;
+    } else if (isLike) {
+      query =
+        "UPDATE user_reacts_to_tweet \
+        SET isRetweet = false \
+        WHERE userID = ? AND tweetID = ?";
+    } else {
+      query =
+        "DELETE FROM user_reacts_to_tweet \
+          WHERE userID = ? AND tweetID = ?";
+    }
+
+    await runQuery(query, [userID, tweetID]);
+    res.send({
+      ok: true,
+      data: { ...(await getTweet(parseInt(tweetID), userID!)) },
+    });
   }
 );
 
@@ -126,15 +188,32 @@ router.post(
   requireAuth,
   async (
     req: TypedRequestQuery<{ tweetID: string }>,
-    res: Response<LikeTweet["response"]>
+    res: Response<SingleTweetResponse>
   ) => {
     const { tweetID } = req.params;
     const { userID } = req.session;
-    const query =
-      "INSERT INTO user_reacts_to_tweet \
-      (tweetID, userID, reactionDate, isRetweet, isLike) \
-       VALUES (?, ?, NOW(), false, true)";
-    await runQuery(query, [tweetID, userID]);
+    const { isLike, isRetweet } = await getUserReactionsToTweet(
+      parseInt(tweetID),
+      userID!
+    );
+
+    let query = "";
+    if (isLike) {
+      res.send({ ok: false });
+      return;
+    } else if (isRetweet) {
+      query =
+        "UPDATE user_reacts_to_tweet \
+        SET isLike = true \
+        WHERE userID = ? AND tweetID = ?";
+    } else {
+      query =
+        "INSERT INTO user_reacts_to_tweet \
+        (userID, tweetID, reactionDate, isRetweet, isLike) \
+         VALUES (?, ?, NOW(), false, true)";
+    }
+
+    await runQuery(query, [userID, tweetID]);
     res.send({
       ok: true,
       data: { ...(await getTweet(parseInt(tweetID), userID!)) },
@@ -147,13 +226,30 @@ router.delete(
   requireAuth,
   async (
     req: TypedRequestQuery<{ tweetID: string }>,
-    res: Response<LikeTweet["response"]>
+    res: Response<SingleTweetResponse>
   ) => {
     const { tweetID } = req.params;
     const { userID } = req.session;
-    const query =
-      "DELETE FROM user_reacts_to_tweet \
-       WHERE userID = ? AND tweetID = ? AND isLike = true";
+    const { isLike, isRetweet } = await getUserReactionsToTweet(
+      parseInt(tweetID),
+      userID!
+    );
+
+    let query = "";
+    if (!isLike) {
+      res.send({ ok: false });
+      return;
+    } else if (isRetweet) {
+      query =
+        "UPDATE user_reacts_to_tweet \
+        SET isLike = false \
+        WHERE userID = ? AND tweetID = ?";
+    } else {
+      query =
+        "DELETE FROM user_reacts_to_tweet \
+         WHERE userID = ? AND tweetID = ?";
+    }
+
     await runQuery(query, [userID, tweetID]);
     res.send({
       ok: true,

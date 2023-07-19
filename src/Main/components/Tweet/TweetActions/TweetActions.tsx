@@ -1,5 +1,6 @@
 import styles from "./TweetActions.module.scss";
 import retweetIcon from "../../../../assets/icons/tweet/retweet.png";
+import retweetActiveIcon from "../../../../assets/icons/tweet/retweet-active.png";
 import replyIcon from "../../../../assets/icons/tweet/reply.png";
 import likeIcon from "../../../../assets/icons/tweet/like.png";
 import likedIcon from "../../../../assets/icons/tweet/liked.png";
@@ -14,9 +15,14 @@ import {
 } from "@tanstack/react-query";
 import { Tweet } from "../../../../../backend/src/entities/tweet";
 import { NormalResponse } from "../../../../../backend/src/api/common";
-import { likeTweetQuery, unlikeTweetQuery } from "./queries";
+import {
+  likeTweetQuery,
+  retweetQuery,
+  undoRetweetQuery,
+  unlikeTweetQuery,
+} from "./queries";
 import { tweetKeys } from "../queries";
-import { LikeTweet } from "../../../../../backend/src/api/tweet";
+import { SingleTweetResponse } from "../../../../../backend/src/api/tweet";
 
 interface TweetActionsProps {
   includeText: boolean;
@@ -38,8 +44,8 @@ const TweetActions = ({
   const { stats, isLiked, isRetweeted, id, author } = tweet;
   const queryClient = useQueryClient();
 
-  const onLikeOrUnlikeSuccess: UseMutationOptions<
-    LikeTweet["response"],
+  const refreshTweet: UseMutationOptions<
+    SingleTweetResponse,
     unknown,
     { id: number }
   >["onSuccess"] = (resp) => {
@@ -52,11 +58,19 @@ const TweetActions = ({
   };
 
   const { mutate: likeTweetMutation } = useMutation(likeTweetQuery, {
-    onSuccess: onLikeOrUnlikeSuccess,
+    onSuccess: refreshTweet,
   });
 
   const { mutate: unlikeTweetMutation } = useMutation(unlikeTweetQuery, {
-    onSuccess: onLikeOrUnlikeSuccess,
+    onSuccess: refreshTweet,
+  });
+
+  const { mutate: retweetMutation } = useMutation(retweetQuery, {
+    onSuccess: refreshTweet,
+  });
+
+  const { mutate: undoRetweetMutation } = useMutation(undoRetweetQuery, {
+    onSuccess: refreshTweet,
   });
 
   return (
@@ -77,10 +91,15 @@ const TweetActions = ({
         {...extraIconProps}
       />
       <Icon
-        src={retweetIcon}
+        src={isRetweeted ? retweetActiveIcon : retweetIcon}
         hover="green"
-        title="Retweet"
+        title={isRetweeted ? "Undo Retweet" : "Retweet"}
         text={includeText ? stats.totalRetweets.toString() : ""}
+        onClick={() => {
+          isRetweeted
+            ? undoRetweetMutation({ id: tweet.id })
+            : retweetMutation({ id: tweet.id });
+        }}
         {...extraIconProps}
       />
       <Icon
