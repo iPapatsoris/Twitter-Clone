@@ -8,23 +8,24 @@ import TweetActions, {
   getRefreshTweetCallback,
 } from "../../TweetActions/TweetActions";
 import { useEffect, useLayoutEffect, useRef } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { addViewQuery } from "./queries";
+import { tweetKeys } from "../../queries";
 
 interface MainTweetProps {
-  tweet: Tweet;
+  tweetID: number;
   tweetThreadRef: React.RefObject<HTMLDivElement>;
 }
 
-const MainTweet = ({ tweet, tweetThreadRef }: MainTweetProps) => {
+const MainTweet = ({ tweetID, tweetThreadRef }: MainTweetProps) => {
   const queryClient = useQueryClient();
   const { mutate: addViewMutation } = useMutation(addViewQuery, {
     onSuccess: getRefreshTweetCallback(queryClient),
   });
 
   useEffect(() => {
-    addViewMutation({ tweetID: tweet.id });
-  }, [tweet, addViewMutation]);
+    addViewMutation({ tweetID });
+  }, [tweetID, addViewMutation]);
 
   const showStat = (name: string, stat: number) => (
     <span>
@@ -43,7 +44,14 @@ const MainTweet = ({ tweet, tweetThreadRef }: MainTweetProps) => {
         "calc(" + tweetCoordinates.y + "px + " + window.scrollY + "px + 82vh)";
       ref.current?.scrollIntoView(true);
     }
-  }, [tweetThreadRef, ref, tweet.id]);
+  }, [tweetThreadRef, ref, tweetID]);
+
+  const { data, isSuccess } = useQuery(tweetKeys.tweetID(tweetID));
+
+  if (!isSuccess) {
+    return null;
+  }
+  const tweet = data.data!;
 
   return (
     <div ref={ref} className={styles.MainTweet}>

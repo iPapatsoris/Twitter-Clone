@@ -61,7 +61,7 @@ const TweetThread = ({}: TweetThreadProps) => {
   return (
     <div ref={ref} className={styles.TweetThread}>
       <List>{previousRepliesJSX}</List>
-      <MainTweet tweetThreadRef={ref} tweet={tweet} />
+      <MainTweet tweetThreadRef={ref} tweetID={tweet.id} />
       <div className={styles.CreateTweet}>Create tweet!</div>
       <List>{repliesJSX}</List>
     </div>

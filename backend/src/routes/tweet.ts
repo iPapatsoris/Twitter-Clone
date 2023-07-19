@@ -94,16 +94,22 @@ router.post(
 
 router.patch(
   "/:tweetID/addView",
-  (
+  async (
     req: TypedRequestQuery<{ tweetID: string }>,
     res: Response<NormalResponse>
   ) => {
     const { tweetID } = req.params;
+    const currentUserID = req.session.userID || -1;
     const query =
       "UPDATE tweet \
        SET views = views + 1\
        WHERE id = ?";
-    simpleQuery(res, query, [tweetID]);
+
+    await runQuery(query, [tweetID]);
+    res.send({
+      ok: true,
+      data: { ...(await getTweet(parseInt(tweetID), currentUserID)) },
+    });
   }
 );
 
