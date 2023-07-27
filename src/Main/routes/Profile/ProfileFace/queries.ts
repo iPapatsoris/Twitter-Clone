@@ -79,6 +79,6 @@ export const profileLoader =
     const { queryKey, queryFn } = profileKeys
       .username(params.username!)
       ._ctx.fields(fullProfileFields);
-    const data = await queryClient.ensureQueryData({ queryKey, queryFn });
+    const data = await queryClient.fetchQuery({ queryKey, queryFn });
     return data;
   };

@@ -66,7 +66,7 @@ export const userTweetsLoader =
       params.username!
     );
 
-    const data = await queryClient.ensureQueryData({ queryKey, queryFn });
+    const data = await queryClient.fetchQuery({ queryKey, queryFn });
     data.data?.tweetsAndRetweets.forEach((t) =>
       setTweet(t.tweet || t.retweet?.tweet!, queryClient)
     );
@@ -80,7 +80,7 @@ export const userTweetsWithRepliesLoader =
       params.username!
     )._ctx.withReplies;
 
-    const data = await queryClient.ensureQueryData({ queryKey, queryFn });
+    const data = await queryClient.fetchQuery({ queryKey, queryFn });
     data.data?.threadsAndRetweets.forEach((t) => {
       if (t.retweet) {
         setTweet(t.retweet.tweet, queryClient);
@@ -98,7 +98,7 @@ export const userLikedTweetsLoader =
       params.username!
     )._ctx.likedTweets;
 
-    const data = await queryClient.ensureQueryData({ queryKey, queryFn });
+    const data = await queryClient.fetchQuery({ queryKey, queryFn });
     data.data?.tweets.forEach((t) => setTweet(t, queryClient));
     return data;
   };

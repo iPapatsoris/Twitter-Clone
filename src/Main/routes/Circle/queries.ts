@@ -69,11 +69,11 @@ export const circleLoader =
       ._ctx.username(params.username!);
 
     const promsieResults = await Promise.all([
-      queryClient.ensureQueryData({
+      queryClient.fetchQuery({
         queryKey: headerQueryKey,
         queryFn: headerQueryFn,
       }),
-      queryClient.ensureQueryData({
+      queryClient.fetchQuery({
         queryKey: circleQueryKey,
         queryFn: circleQueryFn,
       }),

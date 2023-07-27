@@ -42,7 +42,7 @@ export const tweetThreadLoader =
       parseInt(params.tweetID!)
     );
 
-    const tweetThreadData = await queryClient.ensureQueryData({
+    const tweetThreadData = await queryClient.fetchQuery({
       queryKey,
       queryFn,
     });
