@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useContext, useLayoutEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   GetUserFollowees,
   GetUserFollowers,
@@ -19,7 +19,7 @@ const Circle = () => {
   const isFollowersPage = useRouteMatch(getPagePath("followers"));
   const circle: CircleType = isFollowersPage ? "followers" : "followees";
   const { username } = useParams();
-
+  const navigate = useNavigate();
   const { data: headerData, isSuccess: isHeaderSuccess } = useQuery(
     profileKeys.username(username!)._ctx.fields(circleHeaderFields)
   );
@@ -54,10 +54,12 @@ const Circle = () => {
           .followees;
 
   const userCircle = userList.map((f) => (
-    <Profile
-      key={f.id}
-      preview={{ username: f.username, type: "user-list", includeBio: true }}
-    />
+    <div onClick={() => navigate(getPagePath("profile", f.username))}>
+      <Profile
+        key={f.id}
+        preview={{ username: f.username, type: "user-list", includeBio: true }}
+      />
+    </div>
   ));
 
   return <List>{userCircle}</List>;

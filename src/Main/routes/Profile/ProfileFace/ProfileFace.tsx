@@ -87,10 +87,13 @@ const ProfileFace = ({ preview }: ProfileProps) => {
     return null;
   }
 
-  const visitFullProfile = (e: any) => {
+  const visitFullProfile = (e: any) =>
+    navigate(getPagePath("profile", username));
+
+  const visitFullProfileFromHover = (e: any) => {
     if (
       preview &&
-      !preview.noNavOnClick &&
+      preview.type === "hover" &&
       e.target instanceof Node &&
       !buttonRef.current?.contains(e.target) &&
       !followersRef.current?.contains(e.target) &&
@@ -180,12 +183,16 @@ const ProfileFace = ({ preview }: ProfileProps) => {
         username={user.username}
       />
       <div
-        onClick={visitFullProfile}
         className={[styles.Profile, ...previewStyles].join(" ")}
+        onClick={visitFullProfileFromHover}
         ref={profileRef}
       >
         {!preview && <div className={styles.Cover} style={coverStyle} />}
-        <div className={styles.Semantic} onMouseEnter={onMouseEnter}>
+        <div
+          className={styles.Semantic}
+          onClick={visitFullProfile}
+          onMouseEnter={onMouseEnter}
+        >
           <Avatar src={user.avatar} withBorder={!preview} />
         </div>
         <div className={styles.Actions}>
@@ -199,7 +206,11 @@ const ProfileFace = ({ preview }: ProfileProps) => {
           )}
           {preview && preview.iconAction ? preview.iconAction : actionButton}
         </div>
-        <div className={styles.Title} onMouseEnter={onMouseEnter}>
+        <div
+          className={styles.Title}
+          onClick={visitFullProfile}
+          onMouseEnter={onMouseEnter}
+        >
           <div className={styles.NameAndVerified}>
             <h1>{user.name}</h1>
             {user.isVerified ? (
