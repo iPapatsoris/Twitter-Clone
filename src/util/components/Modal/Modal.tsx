@@ -50,6 +50,7 @@ const Modal = ({ withCloseIcon = true, children, setIsActive }: ModalProps) => {
       outerStyles={[styles.Wrapper]}
       innerStyles={modalStyles}
       setIsActive={setIsActive}
+      isFixed
     >
       <ModalContext.Provider value={{ setIsActive: setIsActive }}>
         {[modal]}
