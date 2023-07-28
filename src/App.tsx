@@ -1,14 +1,13 @@
 import styles from "./App.module.scss";
 import Main from "./Main/layouts/Main";
 import Sidebar from "./Sidebar/Sidebar";
-import { useLocation } from "react-router-dom";
+import { ScrollRestoration, useLocation } from "react-router-dom";
 import {
   getPagePath,
   isNotificationsPage,
   useRouteMatches,
 } from "./util/paths";
 import { createContext, SetStateAction, useState } from "react";
-import useScrollToTop from "./util/hooks/useScrollToTop";
 
 export const ErrorPageContext = createContext<{
   setIsErrorPage: React.Dispatch<SetStateAction<boolean>>;
@@ -20,7 +19,6 @@ export const ErrorPageContext = createContext<{
 const App = () => {
   const [isErrorPage, setIsErrorPage] = useState(false);
   const path = useLocation().pathname;
-  useScrollToTop();
 
   const isCirclePage = useRouteMatches([
     getPagePath("followers"),
@@ -39,6 +37,7 @@ const App = () => {
 
   return (
     <ErrorPageContext.Provider value={{ setIsErrorPage, isErrorPage }}>
+      <ScrollRestoration />
       <div className={[styles.App, ...extraClasses].join(" ")}>
         <>
           <Sidebar />
