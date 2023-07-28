@@ -92,6 +92,7 @@ const TweetActions = ({
         title="Reply"
         text={includeText ? stats.totalReplies.toString() : ""}
         exactLeftPlacement={leftAlignFirstIcon}
+        onClick={(e) => e.stopPropagation()}
         {...extraIconProps}
       />
       <Icon
@@ -99,7 +100,8 @@ const TweetActions = ({
         hover="green"
         title={isRetweeted ? "Undo Retweet" : "Retweet"}
         text={includeText ? stats.totalRetweets.toString() : ""}
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           isRetweeted
             ? undoRetweetMutation({ tweetID: tweet.id })
             : retweetMutation({ tweetID: tweet.id });
@@ -111,7 +113,8 @@ const TweetActions = ({
         hover="pink"
         title={isLiked ? "Unlike" : "Like"}
         text={includeText ? stats.totalLikes.toString() : ""}
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           isLiked
             ? unlikeTweetMutation({ tweetID: tweet.id })
             : likeTweetMutation({ tweetID: tweet.id });
@@ -124,6 +127,7 @@ const TweetActions = ({
           hover="primary"
           title="Bookmark"
           text={includeText ? stats.views.toString() : ""}
+          onClick={(e) => e.stopPropagation()}
           {...extraIconProps}
         />
       ) : (
@@ -132,10 +136,17 @@ const TweetActions = ({
           hover="primary"
           title="Views"
           text={includeText ? stats.views.toString() : ""}
+          onClick={(e) => e.stopPropagation()}
           {...extraIconProps}
         />
       )}
-      <Icon src={shareIcon} hover="primary" title="Share" {...extraIconProps} />
+      <Icon
+        onClick={(e) => e.stopPropagation()}
+        src={shareIcon}
+        hover="primary"
+        title="Share"
+        {...extraIconProps}
+      />
     </div>
   );
 };

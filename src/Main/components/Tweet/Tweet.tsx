@@ -9,11 +9,12 @@ import dayjs from "dayjs";
 import TweetActions from "./TweetActions/TweetActions";
 import { useRef, useState } from "react";
 import ProfileHoverPreview from "../../routes/Profile/ProfileFace/ProfileHoverPreview";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getPagePath } from "../../../util/paths";
 import { useReplyLine } from "./TweetThread/useReplyLine";
 import { useQuery } from "@tanstack/react-query";
 import { tweetKeys } from "./queries";
+import { elementIsContainedInRefs, refsExist } from "../../../util/ref";
 
 interface TweetProps {
   tweetID: number;
@@ -33,6 +34,10 @@ const Tweet = ({
 }: TweetProps) => {
   const tweetRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
+  const nameRef = useRef<HTMLAnchorElement>(null);
+  const usernameRef = useRef<HTMLAnchorElement>(null);
+  const nestedLinkRefs = [avatarRef, nameRef, usernameRef];
+
   const replyLineRef = useRef<HTMLDivElement>(null);
   const [isProfilePreviewOpen, setIsProfilePreviewOpen] = useState(false);
 
@@ -60,12 +65,18 @@ const Tweet = ({
   }
   const tweet = data.data;
 
-  const visitProfile = () => {
-    navigate(getPagePath("profile", tweet.author.username));
-  };
+  const getProfileLink = () => getPagePath("profile", tweet.author.username);
 
-  const visitTweetThread = () => {
-    navigate(getPagePath("tweet", tweet.author.username, tweet.id));
+  const getTweetThreadLink = () =>
+    getPagePath("tweet", tweet.author.username, tweet.id);
+
+  const navToTweet = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (
+      refsExist(nestedLinkRefs) &&
+      !elementIsContainedInRefs(e, nestedLinkRefs)
+    ) {
+      navigate(getPagePath("tweet", tweet.author.username, tweet.id));
+    }
   };
 
   const tweetBorderClass = drawReplyLine ? "" : styles.WithBorder;
@@ -81,6 +92,7 @@ const Tweet = ({
       <div
         ref={tweetRef}
         className={[styles.Tweet, tweetBorderClass].join(" ")}
+        onClick={(e) => navToTweet(e)}
       >
         {retweet && (
           <div className={styles.Retweet} onMouseEnter={showProfilePreview}>
@@ -96,47 +108,50 @@ const Tweet = ({
           </div>
         )}
         <div className={styles.TweetWrapper}>
-          <div
-            className={styles.Avatar}
-            onClick={visitProfile}
-            onMouseEnter={showProfilePreview}
-            ref={avatarRef}
-          >
-            <Avatar src={tweet.author.avatar} />
-            {drawReplyLine && (
-              <div className={styles.ReplyLine} ref={replyLineRef}></div>
-            )}
-          </div>
+          <Link to={getProfileLink()}>
+            <div
+              className={styles.Avatar}
+              onMouseEnter={showProfilePreview}
+              ref={avatarRef}
+            >
+              <Avatar src={tweet.author.avatar} />
+              {drawReplyLine && (
+                <div className={styles.ReplyLine} ref={replyLineRef}></div>
+              )}
+            </div>
+          </Link>
           <div className={styles.Wrapper}>
             <>
               <div className={styles.Info}>
-                <span
-                  className={styles.Name}
-                  onClick={visitProfile}
-                  onMouseEnter={showProfilePreview}
-                >
-                  {tweet.author.name}
-                </span>
-                {tweet.author.isVerified ? (
-                  <div onMouseEnter={showProfilePreview} onClick={visitProfile}>
-                    <Icon
-                      src={verifiedIcon}
-                      hover="none"
-                      extraStyles={[styles.Verified]}
-                    />
-                  </div>
-                ) : null}
-                <div className={[styles.LightColor, styles.Subinfo].join(" ")}>
+                <Link ref={nameRef} to={getProfileLink()}>
                   <span
-                    onClick={visitProfile}
+                    className={styles.Name}
                     onMouseEnter={showProfilePreview}
                   >
-                    @{tweet.author.username}
+                    {tweet.author.name}
                   </span>
+                  {tweet.author.isVerified ? (
+                    <div onMouseEnter={showProfilePreview}>
+                      <Icon
+                        src={verifiedIcon}
+                        hover="none"
+                        extraStyles={[styles.Verified]}
+                      />
+                    </div>
+                  ) : null}
+                </Link>
+                <div className={[styles.LightColor, styles.Subinfo].join(" ")}>
+                  <Link ref={usernameRef} to={getProfileLink()}>
+                    <span onMouseEnter={showProfilePreview}>
+                      @{tweet.author.username}
+                    </span>
+                  </Link>
                   <span>·</span>
-                  <span onClick={visitTweetThread}>
-                    {dayjs(tweet.creationDate).format("MMM D, YYYY")}
-                  </span>
+                  <Link to={getTweetThreadLink()}>
+                    <span>
+                      {dayjs(tweet.creationDate).format("MMM D, YYYY")}
+                    </span>
+                  </Link>
                 </div>
                 <div className={styles.MoreIcon}>
                   <Icon
@@ -148,7 +163,7 @@ const Tweet = ({
                   />
                 </div>
               </div>
-              <div onClick={visitTweetThread}>{tweet.text}</div>
+              <div>{tweet.text}</div>
               <TweetActions
                 includeText
                 bookmarkInsteadOfViews={false}
