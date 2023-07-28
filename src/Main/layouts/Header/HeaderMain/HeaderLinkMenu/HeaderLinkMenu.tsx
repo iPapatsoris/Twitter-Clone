@@ -12,7 +12,7 @@ const HeaderLinkMenu = ({ items, extraStyles = [] }: HeaderLinkMenuProps) => {
   const menu = items.map((item) => {
     const itemPath = getPagePath(item.page, item.username);
     return (
-      <Link to={itemPath} key={item.page}>
+      <Link preventScrollReset to={itemPath} key={item.page}>
         <div
           className={[styles.Item, path === itemPath ? styles.Active : ""].join(
             " "
