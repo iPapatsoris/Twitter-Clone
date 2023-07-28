@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styles from "../Profile.module.scss";
 import React, {
   ComponentProps,
@@ -39,7 +39,6 @@ const ProfileFace = ({ preview }: ProfileProps) => {
     shallow
   );
   const { setUserHeader } = useContext(HeaderProfileContext);
-  const navigate = useNavigate();
   const params = useParams();
   const username = preview ? preview.username : params.username!;
 
@@ -80,28 +79,10 @@ const ProfileFace = ({ preview }: ProfileProps) => {
 
   // Action / navigation refs to detect clicking on profile preview except those
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const followersRef = useRef<HTMLAnchorElement>(null);
-  const followingRef = useRef<HTMLAnchorElement>(null);
 
   if (!isSuccess) {
     return null;
   }
-
-  const visitFullProfile = (e: any) =>
-    navigate(getPagePath("profile", username));
-
-  const visitFullProfileFromHover = (e: any) => {
-    if (
-      preview &&
-      preview.type === "hover" &&
-      e.target instanceof Node &&
-      !buttonRef.current?.contains(e.target) &&
-      !followersRef.current?.contains(e.target) &&
-      !followingRef.current?.contains(e.target)
-    ) {
-      navigate(getPagePath("profile", username));
-    }
-  };
 
   const circleButtonKey =
     user.id.toString() +
@@ -166,6 +147,25 @@ const ProfileFace = ({ preview }: ProfileProps) => {
     ];
   }
 
+  const getProfileLink = () => getPagePath("profile", user.username);
+
+  const avatar = (
+    <div className={styles.Semantic} onMouseEnter={onMouseEnter}>
+      <Avatar src={user.avatar} withBorder={!preview} />
+    </div>
+  );
+
+  const nameAndVerified = (
+    <>
+      <h1>{user.name}</h1>
+      {user.isVerified ? (
+        <Icon src={verifiedIcon} hover="none" extraStyles={[styles.Verified]} />
+      ) : null}
+    </>
+  );
+
+  const usernameText = <span>@{user.username}</span>;
+
   return (
     <>
       {isEditModalOpen && (
@@ -184,17 +184,16 @@ const ProfileFace = ({ preview }: ProfileProps) => {
       />
       <div
         className={[styles.Profile, ...previewStyles].join(" ")}
-        onClick={visitFullProfileFromHover}
         ref={profileRef}
       >
         {!preview && <div className={styles.Cover} style={coverStyle} />}
-        <div
-          className={styles.Semantic}
-          onClick={visitFullProfile}
-          onMouseEnter={onMouseEnter}
-        >
-          <Avatar src={user.avatar} withBorder={!preview} />
-        </div>
+        {!preview ? (
+          avatar
+        ) : (
+          <Link className={styles.Semantic} to={getProfileLink()}>
+            {avatar}
+          </Link>
+        )}
         <div className={styles.Actions}>
           {!preview && (
             <>
@@ -206,23 +205,24 @@ const ProfileFace = ({ preview }: ProfileProps) => {
           )}
           {preview && preview.iconAction ? preview.iconAction : actionButton}
         </div>
-        <div
-          className={styles.Title}
-          onClick={visitFullProfile}
-          onMouseEnter={onMouseEnter}
-        >
+        <div className={styles.Title} onMouseEnter={onMouseEnter}>
           <div className={styles.NameAndVerified}>
-            <h1>{user.name}</h1>
-            {user.isVerified ? (
-              <Icon
-                src={verifiedIcon}
-                hover="none"
-                extraStyles={[styles.Verified]}
-              />
-            ) : null}
+            {!preview ? (
+              nameAndVerified
+            ) : (
+              <Link className={styles.Semantic} to={getProfileLink()}>
+                {nameAndVerified}
+              </Link>
+            )}
           </div>
           <div className={[styles.LightColor, styles.Username].join(" ")}>
-            @{user.username}
+            {!preview ? (
+              usernameText
+            ) : (
+              <Link className={styles.Semantic} to={getProfileLink()}>
+                {usernameText}
+              </Link>
+            )}
           </div>
         </div>
         <div className={styles.ProfileInfo}>
@@ -232,17 +232,11 @@ const ProfileFace = ({ preview }: ProfileProps) => {
           {!preview && <Info user={user} />}
           {(!preview || (preview && preview.type === "hover")) && (
             <div className={styles.Friendship}>
-              <Link
-                ref={followersRef}
-                to={getPagePath("following", user.username)}
-              >
+              <Link to={getPagePath("following", user.username)}>
                 <b>{user.totalFollowees}</b>{" "}
                 <span className={styles.LightColor}>Followees</span>
               </Link>
-              <Link
-                ref={followingRef}
-                to={getPagePath("followers", user.username)}
-              >
+              <Link to={getPagePath("followers", user.username)}>
                 <b>{user.totalFollowers}</b>{" "}
                 <span className={styles.LightColor}>Followers</span>
               </Link>
