@@ -99,7 +99,10 @@ const ProfileFace = ({ preview }: ProfileProps) => {
     <Button
       color="black"
       size={preview && preview.type === "user-list" ? "small" : undefined}
-      onClick={() => useFollowMutation.mutate()}
+      onClick={(e) => {
+        e.stopPropagation();
+        useFollowMutation.mutate();
+      }}
       {...circleButtonProps}
     >
       Follow
@@ -114,7 +117,10 @@ const ProfileFace = ({ preview }: ProfileProps) => {
         hoverText="Unfollow"
         {...circleButtonProps}
         extraClasses={[styles.FixedWidthButton]}
-        onClick={() => useUnfollowMutation.mutate()}
+        onClick={(e) => {
+          e.stopPropagation();
+          useUnfollowMutation.mutate();
+        }}
       >
         Following
       </Button>

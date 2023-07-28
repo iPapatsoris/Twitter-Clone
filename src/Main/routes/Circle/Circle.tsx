@@ -54,7 +54,10 @@ const Circle = () => {
           .followees;
 
   const userCircle = userList.map((f) => (
-    <div onClick={() => navigate(getPagePath("profile", f.username))}>
+    <div
+      key={f.id}
+      onClick={() => navigate(getPagePath("profile", f.username))}
+    >
       <Profile
         key={f.id}
         preview={{ username: f.username, type: "user-list", includeBio: true }}
