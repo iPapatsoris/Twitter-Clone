@@ -7,7 +7,7 @@ import {
   HTMLProps,
 } from "react";
 import useClickOutside from "../../hooks/useClickOutside";
-import styles, { InputWrapperNames } from "./InputWrapper.module.scss";
+import styles from "./InputWrapper.module.scss";
 import inputStyles from "./Input.module.scss";
 import eyeIcon from "../../../assets/icons/eye.png";
 import eyeStrikeIcon from "../../../assets/icons/eye-strike.png";
@@ -23,9 +23,9 @@ interface InputProps {
   maxLength?: number;
   autofocus?: boolean;
   readonly?: boolean;
-  onClick?: (e: any) => void;
-  onChange: (e: any) => void;
-  onBlur?: (e: any) => void;
+  onClick?: (e: React.MouseEvent) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   value: string;
   isValid?: boolean;
   error?: string;
@@ -63,7 +63,7 @@ const Input = forwardRef<RefType, InputProps>(
     const [isFocused, setIsFocused] = useState(false);
     const [inputType, setInputType] = useState(initialType);
 
-    const togglePasswordReveal = (e: any) => {
+    const togglePasswordReveal = (e: React.MouseEvent) => {
       e.preventDefault();
       if (inputType === "password") {
         setInputType("text");
@@ -101,7 +101,7 @@ const Input = forwardRef<RefType, InputProps>(
       }
     }, [ref, isFocused]);
 
-    const handleWrapperMousedown = (e: any) => {
+    const handleWrapperMousedown = (e: React.MouseEvent) => {
       if (ref && ref.current && !readonly) {
         // Mouse down on wrapper div would blur the inner input that we are
         // trying to manually focus on, prevent this behavior.
@@ -120,11 +120,11 @@ const Input = forwardRef<RefType, InputProps>(
       }
     };
 
-    const wrapperStyles: styles.InputWrapperNames[] = [styles.Wrapper];
-    const typingAreaStyles: inputStyles.InputNames[] = [inputStyles.TypingArea];
+    const wrapperStyles: styles.ClassNames[] = [styles.Wrapper];
+    const typingAreaStyles: inputStyles.ClassNames[] = [inputStyles.TypingArea];
     const labelStyles: string[] = [inputStyles.InheritCursor];
-    const helperBoxStyles: InputWrapperNames[] = [styles.HelperBox];
-    const leaderStyles: inputStyles.InputNames[] = [inputStyles.Leader];
+    const helperBoxStyles: styles.ClassNames[] = [styles.HelperBox];
+    const leaderStyles: inputStyles.ClassNames[] = [inputStyles.Leader];
 
     if (isFocused) {
       wrapperStyles.push(styles.Focused);
@@ -161,13 +161,14 @@ const Input = forwardRef<RefType, InputProps>(
     const inputProps: HTMLProps<HTMLInputElement | HTMLTextAreaElement> = {
       name,
       maxLength,
-      onChange: (e: any) => {
+      onChange: (e: React.ChangeEvent<any>) => {
+        // TODO: fix any TS
         onChange(e.target.value);
       },
       onBlur,
       value,
       readOnly: readonly,
-      onMouseDown: (e: any) => {
+      onMouseDown: (e: React.MouseEvent) => {
         setIsFocused(true);
         // Parent calls preventDefault() on onMouseDown. We need to stop
         // propagation, because otherwise text highlighting (mouse down

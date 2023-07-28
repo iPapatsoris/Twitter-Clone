@@ -106,14 +106,14 @@ const usePopup = (
     const popupRefCurrent = popupRef.current;
     const targetAreaRefCurrent = targetAreaRef.current;
 
-    const onMouseLeavePopupHandler = (e: any) => {
-      if (!targetAreaRefCurrent?.contains(e.relatedTarget)) {
+    const onMouseLeavePopupHandler = (e: MouseEvent) => {
+      if (!targetAreaRefCurrent?.contains(e.relatedTarget as Node)) {
         setIsActive(false);
       }
     };
 
-    const onMouseLeaveTargetAreaHandler = (e: any) => {
-      if (!popupRefCurrent?.contains(e.relatedTarget)) {
+    const onMouseLeaveTargetAreaHandler = (e: MouseEvent) => {
+      if (!popupRefCurrent?.contains(e.relatedTarget as Node)) {
         setIsActive(false);
       }
     };

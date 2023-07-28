@@ -27,17 +27,17 @@ const ModalWrapper = ({
   allowOuterEvents = false,
   isFixed = false,
 }: ModalWrapperProps) => {
-  let mostRecentMousedown = useRef<Element | null>(null);
+  let mostRecentMousedown = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const onMousedownHandler = (e: any) => {
-      mostRecentMousedown.current = e.target;
+    const onMousedownHandler = (e: MouseEvent) => {
+      mostRecentMousedown.current = e.target as HTMLDivElement;
     };
     window.addEventListener("mousedown", onMousedownHandler);
     return () => window.removeEventListener("mousedown", onMousedownHandler);
   });
 
-  const onOuterMouseup = (e: any) => {
+  const onOuterMouseup = (e: React.MouseEvent) => {
     if (mostRecentMousedown.current === e.target) {
       // Condition to prevent bug where mousedown inside modal and mouseup
       // outside would count as a click outside and close the modal
@@ -48,7 +48,7 @@ const ModalWrapper = ({
     e.stopPropagation();
   };
 
-  const onInnerMouseup = (e: any) => {
+  const onInnerMouseup = (e: React.MouseEvent) => {
     // Stop propagation to not potentially close the modal due to event bubbling
     e.stopPropagation();
   };

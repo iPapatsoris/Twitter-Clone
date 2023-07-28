@@ -57,7 +57,7 @@ const ActualComponent = <FormInput extends FieldValues>(
     }
   }, [isDirty, hasBeenDirtied, setHasBeenDirtied]);
 
-  const handleBlur = (e: any) => {
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     onBlurUser(e);
     onBlur();
     if (hasBeenDirtied) {
