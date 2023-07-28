@@ -187,7 +187,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
         ref={profileRef}
       >
         {!preview && <div className={styles.Cover} style={coverStyle} />}
-        {!preview ? (
+        {!preview || preview.noNavOnClick ? (
           avatar
         ) : (
           <Link className={styles.Semantic} to={getProfileLink()}>
@@ -207,7 +207,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
         </div>
         <div className={styles.Title} onMouseEnter={onMouseEnter}>
           <div className={styles.NameAndVerified}>
-            {!preview ? (
+            {!preview || preview.noNavOnClick ? (
               nameAndVerified
             ) : (
               <Link className={styles.Semantic} to={getProfileLink()}>
@@ -216,7 +216,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
             )}
           </div>
           <div className={[styles.LightColor, styles.Username].join(" ")}>
-            {!preview ? (
+            {!preview || preview.noNavOnClick ? (
               usernameText
             ) : (
               <Link className={styles.Semantic} to={getProfileLink()}>
