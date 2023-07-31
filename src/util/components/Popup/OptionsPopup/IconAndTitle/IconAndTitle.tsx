@@ -18,7 +18,7 @@ const IconAndTitle = ({
 
   return (
     <div className={[styles.IconAndTitle, wrapperStyle].join(" ")}>
-      <Icon src={icon} hover="none" extraStyles={[styles.Icon]} alt={alt} />
+      <Icon src={icon} hover="none" size={24} alt={alt} />
       {title}
     </div>
   );

@@ -99,7 +99,7 @@ const Tweet = ({
             <Icon
               src={retweetIcon}
               extraWrapperStyles={[styles.RetweetIconWrapper]}
-              extraStyles={[styles.RetweetIcon]}
+              size={16}
               hover="none"
             />
             <div className={[styles.Retweeter, styles.LightColor].join(" ")}>
@@ -132,11 +132,7 @@ const Tweet = ({
                   </span>
                   {tweet.author.isVerified ? (
                     <div onMouseEnter={showProfilePreview}>
-                      <Icon
-                        src={verifiedIcon}
-                        hover="none"
-                        extraStyles={[styles.Verified]}
-                      />
+                      <Icon src={verifiedIcon} hover="none" size={18} />
                     </div>
                   ) : null}
                 </Link>
@@ -170,7 +166,6 @@ const Tweet = ({
                 includeText
                 bookmarkInsteadOfViews={false}
                 justifyContent="space-between"
-                leftAlignFirstIcon
                 tweet={{
                   id: tweet.id,
                   stats: tweet.stats,

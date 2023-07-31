@@ -8,6 +8,7 @@ export interface IconProps {
   alt?: string;
   hover?: "normal" | "primary" | "green" | "pink" | "none";
   withBorder?: boolean;
+  // Do not use this to set icon size, use size prop instead
   extraStyles?: Array<string>;
   extraWrapperStyles?: Array<string>;
   onClick?: React.MouseEventHandler<HTMLImageElement>;

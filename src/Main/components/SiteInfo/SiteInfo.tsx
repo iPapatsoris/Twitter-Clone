@@ -24,12 +24,7 @@ const SiteInfo = () => {
       </Link>
       <span className={styles.More}>
         More
-        <Icon
-          src={dotsIcon}
-          extraStyles={[styles.Icon]}
-          hover="none"
-          alt="More options"
-        />
+        <Icon src={dotsIcon} size={13} hover="none" alt="More options" />
       </span>
       <br />
       <span className={styles.Copyright}>© 2023 Twitter, Inc.</span>

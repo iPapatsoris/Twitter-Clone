@@ -44,7 +44,6 @@ export const getRefreshTweetCallback =
 interface TweetActionsProps {
   includeText: boolean;
   bookmarkInsteadOfViews: boolean;
-  leftAlignFirstIcon?: boolean;
   justifyContent: "space-around" | "space-between";
   extraIconProps?: Partial<IconProps>;
   tweet: Pick<Tweet, "stats" | "isLiked" | "isRetweeted" | "id" | "author">;
@@ -53,7 +52,6 @@ interface TweetActionsProps {
 const TweetActions = ({
   includeText,
   bookmarkInsteadOfViews,
-  leftAlignFirstIcon = false,
   justifyContent,
   extraIconProps = {},
   tweet,
@@ -91,8 +89,6 @@ const TweetActions = ({
         hover="primary"
         title="Reply"
         text={includeText ? stats.totalReplies.toString() : ""}
-        // noLeftMargin={leftAlignFirstIcon}
-        // noRightMargin
         noBottomMargin
         noInlineMargin
         onClick={(e) => e.stopPropagation()}

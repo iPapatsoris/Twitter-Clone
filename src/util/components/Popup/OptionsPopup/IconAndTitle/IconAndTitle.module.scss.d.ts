@@ -4,13 +4,7 @@ import globalClassNames, {
 declare const classNames: typeof globalClassNames & {
   readonly IconAndTitle: "IconAndTitle";
   readonly Large: "Large";
-  readonly Icon: "Icon";
   readonly Small: "Small";
 };
 export = classNames;
-export type ClassNames =
-  | "IconAndTitle"
-  | "Large"
-  | "Icon"
-  | "Small"
-  | GlobalClassNames;
+export type ClassNames = "IconAndTitle" | "Large" | "Small" | GlobalClassNames;

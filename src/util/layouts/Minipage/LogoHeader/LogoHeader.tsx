@@ -16,7 +16,7 @@ const LogoHeader = ({ onNavIconClick }: LogoHeaderProps) => {
         onClick={onNavIconClick}
       />
       <div className={styles.Logo}>
-        <Icon src={logoIcon} extraStyles={[styles.LogoSize]} hover="none" />
+        <Icon src={logoIcon} size={24} hover="none" />
       </div>
     </>
   );
