@@ -14,8 +14,9 @@ declare const classNames: typeof globalClassNames & {
   readonly ExactTopPlacement: "ExactTopPlacement";
   readonly ExactBottomPlacement: "ExactBottomPlacement";
   readonly NoHover: "NoHover";
-  readonly Icon: "Icon";
   readonly WithBorder: "WithBorder";
+  readonly Icon: "Icon";
+  readonly NoCursorPointer: "NoCursorPointer";
 };
 export = classNames;
 export type ClassNames =
@@ -31,6 +32,7 @@ export type ClassNames =
   | "ExactTopPlacement"
   | "ExactBottomPlacement"
   | "NoHover"
-  | "Icon"
   | "WithBorder"
+  | "Icon"
+  | "NoCursorPointer"
   | GlobalClassNames;

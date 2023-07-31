@@ -91,11 +91,19 @@ const TweetActions = ({
         hover="primary"
         title="Reply"
         text={includeText ? stats.totalReplies.toString() : ""}
-        exactLeftPlacement={leftAlignFirstIcon}
+        // exactLeftPlacement={leftAlignFirstIcon}
+        // exactRightPlacement
+        exactBottomPlacement
+        exactLeftPlacement
+        exactRightPlacement
+        // exactTopPlacement
         onClick={(e) => e.stopPropagation()}
         {...extraIconProps}
       />
       <Icon
+        exactBottomPlacement
+        exactLeftPlacement
+        exactRightPlacement
         src={isRetweeted ? retweetActiveIcon : retweetIcon}
         hover="green"
         title={isRetweeted ? "Undo Retweet" : "Retweet"}
@@ -109,6 +117,9 @@ const TweetActions = ({
         {...extraIconProps}
       />
       <Icon
+        exactBottomPlacement
+        exactLeftPlacement
+        exactRightPlacement
         src={isLiked ? likedIcon : likeIcon}
         hover="pink"
         title={isLiked ? "Unlike" : "Like"}
@@ -123,6 +134,9 @@ const TweetActions = ({
       />
       {bookmarkInsteadOfViews ? (
         <Icon
+          exactBottomPlacement
+          exactLeftPlacement
+          exactRightPlacement
           src={bookmarkIcon}
           hover="primary"
           title="Bookmark"
@@ -132,6 +146,9 @@ const TweetActions = ({
         />
       ) : (
         <Icon
+          exactBottomPlacement
+          exactLeftPlacement
+          exactRightPlacement
           src={viewsIcon}
           hover="primary"
           title="Views"
@@ -141,6 +158,9 @@ const TweetActions = ({
         />
       )}
       <Icon
+        exactBottomPlacement
+        exactRightPlacement
+        exactLeftPlacement
         onClick={(e) => e.stopPropagation()}
         src={shareIcon}
         hover="primary"

@@ -9,7 +9,7 @@ interface IconAndTextProps {
 
 const IconAndText = ({ icon, text = "", link = "" }: IconAndTextProps) => (
   <div className={styles.IconAndText}>
-    <Icon src={icon} hover="none"></Icon>
+    <Icon noCursorPointer src={icon} hover="none"></Icon>
     {link ? (
       <a href={link} target="_blank" rel="noreferrer" className={styles.Blue}>
         {link}

@@ -13,7 +13,6 @@ declare const classNames: typeof globalClassNames & {
   readonly FixedWidthButton: "FixedWidthButton";
   readonly Title: "Title";
   readonly NameAndVerified: "NameAndVerified";
-  readonly Verified: "Verified";
   readonly Username: "Username";
   readonly ProfileInfo: "ProfileInfo";
   readonly Bio: "Bio";
@@ -34,7 +33,6 @@ export type ClassNames =
   | "FixedWidthButton"
   | "Title"
   | "NameAndVerified"
-  | "Verified"
   | "Username"
   | "ProfileInfo"
   | "Bio"

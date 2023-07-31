@@ -2,7 +2,9 @@
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
-  align-items: center;
+  position: relative;
+  width: min-content;
+  --icon-size: 20px;
 
   .Text {
     transition: var(--transition-duration);
@@ -33,46 +35,55 @@
     @include Hover(var(--pink-color-transparent), var(--pink-color));
   }
 
+  --icon-hover-gap: 8px;
+  margin: var(--icon-hover-gap);
+
+  &.ExactLeftPlacement {
+    margin-left: 0;
+  }
+  &.ExactRightPlacement {
+    margin-right: 0;
+  }
+  &.ExactTopPlacement {
+    margin-top: 0;
+  }
+  &.ExactBottomPlacement {
+    margin-bottom: 0;
+  }
+
+  &.NoHover {
+    margin: 0;
+    transition: none;
+
+    .IconWrapper {
+      width: auto;
+      height: auto;
+    }
+  }
+
   .IconWrapper {
-    --icon-wrapper-padding: 8px;
-    padding: var(--icon-wrapper-padding);
+    position: absolute;
+    --icon-hover-size: calc(var(--icon-size) + 2 * var(--icon-hover-gap));
+    width: var(--icon-hover-size);
+    height: var(--icon-hover-size);
+    top: calc(-1 * var(--icon-hover-gap));
+    left: calc(-1 * var(--icon-hover-gap));
     border-radius: 40px;
     transition: var(--transition-duration);
-    display: flex;
-    align-items: center;
-    width: min-content;
     cursor: pointer;
 
-    &.ExactLeftPlacement {
-      margin-left: calc(-1 * var(--icon-wrapper-padding));
-    }
-    &.ExactRightPlacement {
-      margin-right: calc(-1 * var(--icon-wrapper-padding));
-    }
-    &.ExactTopPlacement {
-      margin-top: calc(-1 * var(--icon-wrapper-padding));
-    }
-    &.ExactBottomPlacement {
-      margin-bottom: calc(-1 * var(--icon-wrapper-padding));
-    }
-
-    &.NoHover {
-      padding: 0;
-      transition: none;
-
-      .Icon {
-        cursor: pointer;
-      }
-    }
-
     &.WithBorder {
-      border: 1px solid rgb(207, 217, 222);
+      outline: 1px solid rgb(207, 217, 222);
     }
+  }
 
-    .Icon {
-      cursor: pointer;
-      width: 20px;
-      height: 20px;
+  .Icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    cursor: pointer;
+
+    &.NoCursorPointer {
+      cursor: auto;
     }
   }
 }

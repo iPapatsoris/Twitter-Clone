@@ -164,9 +164,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
   const nameAndVerified = (
     <>
       <h1>{user.name}</h1>
-      {user.isVerified ? (
-        <Icon src={verifiedIcon} hover="none" extraStyles={[styles.Verified]} />
-      ) : null}
+      {user.isVerified ? <Icon src={verifiedIcon} hover="none" /> : null}
     </>
   );
 

@@ -1,5 +1,6 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useLayoutEffect, useRef } from "react";
 import styles from "./Icon.module.scss";
+import { toPixels } from "../../string";
 
 export interface IconProps {
   src: string;
@@ -16,6 +17,8 @@ export interface IconProps {
   exactBottomPlacement?: boolean;
   exactTopPlacement?: boolean;
   text?: string;
+  size?: number;
+  noCursorPointer?: boolean;
 }
 
 const getHoverClass = (hover: IconProps["hover"]) => {
@@ -50,9 +53,18 @@ const Icon = forwardRef(
       exactBottomPlacement,
       exactTopPlacement,
       text,
+      size,
+      noCursorPointer,
     }: IconProps,
     ref: React.ForwardedRef<HTMLImageElement>
   ) => {
+    const iconAndTextRef = useRef<HTMLDivElement>(null);
+
+    useLayoutEffect(() => {
+      if (size && iconAndTextRef && iconAndTextRef.current) {
+        iconAndTextRef.current.style.setProperty("--icon-size", toPixels(size));
+      }
+    });
     const exactPlacementClasses = [];
     if (exactLeftPlacement) {
       exactPlacementClasses.push(styles.ExactLeftPlacement);
@@ -81,9 +93,11 @@ const Icon = forwardRef(
         className={[
           styles.IconAndTextWrapper,
           hoverClassname,
+          ...exactPlacementClasses,
           ...extraWrapperStyles,
         ].join(" ")}
         onClick={onClick}
+        ref={iconAndTextRef}
       >
         <div
           // Prevent losing cursor position when an icon is clicked within an
@@ -93,21 +107,20 @@ const Icon = forwardRef(
             withBorderClass,
             styles.IconWrapper,
             hoverClassname === styles.NoHover ? styles.NoHover : "",
-            ...exactPlacementClasses,
           ].join(" ")}
-        >
-          <img
-            src={src}
-            title={title}
-            alt={alt}
-            className={[
-              styles.Icon,
-              styles.NoHighlighting,
-              ...extraStyles,
-            ].join(" ")}
-            ref={ref}
-          />
-        </div>
+        />
+        <img
+          src={src}
+          title={title}
+          alt={alt}
+          className={[
+            styles.Icon,
+            styles.NoHighlighting,
+            noCursorPointer ? styles.NoCursorPointer : "",
+            ...extraStyles,
+          ].join(" ")}
+          ref={ref}
+        />
         {text && <span className={styles.Text}>{text}</span>}
       </div>
     );

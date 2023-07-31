@@ -160,6 +160,8 @@ const Tweet = ({
                     alt="More options"
                     hover="primary"
                     exactVerticalPlacement
+                    exactLeftPlacement
+                    exactRightPlacement
                   />
                 </div>
               </div>

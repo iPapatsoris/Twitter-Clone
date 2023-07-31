@@ -14,6 +14,7 @@ const Sidebar = () => {
           hover="primary"
           extraStyles={[styles.Icon]}
           alt="Twitter logo"
+          size={30}
         />
       </div>
       <Nav />
