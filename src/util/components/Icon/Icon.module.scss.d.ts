@@ -9,10 +9,10 @@ declare const classNames: typeof globalClassNames & {
   readonly HoverPrimary: "HoverPrimary";
   readonly HoverGreen: "HoverGreen";
   readonly HoverPink: "HoverPink";
-  readonly ExactLeftPlacement: "ExactLeftPlacement";
-  readonly ExactRightPlacement: "ExactRightPlacement";
-  readonly ExactTopPlacement: "ExactTopPlacement";
-  readonly ExactBottomPlacement: "ExactBottomPlacement";
+  readonly NoLeftMargin: "NoLeftMargin";
+  readonly NoRightMargin: "NoRightMargin";
+  readonly NoTopMargin: "NoTopMargin";
+  readonly NoBottomMargin: "NoBottomMargin";
   readonly NoHover: "NoHover";
   readonly WithBorder: "WithBorder";
   readonly Icon: "Icon";
@@ -27,10 +27,10 @@ export type ClassNames =
   | "HoverPrimary"
   | "HoverGreen"
   | "HoverPink"
-  | "ExactLeftPlacement"
-  | "ExactRightPlacement"
-  | "ExactTopPlacement"
-  | "ExactBottomPlacement"
+  | "NoLeftMargin"
+  | "NoRightMargin"
+  | "NoTopMargin"
+  | "NoBottomMargin"
   | "NoHover"
   | "WithBorder"
   | "Icon"

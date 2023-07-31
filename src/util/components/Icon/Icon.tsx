@@ -11,11 +11,12 @@ export interface IconProps {
   extraStyles?: Array<string>;
   extraWrapperStyles?: Array<string>;
   onClick?: React.MouseEventHandler<HTMLImageElement>;
-  exactLeftPlacement?: boolean;
-  exactRightPlacement?: boolean;
-  exactVerticalPlacement?: boolean;
-  exactBottomPlacement?: boolean;
-  exactTopPlacement?: boolean;
+  noLeftMargin?: boolean;
+  noRightMargin?: boolean;
+  noInlineMargin?: boolean;
+  noBlockMargin?: boolean;
+  noBottomMargin?: boolean;
+  noTopMargin?: boolean;
   text?: string;
   size?: number;
   noCursorPointer?: boolean;
@@ -47,11 +48,12 @@ const Icon = forwardRef(
       extraStyles = [],
       extraWrapperStyles = [],
       onClick = () => {},
-      exactLeftPlacement,
-      exactRightPlacement,
-      exactVerticalPlacement,
-      exactBottomPlacement,
-      exactTopPlacement,
+      noLeftMargin,
+      noRightMargin,
+      noInlineMargin,
+      noBlockMargin,
+      noBottomMargin,
+      noTopMargin,
       text,
       size,
       noCursorPointer,
@@ -65,24 +67,26 @@ const Icon = forwardRef(
         iconAndTextRef.current.style.setProperty("--icon-size", toPixels(size));
       }
     });
-    const exactPlacementClasses = [];
-    if (exactLeftPlacement) {
-      exactPlacementClasses.push(styles.ExactLeftPlacement);
+    const noMarginClasses = [];
+    if (noInlineMargin) {
+      noMarginClasses.push(styles.NoLeftMargin, styles.NoRightMargin);
+    } else {
+      if (noLeftMargin) {
+        noMarginClasses.push(styles.NoLeftMargin);
+      }
+      if (noRightMargin) {
+        noMarginClasses.push(styles.NoRightMargin);
+      }
     }
-    if (exactRightPlacement) {
-      exactPlacementClasses.push(styles.ExactRightPlacement);
-    }
-    if (exactVerticalPlacement) {
-      exactPlacementClasses.push(
-        styles.ExactTopPlacement,
-        styles.ExactBottomPlacement
-      );
-    }
-    if (exactTopPlacement) {
-      exactPlacementClasses.push(styles.ExactTopPlacement);
-    }
-    if (exactBottomPlacement) {
-      exactPlacementClasses.push(styles.ExactBottomPlacement);
+    if (noBlockMargin) {
+      noMarginClasses.push(styles.NoTopMargin, styles.NoBottomMargin);
+    } else {
+      if (noTopMargin) {
+        noMarginClasses.push(styles.NoTopMargin);
+      }
+      if (noBottomMargin) {
+        noMarginClasses.push(styles.NoBottomMargin);
+      }
     }
 
     const withBorderClass = withBorder ? styles.WithBorder : "";
@@ -93,7 +97,7 @@ const Icon = forwardRef(
         className={[
           styles.IconAndTextWrapper,
           hoverClassname,
-          ...exactPlacementClasses,
+          ...noMarginClasses,
           ...extraWrapperStyles,
         ].join(" ")}
         onClick={onClick}

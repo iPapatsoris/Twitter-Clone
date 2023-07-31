@@ -159,9 +159,9 @@ const Tweet = ({
                     title="More"
                     alt="More options"
                     hover="primary"
-                    exactVerticalPlacement
-                    exactLeftPlacement
-                    exactRightPlacement
+                    noBlockMargin
+                    noLeftMargin
+                    noRightMargin
                   />
                 </div>
               </div>

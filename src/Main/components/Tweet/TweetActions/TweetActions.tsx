@@ -91,19 +91,16 @@ const TweetActions = ({
         hover="primary"
         title="Reply"
         text={includeText ? stats.totalReplies.toString() : ""}
-        // exactLeftPlacement={leftAlignFirstIcon}
-        // exactRightPlacement
-        exactBottomPlacement
-        exactLeftPlacement
-        exactRightPlacement
-        // exactTopPlacement
+        // noLeftMargin={leftAlignFirstIcon}
+        // noRightMargin
+        noBottomMargin
+        noInlineMargin
         onClick={(e) => e.stopPropagation()}
         {...extraIconProps}
       />
       <Icon
-        exactBottomPlacement
-        exactLeftPlacement
-        exactRightPlacement
+        noBottomMargin
+        noInlineMargin
         src={isRetweeted ? retweetActiveIcon : retweetIcon}
         hover="green"
         title={isRetweeted ? "Undo Retweet" : "Retweet"}
@@ -117,9 +114,8 @@ const TweetActions = ({
         {...extraIconProps}
       />
       <Icon
-        exactBottomPlacement
-        exactLeftPlacement
-        exactRightPlacement
+        noBottomMargin
+        noInlineMargin
         src={isLiked ? likedIcon : likeIcon}
         hover="pink"
         title={isLiked ? "Unlike" : "Like"}
@@ -134,9 +130,8 @@ const TweetActions = ({
       />
       {bookmarkInsteadOfViews ? (
         <Icon
-          exactBottomPlacement
-          exactLeftPlacement
-          exactRightPlacement
+          noBottomMargin
+          noInlineMargin
           src={bookmarkIcon}
           hover="primary"
           title="Bookmark"
@@ -146,9 +141,8 @@ const TweetActions = ({
         />
       ) : (
         <Icon
-          exactBottomPlacement
-          exactLeftPlacement
-          exactRightPlacement
+          noBottomMargin
+          noInlineMargin
           src={viewsIcon}
           hover="primary"
           title="Views"
@@ -158,9 +152,8 @@ const TweetActions = ({
         />
       )}
       <Icon
-        exactBottomPlacement
-        exactRightPlacement
-        exactLeftPlacement
+        noBottomMargin
+        noInlineMargin
         onClick={(e) => e.stopPropagation()}
         src={shareIcon}
         hover="primary"

@@ -38,16 +38,16 @@
   --icon-hover-gap: 8px;
   margin: var(--icon-hover-gap);
 
-  &.ExactLeftPlacement {
+  &.NoLeftMargin {
     margin-left: 0;
   }
-  &.ExactRightPlacement {
+  &.NoRightMargin {
     margin-right: 0;
   }
-  &.ExactTopPlacement {
+  &.NoTopMargin {
     margin-top: 0;
   }
-  &.ExactBottomPlacement {
+  &.NoBottomMargin {
     margin-bottom: 0;
   }
 

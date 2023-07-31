@@ -61,12 +61,7 @@ const MainTweet = ({ tweetID, tweetThreadRef }: MainTweetProps) => {
             type: "user-list",
             username: tweet.author.username!,
             iconAction: (
-              <Icon
-                src={dotsIcon}
-                title="More"
-                hover="primary"
-                exactRightPlacement
-              />
+              <Icon src={dotsIcon} title="More" hover="primary" noRightMargin />
             ),
           }}
         />
@@ -97,8 +92,8 @@ const MainTweet = ({ tweetID, tweetThreadRef }: MainTweetProps) => {
           }}
           justifyContent="space-around"
           extraIconProps={{
-            exactVerticalPlacement: true,
-            extraStyles: [styles.MainTweetActionIcon],
+            noBlockMargin: true,
+            size: 23,
           }}
         />
       </div>
