@@ -20,6 +20,10 @@
       .Text {
         color: $color;
       }
+
+      .Icon {
+        fill: $color;
+      }
     }
   }
 
@@ -87,6 +91,8 @@
     width: var(--icon-size);
     height: var(--icon-size);
     cursor: pointer;
+      transition: var(--transition-duration);
+      fill: var(--light-color);
 
     &.NoCursorPointer {
       cursor: auto;
