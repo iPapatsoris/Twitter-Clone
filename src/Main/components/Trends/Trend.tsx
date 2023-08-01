@@ -49,6 +49,7 @@ const Trend = () => {
             targetAreaRef: iconRef,
             setIsActive: setShowOptions,
             position: { block: "bottomCover", inline: "rightCover" },
+            isFixed: false
           }}
         />
       )}

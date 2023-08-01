@@ -15,6 +15,7 @@ declare const classNames: typeof globalClassNames & {
   readonly NoBottomMargin: "NoBottomMargin";
   readonly NoHover: "NoHover";
   readonly WithBorder: "WithBorder";
+  readonly RefWrapper: "RefWrapper";
   readonly Icon: "Icon";
   readonly NoCursorPointer: "NoCursorPointer";
 };
@@ -33,6 +34,7 @@ export type ClassNames =
   | "NoBottomMargin"
   | "NoHover"
   | "WithBorder"
+  | "RefWrapper"
   | "Icon"
   | "NoCursorPointer"
   | GlobalClassNames;

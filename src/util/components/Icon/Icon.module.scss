@@ -77,6 +77,12 @@
     }
   }
 
+  .RefWrapper {
+    display: flex;
+    height: min-content;
+    width: min-content;
+  }
+
   .Icon {
     width: var(--icon-size);
     height: var(--icon-size);

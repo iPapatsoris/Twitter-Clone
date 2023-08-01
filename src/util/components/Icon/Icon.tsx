@@ -64,7 +64,7 @@ const Icon = forwardRef(
       size,
       noCursorPointer,
     }: IconProps,
-    ref: React.ForwardedRef<SVGSVGElement>
+    ref: React.ForwardedRef<HTMLDivElement>
   ) => {
     const iconAndTextRef = useRef<HTMLDivElement>(null);
 
@@ -131,13 +131,16 @@ const Icon = forwardRef(
             ].join(" ")}
             ref={ref}
           /> */}
-        <Element width={size} height={size} title={title} aria-labelledby={alt} ref={ref} 
-            className={[
-              styles.Icon,
-              styles.NoHighlighting,
-              noCursorPointer ? styles.NoCursorPointer : "",
-              ...extraStyles,
-            ].join(" ")} />
+          {/* TODO: why we can't put ref directly in Element? spawns forwardRef console error */}
+        <div ref={ref} className={styles.RefWrapper}>
+          <Element width={size} height={size} title={title} aria-labelledby={alt} 
+              className={[
+                styles.Icon,
+                styles.NoHighlighting,
+                noCursorPointer ? styles.NoCursorPointer : "",
+                ...extraStyles,
+              ].join(" ")} />
+        </div>
         {text && <span className={styles.Text}>{text}</span>}
       </div>
     );
