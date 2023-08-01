@@ -13,8 +13,9 @@ const InboxSticky = () => {
             src={NewMessageIcon}
             title="New message"
             alt="Compose message"
+            extraStyles={[styles.Icon]}
           />
-          <Icon src={ExpandInboxIcon} title="Expand" alt="Inbox options" />
+          <Icon src={ExpandInboxIcon} extraStyles={[styles.Icon]} title="Expand" alt="Inbox options" />
         </div>
       </div>
     </div>
