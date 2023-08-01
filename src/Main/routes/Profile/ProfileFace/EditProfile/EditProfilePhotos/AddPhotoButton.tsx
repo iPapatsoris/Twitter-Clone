@@ -1,4 +1,5 @@
-import photoIcon from "../../../../../../assets/icons/photo.png";
+import {ReactComponent as PhotoIcon } from "../../../../../../assets/icons/photo.svg";
+import Icon from "../../../../../../util/components/Icon/Icon";
 import styles from "./EditProfilePhotos.module.scss";
 
 interface AddPhotoButtonProps {
@@ -8,7 +9,7 @@ interface AddPhotoButtonProps {
 
 const AddPhotoButton = ({ alt, onClick }: AddPhotoButtonProps) => (
   <div className={styles.AddPhoto} onClick={onClick}>
-    <img src={photoIcon} title="Add photo" alt={alt} />
+    <Icon src={PhotoIcon} title="Add photo" alt={alt} />
   </div>
 );
 

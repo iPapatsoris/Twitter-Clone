@@ -1,5 +1,5 @@
 import Nav from "./Nav/Nav";
-import logo from "../assets/logo.png";
+import { ReactComponent as Logo } from "../assets/logo.svg";
 import styles from "./Sidebar.module.scss";
 import ProfileButton from "./ProfileButton/ProfileButton";
 import Button from "../util/components/Button/Button";
@@ -9,7 +9,7 @@ const Sidebar = () => {
   return (
     <header className={styles.Sidebar}>
       <div className={styles.Logo}>
-        <Icon src={logo} hover="primary" alt="Twitter logo" size={30} />
+        <Icon src={Logo } hover="primary" alt="Twitter logo" size={30} />
       </div>
       <Nav />
       <div className={styles.TweetButton}>

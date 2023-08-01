@@ -1,8 +1,7 @@
-import { Tweet } from "../../../../../../backend/src/entities/tweet";
 import Icon from "../../../../../util/components/Icon/Icon";
 import Profile from "../../../../routes/Profile/Profile";
 import styles from "./MainTweet.module.scss";
-import dotsIcon from "../../../../../assets/icons/dots-gray.png";
+import {ReactComponent as DotsIcon } from "../../../../../assets/icons/dots-gray.svg";
 import dayjs from "dayjs";
 import TweetActions, {
   getRefreshTweetCallback,
@@ -61,7 +60,7 @@ const MainTweet = ({ tweetID, tweetThreadRef }: MainTweetProps) => {
             type: "user-list",
             username: tweet.author.username!,
             iconAction: (
-              <Icon src={dotsIcon} title="More" hover="primary" noRightMargin />
+              <Icon src={DotsIcon } title="More" hover="primary" noRightMargin />
             ),
           }}
         />

@@ -1,14 +1,12 @@
-import topicsIcon from "../../../assets/icons/options/topics.png";
-import twitterCircleIcon from "../../../assets/icons/options/twitter-circle.png";
-import newslettersIcon from "../../../assets/icons/options/newsletters.png";
-import analyticsIcon from "../../../assets/icons/options/analytics.png";
-import rocketIcon from "../../../assets/icons/options/rocket.png";
-import adsIcon from "../../../assets/icons/options/ads.png";
-import settingsIcon from "../../../assets/icons/settings.png";
-import helpIcon from "../../../assets/icons/options/help.png";
-import displayIcon from "../../../assets/icons/options/display.png";
-import shortcutsIcon from "../../../assets/icons/options/shortcuts.png";
-import monetizationIcon from "../../../assets/icons/options/monetization.png";
+import {ReactComponent as ConnectIcon }from "../../../assets/icons/options/connect.svg";
+import {ReactComponent as DraftsIcon}from "../../../assets/icons/options/drafts.svg";
+import {ReactComponent as AnalyticsIcon }from "../../../assets/icons/options/analytics.svg";
+import {ReactComponent as AdsIcon }from "../../../assets/icons/options/ads.svg";
+import {ReactComponent as SettingsIcon }from "../../../assets/icons/settings.svg";
+import {ReactComponent as HelpIcon }from "../../../assets/icons/options/help.svg";
+import {ReactComponent as DisplayIcon }from "../../../assets/icons/options/display.svg";
+import {ReactComponent as ShortcutsIcon }from "../../../assets/icons/options/shortcuts.svg";
+import {ReactComponent as MonetizationIcon }from "../../../assets/icons/options/monetization.svg";
 import IconAndTitle from "../../../util/components/Popup/OptionsPopup/IconAndTitle/IconAndTitle";
 import { OptionWithNested } from "../../../util/components/Popup/OptionsPopup/Option";
 
@@ -18,13 +16,13 @@ export const navMoreOptionsList: OptionWithNested[] = [
     mainOption: {
       component: (
         <IconAndTitle
-          title="Topics"
-          alt="Topics"
-          icon={topicsIcon}
+          title="Connect"
+          alt="Connect"
+          icon={ConnectIcon}
           size="large"
         />
       ),
-      id: "topics",
+      id: "connect",
       onSelect,
     },
   },
@@ -32,13 +30,27 @@ export const navMoreOptionsList: OptionWithNested[] = [
     mainOption: {
       component: (
         <IconAndTitle
-          title="Twitter Circle"
-          alt="Twitter circle"
-          icon={twitterCircleIcon}
+          title="Drafts"
+          alt="Drafts"
+          icon={DraftsIcon}
           size="large"
         />
       ),
-      id: "circle",
+      id: "drafts",
+      onSelect,
+    },
+  },
+  {
+    mainOption: {
+      component: (
+        <IconAndTitle
+          title="Monetization"
+          alt="Monetization"
+          icon={MonetizationIcon}
+          size="large"
+        />
+      ),
+      id: "monetization",
       onSelect,
     },
   },
@@ -52,20 +64,9 @@ export const navMoreOptionsList: OptionWithNested[] = [
       {
         component: (
           <IconAndTitle
-            title="Newsletters"
-            alt="Newsletters"
-            icon={newslettersIcon}
-          />
-        ),
-        id: "newsletters",
-        onSelect,
-      },
-      {
-        component: (
-          <IconAndTitle
             title="Analytics"
             alt="Analytics"
-            icon={analyticsIcon}
+            icon={AnalyticsIcon}
           />
         ),
         id: "analytics",
@@ -82,31 +83,9 @@ export const navMoreOptionsList: OptionWithNested[] = [
     nestedOptions: [
       {
         component: (
-          <IconAndTitle
-            title="Twitter for Professionals"
-            alt="Twitter for professionals"
-            icon={rocketIcon}
-          />
-        ),
-        id: "pros",
-        onSelect,
-      },
-      {
-        component: (
-          <IconAndTitle title="Twitter Ads" alt="Twitter ads" icon={adsIcon} />
+          <IconAndTitle title="Twitter Ads" alt="Twitter ads" icon={AdsIcon} />
         ),
         id: "ads",
-        onSelect,
-      },
-      {
-        component: (
-          <IconAndTitle
-            title="Monetization"
-            alt="Monetization"
-            icon={monetizationIcon}
-          />
-        ),
-        id: "monetization",
         onSelect,
       },
     ],
@@ -123,7 +102,7 @@ export const navMoreOptionsList: OptionWithNested[] = [
           <IconAndTitle
             title="Settings and Privacy"
             alt="Settings and Privacy"
-            icon={settingsIcon}
+            icon={SettingsIcon}
           />
         ),
         id: "settings",
@@ -131,14 +110,14 @@ export const navMoreOptionsList: OptionWithNested[] = [
       },
       {
         component: (
-          <IconAndTitle title="Help Center" alt="Help center" icon={helpIcon} />
+          <IconAndTitle title="Help Center" alt="Help center" icon={HelpIcon} />
         ),
         id: "help",
         onSelect,
       },
       {
         component: (
-          <IconAndTitle title="Display" alt="Display" icon={displayIcon} />
+          <IconAndTitle title="Display" alt="Display" icon={DisplayIcon} />
         ),
         id: "display",
         onSelect,
@@ -148,7 +127,7 @@ export const navMoreOptionsList: OptionWithNested[] = [
           <IconAndTitle
             title="Keyboard Shortcuts"
             alt="Keyboard shortcuts"
-            icon={shortcutsIcon}
+            icon={ShortcutsIcon}
           />
         ),
         id: "shortcuts",

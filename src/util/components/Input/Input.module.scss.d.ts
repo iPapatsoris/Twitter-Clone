@@ -11,6 +11,7 @@ declare const classNames: typeof globalClassNames & {
   readonly Leader: "Leader";
   readonly Error: "Error";
   readonly InheritCursor: "InheritCursor";
+  readonly SuccessIcon: "SuccessIcon";
 };
 export = classNames;
 export type ClassNames =
@@ -23,4 +24,5 @@ export type ClassNames =
   | "Leader"
   | "Error"
   | "InheritCursor"
+  | "SuccessIcon"
   | GlobalClassNames;

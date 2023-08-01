@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styles from "../Profile.module.scss";
 import React, {
   ComponentProps,
@@ -9,9 +9,9 @@ import React, {
 } from "react";
 import { HeaderProfileContext } from "../../../layouts/Main";
 import Icon from "../../../../util/components/Icon/Icon";
-import optionsIcon from "../../../../assets/icons/dots.png";
-import notificationsIcon from "../../../../assets/icons/notifications.png";
-import verifiedIcon from "../../../../assets/icons/verified.png";
+import {ReactComponent as OptionsIcon }from "../../../../assets/icons/dots.svg";
+import {ReactComponent as NotificationsIcon} from "../../../../assets/icons/notifications.svg";
+import { ReactComponent as VerifiedIcon } from "../../../../assets/icons/verified.svg";
 import Button from "../../../../util/components/Button/Button";
 import Info from "./Info/Info";
 import Modal from "../../../../util/components/Modal/Modal";
@@ -76,6 +76,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
     }
   };
   const profileRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   // Action / navigation refs to detect clicking on profile preview except those
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -153,6 +154,12 @@ const ProfileFace = ({ preview }: ProfileProps) => {
     ];
   }
 
+  const visitFullProfile = (e: React.MouseEvent) => {
+    if (preview && preview.type === "user-list" && !buttonRef.current?.contains(e.currentTarget)) {
+      navigate(getPagePath("profile", user.username))
+    }
+  }
+
   const getProfileLink = () => getPagePath("profile", user.username);
 
   const avatar = (
@@ -164,11 +171,11 @@ const ProfileFace = ({ preview }: ProfileProps) => {
   const nameAndVerified = (
     <>
       <h1>{user.name}</h1>
-      {user.isVerified ? <Icon src={verifiedIcon} hover="none" /> : null}
+      {user.isVerified ? <Icon src={VerifiedIcon } hover="none" /> : null}
     </>
   );
 
-  const usernameText = <span>@{user.username}</span>;
+  const usernameText = <span className={[styles.LightColor, styles.Username].join(" ")}>@{user.username}</span>;
 
   return (
     <>
@@ -188,6 +195,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
       />
       <div
         className={[styles.Profile, ...previewStyles].join(" ")}
+        onClick={visitFullProfile}
         ref={profileRef}
       >
         {!preview && <div className={styles.Cover} style={coverStyle} />}
@@ -201,9 +209,9 @@ const ProfileFace = ({ preview }: ProfileProps) => {
         <div className={styles.Actions}>
           {!preview && (
             <>
-              <Icon src={optionsIcon} withBorder title="More" />
+              <Icon src={OptionsIcon} withBorder title="More" />
               {user.isFollowedByActiveUser && (
-                <Icon src={notificationsIcon} withBorder title="Notify" />
+                <Icon src={NotificationsIcon} withBorder title="Notify" />
               )}
             </>
           )}
@@ -219,7 +227,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
               </Link>
             )}
           </div>
-          <div className={[styles.LightColor, styles.Username].join(" ")}>
+          <div >
             {!preview || preview.noNavOnClick ? (
               usernameText
             ) : (

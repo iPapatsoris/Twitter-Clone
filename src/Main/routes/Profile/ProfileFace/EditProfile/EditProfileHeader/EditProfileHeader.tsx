@@ -1,7 +1,7 @@
 import Button from "../../../../../../util/components/Button/Button";
 import Icon from "../../../../../../util/components/Icon/Icon";
 import styles from "./EditProfileHeader.module.scss";
-import closeIcon from "../../../../../../assets/icons/close.png";
+import { ReactComponent as CloseIcon } from "../../../../../../assets/icons/close.svg";
 import { useContext } from "react";
 import { ModalContext } from "../../../../../../util/components/Modal/Modal";
 
@@ -14,7 +14,7 @@ const EditProfileHeader = ({ disableUpdate }: EditProfileHeaderProps) => {
   return (
     <>
       <Icon
-        src={closeIcon}
+        src={CloseIcon }
         extraWrapperStyles={[styles.Icon]}
         onClick={() => setIsActive(false)}
       />

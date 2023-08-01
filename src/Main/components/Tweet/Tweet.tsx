@@ -2,9 +2,9 @@ import { Retweet } from "../../../../backend/src/entities/tweet";
 import Icon from "../../../util/components/Icon/Icon";
 import Avatar from "../../routes/Profile/ProfileFace/Avatar/Avatar";
 import styles from "./Tweet.module.scss";
-import verifiedIcon from "../../../assets/icons/verified.png";
-import dotsIcon from "../../../assets/icons/dots-gray.png";
-import retweetIcon from "../../../assets/icons/tweet/retweet.png";
+import { ReactComponent as VerifiedIcon } from "../../../assets/icons/verified.svg";
+import { ReactComponent as DotsIcon } from "../../../assets/icons/dots-gray.svg";
+import { ReactComponent as RetweetIcon } from "../../../assets/icons/tweet/retweet.svg";
 import dayjs from "dayjs";
 import TweetActions from "./TweetActions/TweetActions";
 import { useRef, useState } from "react";
@@ -97,7 +97,7 @@ const Tweet = ({
         {retweet && (
           <div className={styles.Retweet} onMouseEnter={showProfilePreview}>
             <Icon
-              src={retweetIcon}
+              src={RetweetIcon }
               extraWrapperStyles={[styles.RetweetIconWrapper]}
               size={16}
               hover="none"
@@ -132,7 +132,7 @@ const Tweet = ({
                   </span>
                   {tweet.author.isVerified ? (
                     <div onMouseEnter={showProfilePreview}>
-                      <Icon src={verifiedIcon} hover="none" size={18} />
+                      <Icon src={VerifiedIcon } hover="none" size={18} />
                     </div>
                   ) : null}
                 </Link>
@@ -151,7 +151,7 @@ const Tweet = ({
                 </div>
                 <div className={styles.MoreIcon}>
                   <Icon
-                    src={dotsIcon}
+                    src={DotsIcon }
                     title="More"
                     alt="More options"
                     hover="primary"

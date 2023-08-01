@@ -1,8 +1,9 @@
 import styles from "./IconAndTitle.module.scss";
 import Icon from "../../../Icon/Icon";
+import { ComponentProps } from "react";
 
 interface IconAndTitleProps {
-  icon: string;
+  icon: ComponentProps<typeof Icon>["src"];
   title: string;
   alt: string;
   size?: "small" | "large";

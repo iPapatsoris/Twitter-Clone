@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { ModalContext } from "../../util/components/Modal/Modal";
 import styles from "./StepHeader.module.scss";
-import closeIcon from "../../assets/icons/close.png";
-import leftArrowIcon from "../../assets/icons/left-arrow.png";
+import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
+import { ReactComponent as LeftArrowIcon } from "../../assets/icons/left-arrow.svg";
 import Icon from "../../util/components/Icon/Icon";
 
 interface StepHeaderProps {
@@ -14,7 +14,7 @@ interface StepHeaderProps {
 const StepHeader = ({ children, step, onPrevStepClick }: StepHeaderProps) => {
   const { setIsActive } = useContext(ModalContext);
 
-  const navIcon = !step ? closeIcon : leftArrowIcon;
+  const navIcon = !step ? CloseIcon  : LeftArrowIcon ;
   const onNavIconClick = () => {
     if (!step) {
       setIsActive(false);

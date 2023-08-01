@@ -1,9 +1,9 @@
 import IconAndText from "./IconAndText";
 import styles from "./Info.module.scss";
-import locationIcon from "../../../../../assets/icons/location.png";
-import birthdayIcon from "../../../../../assets/icons/birthday.png";
-import dateIcon from "../../../../../assets/icons/date.png";
-import websiteIcon from "../../../../../assets/icons/website.png";
+import {ReactComponent as LocationIcon} from "../../../../../assets/icons/location.svg";
+import {ReactComponent as birthdayIcon }from "../../../../../assets/icons/birthday.svg";
+import {ReactComponent as DateIcon }from "../../../../../assets/icons/date.svg";
+import {ReactComponent as WebsiteIcon }from "../../../../../assets/icons/website.svg";
 import dayjs from "dayjs";
 import { UserProfileT } from "../queries";
 
@@ -16,12 +16,12 @@ const Info = ({ user }: InfoProps) => {
 
   if (user.location) {
     infoArray.push(
-      <IconAndText key="location" icon={locationIcon} text={user.location} />
+      <IconAndText key="location" icon={LocationIcon} text={user.location} />
     );
   }
   if (user.website) {
     infoArray.push(
-      <IconAndText key="website" icon={websiteIcon} link={user.website} />
+      <IconAndText key="website" icon={WebsiteIcon} link={user.website} />
     );
   }
   if (user.birthDate) {
@@ -37,7 +37,7 @@ const Info = ({ user }: InfoProps) => {
     infoArray.push(
       <IconAndText
         key="joinedDate"
-        icon={dateIcon}
+        icon={DateIcon}
         text={"Joined " + dayjs(user.joinedDate).format("MMMM YYYY")}
       />
     );

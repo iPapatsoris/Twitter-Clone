@@ -1,5 +1,5 @@
 import styles from "./Search.module.scss";
-import searchIcon from "../../../assets/icons/search.png";
+import { ReactComponent as SearchIcon } from "../../../assets/icons/search.svg";
 import { useRef } from "react";
 import Icon from "../../../util/components/Icon/Icon";
 
@@ -14,7 +14,7 @@ const Search = () => {
 
   return (
     <div className={styles.Search} onClick={handleClick}>
-      <Icon src={searchIcon} hover="none" alt="Search" />
+      <Icon src={SearchIcon } hover="none" alt="Search" />
       <input ref={inputRef} type="text" placeholder="Search Twitter" />
     </div>
   );

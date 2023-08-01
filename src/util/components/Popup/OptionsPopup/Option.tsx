@@ -1,5 +1,5 @@
 import Icon from "../../Icon/Icon";
-import downArrowIcon from "../../../../assets/icons/options/down-arrow.png";
+import {ReactComponent as DownArrowIcon }from "../../../../assets/icons/options/down-arrow.svg";
 import styles from "./Option.module.scss";
 
 export type SimpleOption = {
@@ -33,7 +33,7 @@ const Option = ({
       {hasNestedOptions && (
         <div className={styles.PushRight}>
           <Icon
-            src={downArrowIcon}
+            src={DownArrowIcon}
             hover="none"
             alt="Expand option"
             extraStyles={[

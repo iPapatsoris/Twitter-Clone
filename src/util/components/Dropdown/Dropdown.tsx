@@ -3,7 +3,7 @@ import OptionsPopup from "../Popup/OptionsPopup/OptionsPopup";
 import styles from "../Input/InputWrapper.module.scss";
 import dropdownStyles from "./Dropdown.module.scss";
 import Icon from "../Icon/Icon";
-import downArrowIcon from "../../../assets/icons/options/down-arrow.png";
+import {ReactComponent as DownArrowIcon }from "../../../assets/icons/options/down-arrow.svg";
 import { SimpleOption } from "../Popup/OptionsPopup/Option";
 import Popup from "../Popup/Popup";
 
@@ -30,11 +30,11 @@ const Dropdown = (props: DropdownProps) => {
       mainOption: option,
     }));
 
-  const wrapperStyles: styles.InputWrapperNames[] = [
+  const wrapperStyles: styles.ClassNames[] = [
     styles.Wrapper,
     dropdownStyles.Wrapper,
   ];
-  const labelStyles: styles.InputWrapperNames[] = [];
+  const labelStyles: styles.ClassNames[] = [];
   if (isActive) {
     wrapperStyles.push(styles.Focused);
     labelStyles.push(styles.Blue);
@@ -57,7 +57,7 @@ const Dropdown = (props: DropdownProps) => {
             {selectedOption && selectedOption.component}
           </div>
         </div>
-        <Icon src={downArrowIcon} hover={"none"} />
+        <Icon src={DownArrowIcon} hover={"none"} />
       </div>
       {isActive && dropdownRef && (
         <OptionsPopup

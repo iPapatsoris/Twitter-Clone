@@ -1,20 +1,20 @@
-import homeIcon from "../../assets/icons/nav/home.png";
-import homeIconActive from "../../assets/icons/nav/home-active.png";
-import exploreIcon from "../../assets/icons/nav/hashtag.png";
-import exploreIconActive from "../../assets/icons/nav/hashtag-active.png";
-import notificationIcon from "../../assets/icons/nav/bell.png";
-import notificationIconActive from "../../assets/icons/nav/bell-active.png";
-import messageIcon from "../../assets/icons/nav/mail.png";
-import messageIconActive from "../../assets/icons/nav/mail-active.png";
-import moreIcon from "../../assets/icons/nav/more.png";
-import bookmarkIcon from "../../assets/icons/nav/bookmark.png";
-import bookmarkIconActive from "../../assets/icons/nav/bookmark-active.png";
-import profileIcon from "../../assets/icons/nav/user.png";
-import profileIconActive from "../../assets/icons/nav/user-active.png";
-import listIcon from "../../assets/icons/nav/list.png";
-import listIconActive from "../../assets/icons/nav/list-active.png";
-import settingsIcon from "../../assets/icons/settings.png";
-import settingsIconActive from "../../assets/icons/nav/settings-active.png";
+import {ReactComponent as HomeIcon} from "../../assets/icons/nav/home.svg";
+import {ReactComponent as HomeIconActive} from "../../assets/icons/nav/home-active.svg";
+import {ReactComponent as ExploreIcon} from "../../assets/icons/nav/search.svg";
+import {ReactComponent as ExploreIconActive} from "../../assets/icons/nav/search-active.svg";
+import {ReactComponent as NotificationIcon }from "../../assets/icons/nav/bell.svg";
+import {ReactComponent as NotificationIconActive} from "../../assets/icons/nav/bell-active.svg";
+import {ReactComponent as MessageIcon} from "../../assets/icons/nav/mail.svg";
+import {ReactComponent as MessageIconActive} from "../../assets/icons/nav/mail-active.svg";
+import {ReactComponent as MoreIcon} from "../../assets/icons/nav/more.svg";
+import {ReactComponent as BookmarkIcon} from "../../assets/icons/nav/bookmark.svg";
+import {ReactComponent as BookmarkIconActive} from "../../assets/icons/nav/bookmark-active.svg";
+import {ReactComponent as ProfileIcon} from "../../assets/icons/nav/user.svg";
+import {ReactComponent as ProfileIconActive }from "../../assets/icons/nav/user-active.svg";
+import {ReactComponent as ListIcon} from "../../assets/icons/nav/list.svg";
+import {ReactComponent as ListIconActive }from "../../assets/icons/nav/list-active.svg";
+import {ReactComponent as SettingsIcon} from "../../assets/icons/settings.svg";
+import {ReactComponent as SettingsIconActive }from "../../assets/icons/nav/settings-active.svg";
 import NavItem from "./NavItem";
 import { getPagePath } from "../../util/paths";
 import { useAuthStore } from "../../store/AuthStore";
@@ -27,8 +27,8 @@ const Nav = () => {
   let itemPath = getPagePath("explore");
   const explore = (
     <NavItem
-      icon={exploreIcon}
-      iconActive={exploreIconActive}
+      icon={ExploreIcon }
+      iconActive={ExploreIconActive }
       title="Explore"
       path={itemPath}
     />
@@ -39,8 +39,8 @@ const Nav = () => {
     <>
       {explore}
       <NavItem
-        iconActive={settingsIconActive}
-        icon={settingsIcon}
+        iconActive={SettingsIconActive }
+        icon={SettingsIcon }
         title="Settings"
         path={itemPath}
       />
@@ -54,43 +54,43 @@ const Nav = () => {
       ) : (
         <>
           <NavItem
-            iconActive={homeIconActive}
-            icon={homeIcon}
+            iconActive={HomeIconActive }
+            icon={HomeIcon }
             title="Home"
             path={getPagePath("home")}
           />
           {explore}
           <NavItem
-            iconActive={notificationIconActive}
-            icon={notificationIcon}
+            iconActive={NotificationIconActive }
+            icon={NotificationIcon }
             title="Notifications"
             path={getPagePath("notifications")}
           />
           <NavItem
-            iconActive={messageIconActive}
-            icon={messageIcon}
+            iconActive={MessageIconActive }
+            icon={MessageIcon }
             title="Messages"
             path={getPagePath("messages")}
           />
           <NavItem
-            iconActive={bookmarkIconActive}
-            icon={bookmarkIcon}
+            iconActive={BookmarkIconActive }
+            icon={BookmarkIcon }
             title="Bookmarks"
             path={getPagePath("bookmarks")}
           />
           <NavItem
-            icon={listIcon}
-            iconActive={listIconActive}
+            icon={ListIcon }
+            iconActive={ListIconActive }
             title="Lists"
             path={getPagePath("lists", loggedInUser.username)}
           />
           <NavItem
-            icon={profileIcon}
-            iconActive={profileIconActive}
+            icon={ProfileIcon }
+            iconActive={ProfileIconActive }
             title="Profile"
             path={getPagePath("profile", loggedInUser.username)}
           />
-          <NavItem icon={moreIcon} title="More" isPopup />
+          <NavItem icon={MoreIcon } title="More" isPopup />
         </>
       )}
     </nav>

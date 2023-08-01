@@ -9,9 +9,9 @@ import {
 import Search from "../../../components/Search/Search";
 import { HeaderProfileUser } from "../../Main";
 import HeaderMain from "./HeaderMain";
-import sparkIcon from "../../../../assets/icons/spark.png";
-import settingsIcon from "../../../../assets/icons/settings.png";
-import verifiedIcon from "../../../../assets/icons/verified.png";
+// import {ReactComponent as SparkIcon }from "../../../../assets/icons/spark.svg";
+import {ReactComponent as SettingsIcon} from "../../../../assets/icons/settings.svg";
+import {ReactComponent as VerifiedIcon} from "../../../../assets/icons/verified.svg";
 import styles from "./HeaderMain.module.scss";
 import HeaderLinkMenu from "./HeaderLinkMenu/HeaderLinkMenu";
 
@@ -32,16 +32,16 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
   const userTitle = (
     <>
       <h2>{user?.name}</h2>
-      {user?.isVerified ? <Icon src={verifiedIcon} hover="none" /> : null}
+      {user?.isVerified ? <Icon src={VerifiedIcon} hover="none" /> : null}
     </>
   );
 
   let header = (
     <HeaderMain
       title={<h2>Home</h2>}
-      rightCornerIcon={
-        <Icon src={sparkIcon} title="Top Tweets" alt="Top tweets" />
-      }
+      // rightCornerIcon={
+      //   <Icon src={SparkIcon} title="Top Tweets" alt="Top tweets" />
+      // }
     />
   );
 
@@ -54,7 +54,7 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
           </div>
         }
         rightCornerIcon={
-          <Icon src={settingsIcon} title="Settings" alt="Settings" />
+          <Icon src={SettingsIcon} title="Settings" alt="Settings" />
         }
       />
     );

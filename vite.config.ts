@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import sassDts from "vite-plugin-sass-dts";
 import path from "path";
 import eslint from "vite-plugin-eslint";
+import svgr from "vite-plugin-svgr";
 
 export default defineConfig({
   css: {
@@ -22,6 +23,7 @@ export default defineConfig({
     },
   },
   plugins: [
+    svgr(),
     react(),
     sassDts({
       enabledMode: ["development", "production"],

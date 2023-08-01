@@ -1,6 +1,6 @@
 import Icon from "../../../../util/components/Icon/Icon";
 import styles from "./HeaderMain.module.scss";
-import backIcon from "../../../../assets/icons/left-arrow.png";
+import { ReactComponent as BackIcon } from "../../../../assets/icons/left-arrow.svg";
 import { useNavigate } from "react-router-dom";
 
 interface NewHeaderProps {
@@ -46,7 +46,7 @@ const HeaderMain = ({
     >
       <div className={styles.Main}>
         {leftCornerBackIcon && (
-          <Icon src={backIcon} title={"Back"} onClick={handleBackClick} />
+          <Icon src={BackIcon } title={"Back"} onClick={handleBackClick} />
         )}
         {main}
         {rightCornerIcon && <div className="PushRight">{rightCornerIcon}</div>}

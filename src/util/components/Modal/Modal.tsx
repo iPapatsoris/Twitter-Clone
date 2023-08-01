@@ -1,6 +1,6 @@
 import Icon from "../Icon/Icon";
 import styles from "./Modal.module.scss";
-import closeIcon from "../../../assets/icons/close.png";
+import { ReactComponent as CloseIcon } from "../../../assets/icons/close.svg";
 import React, { createContext, useEffect } from "react";
 import { toPixels } from "../../string";
 import ModalWrapper from "./ModalWrapper/ModalWrapper";
@@ -33,7 +33,7 @@ const Modal = ({ withCloseIcon = true, children, setIsActive }: ModalProps) => {
     <div key={0} className={styles.Dummy}>
       {withCloseIcon && (
         <div className={styles.CloseIcon} onClick={() => setIsActive(false)}>
-          <Icon src={closeIcon} />
+          <Icon src={<CloseIcon />} />
         </div>
       )}
       <div className={styles.Content}>{children}</div>

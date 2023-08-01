@@ -1,5 +1,5 @@
 import styles from "./ProfileButton.module.scss";
-import dots from "../../assets/icons/dots.png";
+import {ReactComponent as Dots }from "../../assets/icons/dots.svg";
 import Icon from "../../util/components/Icon/Icon";
 import OptionsPopup from "../../util/components/Popup/OptionsPopup/OptionsPopup";
 import { useRef, useState } from "react";
@@ -76,7 +76,7 @@ const ProfileButton = () => {
               noNavOnClick: true,
               noPreviewOnHover: true,
               iconAction: (
-                <Icon src={dots} title="" hover="none" alt="Account options" />
+                <Icon src={Dots} title="" hover="none" alt="Account options" />
               ),
             }}
           />

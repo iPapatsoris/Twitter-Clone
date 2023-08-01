@@ -9,10 +9,10 @@ import {
 import useClickOutside from "../../hooks/useClickOutside";
 import styles from "./InputWrapper.module.scss";
 import inputStyles from "./Input.module.scss";
-import eyeIcon from "../../../assets/icons/eye.png";
-import eyeStrikeIcon from "../../../assets/icons/eye-strike.png";
-import successIcon from "../../../assets/icons/success.png";
-import errorIcon from "../../../assets/icons/error.png";
+import {ReactComponent as EyeIcon} from "../../../assets/icons/eye.svg";
+import {ReactComponent as EyeStrikeIcon} from "../../../assets/icons/eye-strike.svg";
+import {ReactComponent as SuccessIcon} from "../../../assets/icons/success.svg";
+import {ReactComponent as ErrorIcon} from "../../../assets/icons/error.svg";
 import Icon from "../Icon/Icon";
 import useForwardRef from "../../hooks/useForwardRef";
 
@@ -145,16 +145,16 @@ const Input = forwardRef<RefType, InputProps>(
     if (initialType === "password") {
       iconJSX = (
         <Icon
-          src={inputType === "password" ? eyeIcon : eyeStrikeIcon}
+          src={inputType === "password" ? EyeIcon : EyeStrikeIcon}
           onClick={(e) => togglePasswordReveal(e)}
           hover="none"
         />
       );
     } else if (showStatusIcon) {
       if (error) {
-        iconJSX = <Icon src={errorIcon} hover="none" />;
+        iconJSX = <Icon src={ErrorIcon} hover="none" />;
       } else if (isValid) {
-        iconJSX = <Icon src={successIcon} hover="none" />;
+        iconJSX = <Icon src={SuccessIcon} extraStyles={[inputStyles.SuccessIcon]} hover="none" />;
       }
     }
 

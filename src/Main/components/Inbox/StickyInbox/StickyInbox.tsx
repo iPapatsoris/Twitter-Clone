@@ -1,6 +1,6 @@
 import styles from "./StickyInbox.module.scss";
-import newMessageIcon from "../../../../assets/icons/new-message.png";
-import expandInbox from "../../../../assets/icons/expand-inbox.png";
+import { ReactComponent as NewMessageIcon } from "../../../../assets/icons/new-message.svg";
+import { ReactComponent as ExpandInboxIcon } from "../../../../assets/icons/expand-up.svg";
 import Icon from "../../../../util/components/Icon/Icon";
 
 const InboxSticky = () => {
@@ -10,11 +10,11 @@ const InboxSticky = () => {
         <h3 className={styles.BiggerText}>Messages</h3>
         <div className={styles.PushRight}>
           <Icon
-            src={newMessageIcon}
+            src={NewMessageIcon}
             title="New message"
             alt="Compose message"
           />
-          <Icon src={expandInbox} title="Expand" alt="Inbox options" />
+          <Icon src={ExpandInboxIcon} title="Expand" alt="Inbox options" />
         </div>
       </div>
     </div>

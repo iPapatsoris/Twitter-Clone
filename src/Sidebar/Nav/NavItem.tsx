@@ -3,9 +3,10 @@ import Icon from "../../util/components/Icon/Icon";
 import { getPagePath } from "../../util/paths";
 import MoreOptionsNavItem from "./MoreOptionsNavItem/MoreOptionsNavItem";
 import styles from "./Nav.module.scss";
+import { ComponentProps } from "react";
 interface NavItemProps {
-  icon: string;
-  iconActive?: string;
+  icon: ComponentProps<typeof Icon>["src"];
+  iconActive?: ComponentProps<typeof Icon>["src"];
   title: string;
   path?: string;
   isPopup?: boolean;

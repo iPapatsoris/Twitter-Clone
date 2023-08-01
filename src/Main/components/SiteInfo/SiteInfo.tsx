@@ -1,7 +1,7 @@
 import styles from "./SiteInfo.module.scss";
 import { Link } from "react-router-dom";
 import Icon from "../../../util/components/Icon/Icon";
-import dotsIcon from "../../../assets/icons/dots-gray.png";
+import { ReactComponent as DotsIcon } from "../../../assets/icons/dots-gray.svg";
 
 const SiteInfo = () => {
   return (
@@ -24,7 +24,7 @@ const SiteInfo = () => {
       </Link>
       <span className={styles.More}>
         More
-        <Icon src={dotsIcon} size={13} hover="none" alt="More options" />
+        <Icon src={DotsIcon} size={13} hover="none" alt="More options" />
       </span>
       <br />
       <span className={styles.Copyright}>© 2023 Twitter, Inc.</span>

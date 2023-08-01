@@ -1,9 +1,14 @@
-import React, { forwardRef, useLayoutEffect, useRef } from "react";
+import React, {
+  forwardRef,
+  useLayoutEffect,
+  useRef,
+} from "react";
 import styles from "./Icon.module.scss";
 import { toPixels } from "../../string";
 
 export interface IconProps {
-  src: string;
+  src: React.ComponentType<React.SVGProps<SVGSVGElement> & {
+    title?: string | undefined}>
   title?: string;
   alt?: string;
   hover?: "normal" | "primary" | "green" | "pink" | "none";
@@ -41,7 +46,7 @@ const getHoverClass = (hover: IconProps["hover"]) => {
 const Icon = forwardRef(
   (
     {
-      src,
+      src: Element,
       title = "",
       alt = "",
       hover = "normal",
@@ -59,7 +64,7 @@ const Icon = forwardRef(
       size,
       noCursorPointer,
     }: IconProps,
-    ref: React.ForwardedRef<HTMLImageElement>
+    ref: React.ForwardedRef<SVGSVGElement>
   ) => {
     const iconAndTextRef = useRef<HTMLDivElement>(null);
 
@@ -114,18 +119,25 @@ const Icon = forwardRef(
             hoverClassname === styles.NoHover ? styles.NoHover : "",
           ].join(" ")}
         />
-        <img
-          src={src}
-          title={title}
-          alt={alt}
-          className={[
-            styles.Icon,
-            styles.NoHighlighting,
-            noCursorPointer ? styles.NoCursorPointer : "",
-            ...extraStyles,
-          ].join(" ")}
-          ref={ref}
-        />
+        {/* <img
+            src={src}
+            title={title}
+            alt={alt}
+            className={[
+              styles.Icon,
+              styles.NoHighlighting,
+              noCursorPointer ? styles.NoCursorPointer : "",
+              ...extraStyles,
+            ].join(" ")}
+            ref={ref}
+          /> */}
+        <Element width={size} height={size} title={title} aria-labelledby={alt} ref={ref} 
+            className={[
+              styles.Icon,
+              styles.NoHighlighting,
+              noCursorPointer ? styles.NoCursorPointer : "",
+              ...extraStyles,
+            ].join(" ")} />
         {text && <span className={styles.Text}>{text}</span>}
       </div>
     );

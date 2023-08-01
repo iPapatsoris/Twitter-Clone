@@ -1,8 +1,9 @@
+import { ComponentProps } from "react";
 import Icon from "../../../../../util/components/Icon/Icon";
 import styles from "./Info.module.scss";
 
 interface IconAndTextProps {
-  icon: string;
+  icon: ComponentProps<typeof Icon>["src"];
   text?: string;
   link?: string;
 }

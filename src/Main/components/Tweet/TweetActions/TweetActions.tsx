@@ -1,12 +1,12 @@
 import styles from "./TweetActions.module.scss";
-import retweetIcon from "../../../../assets/icons/tweet/retweet.png";
-import retweetActiveIcon from "../../../../assets/icons/tweet/retweet-active.png";
-import replyIcon from "../../../../assets/icons/tweet/reply.png";
-import likeIcon from "../../../../assets/icons/tweet/like.png";
-import likedIcon from "../../../../assets/icons/tweet/liked.png";
-import viewsIcon from "../../../../assets/icons/tweet/views.png";
-import shareIcon from "../../../../assets/icons/tweet/share.png";
-import bookmarkIcon from "../../../../assets/icons/tweet/bookmark.png";
+import {ReactComponent as RetweetIcon }from "../../../../assets/icons/tweet/retweet.svg";
+import {ReactComponent as RetweetActiveIcon} from "../../../../assets/icons/tweet/retweet-active.svg";
+import {ReactComponent as ReplyIcon} from "../../../../assets/icons/tweet/reply.svg";
+import {ReactComponent as LikeIcon } from "../../../../assets/icons/tweet/like.svg";
+import {ReactComponent as LikedIcon } from "../../../../assets/icons/tweet/liked.svg";
+import {ReactComponent as ViewsIcon } from "../../../../assets/icons/tweet/views.svg";
+import {ReactComponent as ShareIcon } from "../../../../assets/icons/tweet/share.svg";
+import {ReactComponent as BookmarkIcon }from "../../../../assets/icons/tweet/bookmark.svg";
 import Icon, { IconProps } from "../../../../util/components/Icon/Icon";
 import {
   QueryClient,
@@ -85,7 +85,7 @@ const TweetActions = ({
       ].join(" ")}
     >
       <Icon
-        src={replyIcon}
+        src={ReplyIcon }
         hover="primary"
         title="Reply"
         text={includeText ? stats.totalReplies.toString() : ""}
@@ -97,7 +97,7 @@ const TweetActions = ({
       <Icon
         noBottomMargin
         noInlineMargin
-        src={isRetweeted ? retweetActiveIcon : retweetIcon}
+        src={isRetweeted ? RetweetActiveIcon  : RetweetIcon }
         hover="green"
         title={isRetweeted ? "Undo Retweet" : "Retweet"}
         text={includeText ? stats.totalRetweets.toString() : ""}
@@ -112,7 +112,7 @@ const TweetActions = ({
       <Icon
         noBottomMargin
         noInlineMargin
-        src={isLiked ? likedIcon : likeIcon}
+        src={isLiked ? LikedIcon  : LikeIcon }
         hover="pink"
         title={isLiked ? "Unlike" : "Like"}
         text={includeText ? stats.totalLikes.toString() : ""}
@@ -128,7 +128,7 @@ const TweetActions = ({
         <Icon
           noBottomMargin
           noInlineMargin
-          src={bookmarkIcon}
+          src={BookmarkIcon }
           hover="primary"
           title="Bookmark"
           text={includeText ? stats.views.toString() : ""}
@@ -139,7 +139,7 @@ const TweetActions = ({
         <Icon
           noBottomMargin
           noInlineMargin
-          src={viewsIcon}
+          src={ViewsIcon }
           hover="primary"
           title="Views"
           text={includeText ? stats.views.toString() : ""}
@@ -151,7 +151,7 @@ const TweetActions = ({
         noBottomMargin
         noInlineMargin
         onClick={(e) => e.stopPropagation()}
-        src={shareIcon}
+        src={ShareIcon }
         hover="primary"
         title="Share"
         {...extraIconProps}

@@ -1,11 +1,11 @@
 import Icon from "../../../util/components/Icon/Icon";
-import DotsIcon from "../../../assets/icons/dots-gray.png";
+import {ReactComponent as DotsIcon } from "../../../assets/icons/dots-gray.svg";
 import styles from "./Trend.module.scss";
 import { useRef, useState } from "react";
 import OptionsPopup from "../../../util/components/Popup/OptionsPopup/OptionsPopup";
 import { OptionWithNested } from "../../../util/components/Popup/OptionsPopup/Option";
 import IconAndTitle from "../../../util/components/Popup/OptionsPopup/IconAndTitle/IconAndTitle";
-import sadFaceIcon from "../../../assets/icons/options/sad-face.png";
+import {ReactComponent as SadFaceIcon} from "../../../assets/icons/options/sad-face.svg";
 
 const Trend = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -16,7 +16,7 @@ const Trend = () => {
       mainOption: {
         component: (
           <IconAndTitle
-            icon={sadFaceIcon}
+            icon={SadFaceIcon}
             title="Not interested in this"
             alt="Not interested in trend"
           />
@@ -29,7 +29,7 @@ const Trend = () => {
       mainOption: {
         component: (
           <IconAndTitle
-            icon={sadFaceIcon}
+            icon={SadFaceIcon}
             alt="Spammy trend"
             title="This trend is harmful or spammy"
           />
