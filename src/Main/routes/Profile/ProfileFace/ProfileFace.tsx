@@ -9,8 +9,8 @@ import React, {
 } from "react";
 import { HeaderProfileContext } from "../../../layouts/Main";
 import Icon from "../../../../util/components/Icon/Icon";
-import {ReactComponent as OptionsIcon }from "../../../../assets/icons/dots.svg";
-import {ReactComponent as NotificationsIcon} from "../../../../assets/icons/notifications.svg";
+import { ReactComponent as OptionsIcon } from "../../../../assets/icons/dots.svg";
+import { ReactComponent as NotificationsIcon } from "../../../../assets/icons/notifications.svg";
 import { ReactComponent as VerifiedIcon } from "../../../../assets/icons/verified.svg";
 import Button from "../../../../util/components/Button/Button";
 import Info from "./Info/Info";
@@ -32,6 +32,7 @@ import { useCircleMutation } from "../../Circle/queries";
 import Avatar from "./Avatar/Avatar";
 import ProfileHoverPreview from "./ProfileHoverPreview";
 import { ProfileProps } from "../Profile";
+import { elementIsContainedInRefs } from "../../../../util/ref";
 
 const ProfileFace = ({ preview }: ProfileProps) => {
   const loggedInUser = useAuthStore(
@@ -80,6 +81,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
 
   // Action / navigation refs to detect clicking on profile preview except those
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const tweetOptionsRef = useRef<HTMLDivElement>(null);
 
   if (!isSuccess) {
     return null;
@@ -155,10 +157,14 @@ const ProfileFace = ({ preview }: ProfileProps) => {
   }
 
   const visitFullProfile = (e: React.MouseEvent) => {
-    if (preview && preview.type === "user-list" && !buttonRef.current?.contains(e.currentTarget)) {
-      navigate(getPagePath("profile", user.username))
+    if (
+      preview &&
+      preview.type === "user-list" &&
+      !elementIsContainedInRefs(e, [buttonRef, tweetOptionsRef])
+    ) {
+      navigate(getPagePath("profile", user.username));
     }
-  }
+  };
 
   const getProfileLink = () => getPagePath("profile", user.username);
 
@@ -171,11 +177,15 @@ const ProfileFace = ({ preview }: ProfileProps) => {
   const nameAndVerified = (
     <>
       <h1>{user.name}</h1>
-      {user.isVerified ? <Icon src={VerifiedIcon } hover="none" /> : null}
+      {user.isVerified ? <Icon src={VerifiedIcon} hover="none" /> : null}
     </>
   );
 
-  const usernameText = <span className={[styles.LightColor, styles.Username].join(" ")}>@{user.username}</span>;
+  const usernameText = (
+    <span className={[styles.LightColor, styles.Username].join(" ")}>
+      @{user.username}
+    </span>
+  );
 
   return (
     <>
@@ -209,7 +219,12 @@ const ProfileFace = ({ preview }: ProfileProps) => {
         <div className={styles.Actions}>
           {!preview && (
             <>
-              <Icon src={OptionsIcon} withBorder title="More" />
+              <Icon
+                ref={tweetOptionsRef}
+                src={OptionsIcon}
+                withBorder
+                title="More"
+              />
               {user.isFollowedByActiveUser && (
                 <Icon src={NotificationsIcon} withBorder title="Notify" />
               )}
@@ -227,7 +242,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
               </Link>
             )}
           </div>
-          <div >
+          <div>
             {!preview || preview.noNavOnClick ? (
               usernameText
             ) : (

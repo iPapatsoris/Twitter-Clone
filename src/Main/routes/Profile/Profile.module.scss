@@ -12,7 +12,8 @@ Profile grid */
 
   // Columns for normal profile and medium preview
   @function defineGridColumns($avatar-width) {
-    @return 1rem $avatar-width minmax(180px, 1fr) 1rem;
+    @return var(--main-content-padding) $avatar-width minmax(180px, 1fr)
+      var(--main-content-padding);
   }
   // Columns for small preview
   @function defineGridColumnsSmall() {

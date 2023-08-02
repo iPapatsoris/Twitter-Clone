@@ -1,0 +1,46 @@
+.CreateTweet {
+  //TODO: get this value from global var
+  $gap: 1rem;
+  padding-inline: $gap;
+
+  display: grid;
+  grid-template-areas:
+    "avatar input   input  "
+    ".      widgets action ";
+  grid-template-columns: var(--avatar-small-height) 1fr auto;
+  grid-template-rows: 1fr 1fr;
+  gap: $gap;
+  align-items: center;
+
+  .Avatar {
+    width: var(--avatar-small-height);
+    height: var(--avatar-small-height);
+    grid-area: avatar;
+  }
+
+  textarea {
+    grid-area: input;
+    font-size: 20px;
+    border: none;
+    resize: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .Widgets {
+    grid-area: widgets;
+    display: flex;
+    gap: 1rem;
+
+    .LocationIcon {
+      fill: var(--primary-color);
+    }
+  }
+
+  .PostButton {
+    grid-area: action;
+    width: 4.5rem !important;
+  }
+}

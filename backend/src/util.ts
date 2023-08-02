@@ -56,15 +56,25 @@ export const simpleQuery = <T,>(
     handleSuccess(result);
   });
 
+const dbQuery = (
+  query: string,
+  queryEscapedValues: any[],
+  resolve: any,
+  reject: any
+) =>
+  db.query(query, queryEscapedValues, (error, result) => {
+    if (error) {
+      printError(error);
+      reject(error);
+      return;
+    }
+    resolve(result);
+  });
+
 // prettier-ignore
 export const runQuery = <T,>(query: string, queryEscapedValues: any[]) =>
-  new Promise<T[]>((resolve, reject) => {
-    db.query(query, queryEscapedValues, (error, result) => {
-      if (error) {
-        printError(error);
-        reject(error);
-        return;
-      }
-      resolve(result);
-    });
-  });
+  new Promise<T[]>((resolve, reject) => dbQuery(query, queryEscapedValues, resolve, reject));
+
+// prettier-ignore
+export const runInsertQuery = <T,>(query: string, queryEscapedValues: any[]) =>
+  new Promise<T>((resolve, reject) => dbQuery(query, queryEscapedValues, resolve, reject));

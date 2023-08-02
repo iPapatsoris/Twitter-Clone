@@ -79,11 +79,18 @@
 
     .Info {
       display: flex;
+      align-items: center;
       gap: 0.5rem;
 
       & > *,
       .Subinfo > * {
         flex-shrink: 0;
+      }
+
+      .NameAndVerified {
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
       }
 
       .Name {
@@ -97,6 +104,7 @@
       }
 
       .MoreIcon {
+        height: min-content;
         margin-left: auto;
       }
     }

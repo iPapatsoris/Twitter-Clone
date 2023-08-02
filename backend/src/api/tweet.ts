@@ -4,7 +4,7 @@ import { NormalResponse } from "./common";
 export type CreateTweetFields = keyof CreateTweet["request"]["tweet"];
 export type CreateTweet = {
   request: {
-    tweet: Omit<Tweet, "id" | "authorID" | "views" | "creationDate">;
+    tweet: Pick<Tweet, "text" | "isReply" | "referencedTweetID">;
   };
   response: NormalResponse;
 };
@@ -36,3 +36,5 @@ export type SingleTweetResponse = NormalResponse<Tweet>;
 
 export const getTweetParams = ["noThread"] as const;
 export type GetTweetParams = (typeof getTweetParams)[number];
+
+export const tweetCharLimit = 280;

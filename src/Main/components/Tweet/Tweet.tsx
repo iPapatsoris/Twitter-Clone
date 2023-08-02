@@ -36,7 +36,8 @@ const Tweet = ({
   const avatarRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLAnchorElement>(null);
   const usernameRef = useRef<HTMLAnchorElement>(null);
-  const nestedLinkRefs = [avatarRef, nameRef, usernameRef];
+  const tweetOptionsRef = useRef<HTMLDivElement>(null);
+  const nestedLinkRefs = [avatarRef, nameRef, usernameRef, tweetOptionsRef];
 
   const replyLineRef = useRef<HTMLDivElement>(null);
   const [isProfilePreviewOpen, setIsProfilePreviewOpen] = useState(false);
@@ -71,6 +72,8 @@ const Tweet = ({
     getPagePath("tweet", tweet.author.username, tweet.id);
 
   const navToTweet = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    console.log(e);
+
     if (
       refsExist(nestedLinkRefs) &&
       !elementIsContainedInRefs(e, nestedLinkRefs)
@@ -97,7 +100,7 @@ const Tweet = ({
         {retweet && (
           <div className={styles.Retweet} onMouseEnter={showProfilePreview}>
             <Icon
-              src={RetweetIcon }
+              src={RetweetIcon}
               extraWrapperStyles={[styles.RetweetIconWrapper]}
               size={16}
               hover="none"
@@ -124,17 +127,19 @@ const Tweet = ({
             <>
               <div className={styles.Info}>
                 <Link ref={nameRef} to={getProfileLink()}>
-                  <span
-                    className={styles.Name}
-                    onMouseEnter={showProfilePreview}
-                  >
-                    {tweet.author.name}
-                  </span>
-                  {tweet.author.isVerified ? (
-                    <div onMouseEnter={showProfilePreview}>
-                      <Icon src={VerifiedIcon } hover="none" size={18} />
-                    </div>
-                  ) : null}
+                  <div className={styles.NameAndVerified}>
+                    <span
+                      className={styles.Name}
+                      onMouseEnter={showProfilePreview}
+                    >
+                      {tweet.author.name}
+                    </span>
+                    {tweet.author.isVerified ? (
+                      <div onMouseEnter={showProfilePreview}>
+                        <Icon src={VerifiedIcon} hover="none" size={18} />
+                      </div>
+                    ) : null}
+                  </div>
                 </Link>
                 <div className={[styles.LightColor, styles.Subinfo].join(" ")}>
                   <Link ref={usernameRef} to={getProfileLink()}>
@@ -149,9 +154,9 @@ const Tweet = ({
                     </span>
                   </Link>
                 </div>
-                <div className={styles.MoreIcon}>
+                <div ref={tweetOptionsRef} className={styles.MoreIcon}>
                   <Icon
-                    src={DotsIcon }
+                    src={DotsIcon}
                     title="More"
                     alt="More options"
                     hover="primary"

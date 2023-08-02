@@ -6,8 +6,7 @@
   z-index: 1;
 
   .Main {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding-inline: var(--main-content-padding);
     display: flex;
     align-items: center;
     gap: 2rem;

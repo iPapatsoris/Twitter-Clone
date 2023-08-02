@@ -46,7 +46,12 @@ const HeaderMain = ({
     >
       <div className={styles.Main}>
         {leftCornerBackIcon && (
-          <Icon src={BackIcon } title={"Back"} onClick={handleBackClick} />
+          <Icon
+            src={BackIcon}
+            noLeftMargin
+            title={"Back"}
+            onClick={handleBackClick}
+          />
         )}
         {main}
         {rightCornerIcon && <div className="PushRight">{rightCornerIcon}</div>}

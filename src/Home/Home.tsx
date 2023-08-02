@@ -1,9 +1,12 @@
+import CreateTweet from "../Main/components/Tweet/CreateTweet/CreateTweet";
 import "./Home.scss";
 
 const Home = () => {
   return (
     <div>
-      <div className="Home">this is my Home</div>
+      <div className="Home">
+        <CreateTweet />
+      </div>
     </div>
   );
 };

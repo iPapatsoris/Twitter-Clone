@@ -9,7 +9,13 @@ import {
   SingleTweetResponse,
   Thread,
 } from "../api/tweet.js";
-import { Fields, runQuery, simpleQuery, TypedRequestQuery } from "../util.js";
+import {
+  Fields,
+  runInsertQuery,
+  runQuery,
+  simpleQuery,
+  TypedRequestQuery,
+} from "../util.js";
 import { Tweet } from "../entities/tweet.js";
 import {
   getTweet,
@@ -46,7 +52,7 @@ router.post(
       }
     }
 
-    const [result] = await runQuery<{ insertId: number }>(
+    const result = await runInsertQuery<{ insertId: number }>(
       "INSERT INTO tweet \
       (authorID, text, isReply, referencedTweetID, views, \
       replyDepth, rootTweetID, creationDate)\
