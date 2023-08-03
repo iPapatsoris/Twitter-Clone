@@ -60,7 +60,9 @@ const CreateTweet = ({}: CreateTweetProps) => {
     onSuccess: (data) => {
       if (data.ok) {
         form.reset();
-        queryClient.invalidateQueries(timelineKeys.timeline.queryKey);
+        queryClient.invalidateQueries(
+          timelineKeys.timeline(queryClient).queryKey
+        );
       }
     },
   });

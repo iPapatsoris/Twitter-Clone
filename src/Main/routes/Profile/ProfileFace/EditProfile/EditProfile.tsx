@@ -80,7 +80,10 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
     unknown,
     UpdateUser<UpdateUserFields>["request"]
   >(async (body) =>
-    patchData<(typeof requestFields)[number]>("user", body, requestFields)
+    patchData<
+      UpdateUser<(typeof requestFields)[number]>["response"],
+      (typeof requestFields)[number]
+    >("user", body, requestFields)
   );
 
   const isValidForm = isValid && day !== -1 && month !== -1 && year !== -1;
@@ -96,11 +99,9 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
         user: newUser,
       },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           queryClient.invalidateQueries({
-            queryKey: profileKeys
-              .username(user.username)
-              ._ctx.fields(fullProfileFields).queryKey,
+            queryKey: profileKeys.username(user.username).queryKey,
           });
           setLoggedInUserMiniInfo({
             avatar: newUser.avatar,
