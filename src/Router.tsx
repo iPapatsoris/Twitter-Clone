@@ -32,6 +32,7 @@ import {
   userTweetsLoader,
   userTweetsWithRepliesLoader,
 } from "./Main/routes/Profile/Tweets/queries";
+import { homeLoader } from "./Home/queries";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const loggedInUser: Pick<LoggedInUser, "id"> | null = useAuthStore(
@@ -58,6 +59,7 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
       <Route path="/" element={<App />}>
         <Route
           path={getPagePath("home")}
+          loader={homeLoader(queryClient)}
           element={
             <RequireAuth>
               <Home />

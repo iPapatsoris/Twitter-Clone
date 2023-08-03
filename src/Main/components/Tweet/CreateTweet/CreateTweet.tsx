@@ -3,11 +3,9 @@ import styles from "./CreateTweet.module.scss";
 import { getPagePath } from "../../../../util/paths";
 import { useAuthStore } from "../../../../store/AuthStore";
 import Avatar from "../../../routes/Profile/ProfileFace/Avatar/Avatar";
-import Input from "../../../../util/components/Input/Input";
-import Icon from "../../../../util/components/Icon/Icon";
 import Widgets from "./Widgets";
 import Button from "../../../../util/components/Button/Button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   CreateTweet as CreateTweetAPI,
   tweetCharLimit,
@@ -17,22 +15,12 @@ import yup from "../../../../util/yup";
 import { useController, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Form from "../../../../util/components/Form/Form";
+import { timelineKeys } from "../../../../Home/queries";
 
 interface CreateTweetProps {}
 
 const CreateTweet = ({}: CreateTweetProps) => {
   const { loggedInUser } = useAuthStore();
-  const { mutate, isLoading } = useMutation<
-    CreateTweetAPI["response"],
-    unknown,
-    CreateTweetAPI["request"]
-  >((body) => postData("tweet", body), {
-    onSuccess: (data) => {
-      if (data.ok) {
-        console.log("ok");
-      }
-    },
-  });
 
   const schema: any = yup.object().shape({
     tweet: yup.string().required().max(tweetCharLimit),
@@ -54,16 +42,28 @@ const CreateTweet = ({}: CreateTweetProps) => {
   } = form;
 
   const {
-    field: { onChange, onBlur, value, ref: register },
-    fieldState: { isDirty, error, invalid },
+    field: { onChange, value },
   } = useController({ name: "tweet", control });
 
   const onSubmit = () => {
     const { tweet } = getValues();
-    console.log("hello");
-
     mutate({ tweet: { text: tweet, isReply: false } });
   };
+
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation<
+    CreateTweetAPI["response"],
+    unknown,
+    CreateTweetAPI["request"]
+  >((body) => postData("tweet", body), {
+    onSuccess: (data) => {
+      if (data.ok) {
+        form.reset();
+        queryClient.invalidateQueries(timelineKeys.timeline.queryKey);
+      }
+    },
+  });
 
   if (!loggedInUser) {
     return null;

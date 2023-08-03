@@ -1,5 +1,6 @@
 import { Tweet } from "../entities/tweet.js";
 import { NormalResponse } from "./common";
+import { GetUserTweetsAndRetweets } from "./user.js";
 
 export type CreateTweetFields = keyof CreateTweet["request"]["tweet"];
 export type CreateTweet = {
@@ -31,6 +32,8 @@ export type GetTweet = {
 export type ExpandTweetReplies = {
   response: NormalResponse<{ replies: Tweet[] }>;
 };
+
+export type GetTimeline = GetUserTweetsAndRetweets;
 
 export type SingleTweetResponse = NormalResponse<Tweet>;
 

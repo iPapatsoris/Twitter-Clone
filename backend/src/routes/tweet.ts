@@ -287,19 +287,19 @@ router.get(
   ) => {
     const currentUserID = req.session.userID || -1;
     const tweetIDs = await runQuery<{ id: number }>(
-      "SELECT id \
+      "SELECT distinct(tweet.id) \
        FROM tweet, user_follows as friendship \
-       WHERE authorID = followeeID AND followerID = ? AND isReply = false",
-      [currentUserID]
+       WHERE isReply = false AND (authorID = ? OR (authorID = followeeID AND followerID = ?))",
+      [currentUserID, currentUserID]
     );
     const tweets = await Promise.all(
       tweetIDs.map(({ id }) => getTweet(id, currentUserID))
     );
 
     const followedUsers = await runQuery<{ username: string }>(
-      "SELECT username \
-       FROM user_follows as friendship \
-       WHERE userID = followeeID AND followerID = ?",
+      "SELECT user.username \
+       FROM user_follows, user\
+       WHERE user.id = followeeID AND followerID = ?",
       [currentUserID]
     );
     const retweets = (
@@ -309,6 +309,8 @@ router.get(
         )
       )
     ).flat();
+    console.log("tweets ", tweets);
+    console.log("retweets ", retweets);
 
     res.send({
       ok: true,
