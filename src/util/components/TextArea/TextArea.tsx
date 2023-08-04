@@ -24,7 +24,7 @@ const TextArea = ({
 }) => {
   const ref = useRef<HTMLTextAreaElement>(null);
   const dummyRef = useRef<HTMLTextAreaElement>(null);
-  const [renderDummy, setRenderDummy] = useState(false);
+  const [renderDummy, setRenderDummy] = useState(true);
 
   /* 
     We initially render a hidden dummy TextareaAutosize component just to 
