@@ -1,7 +1,7 @@
 import Icon from "../../../../../util/components/Icon/Icon";
 import Profile from "../../../../routes/Profile/Profile";
 import styles from "./MainTweet.module.scss";
-import {ReactComponent as DotsIcon } from "../../../../../assets/icons/dots-gray.svg";
+import { ReactComponent as DotsIcon } from "../../../../../assets/icons/dots-gray.svg";
 import dayjs from "dayjs";
 import TweetActions, {
   getRefreshTweetCallback,
@@ -60,11 +60,11 @@ const MainTweet = ({ tweetID, tweetThreadRef }: MainTweetProps) => {
             type: "user-list",
             username: tweet.author.username!,
             iconAction: (
-              <Icon src={DotsIcon } title="More" hover="primary" noRightMargin />
+              <Icon src={DotsIcon} title="More" hover="primary" noRightMargin />
             ),
           }}
         />
-        <div>{tweet.text}</div>
+        <div className={styles.Text}>{tweet.text}</div>
         <div>
           <span className={styles.LightColor}>
             {dayjs(tweet.creationDate).format("h:ss A · MMM D, YYYY · ")}

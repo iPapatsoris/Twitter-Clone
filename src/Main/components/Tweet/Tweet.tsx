@@ -166,7 +166,7 @@ const Tweet = ({
                   />
                 </div>
               </div>
-              <div>{tweet.text}</div>
+              <div className={styles.Text}>{tweet.text}</div>
               <TweetActions
                 includeText
                 bookmarkInsteadOfViews={false}
