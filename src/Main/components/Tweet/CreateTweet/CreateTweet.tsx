@@ -12,14 +12,17 @@ import {
 } from "../../../../../backend/src/api/tweet";
 import { postData } from "../../../../util/request";
 import yup from "../../../../util/yup";
-import { useController, useForm } from "react-hook-form";
+import { UseFormReturn, useController, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Form from "../../../../util/components/Form/Form";
 import { timelineKeys } from "../../../../Home/queries";
 import TextArea from "../../../../util/components/TextArea/TextArea";
 import { useRef } from "react";
+import ProgressBar from "./ProgressBar";
 
 interface CreateTweetProps {}
+
+type FormT = { tweet: string };
 
 const CreateTweet = ({}: CreateTweetProps) => {
   const { loggedInUser } = useAuthStore();
@@ -28,7 +31,7 @@ const CreateTweet = ({}: CreateTweetProps) => {
     tweet: yup.string().required().max(tweetCharLimit),
   });
 
-  const form = useForm<{ tweet: string }>({
+  const form = useForm<FormT>({
     mode: "onTouched",
     resolver: yupResolver(schema),
     defaultValues: {
@@ -74,6 +77,7 @@ const CreateTweet = ({}: CreateTweetProps) => {
   if (!loggedInUser) {
     return null;
   }
+  const progressBarInfo = getProgressBarInfo(form);
 
   return (
     <div className={styles.CreateTweet}>
@@ -93,17 +97,38 @@ const CreateTweet = ({}: CreateTweetProps) => {
           refToAlignTopRowWith={avatarRef}
         />
         <Widgets />
-        <Button
-          type="submit"
-          disabled={!isValid}
-          size="medium"
-          extraClasses={[styles.PostButton]}
-        >
-          Post
-        </Button>
+        <div className={styles.RightContent}>
+          {!progressBarInfo.charsWritten ? null : (
+            <ProgressBar tweetCharLimit={tweetCharLimit} {...progressBarInfo} />
+          )}
+          <Button
+            type="submit"
+            disabled={!isValid}
+            size="medium"
+            extraClasses={[styles.PostButton]}
+          >
+            Post
+          </Button>
+        </div>
       </Form>
     </div>
   );
+};
+
+const getProgressBarInfo = (form: UseFormReturn<FormT>) => {
+  const charsWritten = form.getValues("tweet").length;
+  const showCharsWarning = charsWritten >= tweetCharLimit - 20;
+  let progressColor = "var(--primary-color)";
+  let textColor = "var(--light-color)";
+  if (showCharsWarning) {
+    progressColor = "rgb(255, 212, 0)";
+  }
+  if (charsWritten >= tweetCharLimit) {
+    progressColor = "red";
+    textColor = "red";
+  }
+
+  return { charsWritten, showCharsWarning, progressColor, textColor };
 };
 
 export default CreateTweet;

@@ -29,8 +29,18 @@
     }
   }
 
-  .PostButton {
+  .RightContent {
     grid-area: action;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    .Progress {
+      width: 30px;
+    }
+  }
+
+  .PostButton {
     width: 4.5rem !important;
   }
 }

@@ -4,6 +4,7 @@ import "./Home.scss";
 import { timelineKeys } from "./queries";
 import Tweet from "../Main/components/Tweet/Tweet";
 import List from "../Main/layouts/ContentRight/List/List";
+import "react-circular-progressbar/dist/styles.css";
 
 const Home = () => {
   const queryClient = useQueryClient();
