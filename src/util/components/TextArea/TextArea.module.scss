@@ -1,0 +1,10 @@
+.TextArea {
+  grid-area: input;
+  font-size: 20px;
+  border: none;
+  resize: none;
+
+  &:focus {
+    outline: none;
+  }
+}

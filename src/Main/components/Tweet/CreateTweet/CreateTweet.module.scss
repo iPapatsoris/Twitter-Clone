@@ -8,7 +8,7 @@
     "avatar input   input  "
     ".      widgets action ";
   grid-template-columns: var(--avatar-small-height) 1fr auto;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr auto;
   gap: $gap;
   align-items: center;
 
@@ -16,17 +16,7 @@
     width: var(--avatar-small-height);
     height: var(--avatar-small-height);
     grid-area: avatar;
-  }
-
-  textarea {
-    grid-area: input;
-    font-size: 20px;
-    border: none;
-    resize: none;
-
-    &:focus {
-      outline: none;
-    }
+    align-self: start;
   }
 
   .Widgets {

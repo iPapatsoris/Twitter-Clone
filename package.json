@@ -23,6 +23,7 @@
     "react-hook-form": "^7.43.2",
     "react-loader-spinner": "^5.3.4",
     "react-router-dom": "^6.5.0",
+    "react-textarea-autosize": "^8.5.2",
     "vite-plugin-sass-dts": "1.2.9",
     "vite-plugin-svgr": "^3.2.0",
     "yup": "^1.0.2",

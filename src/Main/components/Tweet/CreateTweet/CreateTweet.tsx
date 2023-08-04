@@ -16,6 +16,7 @@ import { useController, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Form from "../../../../util/components/Form/Form";
 import { timelineKeys } from "../../../../Home/queries";
+import TextArea from "../../../../util/components/TextArea/TextArea";
 
 interface CreateTweetProps {}
 
@@ -79,7 +80,7 @@ const CreateTweet = ({}: CreateTweetProps) => {
         </Link>
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <textarea
+        <TextArea
           name="tweet"
           value={value}
           onChange={onChange}
