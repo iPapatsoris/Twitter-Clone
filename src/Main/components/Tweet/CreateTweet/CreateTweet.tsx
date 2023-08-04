@@ -17,6 +17,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Form from "../../../../util/components/Form/Form";
 import { timelineKeys } from "../../../../Home/queries";
 import TextArea from "../../../../util/components/TextArea/TextArea";
+import { useRef } from "react";
 
 interface CreateTweetProps {}
 
@@ -68,23 +69,28 @@ const CreateTweet = ({}: CreateTweetProps) => {
     },
   });
 
+  const avatarRef = useRef<HTMLDivElement>(null);
+
   if (!loggedInUser) {
     return null;
   }
 
   return (
     <div className={styles.CreateTweet}>
-      <div className={styles.Avatar}>
+      <div ref={avatarRef} className={styles.Avatar}>
         <Link to={getPagePath("profile", loggedInUser?.username)}>
           <Avatar src={loggedInUser.avatar} />
         </Link>
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <TextArea
-          name="tweet"
-          value={value}
-          onChange={onChange}
-          placeholder="What is happening?!"
+          textareaProps={{
+            name: "tweet",
+            value: value,
+            onChange,
+            placeholder: "What is happening?!",
+          }}
+          refToAlignTopRowWith={avatarRef}
         />
         <Widgets />
         <Button

@@ -1,5 +1,6 @@
 .TextArea {
   grid-area: input;
+  align-self: start;
   font-size: 20px;
   border: none;
   resize: none;
@@ -7,4 +8,8 @@
   &:focus {
     outline: none;
   }
+}
+
+.Dummy {
+  visibility: hidden;
 }
