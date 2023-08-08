@@ -1,14 +1,13 @@
-import React, {
-  forwardRef,
-  useLayoutEffect,
-  useRef,
-} from "react";
+import React, { forwardRef, useLayoutEffect, useRef } from "react";
 import styles from "./Icon.module.scss";
 import { toPixels } from "../../string";
 
 export interface IconProps {
-  src: React.ComponentType<React.SVGProps<SVGSVGElement> & {
-    title?: string | undefined}>
+  src: React.ComponentType<
+    React.SVGProps<SVGSVGElement> & {
+      title?: string | undefined;
+    }
+  >;
   title?: string;
   alt?: string;
   hover?: "normal" | "primary" | "green" | "pink" | "none";
@@ -119,27 +118,20 @@ const Icon = forwardRef(
             hoverClassname === styles.NoHover ? styles.NoHover : "",
           ].join(" ")}
         />
-        {/* <img
-            src={src}
+        {/* TODO: why we can't put ref directly in Element? spawns forwardRef console error */}
+        <div ref={ref} className={styles.RefWrapper}>
+          <Element
+            width={size}
+            height={size}
             title={title}
-            alt={alt}
+            aria-labelledby={alt}
             className={[
               styles.Icon,
               styles.NoHighlighting,
               noCursorPointer ? styles.NoCursorPointer : "",
               ...extraStyles,
             ].join(" ")}
-            ref={ref}
-          /> */}
-          {/* TODO: why we can't put ref directly in Element? spawns forwardRef console error */}
-        <div ref={ref} className={styles.RefWrapper}>
-          <Element width={size} height={size} title={title} aria-labelledby={alt} 
-              className={[
-                styles.Icon,
-                styles.NoHighlighting,
-                noCursorPointer ? styles.NoCursorPointer : "",
-                ...extraStyles,
-              ].join(" ")} />
+          />
         </div>
         {text && <span className={styles.Text}>{text}</span>}
       </div>
