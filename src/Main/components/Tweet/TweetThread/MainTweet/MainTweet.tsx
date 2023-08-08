@@ -41,7 +41,8 @@ const MainTweet = ({ tweetID, tweetThreadRef }: MainTweetProps) => {
       const tweetCoordinates = ref.current.getBoundingClientRect();
       tweetThreadRef.current.style.minHeight =
         "calc(" + tweetCoordinates.y + "px + " + window.scrollY + "px + 82vh)";
-      ref.current?.scrollIntoView(true);
+
+      ref.current?.scrollIntoView();
     }
   }, [tweetThreadRef, ref, tweetID]);
 
