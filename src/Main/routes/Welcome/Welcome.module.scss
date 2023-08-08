@@ -1,0 +1,66 @@
+.Welcome {
+  height: 100vh;
+  display: grid;
+  grid-template:
+    ".    title " 1fr
+    "logo join" auto
+    ".    ." 1fr / 1fr 1fr;
+
+  .Logo {
+    grid-area: logo;
+    justify-self: center;
+  }
+
+  .Title {
+    grid-area: title;
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    font-size: 64px;
+    font-weight: 700;
+  }
+
+  .Join {
+    grid-area: join;
+    max-width: 300px;
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    .JoinWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    h2 {
+      font-size: 31px;
+    }
+
+    .Terms {
+      font-size: 11px;
+    }
+  }
+
+  .AlreadyAccount {
+    font-weight: 700;
+    font-size: 17px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+
+    button {
+      color: var(--primary-color);
+    }
+  }
+
+  a {
+    color: (var(--primary-color));
+  }
+
+  button {
+    font-size: 15px;
+  }
+}

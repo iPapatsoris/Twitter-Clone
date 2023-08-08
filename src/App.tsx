@@ -8,6 +8,8 @@ import {
   useRouteMatches,
 } from "./util/paths";
 import { createContext, SetStateAction, useState } from "react";
+import { useAuthStore } from "./store/AuthStore";
+import Welcome from "./Main/routes/Welcome/Welcome";
 
 export const ErrorPageContext = createContext<{
   setIsErrorPage: React.Dispatch<SetStateAction<boolean>>;
@@ -19,6 +21,7 @@ export const ErrorPageContext = createContext<{
 const App = () => {
   const [isErrorPage, setIsErrorPage] = useState(false);
   const path = useLocation().pathname;
+  const { loggedInUser } = useAuthStore();
 
   const isCirclePage = useRouteMatches([
     getPagePath("followers"),
@@ -35,7 +38,9 @@ const App = () => {
     extraClasses.push(styles.ExtendedHeaderMain);
   }
 
-  return (
+  return !loggedInUser ? (
+    <Welcome />
+  ) : (
     <ErrorPageContext.Provider value={{ setIsErrorPage, isErrorPage }}>
       <ScrollRestoration />
       <div className={[styles.App, ...extraClasses].join(" ")}>

@@ -35,6 +35,7 @@ import {
 } from "./Main/routes/Profile/Tweets/queries";
 import { homeLoader } from "./Home/queries";
 import { ComponentProps } from "react";
+import Welcome from "./Main/routes/Welcome/Welcome";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const loggedInUser: Pick<LoggedInUser, "id"> | null = useAuthStore(
@@ -45,7 +46,7 @@ const RequireAuth = ({ children }: { children: JSX.Element }) => {
   return loggedInUser ? (
     children
   ) : (
-    <Navigate to={getPagePath("explore")} state={{ from: location }} />
+    <Navigate to={getPagePath("explore")} replace state={{ from: location }} />
   );
 };
 
