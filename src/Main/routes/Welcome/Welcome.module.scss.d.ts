@@ -9,6 +9,7 @@ declare const classNames: typeof globalClassNames & {
   readonly JoinWrapper: "JoinWrapper";
   readonly Terms: "Terms";
   readonly AlreadyAccount: "AlreadyAccount";
+  readonly Button: "Button";
 };
 export = classNames;
 export type ClassNames =
@@ -19,4 +20,5 @@ export type ClassNames =
   | "JoinWrapper"
   | "Terms"
   | "AlreadyAccount"
+  | "Button"
   | GlobalClassNames;

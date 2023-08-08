@@ -17,12 +17,15 @@ const Welcome = ({}: WelcomeProps) => {
         title="Twitter"
         alt="Twitter logo"
         hover="none"
+        noCursorPointer
       />
       <h1 className={styles.Title}>Happening now</h1>
       <div className={styles.Join}>
         <h2>Join today.</h2>
         <div className={styles.JoinWrapper}>
-          <Button color="primary">Create account</Button>
+          <Button extraClasses={[styles.Button]} color="primary">
+            Create account
+          </Button>
           <span className={[styles.LightColor, styles.Terms].join(" ")}>
             By signing up, you agree to the{" "}
             <Link to={getPagePath("tos")}>Terms of Service </Link>and{" "}
@@ -32,7 +35,9 @@ const Welcome = ({}: WelcomeProps) => {
         </div>
         <div className={styles.AlreadyAccount}>
           <span>Already have an account?</span>
-          <Button color="white">Sign in</Button>
+          <Button extraClasses={[styles.Button]} color="white">
+            Sign in
+          </Button>
         </div>
       </div>
     </div>

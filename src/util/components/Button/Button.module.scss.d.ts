@@ -4,8 +4,8 @@ import globalClassNames, {
 declare const classNames: typeof globalClassNames & {
   readonly Button: "Button";
   readonly Primary: "Primary";
-  readonly Black: "Black";
   readonly Disabled: "Disabled";
+  readonly Black: "Black";
   readonly White: "White";
   readonly Red: "Red";
   readonly HoverRed: "HoverRed";
@@ -19,8 +19,8 @@ export = classNames;
 export type ClassNames =
   | "Button"
   | "Primary"
-  | "Black"
   | "Disabled"
+  | "Black"
   | "White"
   | "Red"
   | "HoverRed"

@@ -97,7 +97,7 @@ const CreateTweet = ({}: CreateTweetProps) => {
           refToAlignTopRowWith={avatarRef}
         />
         <Widgets />
-        <div className={styles.RightContent}>
+        <div className={[styles.RightContent, styles.PostContainer].join(" ")}>
           {!progressBarInfo.charsWritten ? null : (
             <ProgressBar tweetCharLimit={tweetCharLimit} {...progressBarInfo} />
           )}

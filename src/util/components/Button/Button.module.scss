@@ -5,7 +5,7 @@
   color: white;
   border-radius: 40px;
   padding-inline: 1rem;
-  padding-block: 1.5rem;
+  padding-block: 0.5rem;
   transition: var(--transition-duration);
   display: flex;
   justify-content: center;
@@ -13,7 +13,7 @@
 
   &.Primary {
     background: var(--primary-color);
-    &:hover {
+    &:hover:not(.Disabled) {
       background-color: rgb(26, 140, 216);
     }
   }

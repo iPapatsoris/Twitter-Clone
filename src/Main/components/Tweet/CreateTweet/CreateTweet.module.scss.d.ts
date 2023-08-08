@@ -8,6 +8,7 @@ declare const classNames: typeof globalClassNames & {
   readonly LocationIcon: "LocationIcon";
   readonly RightContent: "RightContent";
   readonly Progress: "Progress";
+  readonly PostContainer: "PostContainer";
   readonly PostButton: "PostButton";
 };
 export = classNames;
@@ -18,5 +19,6 @@ export type ClassNames =
   | "LocationIcon"
   | "RightContent"
   | "Progress"
+  | "PostContainer"
   | "PostButton"
   | GlobalClassNames;

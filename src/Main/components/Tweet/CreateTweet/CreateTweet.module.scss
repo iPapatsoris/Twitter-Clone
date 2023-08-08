@@ -40,7 +40,11 @@
     }
   }
 
-  .PostButton {
-    width: 4.5rem !important;
+  .PostContainer {
+    padding-block: 0.5rem;
+
+    .PostButton {
+      width: 4.5rem !important;
+    }
   }
 }
