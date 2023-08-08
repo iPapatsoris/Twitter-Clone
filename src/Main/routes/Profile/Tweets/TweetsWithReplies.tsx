@@ -31,7 +31,11 @@ const TweetsWithReplies = () => {
         if (!index) {
           const isFullThread = !t.thread?.hasMoreNestedReplies;
           repliesJSX.push(
-            <Tweet key={tweet.id} drawReplyLine tweetID={tweet.id} />
+            <Tweet
+              key={tweet.id}
+              drawReplyLine={t.thread?.tweets.length! > 1}
+              tweetID={tweet.id}
+            />
           );
           if (!isFullThread) {
             repliesJSX.push(
