@@ -10,6 +10,8 @@ import Settings from "./Steps/Settings/Settings";
 import VerifyAccountInfo from "./Steps/VerifyAccountInfo/VerifyAccountInfo";
 import VerifyEmail from "./Steps/VerifyEmail/VerifyEmail";
 import { postData } from "../util/request";
+import { redirect } from "react-router-dom";
+import { getPagePath } from "../util/paths";
 
 interface SignupProps {}
 
@@ -47,7 +49,11 @@ const Signup = ({}: SignupProps) => {
     CreateUser["response"],
     unknown,
     CreateUser["request"]
-  >(async (body) => postData("user", body));
+  >(async (body) => postData("user", body), {
+    onSuccess: () => {
+      redirect(getPagePath("profile"));
+    },
+  });
 
   useEffect(() => {
     if (performRegistration) {

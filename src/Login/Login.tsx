@@ -13,6 +13,8 @@ import yup from "../util/yup";
 import styles from "./Login.module.scss";
 import { useAuthStore } from "../store/AuthStore";
 import { postData } from "../util/request";
+import { redirect } from "react-router-dom";
+import { getPagePath } from "../util/paths";
 
 const Login = () => {
   const setLoggedInUser = useAuthStore((state) => state.setLoggedInUser);
@@ -24,6 +26,7 @@ const Login = () => {
     onSuccess: (data) => {
       if (data.data) {
         setLoggedInUser(data.data.user);
+        redirect(getPagePath("home"));
       }
     },
   });
@@ -73,12 +76,12 @@ const Login = () => {
             disabled={!isValid}
             isLoading={isLoading}
           >
-            Login
+            Sign in
           </Button>
         }
       >
         <div className={styles.Login}>
-          <h1>Login</h1>
+          <h1>Sign in</h1>
           <FormInput
             autofocus
             name="email"

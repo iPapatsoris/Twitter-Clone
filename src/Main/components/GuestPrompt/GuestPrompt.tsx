@@ -43,7 +43,7 @@ const GuestPrompt = ({}: GuestPromptProps) => {
           color="white"
           onClick={() => handleClick(false)}
         >
-          Login
+          Sign in
         </Button>
         <Terms length="short" extraStyles={[styles.Text]} />
       </div>
