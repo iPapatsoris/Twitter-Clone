@@ -81,14 +81,20 @@ const Login = () => {
         }
       >
         <div className={styles.Login}>
-          <h1>Sign in</h1>
-          <FormInput
-            autofocus
-            name="email"
-            placeholder="Email"
-            control={control}
-          />
-          <FormInput name="password" placeholder="Password" control={control} />
+          <h1>Sign in to Twitter</h1>
+          <div className={styles.Form}>
+            <FormInput
+              autofocus
+              name="email"
+              placeholder="Email"
+              control={control}
+            />
+            <FormInput
+              name="password"
+              placeholder="Password"
+              control={control}
+            />
+          </div>
         </div>
       </Minipage>
     </Form>
