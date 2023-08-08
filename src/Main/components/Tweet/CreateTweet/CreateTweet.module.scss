@@ -1,7 +1,10 @@
+@use "../../../layouts/ContentRight/List/List.module.scss";
+
 .CreateTweet {
-  //TODO: get this value from global var
-  $gap: 1rem;
-  padding-inline: $gap;
+  $padding-inline: List.$padding-inline;
+  $padding-block: List.$padding-block;
+  padding-inline: $padding-inline;
+  padding-block: $padding-block;
 
   display: grid;
   grid-template-areas:
@@ -9,8 +12,9 @@
     ".      widgets action ";
   grid-template-columns: var(--avatar-small-height) 1fr auto;
   grid-template-rows: 1fr auto;
-  gap: $gap;
+  gap: $padding-inline;
   align-items: center;
+  border-block: var(--border);
 
   .Avatar {
     width: var(--avatar-small-height);
@@ -41,8 +45,6 @@
   }
 
   .PostContainer {
-    padding-block: 0.5rem;
-
     .PostButton {
       width: 4.5rem !important;
     }

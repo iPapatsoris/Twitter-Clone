@@ -12,6 +12,10 @@ declare const classNames: {
   readonly Blue: "Blue";
   readonly LightColor: "LightColor";
   readonly NoHighlighting: "NoHighlighting";
+  readonly List: "List";
+  readonly BackgroundColor: "BackgroundColor";
+  readonly Title: "Title";
+  readonly ShowMore: "ShowMore";
 };
 export = classNames;
 export type ClassNames =
@@ -27,4 +31,8 @@ export type ClassNames =
   | "Semantic"
   | "Blue"
   | "LightColor"
-  | "NoHighlighting";
+  | "NoHighlighting"
+  | "List"
+  | "BackgroundColor"
+  | "Title"
+  | "ShowMore";
