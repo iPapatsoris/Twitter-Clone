@@ -5,6 +5,7 @@ import {
   createRoutesFromElements,
   RouterProvider,
   useLocation,
+  redirect,
 } from "react-router-dom";
 import App from "./App";
 import Home from "./Home/Home";
@@ -33,6 +34,7 @@ import {
   userTweetsWithRepliesLoader,
 } from "./Main/routes/Profile/Tweets/queries";
 import { homeLoader } from "./Home/queries";
+import { ComponentProps } from "react";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const loggedInUser: Pick<LoggedInUser, "id"> | null = useAuthStore(
@@ -54,12 +56,21 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
   );
   console.log("rendering router");
 
+  const protectedLoader = (
+    loader: NonNullable<ComponentProps<typeof Route>["loader"]>
+  ) =>
+    loggedInUser
+      ? loader
+      : () => {
+          throw redirect(getPagePath("explore"));
+        };
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<App />}>
         <Route
           path={getPagePath("home")}
-          loader={homeLoader(queryClient)}
+          loader={protectedLoader(homeLoader(queryClient))}
           element={
             <RequireAuth>
               <Home />
