@@ -15,6 +15,7 @@ import { useReplyLine } from "./TweetThread/useReplyLine";
 import { useQuery } from "@tanstack/react-query";
 import { tweetKeys } from "./queries";
 import { elementIsContainedInRefs, refsExist } from "../../../util/ref";
+import { useHoverPopup } from "../../../util/hooks/useHoverPopup";
 
 interface TweetProps {
   tweetID: number;
@@ -40,11 +41,9 @@ const Tweet = ({
   const nestedLinkRefs = [avatarRef, nameRef, usernameRef, tweetOptionsRef];
 
   const replyLineRef = useRef<HTMLDivElement>(null);
-  const [isProfilePreviewOpen, setIsProfilePreviewOpen] = useState(false);
 
-  const showProfilePreview = () => {
-    setIsProfilePreviewOpen(true);
-  };
+  const { isHoverPopupOpen, abortHoverPopupOpen, setIsHoverPopupOpen } =
+    useHoverPopup();
 
   const navigate = useNavigate();
 
@@ -87,8 +86,8 @@ const Tweet = ({
   return (
     <>
       <ProfileHoverPreview
-        isOpen={isProfilePreviewOpen}
-        setIsOpen={setIsProfilePreviewOpen}
+        isOpen={isHoverPopupOpen}
+        setIsOpen={setIsHoverPopupOpen}
         targetAreaRef={tweetRef}
         username={tweet.author.username}
       />
@@ -98,7 +97,11 @@ const Tweet = ({
         onClick={(e) => navToTweet(e)}
       >
         {retweet && (
-          <div className={styles.Retweet} onMouseEnter={showProfilePreview}>
+          <div
+            className={styles.Retweet}
+            onMouseEnter={() => setIsHoverPopupOpen(true)}
+            onMouseLeave={abortHoverPopupOpen}
+          >
             <Icon
               src={RetweetIcon}
               extraWrapperStyles={[styles.RetweetIconWrapper]}
@@ -114,7 +117,8 @@ const Tweet = ({
           <Link to={getProfileLink()}>
             <div
               className={styles.Avatar}
-              onMouseEnter={showProfilePreview}
+              onMouseEnter={() => setIsHoverPopupOpen(true)}
+              onMouseLeave={abortHoverPopupOpen}
               ref={avatarRef}
             >
               <Avatar src={tweet.author.avatar} />
@@ -130,12 +134,16 @@ const Tweet = ({
                   <div className={styles.NameAndVerified}>
                     <span
                       className={styles.Name}
-                      onMouseEnter={showProfilePreview}
+                      onMouseEnter={() => setIsHoverPopupOpen(true)}
+                      onMouseLeave={abortHoverPopupOpen}
                     >
                       {tweet.author.name}
                     </span>
                     {tweet.author.isVerified ? (
-                      <div onMouseEnter={showProfilePreview}>
+                      <div
+                        onMouseEnter={() => setIsHoverPopupOpen(true)}
+                        onMouseLeave={abortHoverPopupOpen}
+                      >
                         <Icon src={VerifiedIcon} hover="none" size={18} />
                       </div>
                     ) : null}
@@ -143,7 +151,10 @@ const Tweet = ({
                 </Link>
                 <div className={[styles.LightColor, styles.Subinfo].join(" ")}>
                   <Link ref={usernameRef} to={getProfileLink()}>
-                    <span onMouseEnter={showProfilePreview}>
+                    <span
+                      onMouseEnter={() => setIsHoverPopupOpen(true)}
+                      onMouseLeave={abortHoverPopupOpen}
+                    >
                       @{tweet.author.username}
                     </span>
                   </Link>

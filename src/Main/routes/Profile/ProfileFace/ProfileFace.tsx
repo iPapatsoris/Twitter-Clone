@@ -33,6 +33,7 @@ import Avatar from "./Avatar/Avatar";
 import ProfileHoverPreview from "./ProfileHoverPreview";
 import { ProfileProps } from "../Profile";
 import { elementIsContainedInRefs } from "../../../../util/ref";
+import { useHoverPopup } from "../../../../util/hooks/useHoverPopup";
 
 const ProfileFace = ({ preview }: ProfileProps) => {
   const loggedInUser = useAuthStore(
@@ -70,12 +71,22 @@ const ProfileFace = ({ preview }: ProfileProps) => {
   }, [user, setUserHeader, preview, isSuccess]);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isHoverPopupOpen, setIsHoverPopupOpen] = useState(false);
+
+  const { isHoverPopupOpen, abortHoverPopupOpen, setIsHoverPopupOpen } =
+    useHoverPopup();
+
   const onMouseEnter = () => {
     if (preview && preview.type !== "hover" && !preview.noPreviewOnHover) {
       setIsHoverPopupOpen(true);
     }
   };
+
+  const onMouseLeave = () => {
+    if (preview && preview.type !== "hover" && !preview.noPreviewOnHover) {
+      abortHoverPopupOpen();
+    }
+  };
+
   const profileRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -169,7 +180,11 @@ const ProfileFace = ({ preview }: ProfileProps) => {
   const getProfileLink = () => getPagePath("profile", user.username);
 
   const avatar = (
-    <div className={styles.Semantic} onMouseEnter={onMouseEnter}>
+    <div
+      className={styles.Semantic}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <Avatar src={user.avatar} withBorder={!preview} />
     </div>
   );
@@ -232,7 +247,11 @@ const ProfileFace = ({ preview }: ProfileProps) => {
           )}
           {preview && preview.iconAction ? preview.iconAction : actionButton}
         </div>
-        <div className={styles.Title} onMouseEnter={onMouseEnter}>
+        <div
+          className={styles.Title}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+        >
           <div className={styles.NameAndVerified}>
             {!preview || preview.noNavOnClick ? (
               nameAndVerified
