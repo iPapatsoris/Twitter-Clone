@@ -1,5 +1,7 @@
 export const refsExist = (refs: React.RefObject<any>[]) =>
-  refs.every((ref) => ref && ref.current);
+  refs.every((ref) => refExists(ref));
+
+export const refExists = (ref: React.RefObject<any>) => ref && ref.current;
 
 export const elementIsContainedInRefs = (
   e: React.UIEvent,
