@@ -107,6 +107,7 @@ const Icon = forwardRef(
         ].join(" ")}
         onClick={onClick}
         ref={iconAndTextRef}
+        title={title}
       >
         <div
           // Prevent losing cursor position when an icon is clicked within an
@@ -121,17 +122,17 @@ const Icon = forwardRef(
         {/* TODO: why we can't put ref directly in Element? spawns forwardRef console error */}
         <div ref={ref} className={styles.RefWrapper}>
           <Element
+            aria-labelledby={alt}
             width={size}
             height={size}
             title={title}
-            aria-labelledby={alt}
             className={[
               styles.Icon,
               styles.NoHighlighting,
               noCursorPointer ? styles.NoCursorPointer : "",
               ...extraStyles,
             ].join(" ")}
-          />
+          ></Element>
         </div>
         {text && <span className={styles.Text}>{text}</span>}
       </div>

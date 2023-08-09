@@ -23,7 +23,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    svgr(),
+    svgr({ svgrOptions: { titleProp: true } }),
     react(),
     sassDts({
       enabledMode: ["development", "production"],
