@@ -6,7 +6,7 @@ import MainTweet from "./MainTweet/MainTweet";
 import Tweet from "../Tweet";
 import List from "../../../layouts/ContentRight/List/List";
 import ShowMoreTweets from "../ShowMoreTweets";
-import { useRef } from "react";
+import { useRef, useState, useLayoutEffect } from "react";
 
 interface TweetThreadProps {}
 
@@ -17,6 +17,13 @@ const TweetThread = ({}: TweetThreadProps) => {
   );
 
   const ref = useRef<HTMLDivElement>(null);
+  const [refExists, setRefExists] = useState(false);
+
+  useLayoutEffect(() => {
+    if (ref) {
+      setRefExists(true);
+    }
+  }, [ref]);
 
   if (!isSuccess) {
     return null;
@@ -61,8 +68,9 @@ const TweetThread = ({}: TweetThreadProps) => {
   return (
     <div ref={ref} className={styles.TweetThread}>
       <List>{previousRepliesJSX}</List>
-      <MainTweet tweetThreadRef={ref} tweetID={tweet.id} />
-      <div className={styles.CreateTweet}>Create tweet!</div>
+      {!refExists ? null : (
+        <MainTweet tweetThreadRef={ref} tweetID={tweet.id} />
+      )}
       <List>{repliesJSX}</List>
     </div>
   );
