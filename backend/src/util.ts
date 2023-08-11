@@ -78,3 +78,10 @@ export const runQuery = <T,>(query: string, queryEscapedValues: any[]) =>
 // prettier-ignore
 export const runInsertQuery = <T,>(query: string, queryEscapedValues: any[]) =>
   new Promise<T>((resolve, reject) => dbQuery(query, queryEscapedValues, resolve, reject));
+
+export const shuffleArray = (array: any[]) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+};

@@ -32,7 +32,7 @@ import { useCircleMutation } from "../../Circle/queries";
 import Avatar from "./Avatar/Avatar";
 import ProfileHoverPreview from "./ProfileHoverPreview";
 import { ProfileProps } from "../Profile";
-import { elementIsContainedInRefs } from "../../../../util/ref";
+import { elementIsContainedInRefs, refsExist } from "../../../../util/ref";
 import { useHoverPopup } from "../../../../util/hooks/useHoverPopup";
 
 const ProfileFace = ({ preview }: ProfileProps) => {
@@ -171,6 +171,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
     if (
       preview &&
       preview.type === "user-list" &&
+      refsExist([buttonRef, tweetOptionsRef]) &&
       !elementIsContainedInRefs(e, [buttonRef, tweetOptionsRef])
     ) {
       navigate(getPagePath("profile", user.username));

@@ -1,5 +1,6 @@
 /* eslint-disable no-multi-str */
 import express, { Request, Response } from "express";
+import { faker } from "@faker-js/faker";
 import { NormalResponse } from "../api/common.js";
 import {
   CreateTweet,
@@ -8,12 +9,14 @@ import {
   GetTweetParams,
   SingleTweetResponse,
   Thread,
+  Trend,
+  GetTrends,
 } from "../api/tweet.js";
 import {
   Fields,
   runInsertQuery,
   runQuery,
-  simpleQuery,
+  shuffleArray,
   TypedRequestQuery,
 } from "../util.js";
 import { Tweet } from "../entities/tweet.js";
@@ -316,6 +319,38 @@ router.get(
       ok: true,
       data: { tweetsAndRetweets: mergeTweetsAndRetweets(tweets, retweets) },
     });
+  }
+);
+
+router.get(
+  "/trending",
+  async (req: Request, res: Response<GetTrends["response"]>) => {
+    const getRandomNumber = () => faker.number.int({ min: 1000, max: 10000 });
+    const trends: Array<Pick<Trend, "category" | "trend">> = [
+      { category: "Music", trend: faker.music.genre() },
+      { category: "Airlines", trend: faker.airline.airline().name },
+      { category: "Areas", trend: faker.location.city() },
+      { category: "Brands", trend: faker.company.name() },
+      { trend: faker.company.buzzNoun() },
+      { category: "Animals", trend: faker.animal.bird() },
+      { category: "Hacking", trend: faker.hacker.noun() },
+      { category: "Vehicles", trend: faker.vehicle.vehicle() },
+      { category: "Animals", trend: faker.animal.snake() },
+      { category: "Finance", trend: faker.finance.currency().name },
+    ];
+    shuffleArray(trends);
+
+    // Prepare response
+    res.send({
+      ok: true,
+      data: {
+        trends: trends.map((trend) => ({
+          ...trend,
+          tweets: getRandomNumber(),
+        })),
+      },
+    });
+    return;
   }
 );
 

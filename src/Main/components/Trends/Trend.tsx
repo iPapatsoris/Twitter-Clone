@@ -1,13 +1,14 @@
 import Icon from "../../../util/components/Icon/Icon";
-import {ReactComponent as DotsIcon } from "../../../assets/icons/dots-gray.svg";
+import { ReactComponent as DotsIcon } from "../../../assets/icons/dots-gray.svg";
 import styles from "./Trend.module.scss";
 import { useRef, useState } from "react";
 import OptionsPopup from "../../../util/components/Popup/OptionsPopup/OptionsPopup";
 import { OptionWithNested } from "../../../util/components/Popup/OptionsPopup/Option";
 import IconAndTitle from "../../../util/components/Popup/OptionsPopup/IconAndTitle/IconAndTitle";
-import {ReactComponent as SadFaceIcon} from "../../../assets/icons/options/sad-face.svg";
+import { ReactComponent as SadFaceIcon } from "../../../assets/icons/options/sad-face.svg";
+import { Trend as TrendT } from "../../../../backend/src/api/tweet";
 
-const Trend = () => {
+const Trend = ({ trend }: { trend: TrendT }) => {
   const [showOptions, setShowOptions] = useState(false);
   const iconRef = useRef(null);
 
@@ -40,6 +41,8 @@ const Trend = () => {
     },
   ];
 
+  const { tweets, trend: trendKeyword, category } = trend;
+
   return (
     <>
       {showOptions && (
@@ -49,15 +52,17 @@ const Trend = () => {
             targetAreaRef: iconRef,
             setIsActive: setShowOptions,
             position: { block: "bottomCover", inline: "rightCover" },
-            isFixed: false
+            isFixed: false,
           }}
         />
       )}
       <div className={styles.Trend}>
         <div className={styles.TrendInfo}>
-          <span className={styles.Subtitle}>Events · Trending</span>
-          <span className={styles.Title}>5 Kim</span>
-          <span className={styles.Subtitle}>5,041 Tweets</span>
+          <span className={styles.Subtitle}>
+            {category} {category ? "·" : ""} Trending
+          </span>
+          <span className={styles.Title}>{trendKeyword}</span>
+          <span className={styles.Subtitle}>{tweets} Tweets</span>
         </div>
         <div className={styles.MoreIcon}>
           <Icon

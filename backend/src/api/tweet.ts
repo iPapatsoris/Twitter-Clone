@@ -37,6 +37,18 @@ export type GetTimeline = GetUserTweetsAndRetweets;
 
 export type SingleTweetResponse = NormalResponse<Tweet>;
 
+export type GetTrends = {
+  response: NormalResponse<{
+    trends: Trend[];
+  }>;
+};
+
+export type Trend = {
+  trend: string;
+  category?: string;
+  tweets: number;
+};
+
 export const getTweetParams = ["noThread"] as const;
 export type GetTweetParams = (typeof getTweetParams)[number];
 

@@ -7,7 +7,7 @@ export type LoggedInUser = NonNullable<LoginUser["response"]["data"]>["user"];
 type LoggedInUserMiniInfo = Pick<LoggedInUser, "name" | "avatar">;
 
 export const useAuthStore = create<{
-  loggedInUser: LoggedInUser | null;
+  loggedInUser: LoggedInUser | null | undefined;
   setLoggedInUser: (user: LoggedInUser | null) => void;
   setLoggedInUserMiniInfo: (userInfo: LoggedInUserMiniInfo) => void;
 }>()(

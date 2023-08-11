@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { cookieName } from "../index.js";
 import { NormalResponse } from "../api/common.js";
 import { loginPath, logoutPath } from "../routes/auth.js";
+import ErrorCodes from "../api/errorCodes.js";
 
 export const checkSession = (
   req: Request,
@@ -25,7 +26,7 @@ export const checkSession = (
 
 export const requireAuth = (
   req: Request,
-  res: Response,
+  res: Response<NormalResponse>,
   next: NextFunction
 ): void => {
   if (
@@ -36,6 +37,7 @@ export const requireAuth = (
     next();
     return;
   }
-  res.status(403);
-  res.send("Not permitted");
+  res.send({ ok: false, errorCode: ErrorCodes.PermissionDenied });
+  // res.status(403);
+  // res.send("Not permitted");
 };
