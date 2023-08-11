@@ -71,8 +71,6 @@ const Tweet = ({
     getPagePath("tweet", tweet.author.username, tweet.id);
 
   const navToTweet = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    console.log(e);
-
     if (
       refsExist(nestedLinkRefs) &&
       !elementIsContainedInRefs(e, nestedLinkRefs)

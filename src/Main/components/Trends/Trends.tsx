@@ -3,15 +3,20 @@ import Trend from "./Trend";
 import { trendsKeys } from "./queries";
 
 const Trends = () => {
-  const { data, isSuccess } = useQuery(trendsKeys.trends());
+  const { data, isSuccess } = useQuery({
+    ...trendsKeys.trends(),
+    staleTime: 120000,
+  });
 
   if (!isSuccess) {
     return null;
   }
 
-  return data.data?.trends.map((trend) => (
+  const trends = data.data!.trends.map((trend) => (
     <Trend key={trend.trend + trend.tweets} trend={trend} />
   ));
+
+  return <>{trends}</>;
 };
 
 export default Trends;
