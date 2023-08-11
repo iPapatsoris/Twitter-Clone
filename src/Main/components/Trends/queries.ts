@@ -11,7 +11,6 @@ export const trendsKeys = createQueryKeys("trends", {
 
 const trendsQuery = async () => {
   const res = await getData<GetTrends["response"]>("tweet/trending");
-  console.log(res);
 
   if (!res.ok) {
     throw new Error();
