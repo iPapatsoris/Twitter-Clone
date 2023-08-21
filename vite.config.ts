@@ -5,18 +5,20 @@ import path from "path";
 import eslint from "vite-plugin-eslint";
 import svgr from "vite-plugin-svgr";
 
+const pathSrc = path.resolve(__dirname, "./src");
+
 export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "@/styles" as common;`,
+        additionalData: `@use "@/styles" as common; @use "${pathSrc}/breakpoints" as media ;`,
         importer(...args) {
           if (args[0] !== "@/styles") {
             return;
           }
 
           return {
-            file: `${path.resolve(__dirname, "./src")}`,
+            file: `${pathSrc}`,
           };
         },
       },
@@ -29,14 +31,8 @@ export default defineConfig({
       enabledMode: ["development", "production"],
       global: {
         generate: true,
-        outFile: path.resolve(__dirname, "./src/style.d.ts"),
+        outFile: `${pathSrc}/style.d.ts`,
       },
-      // typeName: {
-      //   replacement: (fileName) => {
-      //     const spilittedFileName = fileName.split(".");
-      //     return `${spilittedFileName[0]}Names`;
-      //   },
-      // },
     }),
     eslint({
       // failOnWarning: true,

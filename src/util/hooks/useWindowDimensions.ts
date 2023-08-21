@@ -2,9 +2,21 @@ import { useState, useEffect } from "react";
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
+  const style = getComputedStyle(document.body);
+  const mobileWidth = parseInt(style.getPropertyValue("--mobile-width"));
+  const tabletWidth = parseInt(style.getPropertyValue("--tablet-width"));
+  const pcSmallWidth = parseInt(style.getPropertyValue("--pc-small-width"));
+
+  const isMobile = width <= mobileWidth;
+  const isTablet = width > mobileWidth && width <= tabletWidth;
+  const isPcSmall = width > tabletWidth && width <= pcSmallWidth;
+
   return {
     width,
     height,
+    isMobile,
+    isTablet,
+    isPcSmall,
   };
 };
 
