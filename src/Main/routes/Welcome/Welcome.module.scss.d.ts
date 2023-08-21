@@ -3,9 +3,9 @@ import globalClassNames, {
 } from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly Welcome: "Welcome";
-  readonly Logo: "Logo";
   readonly Title: "Title";
   readonly Join: "Join";
+  readonly Logo: "Logo";
   readonly JoinWrapper: "JoinWrapper";
   readonly Terms: "Terms";
   readonly AlreadyAccount: "AlreadyAccount";
@@ -14,9 +14,9 @@ declare const classNames: typeof globalClassNames & {
 export = classNames;
 export type ClassNames =
   | "Welcome"
-  | "Logo"
   | "Title"
   | "Join"
+  | "Logo"
   | "JoinWrapper"
   | "Terms"
   | "AlreadyAccount"

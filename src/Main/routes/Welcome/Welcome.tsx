@@ -8,12 +8,15 @@ import { useState } from "react";
 import Modal from "../../../util/components/Modal/Modal";
 import Login from "../../../Login/Login";
 import Signup from "../../../Signup/Signup";
+import useWindowDimensions from "../../../util/hooks/useWindowDimensions";
 
 interface WelcomeProps {}
 
 const Welcome = ({}: WelcomeProps) => {
   const [loginModal, setLoginModal] = useState(false);
   const [signupModal, setSignupModal] = useState(false);
+
+  const { isMobile, isTablet } = useWindowDimensions();
 
   return (
     <>
@@ -28,7 +31,7 @@ const Welcome = ({}: WelcomeProps) => {
       <div className={styles.Welcome}>
         <Icon
           src={Logo}
-          size={340}
+          size={!isMobile && !isTablet ? 340 : 100}
           extraWrapperStyles={[styles.Logo]}
           title="Twitter"
           alt="Twitter logo"

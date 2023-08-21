@@ -1,10 +1,21 @@
 .Welcome {
-  height: 100vh;
   display: grid;
   grid-template:
     ".    title " 1fr
     "logo join" auto
     ".    ." 1fr / 1fr 1fr;
+
+  min-height: 100vh;
+
+  @include media.multi(tablet, mobile) {
+    justify-items: center;
+    grid-template:
+      "." minmax(1rem, 1fr)
+      "logo" min-content
+      "title" auto
+      "join" auto
+      "." minmax(1rem, 1fr) / 1fr;
+  }
 
   .Logo {
     grid-area: logo;
@@ -19,6 +30,11 @@
     gap: 3rem;
     font-size: 64px;
     font-weight: 700;
+
+    @include media.multi(tablet, mobile) {
+      font-size: 40px;
+      align-self: center;
+    }
   }
 
   .Join {
@@ -28,6 +44,10 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+
+    @include media.multi(tablet, mobile) {
+      align-items: center;
+    }
 
     .JoinWrapper {
       display: flex;
