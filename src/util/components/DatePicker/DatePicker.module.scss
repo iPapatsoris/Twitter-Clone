@@ -5,12 +5,7 @@
   flex-wrap: wrap;
 
   .Dropdown:nth-child(1) {
-    @include media.pc {
-      flex: 1;
-    }
-    @include media.multi(mobile, tablet, pc-small) {
-      width: 100%;
-    }
+    flex: 1;
   }
   .Dropdown:nth-child(n + 2) {
     flex: 0.5;

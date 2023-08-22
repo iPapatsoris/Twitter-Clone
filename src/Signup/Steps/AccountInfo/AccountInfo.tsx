@@ -16,6 +16,7 @@ import yup, { yupSequentialStringSchema } from "../../../util/yup";
 import DatePicker from "../../../util/components/DatePicker/DatePicker";
 import { charLimits } from "../../../../backend/src/api/user";
 import { getData } from "../../../util/request";
+import useWindowDimensions from "../../../util/hooks/useWindowDimensions";
 
 interface AccountInfoProps {
   accountInfo: AccountInfoT;
@@ -84,9 +85,12 @@ const AccountInfo = ({
     nextStep();
   };
 
+  const { isMobile, isTablet } = useWindowDimensions();
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Minipage
+        alignContent={isMobile || isTablet ? "icon" : "header"}
         header={
           <StepHeader step={step} onPrevStepClick={() => {}}>
             {header}

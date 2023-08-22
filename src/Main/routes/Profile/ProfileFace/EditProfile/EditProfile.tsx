@@ -9,7 +9,7 @@ import { useAuthStore } from "../../../../../store/AuthStore";
 import Form from "../../../../../util/components/Form/Form";
 import Minipage from "../../../../../util/layouts/Minipage/Minipage";
 import yup from "../../../../../util/yup";
-import { fullProfileFields, profileKeys, UserProfileT } from "../queries";
+import { profileKeys, UserProfileT } from "../queries";
 import profileStyles from "../../Profile.module.scss";
 import EditProfileHeader from "./EditProfileHeader/EditProfileHeader";
 import EditProfileInfo, {
@@ -125,7 +125,7 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Minipage
-        alignHeaderWithContent={false}
+        alignContent="none"
         header={<EditProfileHeader disableUpdate={!isValidForm} />}
       >
         <div className={[profileStyles.Profile, profileStyles.Edit].join(" ")}>

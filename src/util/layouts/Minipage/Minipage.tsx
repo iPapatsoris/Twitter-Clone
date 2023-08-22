@@ -4,18 +4,21 @@ interface MinipageProps {
   header: React.ReactElement;
   footer?: React.ReactElement;
   children: React.ReactElement[] | React.ReactElement;
-  alignHeaderWithContent?: boolean;
+  alignContent?: "none" | "icon" | "header";
 }
 
 const Minipage = ({
   header,
   footer,
   children,
-  alignHeaderWithContent = true,
+  alignContent = "header",
 }: MinipageProps) => {
-  const extraStyles = alignHeaderWithContent
-    ? [styles.AlignHeaderWithContent]
-    : [];
+  const extraStyles = [];
+  if (alignContent === "header") {
+    extraStyles.push(styles.AlignContentWithHeader);
+  } else if (alignContent === "icon") {
+    extraStyles.push(styles.AlignContentWithIcon);
+  }
 
   return (
     <div className={[styles.Minipage, ...extraStyles].join(" ")}>

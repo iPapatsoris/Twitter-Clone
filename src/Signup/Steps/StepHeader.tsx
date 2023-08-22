@@ -14,7 +14,7 @@ interface StepHeaderProps {
 const StepHeader = ({ children, step, onPrevStepClick }: StepHeaderProps) => {
   const { setIsActive } = useContext(ModalContext);
 
-  const navIcon = !step ? CloseIcon  : LeftArrowIcon ;
+  const navIcon = !step ? CloseIcon : LeftArrowIcon;
   const onNavIconClick = () => {
     if (!step) {
       setIsActive(false);
@@ -26,7 +26,7 @@ const StepHeader = ({ children, step, onPrevStepClick }: StepHeaderProps) => {
   return (
     <>
       <div className={styles.NavIcon} onClick={onNavIconClick}>
-        <Icon src={navIcon} />
+        <Icon src={navIcon} noBlockMargin noInlineMargin />
       </div>
       <div className={styles.StepHeader}>
         <div>{children}</div>

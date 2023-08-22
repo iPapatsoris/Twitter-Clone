@@ -15,6 +15,9 @@ const Welcome = ({}: WelcomeProps) => {
   const [signup, setSignup] = useState(false);
 
   const { isMobile, isTablet } = useWindowDimensions();
+  const isSmallScreen = isMobile || isTablet;
+  const showWelcomePage =
+    !isSmallScreen || (isSmallScreen && !login && !signup);
 
   const loginSignup = (
     <LoginSignup
@@ -22,10 +25,9 @@ const Welcome = ({}: WelcomeProps) => {
       signup={signup}
       setSignup={setSignup}
       setLogin={setLogin}
+      isSmallScreen={isSmallScreen}
     />
   );
-
-  const showWelcomePage = !isMobile || (isMobile && !login && !signup);
 
   const welcomePage = (
     <div className={styles.Welcome}>

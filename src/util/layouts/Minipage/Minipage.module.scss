@@ -17,7 +17,19 @@
     var(--minipage-blank-area) minmax(auto, var(--minipage-icon-area-length))
     1fr var(--minipage-blank-area);
 
-  &.AlignHeaderWithContent {
+  &.AlignContentWithIcon {
+    grid-template-areas:
+      ".       .       .       .      "
+      ".       icon    header  .      "
+      ".       content content content"
+      "footer  footer  footer  footer ";
+
+    .Content {
+      padding-right: var(--minipage-blank-area);
+    }
+  }
+
+  &.AlignContentWithHeader {
     grid-template-areas:
       ".      .       .       .      "
       ".      icon    header  .      "
