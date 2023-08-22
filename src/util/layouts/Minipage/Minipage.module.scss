@@ -1,5 +1,9 @@
 .Minipage {
   height: 100%;
+  @include media.mobile {
+    height: 100vh;
+  }
+
   display: grid;
   --minipage-icon-area-length: 4rem;
   --minipage-blank-area: 1rem;

@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useContext } from "react";
+import { SetStateAction, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { LoginUser } from "../../backend/src/api/auth";
@@ -15,8 +15,9 @@ import { useAuthStore } from "../store/AuthStore";
 import { postData } from "../util/request";
 import { redirect } from "react-router-dom";
 import { getPagePath } from "../util/paths";
+import useWindowDimensions from "../util/hooks/useWindowDimensions";
 
-const Login = () => {
+const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
   const setLoggedInUser = useAuthStore((state) => state.setLoggedInUser);
   const { mutate, isLoading } = useMutation<
     LoginUser["response"],
@@ -61,11 +62,16 @@ const Login = () => {
   };
 
   const { setIsActive } = useContext(ModalContext);
+  const { isMobile } = useWindowDimensions();
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Minipage
-        header={<LogoHeader onNavIconClick={() => setIsActive(false)} />}
+        header={
+          <LogoHeader
+            onNavIconClick={isMobile ? removeLogin : () => setIsActive(false)}
+          />
+        }
         footer={
           <Button
             type="submit"

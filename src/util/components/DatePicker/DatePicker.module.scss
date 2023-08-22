@@ -2,9 +2,15 @@
   margin-top: 1rem;
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
 
   .Dropdown:nth-child(1) {
-    flex: 1;
+    @include media.pc {
+      flex: 1;
+    }
+    @include media.multi(mobile, tablet, pc-small) {
+      width: 100%;
+    }
   }
   .Dropdown:nth-child(n + 2) {
     flex: 0.5;

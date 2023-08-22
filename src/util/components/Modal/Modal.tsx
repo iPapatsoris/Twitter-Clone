@@ -33,7 +33,7 @@ const Modal = ({ withCloseIcon = true, children, setIsActive }: ModalProps) => {
     <div key={0} className={styles.Dummy}>
       {withCloseIcon && (
         <div className={styles.CloseIcon} onClick={() => setIsActive(false)}>
-          <Icon src={<CloseIcon />} />
+          <Icon src={CloseIcon} />
         </div>
       )}
       <div className={styles.Content}>{children}</div>
