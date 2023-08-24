@@ -4,7 +4,6 @@ import { ReactComponent as GifIcon } from "../../../../assets/icons/tweet/create
 import { ReactComponent as PollIcon } from "../../../../assets/icons/tweet/create/poll.svg";
 import { ReactComponent as EmojiIcon } from "../../../../assets/icons/tweet/create/emoji.svg";
 import { ReactComponent as ScheduleIcon } from "../../../../assets/icons/tweet/create/schedule.svg";
-import { ReactComponent as GlobeIcon } from "../../../../assets/icons/tweet/create/globe.svg";
 import { ReactComponent as LocationIcon } from "../../../../assets/icons/location.svg";
 import Icon from "../../../../util/components/Icon/Icon";
 

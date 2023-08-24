@@ -1,9 +1,9 @@
 import styles from "./Minipage.module.scss";
 
-interface MinipageProps {
-  header: React.ReactElement;
+export interface MinipageProps {
+  header?: React.ReactElement;
   footer?: React.ReactElement;
-  children: React.ReactElement[] | React.ReactElement;
+  children?: React.ReactElement[] | React.ReactElement;
   alignContent?: "none" | "icon" | "header";
 }
 

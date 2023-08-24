@@ -12,8 +12,13 @@ import VerifyEmail from "./Steps/VerifyEmail/VerifyEmail";
 import { postData } from "../util/request";
 import { redirect } from "react-router-dom";
 import { getPagePath } from "../util/paths";
+import Minipage from "../util/layouts/Minipage/Minipage";
+import useWindowDimensions from "../util/hooks/useWindowDimensions";
+import StepHeader from "./Steps/StepHeader";
 
-interface SignupProps {}
+interface SignupProps {
+  removeSignup: VoidFunction;
+}
 
 export type AccountInfoT = {
   name: string;
@@ -27,7 +32,7 @@ export type SettingsT = {
   personalizeAds: boolean;
 };
 
-const Signup = ({}: SignupProps) => {
+const Signup = ({ removeSignup }: SignupProps) => {
   const [accountInfo, setAccountInfo] = useState<AccountInfoT>({
     name: "",
     email: "",
@@ -70,11 +75,13 @@ const Signup = ({}: SignupProps) => {
   }, [performRegistration, accountInfo, mutate, username, password]);
 
   const [emailCodeHint, setEmailCodeHint] = useState("");
+  const { isMobile, isTablet } = useWindowDimensions();
+
+  const minipage = (
+    <Minipage alignContent={isMobile || isTablet ? "icon" : "header"} />
+  );
 
   const stepper = useStepper();
-  // TODO: Define Minipage here, and change its props conditionally
-  // instead of defining an inner minipage within each step.
-  // Will also allow to remove Minipage::Wrapper and put it locally
   const steps = [
     <AccountInfo
       stepper={stepper}
@@ -110,7 +117,17 @@ const Signup = ({}: SignupProps) => {
   const stepsWithHeader = steps.map((stepComponent, index) =>
     React.cloneElement(stepComponent, {
       key: index,
-      header: "Step " + (index + 1) + " out of " + steps.length,
+      minipage: React.cloneElement(minipage, {
+        header: (
+          <StepHeader
+            step={index}
+            onPrevStepClick={!index ? () => {} : stepper.prevStep}
+            existStepper={removeSignup}
+          >
+            {"Step " + (index + 1) + " out of " + steps.length}
+          </StepHeader>
+        ),
+      }),
     })
   );
 

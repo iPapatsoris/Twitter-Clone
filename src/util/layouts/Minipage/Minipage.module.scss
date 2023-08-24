@@ -1,6 +1,6 @@
 .Minipage {
   height: 100%;
-  @include media.mobile {
+  @include media.multi(mobile, tablet) {
     height: 100vh;
   }
 

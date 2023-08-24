@@ -1,5 +1,5 @@
 import styles from "./AccountInfo.module.scss";
-import { SetStateAction, useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -7,8 +7,6 @@ import FormInput from "../../../util/components/Input/FormInput";
 import { AccountInfoT } from "../../Signup";
 import useStepper from "../../../util/hooks/useStepper";
 import NextStepButton from "../NextStepButton";
-import StepHeader from "../StepHeader";
-import Minipage from "../../../util/layouts/Minipage/Minipage";
 import Form from "../../../util/components/Form/Form";
 import { useQuery } from "@tanstack/react-query";
 import { GetEmail } from "../../../../backend/src/api/email";
@@ -16,21 +14,21 @@ import yup, { yupSequentialStringSchema } from "../../../util/yup";
 import DatePicker from "../../../util/components/DatePicker/DatePicker";
 import { charLimits } from "../../../../backend/src/api/user";
 import { getData } from "../../../util/request";
-import useWindowDimensions from "../../../util/hooks/useWindowDimensions";
+import { MinipageProps } from "../../../util/layouts/Minipage/Minipage";
 
 interface AccountInfoProps {
   accountInfo: AccountInfoT;
   setAccountInfo: React.Dispatch<SetStateAction<AccountInfoT>>;
   stepper: ReturnType<typeof useStepper>;
-  header?: string;
+  minipage?: React.ReactElement<MinipageProps>;
   inputToFocus?: keyof AccountInfoT;
 }
 
 const AccountInfo = ({
-  stepper: { step, nextStep },
+  stepper: { nextStep },
   accountInfo: { name, email, birthDate },
   setAccountInfo,
-  header = "",
+  minipage,
   inputToFocus = "name",
 }: AccountInfoProps) => {
   const [month, setMonth] = useState(birthDate ? birthDate.month() : -1);
@@ -85,55 +83,52 @@ const AccountInfo = ({
     nextStep();
   };
 
-  const { isMobile, isTablet } = useWindowDimensions();
+  if (!minipage) {
+    return null;
+  }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <Minipage
-        alignContent={isMobile || isTablet ? "icon" : "header"}
-        header={
-          <StepHeader step={step} onPrevStepClick={() => {}}>
-            {header}
-          </StepHeader>
-        }
-        footer={<NextStepButton isDisabled={!isValidForm} />}
-      >
-        <div className={styles.AccountInfo}>
-          <h1>Create your account</h1>
-          <div className={styles.Form}>
-            <div className={styles.NameEmail}>
-              <FormInput
-                name="name"
-                placeholder="Name"
-                control={control}
-                maxLength={50}
-                autofocus={inputToFocus === "name"}
-              />
-              <FormInput
-                name="email"
-                placeholder="Email"
-                control={control}
-                autofocus={inputToFocus === "email"}
-              />
-            </div>
-            <div>
-              <h4>Date of birth</h4>
-              <div className={styles.DateOfBirth}>
-                This will not be shown publicly. Confirm your own age, even if
-                this account is for a business, a pet, or something else.
+      {React.cloneElement(minipage, {
+        footer: <NextStepButton isDisabled={!isValidForm} />,
+        children: (
+          <div className={styles.AccountInfo}>
+            <h1>Create your account</h1>
+            <div className={styles.Form}>
+              <div className={styles.NameEmail}>
+                <FormInput
+                  name="name"
+                  placeholder="Name"
+                  control={control}
+                  maxLength={50}
+                  autofocus={inputToFocus === "name"}
+                />
+                <FormInput
+                  name="email"
+                  placeholder="Email"
+                  control={control}
+                  autofocus={inputToFocus === "email"}
+                />
               </div>
-              <DatePicker
-                day={day}
-                month={month}
-                year={year}
-                setDay={setDay}
-                setMonth={setMonth}
-                setYear={setYear}
-              />
+              <div>
+                <h4>Date of birth</h4>
+                <div className={styles.DateOfBirth}>
+                  This will not be shown publicly. Confirm your own age, even if
+                  this account is for a business, a pet, or something else.
+                </div>
+                <DatePicker
+                  day={day}
+                  month={month}
+                  year={year}
+                  setDay={setDay}
+                  setMonth={setMonth}
+                  setYear={setYear}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </Minipage>
+        ),
+      })}
     </Form>
   );
 };

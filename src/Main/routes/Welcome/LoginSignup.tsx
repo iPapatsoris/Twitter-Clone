@@ -21,7 +21,7 @@ const LoginSignup = ({
   const loginOrSignup = login ? (
     <Login removeLogin={() => setLogin(false)} />
   ) : (
-    <Signup />
+    <Signup removeSignup={() => setSignup(false)} />
   );
 
   let finalLoginOrSignup = null;

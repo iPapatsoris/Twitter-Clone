@@ -1,26 +1,25 @@
-import { SetStateAction } from "react";
+import React, { SetStateAction } from "react";
 import { SettingsT } from "../../Signup";
 import Setting from "./Setting";
 import styles from "./Settings.module.scss";
 import useStepper from "../../../util/hooks/useStepper";
 import Terms from "../../Terms/Terms";
 import NextStepButton from "../NextStepButton";
-import StepHeader from "../StepHeader";
-import Minipage from "../../../util/layouts/Minipage/Minipage";
+import { MinipageProps } from "../../../util/layouts/Minipage/Minipage";
 import Form from "../../../util/components/Form/Form";
 
 interface SettingsProps {
   settings: SettingsT;
   setSettings: React.Dispatch<SetStateAction<SettingsT>>;
   stepper: ReturnType<typeof useStepper>;
-  header?: string;
+  minipage?: React.ReactElement<MinipageProps>;
 }
 
 const Settings = ({
   settings: { receiveEmails, beFoundByEmail, personalizeAds },
   setSettings,
-  stepper: { step, nextStep, prevStep },
-  header = "",
+  stepper: { nextStep },
+  minipage,
 }: SettingsProps) => {
   const settingsList: Array<
     Omit<React.ComponentProps<typeof Setting>, "id"> & {
@@ -54,22 +53,22 @@ const Settings = ({
     <Setting {...props} id={index} key={index} />
   ));
 
+  if (!minipage) {
+    return null;
+  }
+
   return (
     <Form onSubmit={nextStep}>
-      <Minipage
-        header={
-          <StepHeader step={step} onPrevStepClick={prevStep}>
-            {header}
-          </StepHeader>
-        }
-        footer={<NextStepButton isDisabled={false} />}
-      >
-        <div className={styles.Settings}>
-          <h1>Customize your experience</h1>
-          <div className={styles.SettingsList}>{settingsListJSX}</div>
-          <Terms />
-        </div>
-      </Minipage>
+      {React.cloneElement(minipage, {
+        footer: <NextStepButton isDisabled={false} />,
+        children: (
+          <div className={styles.Settings}>
+            <h1>Customize your experience</h1>
+            <div className={styles.SettingsList}>{settingsListJSX}</div>
+            <Terms />
+          </div>
+        ),
+      })}
     </Form>
   );
 };

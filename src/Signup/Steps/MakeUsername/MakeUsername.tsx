@@ -1,28 +1,26 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { SetStateAction } from "react";
+import React, { SetStateAction } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { GetUsernameExists } from "../../../../backend/src/api/user";
 import Form from "../../../util/components/Form/Form";
 import FormInput from "../../../util/components/Input/FormInput";
 import useStepper from "../../../util/hooks/useStepper";
-import Minipage from "../../../util/layouts/Minipage/Minipage";
+import { MinipageProps } from "../../../util/layouts/Minipage/Minipage";
 import yup, { yupSequentialStringSchema } from "../../../util/yup";
 import NextStepButton from "../NextStepButton";
-import StepHeader from "../StepHeader";
 import styles from "./MakeUsername.module.scss";
 import { getData } from "../../../util/request";
 
 interface MakeUsernameProps {
   stepper: ReturnType<typeof useStepper>;
-  header?: string;
+  minipage?: React.ReactElement<MinipageProps>;
   setUsername: React.Dispatch<SetStateAction<string>>;
   setPerformRegistration: React.Dispatch<SetStateAction<boolean>>;
 }
 
 const MakeUsername = ({
-  stepper: { step, prevStep },
-  header = "",
+  minipage,
   setUsername,
   setPerformRegistration,
 }: MakeUsernameProps) => {
@@ -92,35 +90,35 @@ const MakeUsername = ({
     getValues,
   } = form;
 
+  if (!minipage) {
+    return null;
+  }
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <Minipage
-        header={
-          <StepHeader step={step} onPrevStepClick={prevStep}>
-            {header}
-          </StepHeader>
-        }
-        footer={
+      {React.cloneElement(minipage, {
+        footer: (
           <NextStepButton color="primary" isDisabled={!isValid}>
             Sign up
           </NextStepButton>
-        }
-      >
-        <div className={styles.MakeUsername}>
-          <h1>What should we call you?</h1>
-          <span className={styles.Info}>
-            Your @ username is unique. You can always change it later.
-          </span>
-          <FormInput
-            autofocus
-            name="username"
-            placeholder="Usename"
-            control={control}
-            leader="@"
-            showStatusIcon
-          />
-        </div>
-      </Minipage>
+        ),
+        children: (
+          <div className={styles.MakeUsername}>
+            <h1>What should we call you?</h1>
+            <span className={styles.Info}>
+              Your @ username is unique. You can always change it later.
+            </span>
+            <FormInput
+              autofocus
+              name="username"
+              placeholder="Usename"
+              control={control}
+              leader="@"
+              showStatusIcon
+            />
+          </div>
+        ),
+      })}
     </Form>
   );
 };
