@@ -12,7 +12,7 @@ const Sidebar = () => {
   const postTweetButton = isPcBig ? (
     <div className={styles.TweetButtonWrapper}>
       <Button size="large" largeFont stretch>
-        Tweet
+        Post
       </Button>
     </div>
   ) : (

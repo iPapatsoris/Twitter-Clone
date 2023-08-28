@@ -1,5 +1,5 @@
 import styles from "./ProfileButton.module.scss";
-import {ReactComponent as Dots }from "../../assets/icons/dots.svg";
+import { ReactComponent as Dots } from "../../assets/icons/dots.svg";
 import Icon from "../../util/components/Icon/Icon";
 import OptionsPopup from "../../util/components/Popup/OptionsPopup/OptionsPopup";
 import { useRef, useState } from "react";
@@ -9,9 +9,12 @@ import { NormalResponse } from "../../../backend/src/api/common";
 import { useAuthStore } from "../../store/AuthStore";
 import { deleteData } from "../../util/request";
 import Profile from "../../Main/routes/Profile/Profile";
+import useWindowDimensions from "../../util/hooks/useWindowDimensions";
+import Avatar from "../../Main/routes/Profile/ProfileFace/Avatar/Avatar";
 
 const ProfileButton = () => {
   const [showOptions, setShowOptions] = useState(false);
+  const { isPcBig } = useWindowDimensions();
 
   const profileButtonRef = useRef(null);
   const user = useAuthStore((state) => state.loggedInUser);
@@ -69,17 +72,26 @@ const ProfileButton = () => {
         className={[styles.ProfileButton, styles.NoHighlighting].join(" ")}
       >
         <div className={styles.Wrapper}>
-          <Profile
-            preview={{
-              username: user.username,
-              type: "user-list",
-              noNavOnClick: true,
-              noPreviewOnHover: true,
-              iconAction: (
-                <Icon src={Dots} title="" hover="none" alt="Account options" />
-              ),
-            }}
-          />
+          {!isPcBig ? (
+            <Avatar extraClasses={[styles.Avatar]} src={user.avatar} />
+          ) : (
+            <Profile
+              preview={{
+                username: user.username,
+                type: "user-list",
+                noNavOnClick: true,
+                noPreviewOnHover: true,
+                iconAction: (
+                  <Icon
+                    src={Dots}
+                    title=""
+                    hover="none"
+                    alt="Account options"
+                  />
+                ),
+              }}
+            />
+          )}
         </div>
       </div>
     </>

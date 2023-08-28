@@ -2,6 +2,10 @@
   margin-top: auto;
   margin-bottom: 1rem;
 
+  @include media.multi(mobile, table, pc-small) {
+    width: min-content;
+  }
+
   .Wrapper {
     padding: 1rem;
     border-radius: 40px;
@@ -10,6 +14,11 @@
     &:hover {
       background-color: var(--hover-bg);
     }
+  }
+
+  .Avatar {
+    width: var(--avatar-small-height);
+    height: var(--avatar-small-height);
   }
 }
 
