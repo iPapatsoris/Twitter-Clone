@@ -21,6 +21,7 @@ declare const classNames: typeof globalClassNames & {
   readonly WithBackground: "WithBackground";
   readonly RefWrapper: "RefWrapper";
   readonly NoCursorPointer: "NoCursorPointer";
+  readonly Elevate: "Elevate";
 };
 export = classNames;
 export type ClassNames =
@@ -43,4 +44,5 @@ export type ClassNames =
   | "WithBackground"
   | "RefWrapper"
   | "NoCursorPointer"
+  | "Elevate"
   | GlobalClassNames;

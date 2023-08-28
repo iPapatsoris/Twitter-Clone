@@ -147,6 +147,7 @@ const Icon = forwardRef(
               styles.Icon,
               styles.NoHighlighting,
               noCursorPointer ? styles.NoCursorPointer : "",
+              withBackground ? styles.Elevate : "",
               ...extraStyles,
             ].join(" ")}
           ></Element>

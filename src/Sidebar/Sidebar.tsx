@@ -16,15 +16,16 @@ const Sidebar = () => {
       </Button>
     </div>
   ) : (
-    <Button extraClasses={[styles.TweetButton]} round title="Post">
-      <Icon
-        src={CreateTweet}
-        title="Post"
-        alt="Post tweet"
-        hover="none"
-        size={24}
-      />
-    </Button>
+    <Icon
+      src={CreateTweet}
+      hover="none"
+      noInlineMargin
+      withBackground
+      title="Post"
+      alt="Post tweet"
+      size={26}
+      hoverGap={14}
+    />
   );
 
   return (

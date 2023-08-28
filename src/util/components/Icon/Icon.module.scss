@@ -123,5 +123,10 @@
     &.NoCursorPointer {
       cursor: auto;
     }
+
+    &.Elevate {
+      z-index: 1;
+      pointer-events: none;
+    }
   }
 }
