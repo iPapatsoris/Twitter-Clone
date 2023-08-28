@@ -4,15 +4,30 @@
   position: relative;
   width: min-content;
   --icon-size: 20px;
+
+  // Gap between icon and surrounding circle that appears on hover.
+  // Css var can be adjusted by a prop
   --icon-hover-gap: 8px;
-  gap: calc(var(--icon-hover-gap) + 0.5rem);
+
+  // Height of surrounding hover circle depends on icon size and hover gap
+  $icon-hover-height: calc(var(--icon-size) + 2 * var(--icon-hover-gap));
+
+  // Width of hover circle is normally identical to the height, but we store
+  // it as an adjustable css var because there is a prop that can make
+  // the hover area cover both the icon and the text right after it.
+  --icon-hover-width: #{$icon-hover-height};
+
+  // Gap between icon and text after it
+  --icon-text-gap: 18px;
+  gap: var(--icon-text-gap);
 
   .Text {
     transition: var(--transition-duration);
   }
 
   @mixin Hover($bg-color, $color) {
-    &:hover {
+    &:hover,
+    &.ForceHover {
       .IconWrapper {
         background-color: $bg-color;
       }
@@ -67,9 +82,13 @@
 
   .IconWrapper {
     position: absolute;
-    --icon-hover-size: calc(var(--icon-size) + 2 * var(--icon-hover-gap));
-    width: var(--icon-hover-size);
-    height: var(--icon-hover-size);
+    width: var(--icon-hover-width);
+
+    &.HoverThroughBothIconAndText {
+      width: calc(100% + 2 * var(--icon-hover-gap));
+    }
+
+    height: $icon-hover-height;
     top: calc(-1 * var(--icon-hover-gap));
     left: calc(-1 * var(--icon-hover-gap));
     border-radius: 40px;
@@ -78,6 +97,13 @@
 
     &.WithBorder {
       outline: 1px solid rgb(207, 217, 222);
+    }
+
+    &.WithBackground {
+      background-color: var(--primary-color);
+      &:hover {
+        background-color: rgb(26, 140, 216);
+      }
     }
   }
 

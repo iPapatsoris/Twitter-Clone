@@ -10,6 +10,7 @@ const getWindowDimensions = () => {
   const isMobile = width <= mobileWidth;
   const isTablet = width > mobileWidth && width <= tabletWidth;
   const isPcSmall = width > tabletWidth && width <= pcSmallWidth;
+  const isPcBig = width > pcSmallWidth;
 
   return {
     width,
@@ -17,6 +18,8 @@ const getWindowDimensions = () => {
     isMobile,
     isTablet,
     isPcSmall,
+    isPcBig,
+    isSmallScreen: isMobile || isTablet,
   };
 };
 

@@ -3,6 +3,7 @@
   top: 0;
   height: 100vh;
   display: flex;
+  gap: 2rem;
   flex-direction: column;
   font-size: var(--bigger-text);
   grid-area: sidebar-left;
@@ -13,7 +14,12 @@
   }
 }
 
-.TweetButton {
+.TweetButtonWrapper {
   width: 90%;
-  margin-top: 1.5rem;
+}
+
+.TweetButton {
+  height: 54px !important;
+  width: 54px !important;
+  min-width: none !important;
 }

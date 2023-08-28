@@ -2,19 +2,21 @@ import React, { ButtonHTMLAttributes, forwardRef, useState } from "react";
 import { TailSpin } from "react-loader-spinner";
 import styles from "./Button.module.scss";
 
-interface ButtonProps {
+export interface ButtonProps {
   type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
   children: React.ReactNode;
   hoverText?: string;
   hoverColor?: "red" | undefined;
   color?: "primary" | "black" | "white" | "red";
   size?: "small" | "medium" | "large";
+  round?: boolean;
   largeFont?: boolean;
   stretch?: boolean;
   extraClasses?: string[];
   onClick?: (e: React.MouseEvent) => void;
   disabled?: boolean;
   isLoading?: boolean;
+  title?: string;
 }
 
 const Button = forwardRef(
@@ -32,6 +34,7 @@ const Button = forwardRef(
       extraClasses = [],
       disabled = false,
       isLoading = false,
+      title,
     }: ButtonProps,
     ref: React.ForwardedRef<HTMLButtonElement>
   ) => {
@@ -81,6 +84,7 @@ const Button = forwardRef(
         type={type}
         disabled={disabled}
         className={classes}
+        title={title}
         onClick={(e) => onClick(e)}
         {...(hoverText && { onMouseEnter: toggleHover })}
         {...(hoverText && { onMouseLeave: toggleHover })}

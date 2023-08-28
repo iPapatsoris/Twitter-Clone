@@ -3,8 +3,12 @@ import globalClassNames, {
 } from "../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly NavItem: "NavItem";
-  readonly IconAndTitle: "IconAndTitle";
-  readonly Icon: "Icon";
+  readonly Logo: "Logo";
+  readonly PostTweetButton: "PostTweetButton";
 };
 export = classNames;
-export type ClassNames = "NavItem" | "IconAndTitle" | "Icon" | GlobalClassNames;
+export type ClassNames =
+  | "NavItem"
+  | "Logo"
+  | "PostTweetButton"
+  | GlobalClassNames;

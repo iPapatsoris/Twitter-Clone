@@ -6,6 +6,7 @@ declare const classNames: typeof globalClassNames & {
   readonly Text: "Text";
   readonly Hover: "Hover";
   readonly IconWrapper: "IconWrapper";
+  readonly ForceHover: "ForceHover";
   readonly Icon: "Icon";
   readonly HoverPrimary: "HoverPrimary";
   readonly HoverGreen: "HoverGreen";
@@ -15,7 +16,9 @@ declare const classNames: typeof globalClassNames & {
   readonly NoTopMargin: "NoTopMargin";
   readonly NoBottomMargin: "NoBottomMargin";
   readonly NoHover: "NoHover";
+  readonly HoverThroughBothIconAndText: "HoverThroughBothIconAndText";
   readonly WithBorder: "WithBorder";
+  readonly WithBackground: "WithBackground";
   readonly RefWrapper: "RefWrapper";
   readonly NoCursorPointer: "NoCursorPointer";
 };
@@ -25,6 +28,7 @@ export type ClassNames =
   | "Text"
   | "Hover"
   | "IconWrapper"
+  | "ForceHover"
   | "Icon"
   | "HoverPrimary"
   | "HoverGreen"
@@ -34,7 +38,9 @@ export type ClassNames =
   | "NoTopMargin"
   | "NoBottomMargin"
   | "NoHover"
+  | "HoverThroughBothIconAndText"
   | "WithBorder"
+  | "WithBackground"
   | "RefWrapper"
   | "NoCursorPointer"
   | GlobalClassNames;

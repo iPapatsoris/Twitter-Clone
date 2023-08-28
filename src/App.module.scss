@@ -8,30 +8,28 @@
 .App {
   display: grid;
   grid-template:
-    ". sidebar-left header-main   header-right ." var(--header-height)
-    ". sidebar-left content-main content-right ." 1fr
-    ". sidebar-left .             sticky-inbox sticky-inbox" auto
-    / 1fr 250px minmax(375px, 2fr) minmax(285px, 1.5fr) 1fr;
+    ". sidebar-left header-main  .  header-right ." var(--header-height)
+    ". sidebar-left content-main .  content-right ." 1fr
+    ". sidebar-left .            .  sticky-inbox sticky-inbox" auto
+    / 1fr 250px minmax(375px, 2fr) 2rem minmax(285px, 1.5fr) 1fr;
 
   // For a similar behaviour to the real Twitter,
   // use the column specification below:
   // / 1fr 275px 660px 330px 1fr;
 
-  grid-column-gap: 1.5em;
-
   &.NoHeaderRight {
     grid-template-areas:
-      ". sidebar-left header-main  content-right ."
-      ". sidebar-left content-main content-right ."
-      ". sidebar-left .             sticky-inbox sticky-inbox";
+      ". sidebar-left header-main  . content-right ."
+      ". sidebar-left content-main . content-right ."
+      ". sidebar-left .            . sticky-inbox sticky-inbox";
   }
 
   &.ExtendedHeaderMain {
     grid-template-areas:
-      ". sidebar-left header-main-extension  header-right  ."
-      ". sidebar-left header-main-extension  content-right ."
-      ". sidebar-left content-main content-right ."
-      ". sidebar-left .             sticky-inbox sticky-inbox";
+      ". sidebar-left header-main-extension .  header-right  ."
+      ". sidebar-left header-main-extension .  content-right ."
+      ". sidebar-left content-main          .  content-right ."
+      ". sidebar-left .            . sticky-inbox sticky-inbox";
 
     grid-template-rows: 53px 53px auto auto;
   }

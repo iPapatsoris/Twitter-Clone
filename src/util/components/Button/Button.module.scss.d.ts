@@ -12,6 +12,7 @@ declare const classNames: typeof globalClassNames & {
   readonly Small: "Small";
   readonly Medium: "Medium";
   readonly Large: "Large";
+  readonly Round: "Round";
   readonly Stretch: "Stretch";
   readonly LargeFont: "LargeFont";
 };
@@ -27,6 +28,7 @@ export type ClassNames =
   | "Small"
   | "Medium"
   | "Large"
+  | "Round"
   | "Stretch"
   | "LargeFont"
   | GlobalClassNames;

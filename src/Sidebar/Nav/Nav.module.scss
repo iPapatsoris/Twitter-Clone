@@ -3,29 +3,19 @@ nav {
 
   .NavItem {
     padding-top: 0.5rem;
+    display: flex;
 
     &:hover {
       cursor: pointer;
-
-      .IconAndTitle {
-        background-color: var(--hover-bg);
-      }
-    }
-
-    .IconAndTitle {
-      display: flex;
-      gap: 1.5rem;
-      width: min-content;
-      padding: 1rem;
-      padding-right: 2rem;
-      border-radius: 40px;
-      border: black;
-      transition: var(--transition-duration);
     }
   }
+  .Logo {
+    margin-left: 2px;
+    display: inline-block;
+  }
 
-  .Icon {
-    width: 26px !important;
-    height: 26px !important;
+  .PostTweetButton {
+    width: 26px;
+    height: 26px;
   }
 }

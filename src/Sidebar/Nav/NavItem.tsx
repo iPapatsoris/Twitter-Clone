@@ -1,14 +1,16 @@
 import { Link, useLocation } from "react-router-dom";
-import Icon from "../../util/components/Icon/Icon";
+import Icon, { IconProps } from "../../util/components/Icon/Icon";
 import { getPagePath } from "../../util/paths";
 import MoreOptionsNavItem from "./MoreOptionsNavItem/MoreOptionsNavItem";
 import styles from "./Nav.module.scss";
-import { ComponentProps } from "react";
+import { ComponentProps, useState } from "react";
+import useWindowDimensions from "../../util/hooks/useWindowDimensions";
 interface NavItemProps {
   icon: ComponentProps<typeof Icon>["src"];
   iconActive?: ComponentProps<typeof Icon>["src"];
   title: string;
   path?: string;
+  iconProps?: Partial<IconProps>;
   isPopup?: boolean;
 }
 
@@ -18,6 +20,7 @@ const NavItem = ({
   title,
   path: itemPath = getPagePath("error"),
   isPopup = false,
+  iconProps,
 }: NavItemProps) => {
   const currentPath = useLocation().pathname;
   const isActive = itemPath === currentPath;
@@ -25,17 +28,25 @@ const NavItem = ({
     " "
   );
 
+  const { isMobile, isTablet, isPcSmall } = useWindowDimensions();
+  const [forceHover, setForceHover] = useState(false);
+
   const item = (
-    <div className={styles.NavItem}>
-      <div className={styles.IconAndTitle}>
-        <Icon
-          src={isActive && iconActive ? iconActive : icon}
-          extraStyles={[styles.Icon]}
-          hover="none"
-          alt={title}
-        />
-        <span className={navItemClass}>{title}</span>
-      </div>
+    <div
+      className={styles.NavItem}
+      onMouseEnter={() => setForceHover(true)}
+      onMouseLeave={() => setForceHover(false)}
+    >
+      <Icon
+        src={isActive && iconActive ? iconActive : icon}
+        alt={title}
+        {...iconProps}
+        text={!isPcSmall && !isTablet ? title : ""}
+        size={26}
+        hoverGap={14}
+        hoverThroughBothIconAndText
+        forceHover={forceHover}
+      />
     </div>
   );
 
