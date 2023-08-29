@@ -18,7 +18,7 @@ export const HeaderProfileContext = createContext<{
   setUserHeader: () => {},
 });
 
-const Main = () => {
+const Main = ({ showContentRight }: { showContentRight: boolean }) => {
   const [userHeader, setUserHeader] = useState<HeaderProfileUser>(null);
   const { isErrorPage: isErrorPageContext } = useContext(ErrorPageContext);
   const isErrorPage = useRouteMatch(getPagePath("error")) || isErrorPageContext;
@@ -32,6 +32,8 @@ const Main = () => {
       </>
     );
 
+  const headerRight = path !== getPagePath("explore") && <HeaderRight />;
+
   return (
     <main>
       <HeaderProfileContext.Provider
@@ -42,11 +44,14 @@ const Main = () => {
         {!isErrorPage && <HeaderMainHub user={userHeader} />}
         <div className={isErrorPage ? styles.ErrorPage : styles.ContentMain}>
           <Outlet />
-          {/* {!isErrorPage && placeholderJSX} */}
         </div>
-        {!isErrorPage && path !== getPagePath("explore") && <HeaderRight />}
-        {!isErrorPage && <ContentRight />}
-        {!isErrorPage && <StickyInbox />}
+        {!isErrorPage && showContentRight && (
+          <>
+            {headerRight}
+            <ContentRight />
+            <StickyInbox />
+          </>
+        )}
       </HeaderProfileContext.Provider>
     </main>
   );

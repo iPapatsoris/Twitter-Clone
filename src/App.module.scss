@@ -6,16 +6,31 @@
 */
 
 .App {
+  @function columnsSize($sidebar-width) {
+    @return 1fr $sidebar-width 600px 2rem minmax(285px, 1.5fr) 1fr;
+  }
+
   display: grid;
   grid-template:
     ". sidebar-left header-main  .  header-right ." var(--header-height)
     ". sidebar-left content-main .  content-right ." 1fr
     ". sidebar-left .            .  sticky-inbox sticky-inbox" auto
-    / 1fr 250px minmax(375px, 2fr) 2rem minmax(285px, 1.5fr) 1fr;
+    / columnsSize(250px);
 
-  // For a similar behaviour to the real Twitter,
-  // use the column specification below:
-  // / 1fr 275px 660px 330px 1fr;
+  @include media.multi(mobile, tablet, pc-small) {
+    grid-template-columns: columnsSize(auto);
+  }
+
+  $no-content-right-width: 1015px;
+  --no-content-right-width: #{$no-content-right-width};
+
+  @media (width <= $no-content-right-width) {
+    grid-template:
+      ". sidebar-left header-main  ." var(--header-height)
+      ". sidebar-left content-main ." 1fr
+      ". sidebar-left .            ." auto
+      / 1fr auto 600px 1fr;
+  }
 
   &.NoHeaderRight {
     grid-template-areas:

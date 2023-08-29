@@ -64,6 +64,7 @@ const Nav = () => {
               alt="Twitter logo"
               size={26}
               hoverGap={14}
+              noInlineMargin
             />
           </Link>
           <NavItem

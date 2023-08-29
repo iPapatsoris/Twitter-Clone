@@ -46,6 +46,7 @@ const NavItem = ({
         hoverGap={14}
         hoverThroughBothIconAndText
         forceHover={forceHover}
+        noInlineMargin
       />
     </div>
   );

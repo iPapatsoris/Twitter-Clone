@@ -7,7 +7,14 @@ import {
   isNotificationsPage,
   useRouteMatches,
 } from "./util/paths";
-import { createContext, SetStateAction, useState } from "react";
+import {
+  createContext,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import useWindowDimensions from "./util/hooks/useWindowDimensions";
 
 export const ErrorPageContext = createContext<{
   setIsErrorPage: React.Dispatch<SetStateAction<boolean>>;
@@ -25,6 +32,20 @@ const App = () => {
     getPagePath("following"),
   ]);
 
+  const { width } = useWindowDimensions();
+  const appRef = useRef(null);
+  const [showContentRight, setShowContentRight] = useState(true);
+  console.log(showContentRight);
+
+  useEffect(() => {
+    if (appRef && appRef.current) {
+      const style = getComputedStyle(appRef.current);
+      setShowContentRight(
+        width > parseInt(style.getPropertyValue("--no-content-right-width"))
+      );
+    }
+  }, [appRef, setShowContentRight, width]);
+
   let extraClasses = [];
   // Modify grid layout for different pages
   if (isErrorPage) {
@@ -38,10 +59,10 @@ const App = () => {
   return (
     <ErrorPageContext.Provider value={{ setIsErrorPage, isErrorPage }}>
       <ScrollRestoration />
-      <div className={[styles.App, ...extraClasses].join(" ")}>
+      <div ref={appRef} className={[styles.App, ...extraClasses].join(" ")}>
         <>
           <Sidebar />
-          <Main />
+          <Main showContentRight={showContentRight} />
         </>
       </div>
     </ErrorPageContext.Provider>
