@@ -71,18 +71,20 @@ const ProfileButton = () => {
         }}
         className={[styles.ProfileButton, styles.NoHighlighting].join(" ")}
       >
-        <Profile
-          preview={{
-            username: user.username,
-            type: "user-list",
-            noNavOnClick: true,
-            noPreviewOnHover: true,
-            iconAction: (
-              <Icon src={Dots} title="" hover="none" alt="Account options" />
-            ),
-            showJustAvatar: !isPcBig,
-          }}
-        />
+        <div className={styles.Wrapper}>
+          <Profile
+            preview={{
+              username: user.username,
+              type: "user-list",
+              noNavOnClick: true,
+              noPreviewOnHover: true,
+              iconAction: (
+                <Icon src={Dots} title="" hover="none" alt="Account options" />
+              ),
+              showJustAvatar: !isPcBig,
+            }}
+          />
+        </div>
       </div>
     </>
   );
