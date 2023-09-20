@@ -8,6 +8,19 @@ import React, {
 import styles from "./Icon.module.scss";
 import { toPixels } from "../../string";
 
+/* Icon with a background around it that appears on hover. The background area
+   is absolutely positioned to not interfere with content flow. By default, 
+   margins are included on the icon to take into account the extra area that
+   appears on hover, to ensure that the area will not clash with other elements
+   on hover. However, for aligning purposes with other elements, it is not 
+   always desirable to have these margins, so there are also props to opt out of 
+   them.
+
+   TODO: Decouple hover effect code from Icon, refactor into seperate 
+         component to allow reusing hover logic with any component.
+         Most of the code in this file and in the scss one deals with the hover
+         effect. 
+*/
 export interface IconProps {
   // SVG element
   src: React.ComponentType<
