@@ -5,21 +5,6 @@
   @include media.multi(mobile, tablet, pc-small) {
     width: min-content;
   }
-
-  .Wrapper {
-    padding: 1rem;
-    border-radius: 40px;
-    transition: var(--transition-duration);
-
-    &:hover {
-      background-color: var(--hover-bg);
-    }
-  }
-
-  .Avatar {
-    width: var(--avatar-small-height);
-    height: var(--avatar-small-height);
-  }
 }
 
 .PopupStyles {

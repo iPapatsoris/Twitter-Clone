@@ -16,10 +16,11 @@ declare const classNames: typeof globalClassNames & {
   readonly NoTopMargin: "NoTopMargin";
   readonly NoBottomMargin: "NoBottomMargin";
   readonly NoHover: "NoHover";
+  readonly FullSize: "FullSize";
+  readonly RefWrapper: "RefWrapper";
   readonly HoverThroughBothIconAndText: "HoverThroughBothIconAndText";
   readonly WithBorder: "WithBorder";
   readonly WithBackground: "WithBackground";
-  readonly RefWrapper: "RefWrapper";
   readonly NoCursorPointer: "NoCursorPointer";
   readonly Elevate: "Elevate";
 };
@@ -39,10 +40,11 @@ export type ClassNames =
   | "NoTopMargin"
   | "NoBottomMargin"
   | "NoHover"
+  | "FullSize"
+  | "RefWrapper"
   | "HoverThroughBothIconAndText"
   | "WithBorder"
   | "WithBackground"
-  | "RefWrapper"
   | "NoCursorPointer"
   | "Elevate"
   | GlobalClassNames;

@@ -14,6 +14,7 @@ export interface ProfileProps {
     iconAction?: React.ReactElement;
     noNavOnClick?: boolean;
     noPreviewOnHover?: boolean;
+    showJustAvatar?: boolean;
   };
 }
 

@@ -29,11 +29,11 @@ import {
   smallPreviewProfileFields,
 } from "./queries";
 import { useCircleMutation } from "../../Circle/queries";
-import Avatar from "./Avatar/Avatar";
 import ProfileHoverPreview from "./ProfileHoverPreview";
 import { ProfileProps } from "../Profile";
 import { elementIsContainedInRefs, refsExist } from "../../../../util/ref";
 import { useHoverPopup } from "../../../../util/hooks/useHoverPopup";
+import Avatar from "./Avatar/Avatar";
 
 const ProfileFace = ({ preview }: ProfileProps) => {
   const loggedInUser = useAuthStore(
@@ -86,7 +86,6 @@ const ProfileFace = ({ preview }: ProfileProps) => {
       abortHoverPopupOpen();
     }
   };
-
   const profileRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -165,6 +164,9 @@ const ProfileFace = ({ preview }: ProfileProps) => {
       styles.Preview,
       preview.type === "hover" ? styles.Hover : styles.Small,
     ];
+    if (preview.showJustAvatar) {
+      previewStyles.push(styles.JustAvatar);
+    }
   }
 
   const visitFullProfile = (e: React.MouseEvent) => {
@@ -186,9 +188,25 @@ const ProfileFace = ({ preview }: ProfileProps) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <Avatar src={user.avatar} withBorder={!preview} />
+      <Avatar
+        src={user.avatar}
+        withBorder={!preview}
+        iconProps={{
+          hover: "none",
+          fullSize: !(preview && preview.type === "user-list"),
+        }}
+      />
     </div>
   );
+
+  const finalAvatar =
+    !preview || preview.noNavOnClick ? (
+      avatar
+    ) : (
+      <Link className={styles.Semantic} to={getProfileLink()}>
+        {avatar}
+      </Link>
+    );
 
   const nameAndVerified = (
     <>
@@ -201,6 +219,69 @@ const ProfileFace = ({ preview }: ProfileProps) => {
     <span className={[styles.LightColor, styles.Username].join(" ")}>
       @{user.username}
     </span>
+  );
+
+  const actionsAndInfo = (
+    <>
+      <div className={styles.Actions}>
+        {!preview && (
+          <>
+            <Icon
+              ref={tweetOptionsRef}
+              src={OptionsIcon}
+              withBorder
+              title="More"
+            />
+            {user.isFollowedByActiveUser && (
+              <Icon src={NotificationsIcon} withBorder title="Notify" />
+            )}
+          </>
+        )}
+        {preview && preview.iconAction ? preview.iconAction : actionButton}
+      </div>
+      <div
+        className={styles.Title}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
+        <div className={styles.NameAndVerified}>
+          {!preview || preview.noNavOnClick ? (
+            nameAndVerified
+          ) : (
+            <Link className={styles.Semantic} to={getProfileLink()}>
+              {nameAndVerified}
+            </Link>
+          )}
+        </div>
+        <div>
+          {!preview || preview.noNavOnClick ? (
+            usernameText
+          ) : (
+            <Link className={styles.Semantic} to={getProfileLink()}>
+              {usernameText}
+            </Link>
+          )}
+        </div>
+      </div>
+      <div className={styles.ProfileInfo}>
+        {(!preview || preview.includeBio) && (
+          <div className={styles.Bio}>{user.bio}</div>
+        )}
+        {!preview && <Info user={user} />}
+        {(!preview || (preview && preview.type === "hover")) && (
+          <div className={styles.Friendship}>
+            <Link to={getPagePath("following", user.username)}>
+              <b>{user.totalFollowees}</b>{" "}
+              <span className={styles.LightColor}>Followees</span>
+            </Link>
+            <Link to={getPagePath("followers", user.username)}>
+              <b>{user.totalFollowers}</b>{" "}
+              <span className={styles.LightColor}>Followers</span>
+            </Link>
+          </div>
+        )}
+      </div>
+    </>
   );
 
   return (
@@ -225,71 +306,8 @@ const ProfileFace = ({ preview }: ProfileProps) => {
         ref={profileRef}
       >
         {!preview && <div className={styles.Cover} style={coverStyle} />}
-        {!preview || preview.noNavOnClick ? (
-          avatar
-        ) : (
-          <Link className={styles.Semantic} to={getProfileLink()}>
-            {avatar}
-          </Link>
-        )}
-        <div className={styles.Actions}>
-          {!preview && (
-            <>
-              <Icon
-                ref={tweetOptionsRef}
-                src={OptionsIcon}
-                withBorder
-                title="More"
-              />
-              {user.isFollowedByActiveUser && (
-                <Icon src={NotificationsIcon} withBorder title="Notify" />
-              )}
-            </>
-          )}
-          {preview && preview.iconAction ? preview.iconAction : actionButton}
-        </div>
-        <div
-          className={styles.Title}
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
-        >
-          <div className={styles.NameAndVerified}>
-            {!preview || preview.noNavOnClick ? (
-              nameAndVerified
-            ) : (
-              <Link className={styles.Semantic} to={getProfileLink()}>
-                {nameAndVerified}
-              </Link>
-            )}
-          </div>
-          <div>
-            {!preview || preview.noNavOnClick ? (
-              usernameText
-            ) : (
-              <Link className={styles.Semantic} to={getProfileLink()}>
-                {usernameText}
-              </Link>
-            )}
-          </div>
-        </div>
-        <div className={styles.ProfileInfo}>
-          {(!preview || preview.includeBio) && (
-            <div className={styles.Bio}>{user.bio}</div>
-          )}
-          {!preview && <Info user={user} />}
-          {(!preview || (preview && preview.type === "hover")) && (
-            <div className={styles.Friendship}>
-              <Link to={getPagePath("following", user.username)}>
-                <b>{user.totalFollowees}</b>{" "}
-                <span className={styles.LightColor}>Followees</span>
-              </Link>
-              <Link to={getPagePath("followers", user.username)}>
-                <b>{user.totalFollowers}</b>{" "}
-                <span className={styles.LightColor}>Followers</span>
-              </Link>
-            </div>
-          )}
-        </div>
+        {finalAvatar}
+        {!(preview && preview.showJustAvatar) && actionsAndInfo}
       </div>
     </>
   );

@@ -80,6 +80,18 @@
     }
   }
 
+  &.FullSize {
+    width: 100%;
+    height: 100%;
+
+    .IconWrapper,
+    .RefWrapper,
+    .Icon {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
   .IconWrapper {
     position: absolute;
     width: var(--icon-hover-width);

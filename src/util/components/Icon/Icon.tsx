@@ -1,13 +1,22 @@
-import React, { forwardRef, useLayoutEffect, useRef } from "react";
+import React, {
+  ComponentProps,
+  HTMLProps,
+  forwardRef,
+  useLayoutEffect,
+  useRef,
+} from "react";
 import styles from "./Icon.module.scss";
 import { toPixels } from "../../string";
 
 export interface IconProps {
+  // SVG element
   src: React.ComponentType<
     React.SVGProps<SVGSVGElement> & {
       title?: string | undefined;
     }
   >;
+  // Source for image in any format
+  nonSvgSrc?: string;
   title?: string;
   alt?: string;
   // Color of surrounding circle on hover
@@ -33,6 +42,7 @@ export interface IconProps {
   text?: string;
   // Icon size in px
   size?: number;
+  fullSize?: boolean;
   // Gap between icon and surrounding hover circle
   hoverGap?: number;
   // Hover circle covers both icon and text
@@ -48,6 +58,7 @@ const Icon = forwardRef(
   (
     {
       src: Element,
+      nonSvgSrc,
       title = "",
       alt = "",
       hover = "normal",
@@ -63,6 +74,7 @@ const Icon = forwardRef(
       noTopMargin,
       text,
       size,
+      fullSize,
       hoverGap,
       hoverThroughBothIconAndText,
       forceHover,
@@ -109,6 +121,19 @@ const Icon = forwardRef(
       noBlockMargin,
     });
 
+    const imageProps: HTMLProps<HTMLImageElement> = {
+      title: title,
+      width: fullSize ? "100%" : size,
+      height: fullSize ? "100%" : size,
+      className: [
+        styles.Icon,
+        styles.NoHighlighting,
+        noCursorPointer ? styles.NoCursorPointer : "",
+        withBackground ? styles.Elevate : "",
+        ...extraStyles,
+      ].join(" "),
+    };
+
     return (
       <div
         className={[
@@ -116,6 +141,7 @@ const Icon = forwardRef(
           !withBackground ? hoverClassname : "",
           forceHover ? styles.ForceHover : "",
           ...marginClasses,
+          fullSize ? styles.FullSize : "",
           ...extraWrapperStyles,
         ].join(" ")}
         onClick={onClick}
@@ -138,19 +164,14 @@ const Icon = forwardRef(
         />
         {/* TODO: why we can't put ref directly in Element? spawns forwardRef console error */}
         <div ref={ref} className={styles.RefWrapper}>
-          <Element
-            aria-labelledby={alt}
-            width={size}
-            height={size}
-            title={title}
-            className={[
-              styles.Icon,
-              styles.NoHighlighting,
-              noCursorPointer ? styles.NoCursorPointer : "",
-              withBackground ? styles.Elevate : "",
-              ...extraStyles,
-            ].join(" ")}
-          ></Element>
+          {nonSvgSrc ? (
+            <img src={nonSvgSrc} alt={alt} {...imageProps} />
+          ) : (
+            <Element
+              aria-labelledby={alt}
+              {...(imageProps as ComponentProps<typeof Element>)}
+            />
+          )}
         </div>
         {text && (
           <span ref={textRef} className={styles.Text}>

@@ -7,7 +7,7 @@ import { ReactComponent as DotsIcon } from "../../../assets/icons/dots-gray.svg"
 import { ReactComponent as RetweetIcon } from "../../../assets/icons/tweet/retweet.svg";
 import dayjs from "dayjs";
 import TweetActions from "./TweetActions/TweetActions";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import ProfileHoverPreview from "../../routes/Profile/ProfileFace/ProfileHoverPreview";
 import { Link, useNavigate } from "react-router-dom";
 import { getPagePath } from "../../../util/paths";
@@ -119,7 +119,7 @@ const Tweet = ({
               onMouseLeave={abortHoverPopupOpen}
               ref={avatarRef}
             >
-              <Avatar src={tweet.author.avatar} />
+              <Avatar src={tweet.author.avatar} iconProps={{ hover: "none" }} />
               {drawReplyLine && (
                 <div className={styles.ReplyLine} ref={replyLineRef}></div>
               )}

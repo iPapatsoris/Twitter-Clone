@@ -57,6 +57,11 @@ Profile grid */
         ". . content content";
       grid-template-rows: var(--avatar-small-height) auto;
       grid-template-columns: defineGridColumnsSmall();
+
+      &.JustAvatar {
+        grid-template-areas: "avatar";
+        grid-template-columns: var(--avatar-small-height);
+      }
     }
   }
 

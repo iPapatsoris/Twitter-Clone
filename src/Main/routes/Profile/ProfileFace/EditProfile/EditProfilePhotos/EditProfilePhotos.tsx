@@ -24,7 +24,11 @@ const EditProfilePhotos = ({
       <div className={profileStyles.Cover} style={coverStyle}>
         <AddPhotoButton alt="Change cover" onClick={focusOnCover} />
       </div>
-      <Avatar src={avatar} withBorder extraClasses={[profileStyles.EditAvatar]}>
+      <Avatar
+        src={avatar}
+        withBorder
+        iconProps={{ hover: "none", fullSize: true }}
+      >
         <AddPhotoButton alt="Change avatar" onClick={focusOnAvatar} />
       </Avatar>
     </>

@@ -83,7 +83,7 @@ const CreateTweet = ({}: CreateTweetProps) => {
     <div className={styles.CreateTweet}>
       <div ref={avatarRef} className={styles.Avatar}>
         <Link to={getPagePath("profile", loggedInUser?.username)}>
-          <Avatar src={loggedInUser.avatar} />
+          <Avatar src={loggedInUser.avatar} iconProps={{ hover: "none" }} />
         </Link>
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
