@@ -26,10 +26,10 @@
 
   @media (width <= $no-content-right-width) {
     grid-template:
-      ". sidebar-left header-main  ." var(--header-height)
-      ". sidebar-left content-main ." 1fr
-      ". sidebar-left .            ." auto
-      / 1fr auto 600px 1fr;
+      " sidebar-left header-main  ." var(--header-height)
+      " sidebar-left content-main ." 1fr
+      " sidebar-left .            ." auto
+      / 1fr 600px 1fr;
   }
 
   &.NoHeaderRight {

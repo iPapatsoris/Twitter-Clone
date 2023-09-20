@@ -8,6 +8,11 @@
   font-size: var(--bigger-text);
   grid-area: sidebar-left;
 
+  @include media.multi(mobile, tablet, pc-small) {
+    align-items: center;
+    margin-right: 1rem;
+  }
+
   .Logo {
     padding-left: 6px;
     margin-top: 5px;
