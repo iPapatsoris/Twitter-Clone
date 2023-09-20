@@ -2,6 +2,12 @@ nav {
   cursor: pointer;
   padding-top: 3px;
 
+  @include media.multi(mobile, tablet) {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 0;
+  }
+
   .NavItem {
     padding-top: 0.5rem;
     display: flex;

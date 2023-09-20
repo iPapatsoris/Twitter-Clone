@@ -32,6 +32,13 @@
       / 1fr 600px 1fr;
   }
 
+  @include media.multi(mobile, tablet) {
+    grid-template:
+      ". header-main ."
+      ". content-main ."
+      "sidebar-left sidebar-left sidebar-left";
+  }
+
   &.NoHeaderRight {
     grid-template-areas:
       ". sidebar-left header-main  . content-right ."

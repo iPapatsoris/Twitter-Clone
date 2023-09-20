@@ -22,11 +22,13 @@ import { useAuthStore } from "../../store/AuthStore";
 import Icon from "../../util/components/Icon/Icon";
 import { Link } from "react-router-dom";
 import styles from "./Nav.module.scss";
+import useWindowDimensions from "../../util/hooks/useWindowDimensions";
 
 const Nav = () => {
   const loggedInUser = useAuthStore(
     (state) => state.loggedInUser && { username: state.loggedInUser.username }
   );
+  const { isMobile, isTablet } = useWindowDimensions();
 
   let itemPath = getPagePath("explore");
   const explore = (
@@ -57,16 +59,18 @@ const Nav = () => {
         guestNav
       ) : (
         <>
-          <Link className={styles.Logo} to={getPagePath("home")}>
-            <Icon
-              src={Logo}
-              hover="primary"
-              alt="Twitter logo"
-              size={26}
-              hoverGap={14}
-              noInlineMargin
-            />
-          </Link>
+          {!isMobile && !isTablet && (
+            <Link className={styles.Logo} to={getPagePath("home")}>
+              <Icon
+                src={Logo}
+                hover="primary"
+                alt="Twitter logo"
+                size={26}
+                hoverGap={14}
+                noInlineMargin
+              />
+            </Link>
+          )}
           <NavItem
             iconActive={HomeIconActive}
             icon={HomeIcon}
@@ -86,25 +90,29 @@ const Nav = () => {
             title="Messages"
             path={getPagePath("messages")}
           />
-          <NavItem
-            iconActive={BookmarkIconActive}
-            icon={BookmarkIcon}
-            title="Bookmarks"
-            path={getPagePath("bookmarks")}
-          />
-          <NavItem
-            icon={ListIcon}
-            iconActive={ListIconActive}
-            title="Lists"
-            path={getPagePath("lists", loggedInUser.username)}
-          />
-          <NavItem
-            icon={ProfileIcon}
-            iconActive={ProfileIconActive}
-            title="Profile"
-            path={getPagePath("profile", loggedInUser.username)}
-          />
-          <NavItem icon={MoreIcon} title="More" isPopup />
+          {!isMobile && !isTablet && (
+            <>
+              <NavItem
+                iconActive={BookmarkIconActive}
+                icon={BookmarkIcon}
+                title="Bookmarks"
+                path={getPagePath("bookmarks")}
+              />
+              <NavItem
+                icon={ListIcon}
+                iconActive={ListIconActive}
+                title="Lists"
+                path={getPagePath("lists", loggedInUser.username)}
+              />
+              <NavItem
+                icon={ProfileIcon}
+                iconActive={ProfileIconActive}
+                title="Profile"
+                path={getPagePath("profile", loggedInUser.username)}
+              />
+              <NavItem icon={MoreIcon} title="More" isPopup />
+            </>
+          )}
         </>
       )}
     </nav>

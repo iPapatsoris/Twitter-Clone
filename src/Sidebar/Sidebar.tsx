@@ -7,7 +7,7 @@ import Icon from "../util/components/Icon/Icon";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
 
 const Sidebar = () => {
-  const { isPcBig } = useWindowDimensions();
+  const { isPcBig, isMobile, isTablet } = useWindowDimensions();
 
   const postTweetButton = isPcBig ? (
     <div className={styles.TweetButtonWrapper}>
@@ -31,8 +31,8 @@ const Sidebar = () => {
   return (
     <header className={styles.Sidebar}>
       <Nav />
-      {postTweetButton}
-      <ProfileButton />
+      {!isMobile && !isTablet && postTweetButton}
+      {!isMobile && !isTablet && <ProfileButton />}
     </header>
   );
 };

@@ -28,7 +28,7 @@ const NavItem = ({
     " "
   );
 
-  const { isMobile, isTablet, isPcSmall } = useWindowDimensions();
+  const { isMobile, isTablet, isPcBig } = useWindowDimensions();
   const [forceHover, setForceHover] = useState(false);
 
   const item = (
@@ -41,11 +41,12 @@ const NavItem = ({
         src={isActive && iconActive ? iconActive : icon}
         alt={title}
         {...iconProps}
-        text={!isPcSmall && !isTablet ? title : ""}
+        text={isPcBig ? title : ""}
         size={26}
         hoverGap={14}
         hoverThroughBothIconAndText
         forceHover={forceHover}
+        hover={isMobile || isTablet ? "none" : "normal"}
         noInlineMargin
       />
     </div>

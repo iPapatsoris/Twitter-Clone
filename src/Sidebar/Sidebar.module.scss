@@ -1,5 +1,6 @@
 .Sidebar {
   position: sticky;
+  overflow-y: auto;
   top: 0;
   height: 100vh;
   display: flex;
@@ -8,9 +9,21 @@
   font-size: var(--bigger-text);
   grid-area: sidebar-left;
 
-  @include media.multi(mobile, tablet, pc-small) {
+  @include media.pc-small {
     align-items: center;
-    margin-right: 1rem;
+    $no-content-right-width: 1015px; // TODO: import from App.module.scss
+    @media (width > $no-content-right-width) {
+      padding-right: 1rem;
+    }
+  }
+
+  @include media.multi(mobile, tablet) {
+    overflow-y: visible;
+    bottom: 0;
+    height: auto;
+    padding-block: 1rem;
+    background: white;
+    z-index: 1;
   }
 
   .Logo {
