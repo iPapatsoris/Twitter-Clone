@@ -6,12 +6,12 @@
   gap: 2rem;
   flex-direction: column;
   font-size: var(--bigger-text);
-  grid-area: sidebar-left;
+  grid-area: sidebar;
 
   @include media.pc-small {
     align-items: center;
-    $no-content-right-width: 1015px; // TODO: import from App.module.scss
-    @media (width > $no-content-right-width) {
+    $no-content-right-breakpoint: 1015px; // TODO: import from App.module.scss
+    @media (width > $no-content-right-breakpoint) {
       padding-right: 1rem;
     }
   }

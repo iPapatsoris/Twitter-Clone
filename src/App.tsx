@@ -41,7 +41,8 @@ const App = () => {
     if (appRef && appRef.current) {
       const style = getComputedStyle(appRef.current);
       setShowContentRight(
-        width > parseInt(style.getPropertyValue("--no-content-right-width"))
+        width >
+          parseInt(style.getPropertyValue("--no-content-right-breakpoint"))
       );
     }
   }, [appRef, setShowContentRight, width]);
