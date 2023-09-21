@@ -28,7 +28,7 @@ const Nav = () => {
   const loggedInUser = useAuthStore(
     (state) => state.loggedInUser && { username: state.loggedInUser.username }
   );
-  const { isMobile, isTablet } = useWindowDimensions();
+  const { isSmallScreen } = useWindowDimensions();
 
   let itemPath = getPagePath("explore");
   const explore = (
@@ -59,7 +59,7 @@ const Nav = () => {
         guestNav
       ) : (
         <>
-          {!isMobile && !isTablet && (
+          {!isSmallScreen && (
             <Link className={styles.Logo} to={getPagePath("home")}>
               <Icon
                 src={Logo}
@@ -90,7 +90,7 @@ const Nav = () => {
             title="Messages"
             path={getPagePath("messages")}
           />
-          {!isMobile && !isTablet && (
+          {!isSmallScreen && (
             <>
               <NavItem
                 iconActive={BookmarkIconActive}

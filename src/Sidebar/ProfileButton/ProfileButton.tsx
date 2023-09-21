@@ -10,7 +10,6 @@ import { useAuthStore } from "../../store/AuthStore";
 import { deleteData } from "../../util/request";
 import Profile from "../../Main/routes/Profile/Profile";
 import useWindowDimensions from "../../util/hooks/useWindowDimensions";
-import Avatar from "../../Main/routes/Profile/ProfileFace/Avatar/Avatar";
 
 const ProfileButton = () => {
   const [showOptions, setShowOptions] = useState(false);
