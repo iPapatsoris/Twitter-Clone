@@ -24,9 +24,7 @@ const NavItem = ({
 }: NavItemProps) => {
   const currentPath = useLocation().pathname;
   const isActive = itemPath === currentPath;
-  const navItemClass = [styles.BiggerText, isActive ? styles.Bold : ""].join(
-    " "
-  );
+  const navItemClasses = [styles.BiggerText, isActive ? styles.Bold : ""];
 
   const { isSmallScreen, isPcBig } = useWindowDimensions();
   const [forceHover, setForceHover] = useState(false);
@@ -48,6 +46,7 @@ const NavItem = ({
         forceHover={forceHover}
         hover={isSmallScreen ? "none" : "normal"}
         noInlineMargin
+        textStyles={navItemClasses}
       />
     </div>
   );

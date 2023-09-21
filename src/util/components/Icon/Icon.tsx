@@ -53,6 +53,7 @@ export interface IconProps {
 
   // Text right after the icon. Hover on text is like hovering on icon
   text?: string;
+  textStyles?: string[];
   // Icon size in px
   size?: number;
   fullSize?: boolean;
@@ -86,6 +87,7 @@ const Icon = forwardRef(
       noBottomMargin,
       noTopMargin,
       text,
+      textStyles,
       size,
       fullSize,
       hoverGap,
@@ -147,6 +149,11 @@ const Icon = forwardRef(
       ].join(" "),
     };
 
+    const textClasses: string[] = [styles.Text];
+    if (textStyles) {
+      textClasses.push(...textStyles);
+    }
+
     return (
       <div
         className={[
@@ -187,7 +194,7 @@ const Icon = forwardRef(
           )}
         </div>
         {text && (
-          <span ref={textRef} className={styles.Text}>
+          <span ref={textRef} className={textClasses.join(" ")}>
             {text}
           </span>
         )}
