@@ -11,7 +11,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "@/styles" as common; @use "${pathSrc}/breakpoints" as media ;`,
+        additionalData: `@use "@/styles" as common; @use "${pathSrc}/util/breakpoints/breakpoints" as media ;`,
         importer(...args) {
           if (args[0] !== "@/styles") {
             return;

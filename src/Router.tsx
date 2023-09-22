@@ -4,12 +4,10 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
-  useLocation,
   redirect,
 } from "react-router-dom";
 import App from "./App";
 import Home from "./Home/Home";
-import "./global.css";
 import ErrorPage from "./Main/routes/ErrorPage/ErrorPage";
 import Explore from "./Main/routes/Explore/Explore";
 import Notifications from "./Main/routes/Notifications/Notifications";

@@ -1,12 +1,8 @@
-$mobile-width: 425px;
-$tablet-width: 768px;
-$pc-small-width: 1295px;
+@use "./variables.scss" as vars;
 
-:root {
-  --mobile-width: #{$mobile-width};
-  --tablet-width: #{$tablet-width};
-  --pc-small-width: #{$pc-small-width};
-}
+$mobile-width: vars.$mobile-width;
+$tablet-width: vars.$tablet-width;
+$pc-small-width: vars.$pc-small-width;
 
 @mixin mobile {
   @media (width <= $mobile-width) {
