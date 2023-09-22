@@ -15,6 +15,7 @@ import {
   useState,
 } from "react";
 import useWindowDimensions from "./util/hooks/useWindowDimensions";
+import { getLocalCssVar } from "./util/hooks/useMapPropToCssVar";
 
 export const ErrorPageContext = createContext<{
   setIsErrorPage: React.Dispatch<SetStateAction<boolean>>;
@@ -39,10 +40,12 @@ const App = () => {
 
   useEffect(() => {
     if (appRef && appRef.current) {
-      const style = getComputedStyle(appRef.current);
       setShowContentRight(
         width >
-          parseInt(style.getPropertyValue("--no-content-right-breakpoint"))
+          getLocalCssVar({
+            cssVar: "--no-content-right-breakpoint",
+            ref: appRef,
+          })
       );
     }
   }, [appRef, setShowContentRight, width]);

@@ -1,12 +1,6 @@
-import React, {
-  ComponentProps,
-  HTMLProps,
-  forwardRef,
-  useLayoutEffect,
-  useRef,
-} from "react";
+import React, { ComponentProps, HTMLProps, forwardRef, useRef } from "react";
 import styles from "./Icon.module.scss";
-import { toPixels } from "../../string";
+import useMapPropToCssVar from "../../hooks/useMapPropToCssVar";
 
 /* Icon with a background around it that appears on hover. The background area
    is absolutely positioned to not interfere with content flow. By default, 
@@ -23,7 +17,7 @@ import { toPixels } from "../../string";
 */
 export interface IconProps {
   // SVG element
-  src: React.ComponentType<
+  src?: React.ComponentType<
     React.SVGProps<SVGSVGElement> & {
       title?: string | undefined;
     }
@@ -101,29 +95,16 @@ const Icon = forwardRef(
     const iconAndTextRef = useRef<HTMLDivElement>(null);
     const textRef = useRef<HTMLSpanElement>(null);
 
-    // Map size prop to css var
-    useLayoutEffect(() => {
-      if (size && iconAndTextRef && iconAndTextRef.current) {
-        if (size) {
-          iconAndTextRef.current.style.setProperty(
-            "--icon-size",
-            toPixels(size)
-          );
-        }
-      }
-    }, [size]);
-
-    // Map hoverGap prop to css var
-    useLayoutEffect(() => {
-      if (hoverGap && iconAndTextRef && iconAndTextRef.current) {
-        if (hoverGap) {
-          iconAndTextRef.current.style.setProperty(
-            "--icon-hover-gap",
-            toPixels(hoverGap)
-          );
-        }
-      }
-    }, [hoverGap]);
+    useMapPropToCssVar({
+      prop: size,
+      cssVar: "--icon-size",
+      ref: iconAndTextRef,
+    });
+    useMapPropToCssVar({
+      prop: hoverGap,
+      cssVar: "--icon-hover-gap",
+      ref: iconAndTextRef,
+    });
 
     const withBorderClass = withBorder ? styles.WithBorder : "";
     const hoverClassname = getHoverClass(hover);
@@ -152,6 +133,10 @@ const Icon = forwardRef(
     const textClasses: string[] = [styles.Text];
     if (textStyles) {
       textClasses.push(...textStyles);
+    }
+
+    if (!Element && !nonSvgSrc) {
+      throw new Error('Icon "src" or "nonSvgSrc" props must be provided');
     }
 
     return (
@@ -184,7 +169,7 @@ const Icon = forwardRef(
         />
         {/* TODO: why we can't put ref directly in Element? spawns forwardRef console error */}
         <div ref={ref} className={styles.RefWrapper}>
-          {nonSvgSrc ? (
+          {!Element ? (
             <img src={nonSvgSrc} alt={alt} {...imageProps} />
           ) : (
             <Element

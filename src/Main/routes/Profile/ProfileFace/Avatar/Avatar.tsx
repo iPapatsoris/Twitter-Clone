@@ -2,6 +2,7 @@ import styles from "./Avatar.module.scss";
 import { defaultAvatar } from "../defaultPics";
 import { UserProfileT } from "../queries";
 import Icon, { IconProps } from "../../../../../util/components/Icon/Icon";
+import { getGlobalCssVar } from "../../../../../util/hooks/useMapPropToCssVar";
 
 interface AvatarProps {
   src: UserProfileT["avatar"];
@@ -26,14 +27,13 @@ const Avatar = ({
     withBorder ? styles.Border : " ",
   ];
 
-  const style = getComputedStyle(document.body);
   let avatarSizeCssVar = "--avatar-small-height";
   if (size === "medium") {
     avatarSizeCssVar = "--avatar-medium-height";
   } else if (size === "full") {
     avatarSizeCssVar = "--avatar-full-height";
   }
-  const avatarSize = parseInt(style.getPropertyValue(avatarSizeCssVar));
+  const avatarSize = getGlobalCssVar(avatarSizeCssVar);
 
   return children ? (
     <div
