@@ -21,7 +21,11 @@ const GuestPrompt = ({}: GuestPromptProps) => {
     <>
       {isModalOpen && (
         <Modal withCloseIcon={false} setIsActive={setIsModalOpen}>
-          {willSignup ? <Signup /> : <Login />}
+          {willSignup ? (
+            <Signup removeSignup={() => setIsModalOpen(false)} />
+          ) : (
+            <Login removeLogin={() => setIsModalOpen(false)} />
+          )}
         </Modal>
       )}
       <div className={styles.GuestPrompt}>
@@ -45,7 +49,10 @@ const GuestPrompt = ({}: GuestPromptProps) => {
         >
           Sign in
         </Button>
-        <Terms length="short" extraStyles={[styles.Text]} />
+        <Terms
+          length="short"
+          extraStyles={[styles.LightColor, styles.SmallText]}
+        />
       </div>
     </>
   );
