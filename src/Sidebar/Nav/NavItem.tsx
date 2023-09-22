@@ -24,7 +24,7 @@ const NavItem = ({
 }: NavItemProps) => {
   const currentPath = useLocation().pathname;
   const isActive = itemPath === currentPath;
-  const navItemClasses = [styles.BiggerText, isActive ? styles.Bold : ""];
+  const navItemClasses = [styles.BiggestText, isActive ? styles.Bold : ""];
 
   const { isSmallScreen, isPcBig } = useWindowDimensions();
   const [forceHover, setForceHover] = useState(false);

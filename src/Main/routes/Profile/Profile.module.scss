@@ -130,8 +130,8 @@ Profile grid */
 
 .Preview.Small .Title .NameAndVerified {
   h1 {
-    font-weight: 700;
-    font-size: 15px;
+    font-weight: var(--bold-text);
+    font-size: var(--big-text);
   }
 }
 
@@ -147,13 +147,8 @@ Profile grid */
     gap: 0.5rem;
 
     h1 {
-      font-size: 20px;
       font-weight: 800;
     }
-  }
-
-  .Username {
-    font-size: 15px;
   }
 }
 
@@ -162,10 +157,6 @@ Profile grid */
   display: flex;
   flex-direction: column;
   gap: 1rem;
-
-  .Bio {
-    font-size: 15px;
-  }
 
   .Friendship {
     display: flex;

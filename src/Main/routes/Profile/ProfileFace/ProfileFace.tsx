@@ -210,13 +210,13 @@ const ProfileFace = ({ preview }: ProfileProps) => {
 
   const nameAndVerified = (
     <>
-      <h1>{user.name}</h1>
+      <h1 className={styles.BiggestText}>{user.name}</h1>
       {user.isVerified ? <Icon src={VerifiedIcon} hover="none" /> : null}
     </>
   );
 
   const usernameText = (
-    <span className={[styles.LightColor, styles.Username].join(" ")}>
+    <span className={[styles.LightColor, styles.BigText].join(" ")}>
       @{user.username}
     </span>
   );
@@ -265,7 +265,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
       </div>
       <div className={styles.ProfileInfo}>
         {(!preview || preview.includeBio) && (
-          <div className={styles.Bio}>{user.bio}</div>
+          <div className={styles.BigText}>{user.bio}</div>
         )}
         {!preview && <Info user={user} />}
         {(!preview || (preview && preview.type === "hover")) && (

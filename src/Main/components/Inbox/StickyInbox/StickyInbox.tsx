@@ -7,7 +7,7 @@ const InboxSticky = () => {
   return (
     <div className={styles.InboxSticky}>
       <div className={styles.InboxStickyContent}>
-        <h3 className={styles.BiggerText}>Messages</h3>
+        <h3 className={styles.BiggestText}>Messages</h3>
         <div className={styles.PushRight}>
           <Icon
             src={NewMessageIcon}
@@ -15,7 +15,12 @@ const InboxSticky = () => {
             alt="Compose message"
             extraStyles={[styles.Icon]}
           />
-          <Icon src={ExpandInboxIcon} extraStyles={[styles.Icon]} title="Expand" alt="Inbox options" />
+          <Icon
+            src={ExpandInboxIcon}
+            extraStyles={[styles.Icon]}
+            title="Expand"
+            alt="Inbox options"
+          />
         </div>
       </div>
     </div>

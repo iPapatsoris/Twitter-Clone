@@ -1,30 +1,22 @@
 declare const classNames: {
-  readonly Sticky: "Sticky";
   readonly Bold: "Bold";
-  readonly BiggerText: "BiggerText";
-  readonly SmallerText: "SmallerText";
-  readonly Flex: "Flex";
-  readonly CenterAligned: "CenterAligned";
+  readonly BiggestText: "BiggestText";
+  readonly BigText: "BigText";
+  readonly SmallText: "SmallText";
   readonly PushRight: "PushRight";
-  readonly ShowOpacity: "ShowOpacity";
-  readonly Hide: "Hide";
   readonly Semantic: "Semantic";
-  readonly Blue: "Blue";
+  readonly PrimaryColor: "PrimaryColor";
   readonly LightColor: "LightColor";
   readonly NoHighlighting: "NoHighlighting";
 };
 export = classNames;
 export type ClassNames =
-  | "Sticky"
   | "Bold"
-  | "BiggerText"
-  | "SmallerText"
-  | "Flex"
-  | "CenterAligned"
+  | "BiggestText"
+  | "BigText"
+  | "SmallText"
   | "PushRight"
-  | "ShowOpacity"
-  | "Hide"
   | "Semantic"
-  | "Blue"
+  | "PrimaryColor"
   | "LightColor"
   | "NoHighlighting";

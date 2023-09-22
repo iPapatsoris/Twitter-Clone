@@ -11,16 +11,6 @@
   .TrendInfo {
     display: flex;
     flex-direction: column;
-
-    .Title {
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    .Subtitle {
-      color: var(--light-color);
-      font-size: 13px;
-    }
   }
 
   .MoreIcon {

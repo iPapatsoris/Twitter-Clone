@@ -26,7 +26,7 @@ const GuestPrompt = ({}: GuestPromptProps) => {
       )}
       <div className={styles.GuestPrompt}>
         <h2>New to Twitter?</h2>
-        <span className={styles.Text}>
+        <span className={[styles.LightColor, styles.SmallText].join(" ")}>
           Sign up now to get your own personalized timeline!
         </span>
         <Button

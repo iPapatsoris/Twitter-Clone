@@ -1,46 +1,28 @@
-.Sticky {
-  position: sticky;
-  top: 0;
-  background-color: white;
-}
-
 .Bold {
   font-weight: 700;
 }
 
-.BiggerText {
-  font-size: var(--bigger-text);
+.BiggestText {
+  font-size: var(--biggest-text);
 }
 
-.SmallerText {
-  font-size: var(--smaller-text);
+.BigText {
+  font-size: var(--big-text);
 }
 
-.Flex {
-  display: flex;
-}
-
-.CenterAligned {
-  align-items: center;
+.SmallText {
+  font-size: var(--small-text);
 }
 
 .PushRight {
   margin-left: auto;
 }
 
-.ShowOpacity {
-  opacity: 1 !important;
-}
-
-.Hide {
-  visibility: hidden;
-}
-
 .Semantic {
   display: contents;
 }
 
-.Blue {
+.PrimaryColor {
   color: var(--primary-color);
 }
 

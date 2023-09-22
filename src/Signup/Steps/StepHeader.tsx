@@ -30,7 +30,7 @@ const StepHeader = ({
       <div className={styles.NavIcon} onClick={onNavIconClick}>
         <Icon src={navIcon} noBlockMargin noInlineMargin />
       </div>
-      <div className={styles.StepHeader}>
+      <div className={[styles.StepHeader, styles.BiggestText].join(" ")}>
         <div>{children}</div>
       </div>
     </>

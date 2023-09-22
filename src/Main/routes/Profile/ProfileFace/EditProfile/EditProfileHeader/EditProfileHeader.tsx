@@ -14,12 +14,12 @@ const EditProfileHeader = ({ disableUpdate }: EditProfileHeaderProps) => {
   return (
     <>
       <Icon
-        src={CloseIcon }
+        src={CloseIcon}
         extraWrapperStyles={[styles.Icon]}
         onClick={() => setIsActive(false)}
       />
       <div className={styles.Header}>
-        <h2 className={styles.Text}>Edit profile</h2>
+        <h2 className={styles.BiggestText}>Edit profile</h2>
         <Button
           extraClasses={[styles.Action]}
           color="black"

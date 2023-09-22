@@ -4,6 +4,9 @@
   flex-direction: column;
   justify-content: center;
   z-index: 1;
+  position: sticky;
+  top: 0;
+  background-color: white;
 
   .Main {
     padding-inline: var(--main-content-padding);

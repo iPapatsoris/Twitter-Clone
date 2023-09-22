@@ -5,7 +5,6 @@ declare const classNames: typeof globalClassNames & {
   readonly Tweet: "Tweet";
   readonly WithBorder: "WithBorder";
   readonly Retweet: "Retweet";
-  readonly Retweeter: "Retweeter";
   readonly RetweetIconWrapper: "RetweetIconWrapper";
   readonly RetweetIcon: "RetweetIcon";
   readonly TweetWrapper: "TweetWrapper";
@@ -18,7 +17,6 @@ declare const classNames: typeof globalClassNames & {
   readonly Info: "Info";
   readonly Subinfo: "Subinfo";
   readonly NameAndVerified: "NameAndVerified";
-  readonly Name: "Name";
   readonly MoreIcon: "MoreIcon";
   readonly Text: "Text";
 };
@@ -27,7 +25,6 @@ export type ClassNames =
   | "Tweet"
   | "WithBorder"
   | "Retweet"
-  | "Retweeter"
   | "RetweetIconWrapper"
   | "RetweetIcon"
   | "TweetWrapper"
@@ -40,7 +37,6 @@ export type ClassNames =
   | "Info"
   | "Subinfo"
   | "NameAndVerified"
-  | "Name"
   | "MoreIcon"
   | "Text"
   | GlobalClassNames;

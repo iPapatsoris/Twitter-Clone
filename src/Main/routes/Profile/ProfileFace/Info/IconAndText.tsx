@@ -12,7 +12,12 @@ const IconAndText = ({ icon, text = "", link = "" }: IconAndTextProps) => (
   <div className={styles.IconAndText}>
     <Icon noCursorPointer src={icon} hover="none"></Icon>
     {link ? (
-      <a href={link} target="_blank" rel="noreferrer" className={styles.Blue}>
+      <a
+        href={link}
+        target="_blank"
+        rel="noreferrer"
+        className={styles.PrimaryColor}
+      >
         {link}
       </a>
     ) : (

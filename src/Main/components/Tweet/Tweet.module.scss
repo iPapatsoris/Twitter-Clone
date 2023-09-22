@@ -11,11 +11,6 @@
     text-decoration: underline;
   }
 
-  .Retweeter {
-    font-size: 13px;
-    font-weight: 700;
-  }
-
   .RetweetIconWrapper {
     flex-basis: var(--avatar-small-height);
     justify-content: end;
@@ -93,13 +88,8 @@
         gap: 0.2rem;
       }
 
-      .Name {
-        font-size: 15px;
-        font-weight: 700;
-      }
-
       .Subinfo {
-        font-size: 15px;
+        font-size: var(--big-text);
         display: contents;
       }
 

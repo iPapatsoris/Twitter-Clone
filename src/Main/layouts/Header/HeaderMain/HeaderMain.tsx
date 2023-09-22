@@ -29,7 +29,7 @@ const HeaderMain = ({
     <div className={styles.TitleSubtitle}>
       <div className={styles.Title}>{title}</div>
       {subtitle && (
-        <div className={[styles.SmallerText, styles.LightColor].join(" ")}>
+        <div className={[styles.SmallText, styles.LightColor].join(" ")}>
           {subtitle}
         </div>
       )}
@@ -40,7 +40,6 @@ const HeaderMain = ({
     <div
       className={[
         styles.HeaderMain,
-        styles.Sticky,
         extension ? styles.HeaderExtendedGridArea : styles.HeaderMainGridArea,
       ].join(" ")}
     >

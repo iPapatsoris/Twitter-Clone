@@ -58,11 +58,15 @@ const Trend = ({ trend }: { trend: TrendT }) => {
       )}
       <div className={styles.Trend}>
         <div className={styles.TrendInfo}>
-          <span className={styles.Subtitle}>
+          <span className={[styles.LightColor, styles.SmallText].join(" ")}>
             {category} {category ? "·" : ""} Trending
           </span>
-          <span className={styles.Title}>{trendKeyword}</span>
-          <span className={styles.Subtitle}>{tweets} Tweets</span>
+          <span className={[styles.Bold, styles.BigText].join(" ")}>
+            {trendKeyword}
+          </span>
+          <span className={[styles.LightColor, styles.SmallText].join(" ")}>
+            {tweets} Tweets
+          </span>
         </div>
         <div className={styles.MoreIcon}>
           <Icon

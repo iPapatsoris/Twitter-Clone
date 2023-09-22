@@ -71,7 +71,7 @@
     flex-direction: column;
     gap: 1.3rem;
 
-    Button {
+    .Button {
       color: var(--primary-color);
     }
   }
@@ -81,7 +81,7 @@
   }
 
   .Button {
-    font-size: 15px;
+    font-size: var(--big-text);
     padding-block: 1.5rem;
   }
 }

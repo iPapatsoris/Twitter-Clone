@@ -48,7 +48,7 @@ const VerifyAccountInfo = ({
       {React.cloneElement(minipage, {
         footer: (
           <>
-            <Terms extraStyles={[styles.Terms]} />
+            <Terms extraStyles={[styles.LightColor, styles.SmallText]} />
             <NextStepButton color="primary">Confirm</NextStepButton>
           </>
         ),

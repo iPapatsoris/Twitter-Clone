@@ -1,7 +1,7 @@
 .TextArea {
   grid-area: input;
   align-self: start;
-  font-size: 20px;
+  font-size: var(--biggest-text);
   border: none;
   resize: none;
 

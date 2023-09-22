@@ -24,7 +24,11 @@ const List = ({
     <div className={[styles.List, ...classes].join(" ")}>
       {title && <h2 className={styles.Title}>{title}</h2>}
       {children}
-      {withExpand && <span className={styles.ShowMore}>Show more</span>}
+      {withExpand && (
+        <span className={[styles.PrimaryColor, styles.BigText].join(" ")}>
+          Show more
+        </span>
+      )}
     </div>
   );
 };

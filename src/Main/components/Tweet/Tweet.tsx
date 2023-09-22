@@ -106,7 +106,13 @@ const Tweet = ({
               size={16}
               hover="none"
             />
-            <div className={[styles.Retweeter, styles.LightColor].join(" ")}>
+            <div
+              className={[
+                styles.SmallText,
+                styles.Bold,
+                styles.LightColor,
+              ].join(" ")}
+            >
               {retweet.retweeter.name} Retweeted
             </div>
           </div>
@@ -131,7 +137,7 @@ const Tweet = ({
                 <Link ref={nameRef} to={getProfileLink()}>
                   <div className={styles.NameAndVerified}>
                     <span
-                      className={styles.Name}
+                      className={[styles.BigText, styles.Bold].join(" ")}
                       onMouseEnter={() => setIsHoverPopupOpen(true)}
                       onMouseLeave={abortHoverPopupOpen}
                     >

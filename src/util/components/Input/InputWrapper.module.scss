@@ -41,7 +41,7 @@
 .HelperBox {
   min-height: 18px;
   padding-left: 0.5rem;
-  font-size: 13px;
+  font-size: var(--small-text);
   color: var(--primary-color);
 
   &.Error {

@@ -28,7 +28,7 @@
     border: 0;
     background-color: transparent;
     width: 100%;
-    font-size: 15px;
+    font-size: var(--big-text);
     padding: 0;
 
     &:focus-visible {

@@ -27,9 +27,4 @@ $padding-inline: 1rem;
   & > :not(.Title):hover {
     background-color: rgb(0, 0, 0, 0.03);
   }
-
-  .ShowMore {
-    color: var(--primary-color);
-    font-size: 15px;
-  }
 }
