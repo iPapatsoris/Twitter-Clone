@@ -8,7 +8,7 @@ import useWindowDimensions from "../util/hooks/useWindowDimensions";
 import { useEffect, useRef } from "react";
 
 const Sidebar = () => {
-  const { isPcBig, isSmallScreen, height } = useWindowDimensions();
+  const { isSmallScreen, isPcBig, height } = useWindowDimensions();
   const ref = useRef<HTMLElement>(null);
 
   /* Add vertical scrollbar when sidebar overflows and padding.
@@ -19,15 +19,19 @@ const Sidebar = () => {
   */
   useEffect(() => {
     if (ref && ref.current) {
-      if (isPcBig && height < ref.current.scrollHeight) {
+      if (!isSmallScreen && height < ref.current.scrollHeight) {
         ref.current.style.overflowY = "auto";
-        ref.current.style.paddingLeft = "1rem";
+        if (isPcBig) {
+          ref.current.style.paddingLeft = "1rem";
+        } else {
+          ref.current.style.paddingLeft = "0";
+        }
       } else {
         ref.current.style.overflowY = "visible";
         ref.current.style.paddingLeft = "0";
       }
     }
-  }, [height, ref, isPcBig]);
+  }, [height, ref, isSmallScreen, isPcBig]);
 
   const postTweetButton = isPcBig ? (
     <div className={styles.TweetButtonWrapper}>
