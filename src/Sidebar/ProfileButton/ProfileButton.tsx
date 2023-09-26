@@ -64,13 +64,12 @@ const ProfileButton = () => {
         />
       )}
       <div
-        ref={profileButtonRef}
         onClick={() => {
           setShowOptions(true);
         }}
         className={[styles.ProfileButton, styles.NoHighlighting].join(" ")}
       >
-        <div className={styles.Wrapper}>
+        <div className={styles.Wrapper} ref={profileButtonRef}>
           <Profile
             preview={{
               username: user.username,
