@@ -3,7 +3,9 @@
   margin-bottom: 1rem;
 
   @include media.multi(mobile, tablet, pc-small) {
-    width: min-content;
+    width: 100%;
+    height: 100%;
+    position: relative;
   }
 
   .Wrapper {
@@ -14,6 +16,16 @@
     @include media.pc {
       margin-left: -1rem;
       margin-right: 1rem;
+    }
+
+    @include media.multi(mobile, tablet, pc-small) {
+      /*
+      TODO: When Icon hover effect logic is seperated from Icon component, 
+            reuse it here instead of manually centering. 
+      */
+      position: absolute;
+      bottom: 0;
+      right: -7px;
     }
 
     &:hover {

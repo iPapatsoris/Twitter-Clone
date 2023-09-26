@@ -6,6 +6,7 @@ import Button from "../util/components/Button/Button";
 import Icon from "../util/components/Icon/Icon";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
 import { useEffect, useRef } from "react";
+import { useAuthStore } from "../store/AuthStore";
 
 const Sidebar = () => {
   const { isSmallScreen, isPcBig, height } = useWindowDimensions();
@@ -33,6 +34,10 @@ const Sidebar = () => {
     }
   }, [height, ref, isSmallScreen, isPcBig]);
 
+  const loggedInUser = useAuthStore(
+    (state) => state.loggedInUser && { username: state.loggedInUser.username }
+  );
+
   const postTweetButton = isPcBig ? (
     <div className={styles.TweetButtonWrapper}>
       <Button size="large" largeFont stretch>
@@ -43,7 +48,6 @@ const Sidebar = () => {
     <Icon
       src={CreateTweet}
       hover="none"
-      noInlineMargin
       withBackground
       title="Post"
       alt="Post tweet"
@@ -55,8 +59,8 @@ const Sidebar = () => {
   return (
     <header className={styles.Sidebar} ref={ref}>
       <Nav />
-      {!isSmallScreen && postTweetButton}
-      {!isSmallScreen && <ProfileButton />}
+      {!isSmallScreen && loggedInUser && postTweetButton}
+      {!isSmallScreen && loggedInUser && <ProfileButton />}
     </header>
   );
 };

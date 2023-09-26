@@ -6,6 +6,12 @@
     ". sidebar .            .  sticky-inbox sticky-inbox" auto
     / 1fr auto 600px 2rem minmax(285px, 1.5fr) 1fr;
 
+  @include media.pc-small {
+    grid-template-columns:
+      1fr 50px 600px 2rem minmax(285px, 1.5fr)
+      1fr;
+  }
+
   $no-content-right-breakpoint: 1015px;
   --no-content-right-breakpoint: #{$no-content-right-breakpoint};
 

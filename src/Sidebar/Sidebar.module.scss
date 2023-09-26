@@ -9,13 +9,11 @@
   grid-area: sidebar;
 
   @include media.pc-small {
-    align-items: center;
-    // TODO: import variable from App.module.scss
-    // We repeat manually becase importing it produces weird scss import order bug
-    $no-content-right-breakpoint: 1015px;
-    @media (width > $no-content-right-breakpoint) {
-      padding-right: 3px;
-    }
+    align-items: flex-end;
+  }
+
+  @include media.multi(pc-small, tablet, mobile) {
+    padding-right: 1rem;
   }
 
   @include media.multi(mobile, tablet) {

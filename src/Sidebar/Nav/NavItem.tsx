@@ -45,7 +45,6 @@ const NavItem = ({
         hoverThroughBothIconAndText
         forceHover={forceHover}
         hover={isSmallScreen ? "none" : "normal"}
-        noInlineMargin
         textStyles={navItemClasses}
       />
     </div>
