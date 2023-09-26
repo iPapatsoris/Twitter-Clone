@@ -40,6 +40,7 @@ const NavItem = ({
         alt={title}
         {...iconProps}
         text={isPcBig ? title : ""}
+        noLeftMargin={isPcBig}
         size={26}
         hoverGap={14}
         hoverThroughBothIconAndText

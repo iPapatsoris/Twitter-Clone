@@ -28,7 +28,7 @@ const Nav = () => {
   const loggedInUser = useAuthStore(
     (state) => state.loggedInUser && { username: state.loggedInUser.username }
   );
-  const { isSmallScreen } = useWindowDimensions();
+  const { isSmallScreen, isPcBig } = useWindowDimensions();
 
   let itemPath = getPagePath("explore");
   const explore = (
@@ -67,6 +67,7 @@ const Nav = () => {
                 alt="Twitter logo"
                 size={26}
                 hoverGap={14}
+                noLeftMargin={isPcBig}
               />
             </Link>
           )}
