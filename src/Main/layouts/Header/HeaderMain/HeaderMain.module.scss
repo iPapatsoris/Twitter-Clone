@@ -1,12 +1,22 @@
-.HeaderMain {
-  border-inline: var(--border);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.HeaderMain,
+.HeaderExtendedGridArea {
   z-index: 1;
   position: sticky;
-  top: 0;
   background-color: white;
+  border-inline: var(--border);
+}
+
+.HeaderExtendedGridArea {
+  grid-area: header-extended;
+  top: var(--header-height);
+  border-bottom: var(--border);
+}
+
+.HeaderMain {
+  height: var(--header-height);
+  grid-area: header-main;
+  top: 0;
+  display: flex;
 
   .Main {
     padding-inline: var(--main-content-padding);
@@ -27,14 +37,6 @@
       gap: 0.3rem;
     }
   }
-}
-
-.HeaderMainGridArea {
-  grid-area: header-main;
-}
-
-.HeaderExtendedGridArea {
-  grid-area: header-main-extension;
 }
 
 .SearchContainer {

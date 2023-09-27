@@ -37,26 +37,27 @@ const HeaderMain = ({
   );
 
   return (
-    <div
-      className={[
-        styles.HeaderMain,
-        extension ? styles.HeaderExtendedGridArea : styles.HeaderMainGridArea,
-      ].join(" ")}
-    >
-      <div className={styles.Main}>
-        {leftCornerBackIcon && (
-          <Icon
-            src={BackIcon}
-            noLeftMargin
-            title={"Back"}
-            onClick={handleBackClick}
-          />
-        )}
-        {main}
-        {rightCornerIcon && <div className="PushRight">{rightCornerIcon}</div>}
+    <>
+      <div className={[styles.HeaderMain].join(" ")}>
+        <div className={styles.Main}>
+          {leftCornerBackIcon && (
+            <Icon
+              src={BackIcon}
+              noLeftMargin
+              title={"Back"}
+              onClick={handleBackClick}
+            />
+          )}
+          {main}
+          {rightCornerIcon && (
+            <div className="PushRight">{rightCornerIcon}</div>
+          )}
+        </div>
       </div>
-      {extension}
-    </div>
+      {extension && (
+        <div className={styles.HeaderExtendedGridArea}>{extension}</div>
+      )}
+    </>
   );
 };
 

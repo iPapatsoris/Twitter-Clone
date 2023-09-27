@@ -6,6 +6,7 @@
   display: grid;
   grid-template:
     ". sidebar header-main  .  header-right ." var(--header-height)
+    ". sidebar header-extended . content-right ." auto
     ". sidebar content-main .  content-right ." 1fr
     ". sidebar .            .  sticky-inbox sticky-inbox" auto
     / 1fr auto $content-main $content-main-right-gap $content-right 1fr;
@@ -13,6 +14,7 @@
   @include media.pc-small {
     grid-template-areas:
       "sidebar header-main  .  header-right ."
+      "sidebar header-extended  .  content-right ."
       "sidebar content-main .  content-right ."
       "sidebar .            .  sticky-inbox sticky-inbox";
 
@@ -25,6 +27,7 @@
   @media (width <= $no-content-right-breakpoint) {
     grid-template-areas:
       " sidebar header-main  ."
+      " sidebar header-extended  ."
       " sidebar content-main ."
       " sidebar .            .";
     grid-template-columns: 1fr $content-main 1fr;
@@ -33,6 +36,7 @@
   @include media.multi(mobile, tablet) {
     grid-template:
       ". header-main ."
+      ". header-extended ."
       ". content-main ."
       "sidebar sidebar sidebar";
   }
@@ -42,16 +46,6 @@
       ". sidebar header-main  . content-right ."
       ". sidebar content-main . content-right ."
       ". sidebar .            . sticky-inbox sticky-inbox";
-  }
-
-  &.ExtendedHeaderMain {
-    grid-template-areas:
-      ". sidebar header-main-extension .  header-right  ."
-      ". sidebar header-main-extension .  content-right ."
-      ". sidebar content-main          .  content-right ."
-      ". sidebar .            . sticky-inbox sticky-inbox";
-
-    grid-template-rows: 53px 53px auto auto;
   }
 
   &.ErrorPage {

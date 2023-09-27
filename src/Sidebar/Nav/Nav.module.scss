@@ -1,6 +1,6 @@
 nav {
   cursor: pointer;
-  padding-top: 1px;
+  padding-top: 3px;
 
   @include media.multi(mobile, tablet) {
     display: flex;
