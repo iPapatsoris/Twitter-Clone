@@ -62,6 +62,7 @@ const Sidebar = () => {
       alt="Post tweet"
       size={26}
       hoverGap={14}
+      onClick={() => setShowCreateTweetModal(true)}
     />
   );
 
