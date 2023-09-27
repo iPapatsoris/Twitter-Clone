@@ -12,15 +12,30 @@
     ".      widgets action ";
   grid-template-columns: var(--avatar-small-height) 1fr auto;
   grid-template-rows: 1fr auto;
-  gap: $padding-inline;
+  row-gap: $padding-block;
   align-items: center;
-  border-block: var(--border);
+
+  &.BorderAround {
+    border-block: var(--border);
+  }
+
+  &.BorderBetween {
+    .Avatar,
+    .TextArea {
+      border-bottom: var(--border);
+      padding-bottom: 2rem;
+    }
+  }
 
   .Avatar {
     width: var(--avatar-small-height);
     height: var(--avatar-small-height);
     grid-area: avatar;
     align-self: start;
+  }
+
+  .TextArea {
+    padding-left: $padding-inline;
   }
 
   .Widgets {

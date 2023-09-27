@@ -12,6 +12,7 @@ import { toPixels } from "../../string";
 const TextArea = ({
   textareaProps,
   refToAlignTopRowWith,
+  extraStyles,
 }: {
   /*
   Use this prop if we want to center align only the top row of the textarea with 
@@ -21,6 +22,7 @@ const TextArea = ({
   */
   textareaProps: ComponentProps<typeof TextareaAutosize>;
   refToAlignTopRowWith: RefObject<HTMLElement>;
+  extraStyles: string[];
 }) => {
   const ref = useRef<HTMLTextAreaElement>(null);
   const dummyRef = useRef<HTMLTextAreaElement>(null);
@@ -50,17 +52,20 @@ const TextArea = ({
       setRenderDummy(false);
     }
   }, [renderDummy, ref, dummyRef, refToAlignTopRowWith]);
+
+  const classes = [...extraStyles, styles.TextArea];
+
   return (
     <>
       <TextareaAutosize
         ref={ref}
-        className={styles.TextArea}
+        className={classes.join(" ")}
         {...textareaProps}
       />
       {renderDummy && (
         <TextareaAutosize
           ref={dummyRef}
-          className={[styles.TextArea, styles.Dummy].join(" ")}
+          className={[...classes, styles.Dummy].join(" ")}
         />
       )}
     </>

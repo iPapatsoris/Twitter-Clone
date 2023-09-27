@@ -4,6 +4,7 @@ declare const classNames: typeof globalClassNames & {
   readonly Logo: "Logo";
   readonly TweetButtonWrapper: "TweetButtonWrapper";
   readonly TweetButton: "TweetButton";
+  readonly Modal: "Modal";
 };
 export = classNames;
 export type ClassNames =
@@ -11,4 +12,5 @@ export type ClassNames =
   | "Logo"
   | "TweetButtonWrapper"
   | "TweetButton"
+  | "Modal"
   | GlobalClassNames;

@@ -9,13 +9,19 @@ interface ModalProps {
   withCloseIcon?: boolean;
   children: React.ReactNode;
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
+  extraStyles: string[];
 }
 
 export const ModalContext = createContext<{
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 }>({ setIsActive: () => {} });
 
-const Modal = ({ withCloseIcon = true, children, setIsActive }: ModalProps) => {
+const Modal = ({
+  withCloseIcon = true,
+  children,
+  setIsActive,
+  extraStyles,
+}: ModalProps) => {
   useEffect(() => {
     // Disable scrolling the background. Doing so removes the scroll bar,
     // resulting in the content moving horizontally. Adjust some padding to
@@ -40,7 +46,7 @@ const Modal = ({ withCloseIcon = true, children, setIsActive }: ModalProps) => {
     </div>
   );
 
-  const modalStyles: Array<keyof typeof styles> = [styles.Modal];
+  const modalStyles: string[] = [styles.Modal, ...extraStyles];
   if (withCloseIcon) {
     modalStyles.push(styles.WithCloseIcon);
   }

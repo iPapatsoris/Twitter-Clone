@@ -3,7 +3,10 @@ import globalClassNames, {
 } from "../../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly CreateTweet: "CreateTweet";
+  readonly BorderAround: "BorderAround";
+  readonly BorderBetween: "BorderBetween";
   readonly Avatar: "Avatar";
+  readonly TextArea: "TextArea";
   readonly Widgets: "Widgets";
   readonly LocationIcon: "LocationIcon";
   readonly RightContent: "RightContent";
@@ -14,7 +17,10 @@ declare const classNames: typeof globalClassNames & {
 export = classNames;
 export type ClassNames =
   | "CreateTweet"
+  | "BorderAround"
+  | "BorderBetween"
   | "Avatar"
+  | "TextArea"
   | "Widgets"
   | "LocationIcon"
   | "RightContent"

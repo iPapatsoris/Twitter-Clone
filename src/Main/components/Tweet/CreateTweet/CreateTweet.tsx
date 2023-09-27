@@ -20,11 +20,17 @@ import TextArea from "../../../../util/components/TextArea/TextArea";
 import { useRef } from "react";
 import ProgressBar from "./ProgressBar";
 
-interface CreateTweetProps {}
+interface CreateTweetProps {
+  border?: "around" | "between";
+  autofocus?: boolean;
+}
 
 type FormT = { tweet: string };
 
-const CreateTweet = ({}: CreateTweetProps) => {
+const CreateTweet = ({
+  autofocus = false,
+  border = "around",
+}: CreateTweetProps) => {
   const { loggedInUser } = useAuthStore();
 
   const schema: any = yup.object().shape({
@@ -80,7 +86,12 @@ const CreateTweet = ({}: CreateTweetProps) => {
   const progressBarInfo = getProgressBarInfo(form);
 
   return (
-    <div className={styles.CreateTweet}>
+    <div
+      className={[
+        styles.CreateTweet,
+        border === "around" ? styles.BorderAround : styles.BorderBetween,
+      ].join(" ")}
+    >
       <div ref={avatarRef} className={styles.Avatar}>
         <Link to={getPagePath("profile", loggedInUser?.username)}>
           <Avatar src={loggedInUser.avatar} iconProps={{ hover: "none" }} />
@@ -88,11 +99,13 @@ const CreateTweet = ({}: CreateTweetProps) => {
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <TextArea
+          extraStyles={[styles.TextArea]}
           textareaProps={{
             name: "tweet",
             value: value,
             onChange,
             placeholder: "What is happening?!",
+            autoFocus: autofocus,
           }}
           refToAlignTopRowWith={avatarRef}
         />
