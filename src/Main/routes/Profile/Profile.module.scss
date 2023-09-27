@@ -17,7 +17,7 @@ Profile grid */
   }
   // Columns for small preview
   @function defineGridColumnsSmall() {
-    @return var(--avatar-small-height) 1rem 1fr 1fr;
+    @return var(--avatar-small-height) 1rem minmax(40px, 1fr) 1rem auto;
   }
 
   display: grid;
@@ -53,8 +53,8 @@ Profile grid */
     &.Small {
       cursor: pointer;
       grid-template-areas:
-        "avatar . title actions"
-        ". . content content";
+        "avatar . title . actions"
+        ". . content content content";
       grid-template-rows: var(--avatar-small-height) auto;
       grid-template-columns: defineGridColumnsSmall();
 
