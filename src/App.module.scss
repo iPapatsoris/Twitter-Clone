@@ -1,26 +1,33 @@
 .App {
+  $content-main: 600px;
+  $content-main-right-gap: 2rem;
+  $content-right: minmax(285px, 1.5fr);
+
   display: grid;
   grid-template:
     ". sidebar header-main  .  header-right ." var(--header-height)
     ". sidebar content-main .  content-right ." 1fr
     ". sidebar .            .  sticky-inbox sticky-inbox" auto
-    / 1fr auto 600px 2rem minmax(285px, 1.5fr) 1fr;
+    / 1fr auto $content-main $content-main-right-gap $content-right 1fr;
 
   @include media.pc-small {
-    grid-template-columns:
-      1fr 83px 600px 2rem minmax(285px, 1.5fr)
-      1fr;
+    grid-template-areas:
+      "sidebar header-main  .  header-right ."
+      "sidebar content-main .  content-right ."
+      "sidebar .            .  sticky-inbox sticky-inbox";
+
+    grid-template-columns: 1fr $content-main $content-main-right-gap $content-right 1fr;
   }
 
   $no-content-right-breakpoint: 1015px;
   --no-content-right-breakpoint: #{$no-content-right-breakpoint};
 
   @media (width <= $no-content-right-breakpoint) {
-    grid-template:
-      " sidebar header-main  ." var(--header-height)
-      " sidebar content-main ." 1fr
-      " sidebar .            ." auto
-      / 1fr 600px 1fr;
+    grid-template-areas:
+      " sidebar header-main  ."
+      " sidebar content-main ."
+      " sidebar .            .";
+    grid-template-columns: 1fr $content-main 1fr;
   }
 
   @include media.multi(mobile, tablet) {
