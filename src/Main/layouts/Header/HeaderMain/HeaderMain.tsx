@@ -38,7 +38,11 @@ const HeaderMain = ({
 
   return (
     <>
-      <div className={[styles.HeaderMain].join(" ")}>
+      <div
+        className={[styles.HeaderMain, !extension ? styles.Border : ""].join(
+          " "
+        )}
+      >
         <div className={styles.Main}>
           {leftCornerBackIcon && (
             <Icon

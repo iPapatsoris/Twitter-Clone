@@ -7,9 +7,9 @@
 }
 
 .HeaderExtendedGridArea {
+  border-bottom: var(--border);
   grid-area: header-extended;
   top: var(--header-height);
-  border-bottom: var(--border);
 }
 
 .HeaderMain {
@@ -17,6 +17,10 @@
   grid-area: header-main;
   top: 0;
   display: flex;
+
+  &.Border {
+    border-bottom: var(--border);
+  }
 
   .Main {
     padding-inline: var(--main-content-padding);

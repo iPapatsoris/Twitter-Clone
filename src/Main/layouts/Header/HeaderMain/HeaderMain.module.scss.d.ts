@@ -4,6 +4,7 @@ import globalClassNames, {
 declare const classNames: typeof globalClassNames & {
   readonly HeaderMain: "HeaderMain";
   readonly HeaderExtendedGridArea: "HeaderExtendedGridArea";
+  readonly Border: "Border";
   readonly Main: "Main";
   readonly TitleSubtitle: "TitleSubtitle";
   readonly Title: "Title";
@@ -13,6 +14,7 @@ export = classNames;
 export type ClassNames =
   | "HeaderMain"
   | "HeaderExtendedGridArea"
+  | "Border"
   | "Main"
   | "TitleSubtitle"
   | "Title"
