@@ -2,11 +2,7 @@ import styles from "./App.module.scss";
 import Main from "./Main/layouts/Main";
 import Sidebar from "./Sidebar/Sidebar";
 import { ScrollRestoration, useLocation } from "react-router-dom";
-import {
-  getPagePath,
-  isNotificationsPage,
-  useRouteMatches,
-} from "./util/paths";
+import { getPagePath } from "./util/paths";
 import {
   createContext,
   SetStateAction,
@@ -27,11 +23,6 @@ export const ErrorPageContext = createContext<{
 const App = () => {
   const [isErrorPage, setIsErrorPage] = useState(false);
   const path = useLocation().pathname;
-
-  const isCirclePage = useRouteMatches([
-    getPagePath("followers"),
-    getPagePath("following"),
-  ]);
 
   const { width } = useWindowDimensions();
   const appRef = useRef(null);
@@ -56,8 +47,6 @@ const App = () => {
     extraClasses.push(styles.ErrorPage);
   } else if (path === getPagePath("explore")) {
     extraClasses.push(styles.NoHeaderRight);
-  } else if (isNotificationsPage(path) || isCirclePage) {
-    extraClasses.push(styles.ExtendedHeaderMain);
   }
 
   return (

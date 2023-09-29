@@ -13,7 +13,6 @@ main {
 
 .ContentMain {
   grid-area: content-main;
-  min-height: 100vh;
 
   @media (min-width: vars.$tablet-width) {
     border-inline: var(--border);
