@@ -34,11 +34,12 @@
   }
 
   @include media.multi(mobile, tablet) {
-    grid-template:
-      ". header-main ."
-      ". header-extended ."
-      ". content-main ."
-      "sidebar sidebar sidebar";
+    grid-template-areas:
+      "header-main"
+      "header-extended"
+      "content-main"
+      "sidebar";
+    grid-template-columns: 1fr;
   }
 
   &.NoHeaderRight {

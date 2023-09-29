@@ -1,3 +1,7 @@
+@use "../../util/breakpoints/variables.scss" as vars;
+
+$tablet-width: vars.$mobile-width;
+
 main {
   // Ignore element so that its children can be taken as grid items of
   // parent grid.
@@ -9,8 +13,11 @@ main {
 
 .ContentMain {
   grid-area: content-main;
-  border-inline: var(--border);
   min-height: 100vh;
+
+  @media (min-width: vars.$tablet-width) {
+    border-inline: var(--border);
+  }
 }
 
 .ErrorPage {
