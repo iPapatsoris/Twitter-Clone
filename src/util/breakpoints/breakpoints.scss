@@ -5,25 +5,25 @@ $tablet-width: vars.$tablet-width;
 $pc-small-width: vars.$pc-small-width;
 
 @mixin mobile {
-  @media (width <= $mobile-width) {
+  @media (max-width: $mobile-width) {
     @content;
   }
 }
 
 @mixin tablet {
-  @media ($mobile-width < width <= $tablet-width) {
+  @media ((min-width: $mobile-width) and (max-width: $tablet-width)) {
     @content;
   }
 }
 
 @mixin pc-small {
-  @media ($tablet-width < width <= $pc-small-width) {
+  @media ((min-width: $tablet-width) and (max-width: $pc-small-width)) {
     @content;
   }
 }
 
 @mixin pc {
-  @media (width > $pc-small-width) {
+  @media (min-width: $pc-small-width) {
     @content;
   }
 }

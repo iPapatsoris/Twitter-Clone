@@ -24,7 +24,7 @@
   $no-content-right-breakpoint: 1015px;
   --no-content-right-breakpoint: #{$no-content-right-breakpoint};
 
-  @media (width <= $no-content-right-breakpoint) {
+  @media (max-width: $no-content-right-breakpoint) {
     grid-template-areas:
       " sidebar header-main  ."
       " sidebar header-extended  ."
