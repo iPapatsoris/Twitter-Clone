@@ -108,10 +108,17 @@ Profile grid */
   display: flex;
   justify-content: end;
   gap: 0.5rem;
-  padding-top: 1rem;
+  align-items: center;
 
   .FixedWidthButton {
     width: 6.5rem;
+  }
+}
+
+:not(.Preview) > .Actions {
+  @include media.mobile {
+    padding-top: 1rem;
+    align-items: start;
   }
 }
 

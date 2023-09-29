@@ -2,15 +2,15 @@ import globalClassNames, {
   ClassNames as GlobalClassNames,
 } from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly Profile: "Profile";
   readonly Preview: "Preview";
+  readonly Actions: "Actions";
+  readonly Profile: "Profile";
   readonly Hover: "Hover";
   readonly Small: "Small";
   readonly JustAvatar: "JustAvatar";
   readonly Cover: "Cover";
   readonly Edit: "Edit";
   readonly EditAvatar: "EditAvatar";
-  readonly Actions: "Actions";
   readonly FixedWidthButton: "FixedWidthButton";
   readonly Title: "Title";
   readonly NameAndVerified: "NameAndVerified";
@@ -21,15 +21,15 @@ declare const classNames: typeof globalClassNames & {
 };
 export = classNames;
 export type ClassNames =
-  | "Profile"
   | "Preview"
+  | "Actions"
+  | "Profile"
   | "Hover"
   | "Small"
   | "JustAvatar"
   | "Cover"
   | "Edit"
   | "EditAvatar"
-  | "Actions"
   | "FixedWidthButton"
   | "Title"
   | "NameAndVerified"
