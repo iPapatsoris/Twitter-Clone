@@ -1,25 +1,24 @@
 import styles from "./Avatar.module.scss";
 import { defaultAvatar } from "../defaultPics";
 import { UserProfileT } from "../queries";
-import Icon, { IconProps } from "../../../../../util/components/Icon/Icon";
+import Icon from "../../../../../util/components/Icon/Icon";
 import { getGlobalCssVar } from "../../../../../util/hooks/useMapPropToCssVar";
 
 interface AvatarProps {
   src: UserProfileT["avatar"];
-  size?: "full" | "medium" | "small";
+  // If size is not provided, avatar takes the full size of its container
+  size?: "full" | "medium" | "small" | "smaller" | "tiny";
   withBorder?: boolean;
   children?: React.ReactElement;
   extraClasses?: string[];
-  iconProps?: Partial<IconProps>;
 }
 
 const Avatar = ({
   src,
-  size = "small",
+  size,
   withBorder,
   extraClasses = [],
   children,
-  iconProps,
 }: AvatarProps) => {
   const classes = [
     ...extraClasses,
@@ -28,7 +27,11 @@ const Avatar = ({
   ];
 
   let avatarSizeCssVar = "--avatar-small-height";
-  if (size === "medium") {
+  if (size === "tiny") {
+    avatarSizeCssVar = "--avatar-tiny-height";
+  } else if (size === "smaller") {
+    avatarSizeCssVar = "--avatar-smaller-height";
+  } else if (size === "medium") {
     avatarSizeCssVar = "--avatar-medium-height";
   } else if (size === "full") {
     avatarSizeCssVar = "--avatar-full-height";
@@ -51,8 +54,8 @@ const Avatar = ({
       extraWrapperStyles={[styles.AvatarGridArea]}
       nonSvgSrc={src || defaultAvatar}
       alt="The avatar of the user"
-      title={iconProps?.title}
-      {...iconProps}
+      fullSize={size === undefined}
+      hover="none"
     />
   );
 };

@@ -10,6 +10,7 @@ main {
 .ContentMain {
   grid-area: content-main;
   border-inline: var(--border);
+  min-height: 100vh;
 }
 
 .ErrorPage {

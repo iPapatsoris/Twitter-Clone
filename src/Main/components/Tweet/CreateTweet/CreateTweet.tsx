@@ -94,7 +94,7 @@ const CreateTweet = ({
     >
       <div ref={avatarRef} className={styles.Avatar}>
         <Link to={getPagePath("profile", loggedInUser?.username)}>
-          <Avatar src={loggedInUser.avatar} iconProps={{ hover: "none" }} />
+          <Avatar src={loggedInUser.avatar} />
         </Link>
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>

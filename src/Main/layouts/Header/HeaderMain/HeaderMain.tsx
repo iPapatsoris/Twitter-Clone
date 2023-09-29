@@ -8,6 +8,7 @@ interface NewHeaderProps {
   subtitle?: React.ReactElement;
   singleComponent?: React.ReactElement;
   leftCornerBackIcon?: boolean;
+  leftCornerIcon?: React.ReactElement;
   rightCornerIcon?: React.ReactElement;
   extension?: React.ReactElement;
 }
@@ -17,6 +18,7 @@ const HeaderMain = ({
   subtitle,
   singleComponent,
   leftCornerBackIcon = false,
+  leftCornerIcon: leftCornerIconProp,
   rightCornerIcon,
   extension,
 }: NewHeaderProps) => {
@@ -36,6 +38,18 @@ const HeaderMain = ({
     </div>
   );
 
+  let leftCornerIcon = leftCornerIconProp;
+  if (leftCornerBackIcon) {
+    leftCornerIcon = (
+      <Icon
+        src={BackIcon}
+        noLeftMargin
+        title={"Back"}
+        onClick={handleBackClick}
+      />
+    );
+  }
+
   return (
     <>
       <div
@@ -44,14 +58,7 @@ const HeaderMain = ({
         )}
       >
         <div className={styles.Main}>
-          {leftCornerBackIcon && (
-            <Icon
-              src={BackIcon}
-              noLeftMargin
-              title={"Back"}
-              onClick={handleBackClick}
-            />
-          )}
+          {leftCornerIcon}
           {main}
           {rightCornerIcon && (
             <div className="PushRight">{rightCornerIcon}</div>

@@ -2,9 +2,22 @@
 scope to the Avatar component, as they are also used here to define the 
 Profile grid */
 :root {
-  --avatar-height: 133px;
-  --avatar-medium-height: 75px;
-  --avatar-small-height: 46px;
+  --avatar-full-height: 133px; // For profile
+  --avatar-medium-height: 75px; // For hover preview
+  --avatar-small-height: 46px; // For tweets and user lists
+  --avatar-tiny-height: 32px; // For user menu header on mobile
+}
+
+@include media.multi(mobile, tablet) {
+  :root {
+    --avatar-small-height: 40px;
+  }
+}
+
+@include media.multi(mobile) {
+  :root {
+    --avatar-full-height: 25vw;
+  }
 }
 
 .Profile {
@@ -29,13 +42,13 @@ Profile grid */
     ".       content content .      ";
 
   grid-template-rows:
-    calc(var(--cover-height) - var(--avatar-height) / 2)
-    calc(var(--avatar-height) / 2)
-    calc(var(--avatar-height) / 2)
+    calc(var(--cover-height) - var(--avatar-full-height) / 2)
+    calc(var(--avatar-full-height) / 2)
+    calc(var(--avatar-full-height) / 2)
     auto
     auto;
 
-  grid-template-columns: defineGridColumns(var(--avatar-height));
+  grid-template-columns: defineGridColumns(var(--avatar-full-height));
 
   &.Preview {
     &.Hover {
@@ -95,7 +108,7 @@ Profile grid */
   display: flex;
   justify-content: end;
   gap: 0.5rem;
-  align-items: center;
+  padding-top: 1rem;
 
   .FixedWidthButton {
     width: 6.5rem;

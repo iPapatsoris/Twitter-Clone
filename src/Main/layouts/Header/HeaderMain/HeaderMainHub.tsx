@@ -10,10 +10,13 @@ import Search from "../../../components/Search/Search";
 import { HeaderProfileUser } from "../../Main";
 import HeaderMain from "./HeaderMain";
 // import {ReactComponent as SparkIcon }from "../../../../assets/icons/spark.svg";
-import {ReactComponent as SettingsIcon} from "../../../../assets/icons/settings.svg";
-import {ReactComponent as VerifiedIcon} from "../../../../assets/icons/verified.svg";
+import { ReactComponent as SettingsIcon } from "../../../../assets/icons/settings.svg";
+import { ReactComponent as VerifiedIcon } from "../../../../assets/icons/verified.svg";
 import styles from "./HeaderMain.module.scss";
 import HeaderLinkMenu from "./HeaderLinkMenu/HeaderLinkMenu";
+import Avatar from "../../../routes/Profile/ProfileFace/Avatar/Avatar";
+import { useAuthStore } from "../../../../store/AuthStore";
+import useWindowDimensions from "../../../../util/hooks/useWindowDimensions";
 
 interface HeaderMainHubProps {
   user: HeaderProfileUser;
@@ -28,6 +31,8 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
     getPagePath("following"),
   ]);
   const isTweetPage = useRouteMatch(getPagePath("tweet"));
+  const { loggedInUser } = useAuthStore();
+  const { isSmallScreen } = useWindowDimensions();
 
   const userTitle = (
     <>
@@ -36,9 +41,12 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
     </>
   );
 
+  const profileButton = <Avatar size="tiny" src={loggedInUser?.avatar} />;
+
   let header = (
     <HeaderMain
       title={<h2>Home</h2>}
+      leftCornerIcon={isSmallScreen ? profileButton : undefined}
       // rightCornerIcon={
       //   <Icon src={SparkIcon} title="Top Tweets" alt="Top tweets" />
       // }

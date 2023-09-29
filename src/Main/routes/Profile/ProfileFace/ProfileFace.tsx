@@ -188,14 +188,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <Avatar
-        src={user.avatar}
-        withBorder={!preview}
-        iconProps={{
-          hover: "none",
-          fullSize: !(preview && preview.type === "user-list"),
-        }}
-      />
+      <Avatar src={user.avatar} withBorder={!preview} />
     </div>
   );
 

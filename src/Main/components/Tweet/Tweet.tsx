@@ -125,7 +125,7 @@ const Tweet = ({
               onMouseLeave={abortHoverPopupOpen}
               ref={avatarRef}
             >
-              <Avatar src={tweet.author.avatar} iconProps={{ hover: "none" }} />
+              <Avatar src={tweet.author.avatar} />
               {drawReplyLine && (
                 <div className={styles.ReplyLine} ref={replyLineRef}></div>
               )}

@@ -9,7 +9,7 @@ interface ModalProps {
   withCloseIcon?: boolean;
   children: React.ReactNode;
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
-  extraStyles: string[];
+  extraStyles?: string[];
 }
 
 export const ModalContext = createContext<{
@@ -46,9 +46,12 @@ const Modal = ({
     </div>
   );
 
-  const modalStyles: string[] = [styles.Modal, ...extraStyles];
+  const modalStyles: string[] = [styles.Modal];
   if (withCloseIcon) {
     modalStyles.push(styles.WithCloseIcon);
+  }
+  if (extraStyles) {
+    modalStyles.push(...extraStyles);
   }
 
   return (
