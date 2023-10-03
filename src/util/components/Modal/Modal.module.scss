@@ -20,8 +20,8 @@
       width: 100vw;
       height: 100vh;
       border-radius: 0;
-      max-width: none;
-      min-width: none;
+      max-width: unset;
+      min-width: unset;
     }
 
     &.WithCloseIcon {

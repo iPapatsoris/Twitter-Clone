@@ -15,8 +15,8 @@ declare const classNames: typeof globalClassNames & {
   readonly Wrapper: "Wrapper";
   readonly ShowMore: "ShowMore";
   readonly Info: "Info";
-  readonly Subinfo: "Subinfo";
   readonly NameAndVerified: "NameAndVerified";
+  readonly Subinfo: "Subinfo";
   readonly MoreIcon: "MoreIcon";
   readonly Text: "Text";
 };
@@ -35,8 +35,8 @@ export type ClassNames =
   | "Wrapper"
   | "ShowMore"
   | "Info"
-  | "Subinfo"
   | "NameAndVerified"
+  | "Subinfo"
   | "MoreIcon"
   | "Text"
   | GlobalClassNames;

@@ -73,28 +73,37 @@
     }
 
     .Info {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      display: grid;
+      column-gap: 0.5rem;
+      grid-template-areas: "name info more";
+      grid-template-columns: auto auto 1fr;
 
-      & > *,
-      .Subinfo > * {
-        flex-shrink: 0;
+      @include media.mobile {
+        grid-template-areas:
+          "name . more"
+          "info info info";
       }
 
       .NameAndVerified {
+        grid-area: name;
         display: flex;
         align-items: center;
         gap: 0.2rem;
       }
 
       .Subinfo {
+        grid-area: info;
         font-size: var(--big-text);
-        display: contents;
+        display: flex;
+        gap: 0.5rem;
+
+        a {
+          color: var(--light-color);
+        }
       }
 
       .MoreIcon {
-        height: min-content;
+        grid-area: more;
         margin-left: auto;
       }
     }
