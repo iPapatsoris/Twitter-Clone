@@ -8,21 +8,17 @@
   --minipage-icon-area-length: 4rem;
   --minipage-blank-area: 1rem;
   grid-template-areas:
-    ".       .       .       .      "
     ".       icon    header  .      "
-    ".       .       .       .      "
     "content content content content"
     "footer  footer  footer  footer ";
-  grid-template-rows: 0.5rem auto 0.5rem 1fr auto;
+  grid-template-rows: var(--header-height) 1fr auto;
   grid-template-columns:
     var(--minipage-blank-area) minmax(auto, var(--minipage-icon-area-length))
     1fr var(--minipage-blank-area);
 
   &.AlignContentWithIcon {
     grid-template-areas:
-      ".       .       .       .      "
       ".       icon    header  .      "
-      ".       .       .       .      "
       ".       content content content"
       "footer  footer  footer  footer ";
 
@@ -33,9 +29,7 @@
 
   &.AlignContentWithHeader {
     grid-template-areas:
-      ".      .       .       .      "
       ".      icon    header  .      "
-      ".       .       .       .      "
       ".      .       content content"
       "footer footer  footer  footer ";
 

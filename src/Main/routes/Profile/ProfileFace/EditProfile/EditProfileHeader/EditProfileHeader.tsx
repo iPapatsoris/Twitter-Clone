@@ -18,6 +18,7 @@ const EditProfileHeader = ({ disableUpdate }: EditProfileHeaderProps) => {
         extraWrapperStyles={[styles.Icon]}
         onClick={() => setIsActive(false)}
         noBlockMargin
+        noInlineMargin
       />
       <div className={styles.Header}>
         <h2 className={styles.BiggestText}>Edit profile</h2>
