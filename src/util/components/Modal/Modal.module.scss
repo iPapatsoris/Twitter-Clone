@@ -11,9 +11,18 @@
   .Modal {
     background-color: white;
     border-radius: 15px;
-    width: 40vw;
+    width: 50vw;
     height: 70vh;
+    min-width: 440px;
     max-width: 600px;
+
+    @include media.multi(mobile, tablet) {
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+      max-width: none;
+      min-width: none;
+    }
 
     &.WithCloseIcon {
       display: grid;
