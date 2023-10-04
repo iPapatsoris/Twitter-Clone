@@ -30,12 +30,16 @@
   width: 90%;
 }
 
-.TweetButton {
-  height: 54px !important;
-  width: 54px !important;
-  min-width: none !important;
+.TweetIconWrapper {
+  @include media.multi(mobile, tablet) {
+    position: fixed;
+    bottom: 5.5rem;
+    right: 2rem;
+  }
 }
 
 .Modal {
-  height: min-content !important;
+  @include media.multi(pc-small, pc) {
+    height: min-content !important;
+  }
 }

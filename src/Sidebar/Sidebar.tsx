@@ -63,6 +63,7 @@ const Sidebar = () => {
       size={26}
       hoverGap={14}
       onClick={() => setShowCreateTweetModal(true)}
+      extraWrapperStyles={[styles.TweetIconWrapper]}
     />
   );
 
@@ -70,7 +71,7 @@ const Sidebar = () => {
     <>
       <header className={styles.Sidebar} ref={ref}>
         <Nav />
-        {!isSmallScreen && loggedInUser && postTweetButton}
+        {loggedInUser && postTweetButton}
         {!isSmallScreen && loggedInUser && <ProfileButton />}
       </header>
       {showCreateTweetModal && (
@@ -79,7 +80,7 @@ const Sidebar = () => {
           extraStyles={[styles.Modal]}
           setIsActive={setShowCreateTweetModal}
         >
-          <CreateTweetModal />
+          <CreateTweetModal closeModal={() => setShowCreateTweetModal(false)} />
         </Modal>
       )}
     </>

@@ -5,11 +5,11 @@ declare const classNames: typeof globalClassNames & {
   readonly CreateTweet: "CreateTweet";
   readonly BorderAround: "BorderAround";
   readonly BorderBetween: "BorderBetween";
+  readonly Widgets: "Widgets";
+  readonly RightContent: "RightContent";
   readonly Avatar: "Avatar";
   readonly TextArea: "TextArea";
-  readonly Widgets: "Widgets";
   readonly LocationIcon: "LocationIcon";
-  readonly RightContent: "RightContent";
   readonly Progress: "Progress";
   readonly PostContainer: "PostContainer";
   readonly PostButton: "PostButton";
@@ -19,11 +19,11 @@ export type ClassNames =
   | "CreateTweet"
   | "BorderAround"
   | "BorderBetween"
+  | "Widgets"
+  | "RightContent"
   | "Avatar"
   | "TextArea"
-  | "Widgets"
   | "LocationIcon"
-  | "RightContent"
   | "Progress"
   | "PostContainer"
   | "PostButton"

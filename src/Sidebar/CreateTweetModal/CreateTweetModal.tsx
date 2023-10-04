@@ -3,9 +3,11 @@ import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
 import Icon from "../../util/components/Icon/Icon";
 import styles from "./CreateTweetModal.module.scss";
 
-interface CreateTweetModalProps {}
+interface CreateTweetModalProps {
+  closeModal: VoidFunction;
+}
 
-const CreateTweetModal = ({}: CreateTweetModalProps) => {
+const CreateTweetModal = ({ closeModal }: CreateTweetModalProps) => {
   return (
     <div className={styles.CreateTweetModal}>
       <Icon
@@ -13,6 +15,7 @@ const CreateTweetModal = ({}: CreateTweetModalProps) => {
         src={CloseIcon}
         title="Close"
         alt="Close modal"
+        onClick={closeModal}
       />
       <CreateTweet border="between" autofocus />
     </div>

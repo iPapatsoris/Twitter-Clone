@@ -20,10 +20,10 @@
   }
 
   &.BorderBetween {
-    .Avatar,
-    .TextArea {
-      border-bottom: var(--border);
-      padding-bottom: 2rem;
+    .Widgets,
+    .RightContent {
+      border-top: var(--border);
+      padding-top: 1rem;
     }
   }
 
@@ -41,7 +41,9 @@
   .Widgets {
     grid-area: widgets;
     display: flex;
+    align-items: center;
     gap: 1rem;
+    height: 100%;
 
     .LocationIcon {
       fill: var(--primary-color);
@@ -53,6 +55,7 @@
     display: flex;
     gap: 1rem;
     align-items: center;
+    height: 100%;
 
     .Progress {
       width: 30px;

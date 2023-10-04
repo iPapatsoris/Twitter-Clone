@@ -42,6 +42,10 @@ $pc-small-width: vars.$pc-small-width;
       @include pc-small {
         @content;
       }
+    } @else if ($key == pc) {
+      @include pc {
+        @content;
+      }
     }
   }
 }
