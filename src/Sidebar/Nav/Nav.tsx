@@ -83,6 +83,10 @@ const Nav = () => {
             icon={NotificationIcon}
             title="Notifications"
             path={getPagePath("notifications")}
+            alternativeActivePages={[
+              "notificationsMentions",
+              "notificationsVerified",
+            ]}
           />
           <NavItem
             iconActive={MessageIconActive}
