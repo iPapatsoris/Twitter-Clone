@@ -9,6 +9,7 @@ interface AvatarProps {
   // If size is not provided, avatar takes the full size of its container
   size?: "full" | "medium" | "small" | "smaller" | "tiny";
   withBorder?: boolean;
+  onClick?: VoidFunction;
   children?: React.ReactElement;
   extraClasses?: string[];
 }
@@ -17,6 +18,7 @@ const Avatar = ({
   src,
   size,
   withBorder,
+  onClick,
   extraClasses = [],
   children,
 }: AvatarProps) => {
@@ -44,6 +46,7 @@ const Avatar = ({
       style={{
         backgroundImage: "url(" + (src || defaultAvatar) + ")",
       }}
+      onClick={onClick}
     >
       {children}
     </div>
@@ -56,6 +59,7 @@ const Avatar = ({
       alt="The avatar of the user"
       fullSize={size === undefined}
       hover="none"
+      onClick={onClick}
     />
   );
 };

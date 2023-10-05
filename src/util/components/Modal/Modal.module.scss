@@ -3,14 +3,20 @@
 }
 
 .Wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
 
-  .Modal {
-    background-color: white;
-    border-radius: 15px;
+  &:not(.SidePanel) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &.SidePanel .Modal {
+    width: 80%;
+    overflow-y: auto;
+  }
+
+  &:not(.SidePanel) .Modal {
     width: 50vw;
     height: 70vh;
     min-width: 440px;
@@ -19,10 +25,17 @@
     @include media.multi(mobile, tablet) {
       width: 100vw;
       height: 100vh;
-      border-radius: 0;
       max-width: unset;
       min-width: unset;
     }
+  }
+
+  .Modal {
+    @include media.multi(pc-small, pc) {
+      border-radius: 15px;
+    }
+    height: 100vh;
+    background-color: white;
 
     &.WithCloseIcon {
       display: grid;

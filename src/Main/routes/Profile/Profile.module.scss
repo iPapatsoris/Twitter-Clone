@@ -63,6 +63,21 @@ Profile grid */
       grid-template-columns: defineGridColumns(var(--avatar-medium-height));
     }
 
+    &.MobileSidebar {
+      padding: 1rem;
+      row-gap: 0.5rem;
+      grid-template-areas:
+        "avatar actions"
+        "title  title"
+        "content content";
+      grid-template-rows: var(--avatar-small-height) auto auto;
+      grid-template-columns: var(--avatar-small-height) 1fr;
+
+      .NameAndVerified h1 {
+        font-size: 17px;
+      }
+    }
+
     &.Small {
       cursor: pointer;
       grid-template-areas:

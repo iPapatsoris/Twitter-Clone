@@ -9,7 +9,7 @@ export interface ProfileProps {
   // and show a preview instead of the full profile
   preview?: {
     username: string;
-    type: "hover" | "user-list";
+    type: "hover" | "user-list" | "mobile-sidebar";
     includeBio?: boolean;
     iconAction?: React.ReactElement;
     noNavOnClick?: boolean;

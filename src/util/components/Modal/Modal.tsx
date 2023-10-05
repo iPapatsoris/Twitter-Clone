@@ -10,6 +10,7 @@ interface ModalProps {
   children: React.ReactNode;
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
   extraStyles?: string[];
+  isSidePanel?: boolean;
 }
 
 export const ModalContext = createContext<{
@@ -21,6 +22,7 @@ const Modal = ({
   children,
   setIsActive,
   extraStyles,
+  isSidePanel,
 }: ModalProps) => {
   useEffect(() => {
     // Disable scrolling the background. Doing so removes the scroll bar,
@@ -56,7 +58,7 @@ const Modal = ({
 
   return (
     <ModalWrapper
-      outerStyles={[styles.Wrapper]}
+      outerStyles={[styles.Wrapper, isSidePanel ? styles.SidePanel : ""]}
       innerStyles={modalStyles}
       setIsActive={setIsActive}
       isFixed

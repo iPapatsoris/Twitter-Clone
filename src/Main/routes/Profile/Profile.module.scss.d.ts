@@ -6,6 +6,8 @@ declare const classNames: typeof globalClassNames & {
   readonly Actions: "Actions";
   readonly Profile: "Profile";
   readonly Hover: "Hover";
+  readonly MobileSidebar: "MobileSidebar";
+  readonly NameAndVerified: "NameAndVerified";
   readonly Small: "Small";
   readonly JustAvatar: "JustAvatar";
   readonly Cover: "Cover";
@@ -13,7 +15,6 @@ declare const classNames: typeof globalClassNames & {
   readonly EditAvatar: "EditAvatar";
   readonly FixedWidthButton: "FixedWidthButton";
   readonly Title: "Title";
-  readonly NameAndVerified: "NameAndVerified";
   readonly ProfileInfo: "ProfileInfo";
   readonly Friendship: "Friendship";
   readonly Loading: "Loading";
@@ -25,6 +26,8 @@ export type ClassNames =
   | "Actions"
   | "Profile"
   | "Hover"
+  | "MobileSidebar"
+  | "NameAndVerified"
   | "Small"
   | "JustAvatar"
   | "Cover"
@@ -32,7 +35,6 @@ export type ClassNames =
   | "EditAvatar"
   | "FixedWidthButton"
   | "Title"
-  | "NameAndVerified"
   | "ProfileInfo"
   | "Friendship"
   | "Loading"

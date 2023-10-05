@@ -17,6 +17,9 @@ import HeaderLinkMenu from "./HeaderLinkMenu/HeaderLinkMenu";
 import Avatar from "../../../routes/Profile/ProfileFace/Avatar/Avatar";
 import { useAuthStore } from "../../../../store/AuthStore";
 import useWindowDimensions from "../../../../util/hooks/useWindowDimensions";
+import { useState } from "react";
+import Modal from "../../../../util/components/Modal/Modal";
+import MobileSidepanel from "../../../../Sidebar/MobileSidepanel";
 
 interface HeaderMainHubProps {
   user: HeaderProfileUser;
@@ -31,8 +34,9 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
     getPagePath("following"),
   ]);
   const isTweetPage = useRouteMatch(getPagePath("tweet"));
-  const { loggedInUser } = useAuthStore();
   const { isSmallScreen } = useWindowDimensions();
+  const { loggedInUser } = useAuthStore();
+  const [showMobileSidePanel, setShowMobileSidePanel] = useState(false);
 
   const userTitle = (
     <>
@@ -41,7 +45,24 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
     </>
   );
 
-  const profileButton = <Avatar size="tiny" src={loggedInUser?.avatar} />;
+  const profileButton = (
+    <>
+      {showMobileSidePanel && (
+        <Modal
+          isSidePanel
+          setIsActive={setShowMobileSidePanel}
+          withCloseIcon={false}
+        >
+          <MobileSidepanel />
+        </Modal>
+      )}
+      <Avatar
+        size="tiny"
+        src={loggedInUser?.avatar}
+        onClick={() => setShowMobileSidePanel(true)}
+      />
+    </>
+  );
 
   let header = (
     <HeaderMain

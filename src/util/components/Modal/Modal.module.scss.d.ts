@@ -4,6 +4,7 @@ import globalClassNames, {
 declare const classNames: typeof globalClassNames & {
   readonly Dummy: "Dummy";
   readonly Wrapper: "Wrapper";
+  readonly SidePanel: "SidePanel";
   readonly Modal: "Modal";
   readonly WithCloseIcon: "WithCloseIcon";
   readonly CloseIcon: "CloseIcon";
@@ -14,6 +15,7 @@ export = classNames;
 export type ClassNames =
   | "Dummy"
   | "Wrapper"
+  | "SidePanel"
   | "Modal"
   | "WithCloseIcon"
   | "CloseIcon"

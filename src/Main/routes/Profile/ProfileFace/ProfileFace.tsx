@@ -45,7 +45,10 @@ const ProfileFace = ({ preview }: ProfileProps) => {
   const username = preview ? preview.username : params.username!;
 
   let fieldsToQuery: Readonly<FullProfileRequestFields[]> = fullProfileFields;
-  if (preview && preview.type === "hover") {
+  if (
+    preview &&
+    (preview.type === "hover" || preview.type === "mobile-sidebar")
+  ) {
     fieldsToQuery = mediumPreviewProfileFields;
   } else if (preview && preview.type === "user-list") {
     fieldsToQuery = smallPreviewProfileFields;
@@ -160,10 +163,18 @@ const ProfileFace = ({ preview }: ProfileProps) => {
 
   let previewStyles: Array<keyof typeof styles> = [];
   if (preview) {
-    previewStyles = [
-      styles.Preview,
-      preview.type === "hover" ? styles.Hover : styles.Small,
-    ];
+    previewStyles = [styles.Preview];
+    switch (preview.type) {
+      case "hover":
+        previewStyles.push(styles.Hover);
+        break;
+      case "user-list":
+        previewStyles.push(styles.Small);
+        break;
+      case "mobile-sidebar":
+        previewStyles.push(styles.MobileSidebar);
+        break;
+    }
     if (preview.showJustAvatar) {
       previewStyles.push(styles.JustAvatar);
     }
@@ -214,24 +225,27 @@ const ProfileFace = ({ preview }: ProfileProps) => {
     </span>
   );
 
-  const actionsAndInfo = (
+  const actions = (
+    <div className={styles.Actions}>
+      {!preview && (
+        <>
+          <Icon
+            ref={tweetOptionsRef}
+            src={OptionsIcon}
+            withBorder
+            title="More"
+          />
+          {user.isFollowedByActiveUser && (
+            <Icon src={NotificationsIcon} withBorder title="Notify" />
+          )}
+        </>
+      )}
+      {preview && preview.iconAction ? preview.iconAction : actionButton}
+    </div>
+  );
+
+  const info = (
     <>
-      <div className={styles.Actions}>
-        {!preview && (
-          <>
-            <Icon
-              ref={tweetOptionsRef}
-              src={OptionsIcon}
-              withBorder
-              title="More"
-            />
-            {user.isFollowedByActiveUser && (
-              <Icon src={NotificationsIcon} withBorder title="Notify" />
-            )}
-          </>
-        )}
-        {preview && preview.iconAction ? preview.iconAction : actionButton}
-      </div>
       <div
         className={styles.Title}
         onMouseEnter={onMouseEnter}
@@ -261,7 +275,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
           <div className={styles.BigText}>{user.bio}</div>
         )}
         {!preview && <Info user={user} />}
-        {(!preview || (preview && preview.type === "hover")) && (
+        {(!preview || (preview && preview.type !== "user-list")) && (
           <div className={styles.Friendship}>
             <Link to={getPagePath("following", user.username)}>
               <b>{user.totalFollowees}</b>{" "}
@@ -300,7 +314,12 @@ const ProfileFace = ({ preview }: ProfileProps) => {
       >
         {!preview && <div className={styles.Cover} style={coverStyle} />}
         {finalAvatar}
-        {!(preview && preview.showJustAvatar) && actionsAndInfo}
+        {!(preview && preview.showJustAvatar) && (
+          <>
+            {(!preview || preview.type !== "mobile-sidebar") && actions}
+            {info}
+          </>
+        )}
       </div>
     </>
   );
