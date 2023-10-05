@@ -5,7 +5,7 @@ import styles from "./Option.module.scss";
 export type SimpleOption = {
   component: React.ReactNode;
   id: string;
-  onSelect: () => void;
+  onSelect?: () => void;
 };
 
 export interface OptionWithNested {

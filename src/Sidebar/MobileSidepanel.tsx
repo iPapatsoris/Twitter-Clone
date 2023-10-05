@@ -34,7 +34,6 @@ const MobileSidepanel = () => {
           </Link>
         ),
         id: "profile",
-        onSelect: closeModal,
       },
     },
     {
@@ -50,7 +49,6 @@ const MobileSidepanel = () => {
           </Link>
         ),
         id: "bookmarks",
-        onSelect: closeModal,
       },
     },
     {
@@ -66,7 +64,6 @@ const MobileSidepanel = () => {
           </Link>
         ),
         id: "lists",
-        onSelect: closeModal,
       },
     },
     ...addClickHandlerToNonExpandableOptions(navMoreOptionsList, closeModal),

@@ -22,8 +22,7 @@ const Trend = ({ trend }: { trend: TrendT }) => {
             alt="Not interested in trend"
           />
         ),
-        id: 0,
-        onSelect: () => {},
+        id: "uninteresting",
       },
     },
     {
@@ -35,8 +34,7 @@ const Trend = ({ trend }: { trend: TrendT }) => {
             title="This trend is harmful or spammy"
           />
         ),
-        id: 1,
-        onSelect: () => {},
+        id: "spam",
       },
     },
   ];

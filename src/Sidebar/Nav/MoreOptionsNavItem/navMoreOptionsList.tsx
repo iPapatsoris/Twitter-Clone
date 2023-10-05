@@ -1,16 +1,15 @@
-import {ReactComponent as ConnectIcon }from "../../../assets/icons/options/connect.svg";
-import {ReactComponent as DraftsIcon}from "../../../assets/icons/options/drafts.svg";
-import {ReactComponent as AnalyticsIcon }from "../../../assets/icons/options/analytics.svg";
-import {ReactComponent as AdsIcon }from "../../../assets/icons/options/ads.svg";
-import {ReactComponent as SettingsIcon }from "../../../assets/icons/settings.svg";
-import {ReactComponent as HelpIcon }from "../../../assets/icons/options/help.svg";
-import {ReactComponent as DisplayIcon }from "../../../assets/icons/options/display.svg";
-import {ReactComponent as ShortcutsIcon }from "../../../assets/icons/options/shortcuts.svg";
-import {ReactComponent as MonetizationIcon }from "../../../assets/icons/options/monetization.svg";
+import { ReactComponent as ConnectIcon } from "../../../assets/icons/options/connect.svg";
+import { ReactComponent as DraftsIcon } from "../../../assets/icons/options/drafts.svg";
+import { ReactComponent as AnalyticsIcon } from "../../../assets/icons/options/analytics.svg";
+import { ReactComponent as AdsIcon } from "../../../assets/icons/options/ads.svg";
+import { ReactComponent as SettingsIcon } from "../../../assets/icons/settings.svg";
+import { ReactComponent as HelpIcon } from "../../../assets/icons/options/help.svg";
+import { ReactComponent as DisplayIcon } from "../../../assets/icons/options/display.svg";
+import { ReactComponent as ShortcutsIcon } from "../../../assets/icons/options/shortcuts.svg";
+import { ReactComponent as MonetizationIcon } from "../../../assets/icons/options/monetization.svg";
 import IconAndTitle from "../../../util/components/Popup/OptionsPopup/IconAndTitle/IconAndTitle";
 import { OptionWithNested } from "../../../util/components/Popup/OptionsPopup/Option";
 
-const onSelect = () => {};
 export const navMoreOptionsList: OptionWithNested[] = [
   {
     mainOption: {
@@ -23,7 +22,6 @@ export const navMoreOptionsList: OptionWithNested[] = [
         />
       ),
       id: "connect",
-      onSelect,
     },
   },
   {
@@ -37,7 +35,6 @@ export const navMoreOptionsList: OptionWithNested[] = [
         />
       ),
       id: "drafts",
-      onSelect,
     },
   },
   {
@@ -51,14 +48,12 @@ export const navMoreOptionsList: OptionWithNested[] = [
         />
       ),
       id: "monetization",
-      onSelect,
     },
   },
   {
     mainOption: {
       component: "Creator Studio",
       id: "studio",
-      onSelect,
     },
     nestedOptions: [
       {
@@ -70,7 +65,6 @@ export const navMoreOptionsList: OptionWithNested[] = [
           />
         ),
         id: "analytics",
-        onSelect,
       },
     ],
   },
@@ -78,7 +72,6 @@ export const navMoreOptionsList: OptionWithNested[] = [
     mainOption: {
       component: "Professional Tools",
       id: "pro-tools",
-      onSelect,
     },
     nestedOptions: [
       {
@@ -86,7 +79,6 @@ export const navMoreOptionsList: OptionWithNested[] = [
           <IconAndTitle title="Twitter Ads" alt="Twitter ads" icon={AdsIcon} />
         ),
         id: "ads",
-        onSelect,
       },
     ],
   },
@@ -94,7 +86,6 @@ export const navMoreOptionsList: OptionWithNested[] = [
     mainOption: {
       component: "Settings and Support",
       id: "settings-support",
-      onSelect,
     },
     nestedOptions: [
       {
@@ -106,21 +97,18 @@ export const navMoreOptionsList: OptionWithNested[] = [
           />
         ),
         id: "settings",
-        onSelect,
       },
       {
         component: (
           <IconAndTitle title="Help Center" alt="Help center" icon={HelpIcon} />
         ),
         id: "help",
-        onSelect,
       },
       {
         component: (
           <IconAndTitle title="Display" alt="Display" icon={DisplayIcon} />
         ),
         id: "display",
-        onSelect,
       },
       {
         component: (
@@ -131,7 +119,6 @@ export const navMoreOptionsList: OptionWithNested[] = [
           />
         ),
         id: "shortcuts",
-        onSelect,
       },
     ],
   },

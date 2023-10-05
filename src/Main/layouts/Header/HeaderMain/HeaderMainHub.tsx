@@ -14,12 +14,8 @@ import { ReactComponent as SettingsIcon } from "../../../../assets/icons/setting
 import { ReactComponent as VerifiedIcon } from "../../../../assets/icons/verified.svg";
 import styles from "./HeaderMain.module.scss";
 import HeaderLinkMenu from "./HeaderLinkMenu/HeaderLinkMenu";
-import Avatar from "../../../routes/Profile/ProfileFace/Avatar/Avatar";
-import { useAuthStore } from "../../../../store/AuthStore";
 import useWindowDimensions from "../../../../util/hooks/useWindowDimensions";
-import { useState } from "react";
-import Modal from "../../../../util/components/Modal/Modal";
-import MobileSidepanel from "../../../../Sidebar/MobileSidepanel";
+import HeaderAvatar from "./HeaderAvatar";
 
 interface HeaderMainHubProps {
   user: HeaderProfileUser;
@@ -35,8 +31,6 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
   ]);
   const isTweetPage = useRouteMatch(getPagePath("tweet"));
   const { isSmallScreen } = useWindowDimensions();
-  const { loggedInUser } = useAuthStore();
-  const [showMobileSidePanel, setShowMobileSidePanel] = useState(false);
 
   const userTitle = (
     <>
@@ -45,29 +39,10 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
     </>
   );
 
-  const profileButton = (
-    <>
-      {showMobileSidePanel && (
-        <Modal
-          isSidePanel
-          setIsActive={setShowMobileSidePanel}
-          withCloseIcon={false}
-        >
-          <MobileSidepanel />
-        </Modal>
-      )}
-      <Avatar
-        size="tiny"
-        src={loggedInUser?.avatar}
-        onClick={() => setShowMobileSidePanel(true)}
-      />
-    </>
-  );
-
   let header = (
     <HeaderMain
       title={<h2>Home</h2>}
-      leftCornerIcon={isSmallScreen ? profileButton : undefined}
+      leftCornerIcon={isSmallScreen ? <HeaderAvatar /> : undefined}
       // rightCornerIcon={
       //   <Icon src={SparkIcon} title="Top Tweets" alt="Top tweets" />
       // }
@@ -129,8 +104,18 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
         leftCornerBackIcon
       />
     );
-  } else if (isTweetPage) {
-    header = <HeaderMain title={<h2>Tweet</h2>} leftCornerBackIcon />;
+  } else if (
+    isTweetPage ||
+    path === getPagePath("bookmarks") ||
+    path === getPagePath("lists")
+  ) {
+    let title = "Tweet";
+    if (path === getPagePath("bookmarks")) {
+      title = "Bookmarks";
+    } else if (path === getPagePath("lists")) {
+      title = "Lists";
+    }
+    header = <HeaderMain title={<h2>{title}</h2>} leftCornerBackIcon />;
   }
 
   return header;
