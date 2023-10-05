@@ -1,10 +1,10 @@
 import Icon from "../../Icon/Icon";
-import {ReactComponent as DownArrowIcon }from "../../../../assets/icons/options/down-arrow.svg";
+import { ReactComponent as DownArrowIcon } from "../../../../assets/icons/options/down-arrow.svg";
 import styles from "./Option.module.scss";
 
 export type SimpleOption = {
   component: React.ReactNode;
-  id: number;
+  id: string;
   onSelect: () => void;
 };
 
@@ -45,6 +45,29 @@ const Option = ({
       )}
     </div>
   );
+};
+
+export const addClickHandlerToNonExpandableOptions = (
+  options: OptionWithNested[],
+  onClickHandler: VoidFunction
+) => {
+  return options.map((option) => {
+    return {
+      ...option,
+      mainOption: {
+        ...option.mainOption,
+        onSelect: !option.nestedOptions
+          ? onClickHandler
+          : option.mainOption.onSelect,
+      },
+      nestedOptions:
+        option.nestedOptions &&
+        option.nestedOptions.map((nested) => ({
+          ...nested,
+          onSelect: onClickHandler,
+        })),
+    };
+  });
 };
 
 export default Option;

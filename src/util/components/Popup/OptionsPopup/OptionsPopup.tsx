@@ -1,6 +1,9 @@
-import React, { useState } from "react";
 import Popup, { PopupProps } from "../Popup";
-import Option, { OptionWithNested } from "./Option";
+import {
+  OptionWithNested,
+  addClickHandlerToNonExpandableOptions,
+} from "./Option";
+import OptionsList from "./OptionsList";
 
 // Note: If OptionsPopup is placed as the child of the element that opens it
 // onClick, the onClick event handler passed to the individual options
@@ -13,71 +16,25 @@ export interface OptionsPopupProps {
 }
 
 const OptionsPopup = ({
-  options: optionProps,
+  options,
   extraOptionStyles,
   popupProps,
 }: OptionsPopupProps) => {
-  const initialOptions: OptionWithNested[] = optionProps.map((option) => ({
-    ...option,
-    targetAreaRef: popupProps.targetAreaRef, // where is this used?
-    showNestedOptions: false,
-  }));
-  const [options, setOptions] = useState<OptionWithNested[]>(initialOptions);
+  const closePopup = () => popupProps.setIsActive(false);
 
-  // Toggle nested options visibility for clicked option
-  const handleOptionClick = (id: number) => {
-    const index = options.findIndex((option) => option.mainOption.id === id);
-    const option = options[index];
-    if (option.nestedOptions) {
-      const newOptions = [...options];
-      newOptions[index].showNestedOptions =
-        !newOptions[index].showNestedOptions;
-      setOptions(newOptions);
-    } else {
-      popupProps.setIsActive(false);
-    }
+  const optionsWithPopupHandling = addClickHandlerToNonExpandableOptions(
+    options,
+    closePopup
+  );
 
-    option.mainOption.onSelect && option.mainOption.onSelect();
-  };
-
-  const optionsJSX: React.ReactElement[] = [];
-  options.forEach((option) => {
-    // For each option, include itself along with its nested options
-    let nestedOptionsJSX: Array<React.ReactElement> = [];
-    if (option.nestedOptions && option.showNestedOptions) {
-      nestedOptionsJSX = option.nestedOptions?.map((nested) => (
-        <Option
-          mainOption={{
-            component: nested.component,
-            id: nested.id,
-            onSelect: () => {
-              popupProps.setIsActive(false);
-              nested.onSelect();
-            },
-          }}
-          key={nested.id}
-          extraStyles={extraOptionStyles}
-        />
-      ));
-    }
-
-    optionsJSX.push(
-      <Option
-        mainOption={{
-          component: option.mainOption.component,
-          id: option.mainOption.id,
-          onSelect: () => handleOptionClick(option.mainOption.id),
-        }}
-        nestedOptions={option.nestedOptions}
-        showNestedOptions={option.showNestedOptions}
-        key={option.mainOption.id}
-        extraStyles={extraOptionStyles}
-      />,
-      ...nestedOptionsJSX
-    );
-  });
-
-  return <Popup {...popupProps}>{optionsJSX}</Popup>;
+  return (
+    <Popup {...popupProps}>
+      <OptionsList
+        options={optionsWithPopupHandling}
+        extraOptionStyles={extraOptionStyles}
+      />
+    </Popup>
+  );
 };
 
 export default OptionsPopup;
