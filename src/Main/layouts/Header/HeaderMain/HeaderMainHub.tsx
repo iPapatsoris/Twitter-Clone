@@ -107,13 +107,16 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
   } else if (
     isTweetPage ||
     path === getPagePath("bookmarks") ||
-    path === getPagePath("lists")
+    path === getPagePath("lists") ||
+    path === getPagePath("messages")
   ) {
     let title = "Tweet";
     if (path === getPagePath("bookmarks")) {
       title = "Bookmarks";
     } else if (path === getPagePath("lists")) {
       title = "Lists";
+    } else if (path === getPagePath("messages")) {
+      title = "Messages";
     }
     header = <HeaderMain title={<h2>{title}</h2>} leftCornerBackIcon />;
   }

@@ -1,5 +1,5 @@
 import Profile from "../Main/routes/Profile/Profile";
-import { useAuthStore } from "../store/AuthStore";
+import { useAuthStore, useLogoutMutation } from "../store/AuthStore";
 import IconAndTitle from "../util/components/Popup/OptionsPopup/IconAndTitle/IconAndTitle";
 import {
   OptionWithNested,
@@ -8,6 +8,7 @@ import {
 import { ReactComponent as ProfileIcon } from "../assets/icons/nav/user.svg";
 import { ReactComponent as BookmarkIcon } from "../assets/icons/nav/bookmark.svg";
 import { ReactComponent as ListIcon } from "../assets/icons/nav/list.svg";
+import { ReactComponent as LogoutIcon } from "../assets/icons/nav/logout.svg";
 import { Link } from "react-router-dom";
 import { getPagePath } from "../util/paths";
 import OptionsList from "../util/components/Popup/OptionsPopup/OptionsList";
@@ -19,6 +20,7 @@ const MobileSidepanel = () => {
   const { loggedInUser } = useAuthStore();
   const { setIsActive } = useContext(ModalContext);
   const closeModal = () => setIsActive(false);
+  const { mutate: logout } = useLogoutMutation();
 
   const options: OptionWithNested[] = [
     {
@@ -68,6 +70,22 @@ const MobileSidepanel = () => {
     },
     ...addClickHandlerToNonExpandableOptions(navMoreOptionsList, closeModal),
   ];
+
+  options[options.length - 1].nestedOptions?.push({
+    component: (
+      <IconAndTitle
+        title="Logout"
+        alt="Logout"
+        icon={LogoutIcon}
+        size="small"
+        onClick={() => {
+          logout();
+          setIsActive(false);
+        }}
+      />
+    ),
+    id: "logout",
+  });
 
   return (
     <>

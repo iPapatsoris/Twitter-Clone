@@ -4,10 +4,7 @@ import Icon from "../../util/components/Icon/Icon";
 import OptionsPopup from "../../util/components/Popup/OptionsPopup/OptionsPopup";
 import { useRef, useState } from "react";
 import { OptionWithNested } from "../../util/components/Popup/OptionsPopup/Option";
-import { useMutation } from "@tanstack/react-query";
-import { NormalResponse } from "../../../backend/src/api/common";
-import { useAuthStore } from "../../store/AuthStore";
-import { deleteData } from "../../util/request";
+import { useAuthStore, useLogoutMutation } from "../../store/AuthStore";
 import Profile from "../../Main/routes/Profile/Profile";
 import useWindowDimensions from "../../util/hooks/useWindowDimensions";
 
@@ -17,18 +14,7 @@ const ProfileButton = () => {
 
   const profileButtonRef = useRef(null);
   const user = useAuthStore((state) => state.loggedInUser);
-  const setUser = useAuthStore((state) => state.setLoggedInUser);
-  const { mutate } = useMutation<NormalResponse>(
-    ["logout"],
-    () => deleteData("auth/logout"),
-    {
-      onSuccess: (data) => {
-        if (data.ok) {
-          setUser(null);
-        }
-      },
-    }
-  );
+  const { mutate: logout } = useLogoutMutation();
 
   if (!user) return null;
 
@@ -36,15 +22,15 @@ const ProfileButton = () => {
     {
       mainOption: {
         component: "Add an existing account",
-        id: 1,
+        id: "add-account",
         onSelect: () => {},
       },
     },
     {
       mainOption: {
         component: "Logout @" + user.username,
-        id: 2,
-        onSelect: mutate,
+        id: "logout",
+        onSelect: logout,
       },
     },
   ];

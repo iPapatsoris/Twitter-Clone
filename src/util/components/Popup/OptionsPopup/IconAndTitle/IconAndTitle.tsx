@@ -7,6 +7,7 @@ interface IconAndTitleProps {
   title: string;
   alt: string;
   size?: "small" | "large";
+  onClick?: VoidFunction;
 }
 
 const IconAndTitle = ({
@@ -14,11 +15,15 @@ const IconAndTitle = ({
   title,
   size = "small",
   alt,
+  onClick,
 }: IconAndTitleProps) => {
   const wrapperStyle = size === "large" ? styles.Large : styles.Small;
 
   return (
-    <div className={[styles.IconAndTitle, wrapperStyle].join(" ")}>
+    <div
+      onClick={onClick}
+      className={[styles.IconAndTitle, wrapperStyle].join(" ")}
+    >
       <Icon src={icon} hover="none" size={24} alt={alt} />
       {title}
     </div>
