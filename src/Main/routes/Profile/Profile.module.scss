@@ -159,6 +159,10 @@ Profile grid */
   padding-block: 1rem;
 }
 
+.Preview .Title .NameAndVerified h1:hover {
+  text-decoration: underline;
+}
+
 .Preview.Hover .Title .NameAndVerified h1 {
   font-size: 18px;
 }
