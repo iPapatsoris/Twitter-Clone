@@ -57,7 +57,11 @@ export const addClickHandlerToNonExpandableOptions = (
       mainOption: {
         ...option.mainOption,
         onSelect: !option.nestedOptions
-          ? onClickHandler
+          ? () => {
+              const providedHandler = option.mainOption.onSelect;
+              providedHandler && providedHandler();
+              onClickHandler();
+            }
           : option.mainOption.onSelect,
       },
       nestedOptions:
