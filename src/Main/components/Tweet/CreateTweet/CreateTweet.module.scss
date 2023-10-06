@@ -8,23 +8,41 @@
 
   display: grid;
   grid-template-areas:
-    "avatar input   input  "
-    ".      widgets action ";
-  grid-template-columns: var(--avatar-small-height) 1fr auto;
+    "avatar input   input    input input "
+    ".      widgets progress . action ";
+  grid-template-columns: var(--avatar-small-height) 1fr auto 1rem auto;
   grid-template-rows: 1fr auto;
   row-gap: $padding-block;
   align-items: center;
 
-  &.BorderAround {
+  &.AsModalContent {
+    grid-template-areas:
+      "icon   .       . . ."
+      "avatar input   input input input"
+      "border border  border border border"
+      ".      widgets progress . action";
+    grid-template-rows: auto 1fr auto auto;
+
+    @include media.multi(mobile, tablet) {
+      grid-template-areas:
+        "icon   .       action"
+        "avatar input   input"
+        "border border  border"
+        ".      widgets progress ";
+    }
+  }
+
+  &:not(.AsModalContent) {
     border-block: var(--border);
   }
 
-  &.BorderBetween {
-    .Widgets,
-    .RightContent {
-      border-top: var(--border);
-      padding-top: 1rem;
-    }
+  .CloseIcon {
+    grid-area: icon;
+  }
+
+  .Border {
+    grid-area: border;
+    border-block: var(--border);
   }
 
   .Avatar {
@@ -50,21 +68,20 @@
     }
   }
 
-  .RightContent {
+  .Action {
     grid-area: action;
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    height: 100%;
-
-    .Progress {
-      width: 30px;
-    }
   }
 
-  .PostContainer {
-    .PostButton {
-      width: 4.5rem !important;
+  .Progress {
+    width: 30px;
+    grid-area: progress;
+    justify-self: center;
+
+    &.Show {
+      visibility: visible;
+    }
+    &.Hide {
+      visibility: hidden;
     }
   }
 }

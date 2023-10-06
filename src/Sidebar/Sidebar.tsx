@@ -80,7 +80,7 @@ const Sidebar = () => {
           extraStyles={[styles.Modal]}
           setIsActive={setShowCreateTweetModal}
         >
-          <CreateTweetModal closeModal={() => setShowCreateTweetModal(false)} />
+          <CreateTweetModal />
         </Modal>
       )}
     </>

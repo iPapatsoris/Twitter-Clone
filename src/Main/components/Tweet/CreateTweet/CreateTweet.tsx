@@ -17,21 +17,25 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Form from "../../../../util/components/Form/Form";
 import { timelineKeys } from "../../../../Home/queries";
 import TextArea from "../../../../util/components/TextArea/TextArea";
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import ProgressBar from "./ProgressBar";
+import Icon from "../../../../util/components/Icon/Icon";
+import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg";
+import { ModalContext } from "../../../../util/components/Modal/Modal";
 
 interface CreateTweetProps {
-  border?: "around" | "between";
   autofocus?: boolean;
+  asModalContent?: boolean;
 }
 
 type FormT = { tweet: string };
 
 const CreateTweet = ({
   autofocus = false,
-  border = "around",
+  asModalContent,
 }: CreateTweetProps) => {
   const { loggedInUser } = useAuthStore();
+  const { setIsActive } = useContext(ModalContext);
 
   const schema: any = yup.object().shape({
     tweet: yup.string().required().max(tweetCharLimit),
@@ -89,9 +93,18 @@ const CreateTweet = ({
     <div
       className={[
         styles.CreateTweet,
-        border === "around" ? styles.BorderAround : styles.BorderBetween,
+        asModalContent ? styles.AsModalContent : "",
       ].join(" ")}
     >
+      {asModalContent && (
+        <Icon
+          src={CloseIcon}
+          onClick={() => setIsActive(false)}
+          title="Close"
+          alt="Close"
+          extraWrapperStyles={[styles.CloseIcon]}
+        />
+      )}
       <div ref={avatarRef} className={styles.Avatar}>
         <Link to={getPagePath("profile", loggedInUser?.username)}>
           <Avatar src={loggedInUser.avatar} />
@@ -109,17 +122,11 @@ const CreateTweet = ({
           }}
           refToAlignTopRowWith={avatarRef}
         />
+        {!asModalContent ? <></> : <div className={styles.Border}></div>}
         <Widgets />
-        <div className={[styles.RightContent, styles.PostContainer].join(" ")}>
-          {!progressBarInfo.charsWritten ? null : (
-            <ProgressBar tweetCharLimit={tweetCharLimit} {...progressBarInfo} />
-          )}
-          <Button
-            type="submit"
-            disabled={!isValid}
-            size="medium"
-            extraClasses={[styles.PostButton]}
-          >
+        <ProgressBar tweetCharLimit={tweetCharLimit} {...progressBarInfo} />
+        <div className={styles.Action}>
+          <Button type="submit" disabled={!isValid} size="medium">
             Post
           </Button>
         </div>

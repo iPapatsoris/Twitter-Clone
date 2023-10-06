@@ -3,28 +3,30 @@ import globalClassNames, {
 } from "../../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly CreateTweet: "CreateTweet";
-  readonly BorderAround: "BorderAround";
-  readonly BorderBetween: "BorderBetween";
-  readonly Widgets: "Widgets";
-  readonly RightContent: "RightContent";
+  readonly AsModalContent: "AsModalContent";
+  readonly CloseIcon: "CloseIcon";
+  readonly Border: "Border";
   readonly Avatar: "Avatar";
   readonly TextArea: "TextArea";
+  readonly Widgets: "Widgets";
   readonly LocationIcon: "LocationIcon";
+  readonly Action: "Action";
   readonly Progress: "Progress";
-  readonly PostContainer: "PostContainer";
-  readonly PostButton: "PostButton";
+  readonly Show: "Show";
+  readonly Hide: "Hide";
 };
 export = classNames;
 export type ClassNames =
   | "CreateTweet"
-  | "BorderAround"
-  | "BorderBetween"
-  | "Widgets"
-  | "RightContent"
+  | "AsModalContent"
+  | "CloseIcon"
+  | "Border"
   | "Avatar"
   | "TextArea"
+  | "Widgets"
   | "LocationIcon"
+  | "Action"
   | "Progress"
-  | "PostContainer"
-  | "PostButton"
+  | "Show"
+  | "Hide"
   | GlobalClassNames;

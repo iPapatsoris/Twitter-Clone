@@ -17,7 +17,11 @@ const ProgressBar = ({
   textColor,
   progressColor,
 }: ProgressBarProps) => (
-  <div className={styles.Progress}>
+  <div
+    className={[styles.Progress, charsWritten ? styles.Show : styles.Hide].join(
+      " "
+    )}
+  >
     <CircularProgressbar
       minValue={0}
       maxValue={tweetCharLimit}
