@@ -122,7 +122,7 @@ const CreateTweet = ({
           }}
           refToAlignTopRowWith={avatarRef}
         />
-        {!asModalContent ? <></> : <div className={styles.Border}></div>}
+        <>{!asModalContent && <div className={styles.Border}></div>}</>
         <Widgets />
         <ProgressBar tweetCharLimit={tweetCharLimit} {...progressBarInfo} />
         <div className={styles.Action}>

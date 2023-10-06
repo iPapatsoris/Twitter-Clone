@@ -1,4 +1,9 @@
+.Wrapper {
+  overflow-y: auto;
+}
+
 .Sidebar {
+  overflow-y: auto;
   position: sticky;
   top: 0;
   height: 100vh;
@@ -8,12 +13,22 @@
   font-size: var(--bigger-text);
   grid-area: sidebar;
 
-  @include media.pc-small {
-    align-items: flex-end;
-  }
+  @include media.multi(pc-small) {
+    // First align icons with each other
+    align-items: center;
+    // then push them to the right. If we used "align-items: flex-end" instead,
+    // they would be pushed to the right but wouldn't be aligned with each other
+    // because some of them are of different sizes
+    margin-left: auto;
+    padding-right: 0.5rem;
 
-  @include media.multi(pc-small, tablet, mobile) {
-    padding-right: 1rem;
+    @media (max-width: 870px) {
+      // At this smaller screen width, it makes more sense to align to the
+      // center instead of push to the right
+      align-items: center;
+      margin-left: 0;
+      padding-right: 0;
+    }
   }
 
   @include media.multi(mobile, tablet) {

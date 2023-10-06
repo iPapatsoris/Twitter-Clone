@@ -67,7 +67,7 @@ const Nav = () => {
                 alt="Twitter logo"
                 size={26}
                 hoverGap={14}
-                noLeftMargin={isPcBig}
+                // noLeftMargin={isPcBig}
               />
             </Link>
           )}

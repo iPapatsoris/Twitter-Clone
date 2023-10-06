@@ -15,6 +15,7 @@ declare const classNames: typeof globalClassNames & {
   readonly EditAvatar: "EditAvatar";
   readonly FixedWidthButton: "FixedWidthButton";
   readonly Title: "Title";
+  readonly NoHoverUnderline: "NoHoverUnderline";
   readonly ProfileInfo: "ProfileInfo";
   readonly Friendship: "Friendship";
   readonly Loading: "Loading";
@@ -35,6 +36,7 @@ export type ClassNames =
   | "EditAvatar"
   | "FixedWidthButton"
   | "Title"
+  | "NoHoverUnderline"
   | "ProfileInfo"
   | "Friendship"
   | "Loading"

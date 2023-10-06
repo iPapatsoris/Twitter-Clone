@@ -1,5 +1,6 @@
 import globalClassNames, { ClassNames as GlobalClassNames } from "../style.d";
 declare const classNames: typeof globalClassNames & {
+  readonly Wrapper: "Wrapper";
   readonly Sidebar: "Sidebar";
   readonly Modal: "Modal";
   readonly TweetIconWrapper: "TweetIconWrapper";
@@ -7,6 +8,7 @@ declare const classNames: typeof globalClassNames & {
 };
 export = classNames;
 export type ClassNames =
+  | "Wrapper"
   | "Sidebar"
   | "Modal"
   | "TweetIconWrapper"

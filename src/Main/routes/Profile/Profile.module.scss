@@ -159,7 +159,7 @@ Profile grid */
   padding-block: 1rem;
 }
 
-.Preview .Title .NameAndVerified h1:hover {
+.Preview:not(.NoHoverUnderline) .Title .NameAndVerified h1:hover {
   text-decoration: underline;
 }
 

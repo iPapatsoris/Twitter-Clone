@@ -178,6 +178,9 @@ const ProfileFace = ({ preview }: ProfileProps) => {
     if (preview.showJustAvatar) {
       previewStyles.push(styles.JustAvatar);
     }
+    if (preview.noPreviewOnHover) {
+      previewStyles.push(styles.NoHoverUnderline);
+    }
   }
 
   const visitFullProfile = (e: React.MouseEvent) => {

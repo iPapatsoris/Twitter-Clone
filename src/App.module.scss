@@ -22,7 +22,7 @@
     grid-template-columns: 1fr $content-main $content-main-right-gap $content-right 1fr;
   }
 
-  $no-content-right-breakpoint: 1015px;
+  $no-content-right-breakpoint: 1110px;
   --no-content-right-breakpoint: #{$no-content-right-breakpoint};
 
   @media (max-width: $no-content-right-breakpoint) {
