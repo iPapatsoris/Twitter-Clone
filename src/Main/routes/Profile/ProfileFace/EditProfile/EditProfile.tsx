@@ -58,12 +58,12 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
 
   const form = useForm<ProfileInfoT>({
     defaultValues: {
-      name: user.name,
-      bio: user.bio,
-      location: user.location,
-      website: user.website,
-      avatar: user.avatar,
-      coverPic: user.coverPic,
+      name: user.name || "",
+      bio: user.bio || "",
+      location: user.location || "",
+      website: user.website || "",
+      avatar: user.avatar || "",
+      coverPic: user.coverPic || "",
     },
     mode: "onTouched",
     resolver: yupResolver(schema),
@@ -112,6 +112,7 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
       }
     );
   };
+  console.log(user);
 
   const scrollToInput = (ref: RefObject<HTMLInputElement>) => {
     if (ref && ref.current) ref.current.scrollIntoView({ behavior: "smooth" });
