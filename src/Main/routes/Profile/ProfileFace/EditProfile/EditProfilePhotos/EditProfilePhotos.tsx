@@ -15,9 +15,10 @@ const EditProfilePhotos = ({
   focusOnAvatar,
   focusOnCover,
 }: EditProfilePhotosProps) => {
-  const coverStyle: React.CSSProperties = coverPic
-    ? { backgroundImage: "url(" + coverPic + ")" }
-    : { backgroundColor: "background-color: rgb(207, 217, 222)" };
+  const coverStyle: React.CSSProperties =
+    coverPic && coverPic !== ""
+      ? { backgroundImage: "url(" + coverPic + ")" }
+      : { backgroundColor: "rgb(207, 217, 222)" };
 
   return (
     <>
