@@ -9,10 +9,10 @@ import {
 import useClickOutside from "../../hooks/useClickOutside";
 import styles from "./InputWrapper.module.scss";
 import inputStyles from "./Input.module.scss";
-import {ReactComponent as EyeIcon} from "../../../assets/icons/eye.svg";
-import {ReactComponent as EyeStrikeIcon} from "../../../assets/icons/eye-strike.svg";
-import {ReactComponent as SuccessIcon} from "../../../assets/icons/success.svg";
-import {ReactComponent as ErrorIcon} from "../../../assets/icons/error.svg";
+import { ReactComponent as EyeIcon } from "../../../assets/icons/eye.svg";
+import { ReactComponent as EyeStrikeIcon } from "../../../assets/icons/eye-strike.svg";
+import { ReactComponent as SuccessIcon } from "../../../assets/icons/success.svg";
+import { ReactComponent as ErrorIcon } from "../../../assets/icons/error.svg";
 import Icon from "../Icon/Icon";
 import useForwardRef from "../../hooks/useForwardRef";
 
@@ -154,17 +154,20 @@ const Input = forwardRef<RefType, InputProps>(
       if (error) {
         iconJSX = <Icon src={ErrorIcon} hover="none" />;
       } else if (isValid) {
-        iconJSX = <Icon src={SuccessIcon} extraStyles={[inputStyles.SuccessIcon]} hover="none" />;
+        iconJSX = (
+          <Icon
+            src={SuccessIcon}
+            extraStyles={[inputStyles.SuccessIcon]}
+            hover="none"
+          />
+        );
       }
     }
 
     const inputProps: HTMLProps<HTMLInputElement | HTMLTextAreaElement> = {
       name,
       maxLength,
-      onChange: (e: React.ChangeEvent<any>) => {
-        // TODO: fix any TS
-        onChange(e.target.value);
-      },
+      onChange,
       onBlur,
       value,
       readOnly: readonly,

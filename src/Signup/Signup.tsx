@@ -75,10 +75,10 @@ const Signup = ({ removeSignup }: SignupProps) => {
   }, [performRegistration, accountInfo, mutate, username, password]);
 
   const [emailCodeHint, setEmailCodeHint] = useState("");
-  const { isMobile, isTablet } = useWindowDimensions();
+  const { isSmallScreen } = useWindowDimensions();
 
   const minipage = (
-    <Minipage alignContent={isMobile || isTablet ? "icon" : "header"} />
+    <Minipage alignContent={isSmallScreen ? "icon" : "header"} />
   );
 
   const stepper = useStepper();

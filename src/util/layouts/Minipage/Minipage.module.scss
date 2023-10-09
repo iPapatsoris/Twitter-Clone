@@ -5,7 +5,7 @@
   }
 
   display: grid;
-  --minipage-icon-area-length: 4rem;
+  --minipage-icon-area-length: 3rem;
   --minipage-blank-area: 1rem;
   grid-template-areas:
     ".       icon    header  .      "
@@ -60,9 +60,13 @@
     display: grid;
     grid-template:
       ". content ."
-      / 4rem 1fr 4rem;
+      / 1rem 1fr 1rem;
     align-items: center;
     padding-block: 2rem;
+
+    @include media.mobile {
+      padding-block: 1rem;
+    }
 
     .Wrapper {
       grid-area: content;

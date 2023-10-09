@@ -89,7 +89,7 @@ const VerifyEmail = ({
               name="emailCode"
               placeholder="Verification code"
               value={code}
-              onChange={() => setCode}
+              onChange={(e) => setCode(e.target.value)}
               autofocus
               helper={<Helper onResendCode={onResendCode} />}
               error={wrongCodeError}

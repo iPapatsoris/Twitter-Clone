@@ -7,7 +7,7 @@
   display: grid;
   grid-template:
     ". sidebar header-main  .  header-right ." var(--header-height)
-    ". sidebar header-extended  .  header-right ." auto
+    ". sidebar header-extended  .  content-right ." auto
     ". sidebar content-main .  content-right ." 1fr
     ". sidebar .            .  sticky-inbox sticky-inbox" auto
     / 1fr auto $content-main $content-main-right-gap $content-right 1fr;
