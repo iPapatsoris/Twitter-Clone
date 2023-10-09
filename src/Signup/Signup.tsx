@@ -10,11 +10,12 @@ import Settings from "./Steps/Settings/Settings";
 import VerifyAccountInfo from "./Steps/VerifyAccountInfo/VerifyAccountInfo";
 import VerifyEmail from "./Steps/VerifyEmail/VerifyEmail";
 import { postData } from "../util/request";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getPagePath } from "../util/paths";
 import Minipage from "../util/layouts/Minipage/Minipage";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
 import StepHeader from "./Steps/StepHeader";
+import { useAuthStore } from "../store/AuthStore";
 
 interface SignupProps {
   removeSignup: VoidFunction;
@@ -49,14 +50,17 @@ const Signup = ({ removeSignup }: SignupProps) => {
   const [password, setPassword] = useState("");
   const [performRegistration, setPerformRegistration] = useState(false);
   const [inputToFocus, setInputToFocus] = useState<keyof AccountInfoT>("name");
+  const navigate = useNavigate();
+  const setLoggedInUser = useAuthStore((state) => state.setLoggedInUser);
 
   const { mutate } = useMutation<
     CreateUser["response"],
     unknown,
     CreateUser["request"]
   >(async (body) => postData("user", body), {
-    onSuccess: () => {
-      redirect(getPagePath("profile"));
+    onSuccess: (res) => {
+      setLoggedInUser(res.data?.user!);
+      navigate(getPagePath("explore"));
     },
   });
 

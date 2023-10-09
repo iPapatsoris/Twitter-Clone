@@ -64,9 +64,32 @@ router
           ok: false,
           errorCode,
         });
+        return;
       });
+
+      const fields = prepareUserQuery({
+        fields: ["username", "name", "avatar", "id"],
+        res,
+      });
+      const newUser = await getUser({
+        username: user.username,
+        session: req.session,
+        ...fields.data!,
+      });
+
+      req.session.isLoggedIn = true;
+      req.session.userID = newUser.data?.user.id;
+
       res.send({
         ok: true,
+        data: {
+          user: {
+            id: newUser.data?.user.id!,
+            username: user.username,
+            name: user.name,
+            avatar: newUser.data?.user.avatar,
+          },
+        },
       });
     }
   )

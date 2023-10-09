@@ -8,7 +8,9 @@ export type CreateUser = {
   request: {
     user: Pick<User, "name" | "username" | "password" | "birthDate" | "email">;
   };
-  response: NormalResponse;
+  response: NormalResponse<{
+    user: Pick<User, "avatar" | "name" | "username" | "id">;
+  }>;
 };
 
 export type UpdateUser<T extends UpdateUserFields> = {
