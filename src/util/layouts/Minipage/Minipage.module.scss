@@ -60,7 +60,7 @@
     display: grid;
     grid-template:
       ". content ."
-      / 1rem 1fr 1rem;
+      / 1rem auto 1rem;
     align-items: center;
     padding-block: 2rem;
 
@@ -70,6 +70,7 @@
 
     .Wrapper {
       grid-area: content;
+      align-items: center;
       display: flex;
       flex-direction: column;
       gap: 2rem;

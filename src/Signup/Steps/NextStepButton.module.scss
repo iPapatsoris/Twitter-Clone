@@ -1,0 +1,6 @@
+.Button {
+  width: 50%;
+  @include media.mobile {
+    width: 100%;
+  }
+}

@@ -28,7 +28,7 @@ const StepHeader = ({
   return (
     <>
       <div className={styles.NavIcon} onClick={onNavIconClick}>
-        <Icon src={navIcon} noInlineMargin />
+        <Icon src={navIcon} title={!step ? "Close" : "Back"} noInlineMargin />
       </div>
       <div className={[styles.StepHeader, styles.BiggestText].join(" ")}>
         <div>{children}</div>

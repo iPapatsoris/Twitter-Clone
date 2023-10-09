@@ -1,4 +1,5 @@
 import Button from "../../util/components/Button/Button";
+import styles from "./NextStepButton.module.scss";
 
 interface NextStepButtonProps {
   isDisabled?: boolean;
@@ -20,10 +21,10 @@ const NextStepButton = ({
     size="large"
     largeFont
     color={color}
-    stretch
     disabled={isDisabled}
     isLoading={isLoading}
     onClick={onClick}
+    extraClasses={[styles.Button]}
   >
     {children}
   </Button>
