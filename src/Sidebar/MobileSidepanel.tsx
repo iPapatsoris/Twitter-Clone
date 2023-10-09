@@ -9,7 +9,6 @@ import { ReactComponent as ProfileIcon } from "../assets/icons/nav/user.svg";
 import { ReactComponent as BookmarkIcon } from "../assets/icons/nav/bookmark.svg";
 import { ReactComponent as ListIcon } from "../assets/icons/nav/list.svg";
 import { ReactComponent as LogoutIcon } from "../assets/icons/nav/logout.svg";
-import { Link } from "react-router-dom";
 import { getPagePath } from "../util/paths";
 import OptionsList from "../util/components/Popup/OptionsPopup/OptionsList";
 import { navMoreOptionsList } from "./Nav/MoreOptionsNavItem/navMoreOptionsList";
@@ -26,46 +25,43 @@ const MobileSidepanel = () => {
     {
       mainOption: {
         component: (
-          <Link to={getPagePath("profile", loggedInUser?.username)}>
-            <IconAndTitle
-              title="Profile"
-              alt="Profile"
-              icon={ProfileIcon}
-              size="large"
-            />
-          </Link>
+          <IconAndTitle
+            title="Profile"
+            alt="Profile"
+            icon={ProfileIcon}
+            size="large"
+          />
         ),
         id: "profile",
+        link: getPagePath("profile", loggedInUser?.username),
       },
     },
     {
       mainOption: {
         component: (
-          <Link to={getPagePath("bookmarks")}>
-            <IconAndTitle
-              title="Bookmarks"
-              alt="Bookmarks"
-              icon={BookmarkIcon}
-              size="large"
-            />
-          </Link>
+          <IconAndTitle
+            title="Bookmarks"
+            alt="Bookmarks"
+            icon={BookmarkIcon}
+            size="large"
+          />
         ),
         id: "bookmarks",
+        link: getPagePath("bookmarks"),
       },
     },
     {
       mainOption: {
         component: (
-          <Link to={getPagePath("lists")}>
-            <IconAndTitle
-              title="Lists"
-              alt="Lists"
-              icon={ListIcon}
-              size="large"
-            />
-          </Link>
+          <IconAndTitle
+            title="Lists"
+            alt="Lists"
+            icon={ListIcon}
+            size="large"
+          />
         ),
         id: "lists",
+        link: getPagePath("lists"),
       },
     },
     ...addClickHandlerToNonExpandableOptions(navMoreOptionsList, closeModal),

@@ -37,11 +37,7 @@ const OptionsList = ({
     if (option.nestedOptions && option.showNestedOptions) {
       nestedOptionsJSX = option.nestedOptions?.map((nested) => (
         <Option
-          mainOption={{
-            component: nested.component,
-            id: nested.id,
-            onSelect: nested.onSelect,
-          }}
+          mainOption={{ ...nested }}
           key={nested.id}
           extraStyles={extraOptionStyles}
         />
@@ -51,8 +47,7 @@ const OptionsList = ({
     optionsJSX.push(
       <Option
         mainOption={{
-          component: option.mainOption.component,
-          id: option.mainOption.id,
+          ...option.mainOption,
           onSelect: () => handleOptionClick(option.mainOption.id),
         }}
         nestedOptions={option.nestedOptions}
