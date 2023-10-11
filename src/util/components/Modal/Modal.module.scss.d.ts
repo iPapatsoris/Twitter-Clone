@@ -6,8 +6,6 @@ declare const classNames: typeof globalClassNames & {
   readonly Wrapper: "Wrapper";
   readonly SidePanel: "SidePanel";
   readonly Modal: "Modal";
-  readonly WithCloseIcon: "WithCloseIcon";
-  readonly CloseIcon: "CloseIcon";
   readonly Header: "Header";
   readonly Content: "Content";
 };
@@ -17,8 +15,6 @@ export type ClassNames =
   | "Wrapper"
   | "SidePanel"
   | "Modal"
-  | "WithCloseIcon"
-  | "CloseIcon"
   | "Header"
   | "Content"
   | GlobalClassNames;

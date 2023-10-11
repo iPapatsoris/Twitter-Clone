@@ -6,7 +6,6 @@ import { toPixels } from "../../string";
 import ModalWrapper from "./ModalWrapper/ModalWrapper";
 
 interface ModalProps {
-  withCloseIcon?: boolean;
   children: React.ReactNode;
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
   extraStyles?: string[];
@@ -18,7 +17,6 @@ export const ModalContext = createContext<{
 }>({ setIsActive: () => {} });
 
 const Modal = ({
-  withCloseIcon = true,
   children,
   setIsActive,
   extraStyles,
@@ -39,19 +37,11 @@ const Modal = ({
 
   const modal = (
     <div key={0} className={styles.Dummy}>
-      {withCloseIcon && (
-        <div className={styles.CloseIcon} onClick={() => setIsActive(false)}>
-          <Icon src={CloseIcon} />
-        </div>
-      )}
       <div className={styles.Content}>{children}</div>
     </div>
   );
 
   const modalStyles: string[] = [styles.Modal];
-  if (withCloseIcon) {
-    modalStyles.push(styles.WithCloseIcon);
-  }
   if (extraStyles) {
     modalStyles.push(...extraStyles);
   }
