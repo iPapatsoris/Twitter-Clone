@@ -38,19 +38,19 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
   /* Subscribe to loggedInUser without triggering a router rerender on change.
      When we login or signup, we redirect to another route directly through that 
      action. */
-  const loggedInUser = useRef<LoggedInUser | null | undefined>(
+  const loggedInUserRef = useRef<LoggedInUser | null | undefined>(
     useAuthStore.getState().loggedInUser
   );
   useEffect(() => {
     useAuthStore.subscribe(
-      (state) => (loggedInUser.current = state.loggedInUser)
+      (state) => (loggedInUserRef.current = state.loggedInUser)
     );
   }, []);
 
   const protectedLoader = (
     loader: NonNullable<ComponentProps<typeof Route>["loader"]> = () => ({})
   ) =>
-    loggedInUser
+    loggedInUserRef && loggedInUserRef.current
       ? loader
       : () => {
           throw redirect("/");
@@ -135,7 +135,11 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
         <Route
           index
           element={
-            loggedInUser ? <Navigate to={getPagePath("home")} /> : <Welcome />
+            loggedInUserRef && loggedInUserRef.current ? (
+              <Navigate to={getPagePath("home")} />
+            ) : (
+              <Welcome />
+            )
           }
         />
       </>
