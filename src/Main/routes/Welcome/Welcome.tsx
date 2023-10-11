@@ -6,7 +6,9 @@ import { Link } from "react-router-dom";
 import { getPagePath } from "../../../util/paths";
 import { useState } from "react";
 import useWindowDimensions from "../../../util/hooks/useWindowDimensions";
-import LoginSignup from "./LoginSignup";
+import Modal from "../../../util/components/Modal/Modal";
+import Signup from "../../../Signup/Signup";
+import Login from "../../../Login/Login";
 
 interface WelcomeProps {}
 
@@ -20,13 +22,13 @@ const Welcome = ({}: WelcomeProps) => {
     !isSmallScreen || (isSmallScreen && !login && !signup);
 
   const loginSignup = (
-    <LoginSignup
-      login={login}
-      signup={signup}
-      setSignup={setSignup}
-      setLogin={setLogin}
-      isSmallScreen={isSmallScreen}
-    />
+    <Modal setIsActive={login ? setLogin : setSignup}>
+      {signup ? (
+        <Signup removeSignup={() => setSignup(false)} />
+      ) : (
+        <Login removeLogin={() => setLogin(false)} />
+      )}
+    </Modal>
   );
 
   const welcomePage = (
@@ -74,7 +76,7 @@ const Welcome = ({}: WelcomeProps) => {
 
   return (
     <>
-      {loginSignup}
+      {(login || signup) && loginSignup}
       {showWelcomePage && welcomePage}
     </>
   );

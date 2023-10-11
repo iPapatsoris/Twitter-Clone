@@ -1,6 +1,4 @@
-import Icon from "../Icon/Icon";
 import styles from "./Modal.module.scss";
-import { ReactComponent as CloseIcon } from "../../../assets/icons/close.svg";
 import React, { createContext, useEffect } from "react";
 import { toPixels } from "../../string";
 import ModalWrapper from "./ModalWrapper/ModalWrapper";
