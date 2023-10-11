@@ -20,7 +20,7 @@ const GuestPrompt = ({}: GuestPromptProps) => {
   return (
     <>
       {isModalOpen && (
-        <Modal withCloseIcon={false} setIsActive={setIsModalOpen}>
+        <Modal setIsActive={setIsModalOpen}>
           {willSignup ? (
             <Signup removeSignup={() => setIsModalOpen(false)} />
           ) : (

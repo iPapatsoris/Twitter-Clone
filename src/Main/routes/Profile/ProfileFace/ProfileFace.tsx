@@ -297,7 +297,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
   return (
     <>
       {isEditModalOpen && (
-        <Modal withCloseIcon={false} setIsActive={setIsEditModalOpen}>
+        <Modal setIsActive={setIsEditModalOpen}>
           <EditProfile
             user={user}
             closeModal={() => setIsEditModalOpen(false)}

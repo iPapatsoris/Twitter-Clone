@@ -54,7 +54,6 @@ const Sidebar = () => {
       </header>
       {showCreateTweetModal && (
         <Modal
-          withCloseIcon={false}
           extraStyles={[styles.Modal]}
           setIsActive={setShowCreateTweetModal}
         >

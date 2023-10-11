@@ -12,11 +12,7 @@ const HeaderAvatar = ({}: HeaderAvatarProps) => {
   return (
     <>
       {showMobileSidePanel && (
-        <Modal
-          isSidePanel
-          setIsActive={setShowMobileSidePanel}
-          withCloseIcon={false}
-        >
+        <Modal isSidePanel setIsActive={setShowMobileSidePanel}>
           <MobileSidepanel />
         </Modal>
       )}
