@@ -42,9 +42,6 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
   const [day, setDay] = useState(birthDate ? birthDate.date() : -1);
   const [year, setYear] = useState(birthDate ? birthDate.year() : -1);
 
-  const setLoggedInUserMiniInfo = useAuthStore(
-    (state) => state.setLoggedInUserMiniInfo
-  );
   const queryClient = useQueryClient();
 
   const schema: yup.ObjectSchema<ProfileInfoT> = yup.object().shape({
@@ -102,10 +99,6 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
         onSuccess: async () => {
           queryClient.invalidateQueries({
             queryKey: profileKeys.username(user.username).queryKey,
-          });
-          setLoggedInUserMiniInfo({
-            avatar: newUser.avatar,
-            name: newUser.name,
           });
           closeModal();
         },
