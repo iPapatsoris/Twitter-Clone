@@ -42,7 +42,7 @@ const Main = ({ showContentRight }: { showContentRight: boolean }) => {
         }}
       >
         {!isErrorPage && <HeaderMainHub user={userHeader} />}
-        <div className={isErrorPage ? styles.ErrorPage : styles.ContentMain}>
+        <div className={styles.ContentMain}>
           <Outlet />
         </div>
         {!isErrorPage && showContentRight && (

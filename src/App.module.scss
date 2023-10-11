@@ -60,11 +60,4 @@
         "sidebar .            . sticky-inbox sticky-inbox";
     }
   }
-
-  &.ErrorPage {
-    grid-template-areas:
-      ". sidebar error error ."
-      ". sidebar error error ."
-      ". sidebar error error .";
-  }
 }

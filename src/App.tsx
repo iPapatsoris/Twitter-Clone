@@ -27,7 +27,6 @@ const App = () => {
   const { width } = useWindowDimensions();
   const appRef = useRef(null);
   const [showContentRight, setShowContentRight] = useState(true);
-  console.log(showContentRight);
 
   useEffect(() => {
     if (appRef && appRef.current) {
@@ -41,13 +40,9 @@ const App = () => {
     }
   }, [appRef, setShowContentRight, width]);
 
-  let extraClasses = [];
-  // Modify grid layout for different pages
-  if (isErrorPage) {
-    extraClasses.push(styles.ErrorPage);
-  } else if (path === getPagePath("explore")) {
-    extraClasses.push(styles.NoHeaderRight);
-  }
+  // Modify grid layout for explore page
+  const extraClasses =
+    path === getPagePath("explore") ? [styles.NoHeaderRight] : [];
 
   return (
     <ErrorPageContext.Provider value={{ setIsErrorPage, isErrorPage }}>
