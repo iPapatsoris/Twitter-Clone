@@ -17,8 +17,7 @@ import { getPagePath } from "./util/paths";
 import Profile from "./Main/routes/Profile/Profile";
 import { profileLoader } from "./Main/routes/Profile/ProfileFace/queries";
 import { QueryClient } from "@tanstack/react-query";
-import { shallow } from "zustand/shallow";
-import { useAuthStore } from "./store/AuthStore";
+import { LoggedInUser, useAuthStore } from "./store/AuthStore";
 import Circle from "./Main/routes/Circle/Circle";
 import { circleLoader } from "./Main/routes/Circle/queries";
 import TweetThread from "./Main/components/Tweet/TweetThread/TweetThread";
@@ -32,15 +31,21 @@ import {
   userTweetsWithRepliesLoader,
 } from "./Main/routes/Profile/Tweets/queries";
 import { homeLoader } from "./Home/queries";
-import { ComponentProps } from "react";
+import { ComponentProps, useEffect, useRef } from "react";
 import Welcome from "./Main/routes/Welcome/Welcome";
 
 const Router = ({ queryClient }: { queryClient: QueryClient }) => {
-  const loggedInUser = useAuthStore(
-    (state) => state.loggedInUser && { username: state.loggedInUser.username },
-    shallow
+  /* Subscribe to loggedInUser without triggering a router rerender on change.
+     When we login or signup, we redirect to another route directly through that 
+     action. */
+  const loggedInUser = useRef<LoggedInUser | null | undefined>(
+    useAuthStore.getState().loggedInUser
   );
-  console.log("rendering router");
+  useEffect(() => {
+    useAuthStore.subscribe(
+      (state) => (loggedInUser.current = state.loggedInUser)
+    );
+  }, []);
 
   const protectedLoader = (
     loader: NonNullable<ComponentProps<typeof Route>["loader"]> = () => ({})
@@ -50,7 +55,6 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
       : () => {
           throw redirect("/");
         };
-
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
@@ -76,7 +80,6 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
             loader={protectedLoader()}
             element={<NotificationsMentions />}
           />
-          {/* <Route index element={<Navigate to={paths.notifications.self} />} /> */}
           <Route path={getPagePath("messages")} loader={protectedLoader()} />
           <Route path={getPagePath("bookmarks")} />
           <Route path={getPagePath("lists")} />
@@ -85,25 +88,25 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
             element={<Profile />}
             id={getPagePath("profile")}
             loader={profileLoader(queryClient)}
-            errorElement={<ErrorPage />} // is this needed? can i have it globally?
+            errorElement={<ErrorPage />} // Can ErrorPage be included globally?
           >
             <Route
               index
               loader={userTweetsLoader(queryClient)}
               element={<Tweets />}
-              errorElement={<ErrorPage />} // is this needed? can i have it globally?
+              errorElement={<ErrorPage />}
             />
             <Route
               path={getPagePath("profileWithReplies")}
               loader={userTweetsWithRepliesLoader(queryClient)}
               element={<TweetsWithReplies />}
-              errorElement={<ErrorPage />} // is this needed? can i have it globally?
+              errorElement={<ErrorPage />}
             />
             <Route
               path={getPagePath("profileLikes")}
               loader={userLikedTweetsLoader(queryClient)}
               element={<LikedTweets />}
-              errorElement={<ErrorPage />} // is this needed? can i have it globally?
+              errorElement={<ErrorPage />}
             />
           </Route>
           <Route
@@ -111,21 +114,21 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
             element={<TweetThread />}
             id={getPagePath("tweet")}
             loader={tweetThreadLoader(queryClient)}
-            errorElement={<ErrorPage />} // is this needed? can i have it globally?
+            errorElement={<ErrorPage />}
           />
           <Route
             path={getPagePath("followers")}
             element={<Circle />}
             id={getPagePath("followers")}
             loader={circleLoader(queryClient, "followers")}
-            errorElement={<ErrorPage />} // is this needed?
+            errorElement={<ErrorPage />}
           />
           <Route
             path={getPagePath("following")}
             element={<Circle />}
             id={getPagePath("following")}
             loader={circleLoader(queryClient, "followees")}
-            errorElement={<ErrorPage />} // is this needed?
+            errorElement={<ErrorPage />}
           />
           <Route path="*" id={getPagePath("error")} element={<ErrorPage />} />
         </Route>

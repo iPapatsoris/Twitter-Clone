@@ -60,7 +60,7 @@ const Signup = ({ removeSignup }: SignupProps) => {
   >(async (body) => postData("user", body), {
     onSuccess: (res) => {
       setLoggedInUser(res.data?.user!);
-      navigate(getPagePath("explore"));
+      navigate(getPagePath("profile", res.data?.user.username));
     },
   });
 
