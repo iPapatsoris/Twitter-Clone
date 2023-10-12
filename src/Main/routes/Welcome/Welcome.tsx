@@ -2,9 +2,9 @@ import Icon from "../../../util/components/Icon/Icon";
 import styles from "./Welcome.module.scss";
 import { ReactComponent as Logo } from "../../../assets/logo.svg";
 import Button from "../../../util/components/Button/Button";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getPagePath } from "../../../util/paths";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useWindowDimensions from "../../../util/hooks/useWindowDimensions";
 import Modal from "../../../util/components/Modal/Modal";
 import Signup from "../../../Signup/Signup";
@@ -15,11 +15,21 @@ interface WelcomeProps {}
 const Welcome = ({}: WelcomeProps) => {
   const [login, setLogin] = useState(false);
   const [signup, setSignup] = useState(false);
+  const { state: routerState } = useLocation();
 
   const { isMobile, isTablet } = useWindowDimensions();
   const isSmallScreen = isMobile || isTablet;
   const showWelcomePage =
     !isSmallScreen || (isSmallScreen && !login && !signup);
+
+  // Open login or signup modal when sent here from another page
+  useEffect(() => {
+    if (routerState === "login") {
+      setLogin(true);
+    } else if (routerState === "signup") {
+      setSignup(true);
+    }
+  }, [routerState]);
 
   const loginSignup = (
     <Modal setIsActive={login ? setLogin : setSignup}>

@@ -1,33 +1,20 @@
-import { useState } from "react";
-import Login from "../../../Login/Login";
-import Signup from "../../../Signup/Signup";
 import Terms from "../../../Signup/Terms/Terms";
 import Button from "../../../util/components/Button/Button";
-import Modal, { openModalHandler } from "../../../util/components/Modal/Modal";
 import styles from "./GuestPrompt.module.scss";
+import { useNavigate } from "react-router-dom";
+import { getPagePath } from "../../../util/paths";
 
 interface GuestPromptProps {}
 
 const GuestPrompt = ({}: GuestPromptProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [willSignup, setWillSignup] = useState(false);
+  const navigate = useNavigate();
 
   const handleClick = (signup: boolean) => {
-    openModalHandler({ setIsModalOpen });
-    setWillSignup(signup);
+    navigate(getPagePath("welcome"), { state: signup ? "signup" : "login" });
   };
 
   return (
     <>
-      {isModalOpen && (
-        <Modal setIsActive={setIsModalOpen}>
-          {willSignup ? (
-            <Signup removeSignup={() => setIsModalOpen(false)} />
-          ) : (
-            <Login removeLogin={() => setIsModalOpen(false)} />
-          )}
-        </Modal>
-      )}
       <div className={styles.GuestPrompt}>
         <h2>New to Twitter?</h2>
         <span className={[styles.LightColor, styles.SmallText].join(" ")}>
