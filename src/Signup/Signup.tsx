@@ -10,8 +10,6 @@ import Settings from "./Steps/Settings/Settings";
 import VerifyAccountInfo from "./Steps/VerifyAccountInfo/VerifyAccountInfo";
 import VerifyEmail from "./Steps/VerifyEmail/VerifyEmail";
 import { postData } from "../util/request";
-import { useNavigate } from "react-router-dom";
-import { getPagePath } from "../util/paths";
 import Minipage from "../util/layouts/Minipage/Minipage";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
 import StepHeader from "./Steps/StepHeader";
@@ -50,8 +48,7 @@ const Signup = ({ removeSignup }: SignupProps) => {
   const [password, setPassword] = useState("");
   const [performRegistration, setPerformRegistration] = useState(false);
   const [inputToFocus, setInputToFocus] = useState<keyof AccountInfoT>("name");
-  const navigate = useNavigate();
-  const setLoggedInUser = useAuthStore((state) => state.setLoggedInUser);
+  const handleSignup = useAuthStore((state) => state.handleSignup);
 
   const { mutate } = useMutation<
     CreateUser["response"],
@@ -59,8 +56,7 @@ const Signup = ({ removeSignup }: SignupProps) => {
     CreateUser["request"]
   >(async (body) => postData("user", body), {
     onSuccess: (res) => {
-      setLoggedInUser(res.data?.user!);
-      navigate(getPagePath("profile", res.data?.user.username));
+      handleSignup(res.data?.user!);
     },
   });
 

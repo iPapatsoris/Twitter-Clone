@@ -9,11 +9,15 @@ export type LoggedInUser = NonNullable<LoginUser["response"]["data"]>["user"];
 export const useAuthStore = create<{
   loggedInUser: LoggedInUser | null | undefined;
   setLoggedInUser: (user: LoggedInUser | null) => void;
+  justSignedUp: boolean;
+  handleSignup: (user: LoggedInUser | null) => void;
 }>()(
   persist(
     (set) => ({
       loggedInUser: null,
+      justSignedUp: false,
       setLoggedInUser: (user) => set({ loggedInUser: user }),
+      handleSignup: (user) => set({ loggedInUser: user, justSignedUp: true }),
     }),
     {
       name: "loggedInUser",

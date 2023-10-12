@@ -19,6 +19,7 @@ export type Page =
   | "privacy"
   | "cookies"
   | "followers"
+  | "welcome"
   | "following";
 
 // TODO: improve code reusability for nested paths
@@ -51,6 +52,7 @@ export const getPagePath = (
     cookies: "/cookies",
     followers: "/" + usernameInPath + "/followers",
     following: "/" + usernameInPath + "/following",
+    welcome: "/",
   };
 
   return paths[page];

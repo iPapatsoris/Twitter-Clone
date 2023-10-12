@@ -17,7 +17,7 @@ import { getPagePath } from "./util/paths";
 import Profile from "./Main/routes/Profile/Profile";
 import { profileLoader } from "./Main/routes/Profile/ProfileFace/queries";
 import { QueryClient } from "@tanstack/react-query";
-import { LoggedInUser, useAuthStore } from "./store/AuthStore";
+import { useAuthStore } from "./store/AuthStore";
 import Circle from "./Main/routes/Circle/Circle";
 import { circleLoader } from "./Main/routes/Circle/queries";
 import TweetThread from "./Main/components/Tweet/TweetThread/TweetThread";
@@ -31,30 +31,31 @@ import {
   userTweetsWithRepliesLoader,
 } from "./Main/routes/Profile/Tweets/queries";
 import { homeLoader } from "./Home/queries";
-import { ComponentProps, useEffect, useRef } from "react";
+import { ComponentProps } from "react";
 import Welcome from "./Main/routes/Welcome/Welcome";
 
 const Router = ({ queryClient }: { queryClient: QueryClient }) => {
-  /* Subscribe to loggedInUser without triggering a router rerender on change.
-     When we login or signup, we redirect to another route directly through that 
-     action. */
-  const loggedInUserRef = useRef<LoggedInUser | null | undefined>(
-    useAuthStore.getState().loggedInUser
-  );
-  useEffect(() => {
-    useAuthStore.subscribe(
-      (state) => (loggedInUserRef.current = state.loggedInUser)
-    );
-  }, []);
+  const loggedInUser = useAuthStore((state) => state.loggedInUser);
+  const justSignedUp = useAuthStore((state) => state.justSignedUp);
 
   const protectedLoader = (
     loader: NonNullable<ComponentProps<typeof Route>["loader"]> = () => ({})
   ) =>
-    loggedInUserRef && loggedInUserRef.current
+    loggedInUser
       ? loader
       : () => {
           throw redirect("/");
         };
+
+  let rootRedirect = <Navigate to={getPagePath("home")} />;
+  if (!loggedInUser) {
+    rootRedirect = <Welcome />;
+  } else if (justSignedUp) {
+    rootRedirect = (
+      <Navigate to={getPagePath("profile", loggedInUser?.username)} />
+    );
+  }
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
@@ -132,16 +133,7 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
           />
           <Route path="*" id={getPagePath("error")} element={<ErrorPage />} />
         </Route>
-        <Route
-          index
-          element={
-            loggedInUserRef && loggedInUserRef.current ? (
-              <Navigate to={getPagePath("home")} />
-            ) : (
-              <Welcome />
-            )
-          }
-        />
+        <Route index element={rootRedirect} />
       </>
     )
   );

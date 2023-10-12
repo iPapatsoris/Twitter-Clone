@@ -13,8 +13,6 @@ import yup from "../util/yup";
 import styles from "./Login.module.scss";
 import { useAuthStore } from "../store/AuthStore";
 import { postData } from "../util/request";
-import { redirect } from "react-router-dom";
-import { getPagePath } from "../util/paths";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
 
 const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
@@ -27,7 +25,6 @@ const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
     onSuccess: (data) => {
       if (data.data) {
         setLoggedInUser(data.data.user);
-        redirect(getPagePath("home"));
       }
     },
   });
