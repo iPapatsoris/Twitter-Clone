@@ -37,7 +37,11 @@ const WhoToFollow = () => {
         >
           <Profile
             key={user.id}
-            preview={{ type: "user-list", username: user.username }}
+            preview={{
+              type: "user-list",
+              username: user.username,
+              nameAbbreviationLimit: 10,
+            }}
           />
         </div>
       ))}

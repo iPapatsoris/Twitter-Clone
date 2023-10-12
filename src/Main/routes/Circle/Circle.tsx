@@ -60,7 +60,12 @@ const Circle = () => {
     >
       <Profile
         key={f.id}
-        preview={{ username: f.username, type: "user-list", includeBio: true }}
+        preview={{
+          username: f.username,
+          type: "user-list",
+          includeBio: true,
+          nameAbbreviationLimit: 15,
+        }}
       />
     </div>
   ));

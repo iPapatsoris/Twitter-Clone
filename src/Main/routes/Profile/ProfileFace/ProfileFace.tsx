@@ -34,6 +34,7 @@ import { ProfileProps } from "../Profile";
 import { elementIsContainedInRefs, refsExist } from "../../../../util/ref";
 import { useHoverPopup } from "../../../../util/hooks/useHoverPopup";
 import Avatar from "./Avatar/Avatar";
+import { abbreviate } from "../../../../util/string";
 
 const ProfileFace = ({ preview }: ProfileProps) => {
   const loggedInUser = useAuthStore(
@@ -215,16 +216,23 @@ const ProfileFace = ({ preview }: ProfileProps) => {
       </Link>
     );
 
+  const abbreviationLimit =
+    preview && preview.type !== "hover"
+      ? preview.nameAbbreviationLimit
+      : undefined;
+
   const nameAndVerified = (
     <>
-      <h1 className={styles.BiggestText}>{user.name}</h1>
+      <h1 className={styles.BiggestText}>
+        {abbreviate(user.name, abbreviationLimit)}
+      </h1>
       {user.isVerified ? <Icon src={VerifiedIcon} hover="none" /> : null}
     </>
   );
 
   const usernameText = (
     <span className={[styles.LightColor, styles.BigText].join(" ")}>
-      @{user.username}
+      @{abbreviate(user.username, abbreviationLimit)}
     </span>
   );
 
