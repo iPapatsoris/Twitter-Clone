@@ -3,6 +3,7 @@
 }
 
 .Sidebar {
+  max-width: 260px;
   overflow-y: auto;
   position: sticky;
   top: 0;
@@ -13,7 +14,7 @@
   font-size: var(--bigger-text);
   grid-area: sidebar;
 
-  @include media.multi(pc-small) {
+  @include media.pc-small {
     // First align icons with each other
     align-items: center;
     // then push them to the right. If we used "align-items: flex-end" instead,
@@ -32,6 +33,7 @@
   }
 
   @include media.multi(mobile, tablet) {
+    max-width: unset;
     overflow-y: visible;
     bottom: 0;
     height: auto;
