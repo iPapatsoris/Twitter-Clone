@@ -64,7 +64,6 @@ const Circle = () => {
           username: f.username,
           type: "user-list",
           includeBio: true,
-          nameAbbreviationLimit: 15,
         }}
       />
     </div>

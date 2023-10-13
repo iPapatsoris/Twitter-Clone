@@ -14,6 +14,11 @@
   font-size: var(--small-text);
 }
 
+.EllipsisOverlow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .PushRight {
   margin-left: auto;
 }

@@ -3,6 +3,7 @@ declare const classNames: {
   readonly BiggestText: "BiggestText";
   readonly BigText: "BigText";
   readonly SmallText: "SmallText";
+  readonly EllipsisOverlow: "EllipsisOverlow";
   readonly PushRight: "PushRight";
   readonly Semantic: "Semantic";
   readonly PrimaryColor: "PrimaryColor";
@@ -15,6 +16,7 @@ export type ClassNames =
   | "BiggestText"
   | "BigText"
   | "SmallText"
+  | "EllipsisOverlow"
   | "PushRight"
   | "Semantic"
   | "PrimaryColor"

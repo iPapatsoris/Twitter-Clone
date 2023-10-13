@@ -15,7 +15,6 @@ export interface ProfileProps {
     noNavOnClick?: boolean;
     noPreviewOnHover?: boolean;
     showJustAvatar?: boolean;
-    nameAbbreviationLimit?: number;
   };
 }
 
