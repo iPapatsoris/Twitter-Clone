@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import Icon, { IconProps } from "../../util/components/Icon/Icon";
-import { Page, getPagePath } from "../../util/paths";
+import { getPagePath } from "../../util/paths";
 import MoreOptionsNavItem from "./MoreOptionsNavItem/MoreOptionsNavItem";
 import styles from "./Nav.module.scss";
 import { ComponentProps, useState } from "react";
@@ -8,7 +8,7 @@ import useWindowDimensions from "../../util/hooks/useWindowDimensions";
 interface NavItemProps {
   icon: ComponentProps<typeof Icon>["src"];
   iconActive?: ComponentProps<typeof Icon>["src"];
-  alternativeActivePages?: Page[];
+  alternativeActivePaths?: string[];
   title: string;
   path?: string;
   iconProps?: Partial<IconProps>;
@@ -18,7 +18,7 @@ interface NavItemProps {
 const NavItem = ({
   icon,
   iconActive,
-  alternativeActivePages,
+  alternativeActivePaths,
   title,
   path: itemPath = getPagePath("error"),
   isPopup = false,
@@ -27,7 +27,7 @@ const NavItem = ({
   const currentPath = useLocation().pathname;
   const isActive =
     itemPath === currentPath ||
-    alternativeActivePages?.some((page) => currentPath === getPagePath(page));
+    alternativeActivePaths?.some((page) => currentPath === page);
   const navItemClasses = [styles.BiggestText, isActive ? styles.Bold : ""];
 
   const { isSmallScreen, isPcBig } = useWindowDimensions();

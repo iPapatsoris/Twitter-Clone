@@ -83,9 +83,9 @@ const Nav = () => {
             icon={NotificationIcon}
             title="Notifications"
             path={getPagePath("notifications")}
-            alternativeActivePages={[
-              "notificationsMentions",
-              "notificationsVerified",
+            alternativeActivePaths={[
+              getPagePath("notificationsMentions"),
+              getPagePath("notificationsVerified"),
             ]}
           />
           <NavItem
@@ -113,6 +113,10 @@ const Nav = () => {
                 iconActive={ProfileIconActive}
                 title="Profile"
                 path={getPagePath("profile", loggedInUser.username)}
+                alternativeActivePaths={[
+                  getPagePath("profileWithReplies", loggedInUser.username),
+                  getPagePath("profileLikes", loggedInUser.username),
+                ]}
               />
               <NavItem icon={MoreIcon} title="More" isPopup />
             </>
