@@ -22,7 +22,12 @@ dotenv.config();
 const port = process.env.SERVER_PORT;
 const app = express();
 app.use(bodyParser.json());
-app.use(cors({ origin: process.env.CLIENT_DOMAIN, credentials: true }));
+app.use(
+  cors({
+    origin: [process.env.CLIENT_DOMAIN_DEV!, process.env.CLIENT_DOMAIN_PROD!],
+    credentials: true,
+  })
+);
 
 export const cookieName = "session";
 
