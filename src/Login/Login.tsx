@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LoginUser } from "../../backend/src/api/auth";
 import Button from "../util/components/Button/Button";
 import Form from "../util/components/Form/Form";
@@ -14,9 +14,15 @@ import styles from "./Login.module.scss";
 import { useAuthStore } from "../store/AuthStore";
 import { postData } from "../util/request";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
+import {
+  mediumPreviewProfileFields,
+  profileKeys,
+} from "../Main/routes/Profile/ProfileFace/queries";
 
 const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
   const setLoggedInUser = useAuthStore((state) => state.setLoggedInUser);
+  const queryClient = useQueryClient();
+
   const { mutate, isLoading, data } = useMutation<
     LoginUser["response"],
     unknown,
@@ -25,6 +31,11 @@ const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
     onSuccess: (data) => {
       if (data.data) {
         setLoggedInUser(data.data.user);
+        queryClient.prefetchQuery(
+          profileKeys
+            .username(data.data.user.username)
+            ._ctx.fields(mediumPreviewProfileFields)
+        );
       }
     },
   });
