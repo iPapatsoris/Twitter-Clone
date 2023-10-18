@@ -17,7 +17,7 @@ import useWindowDimensions from "../util/hooks/useWindowDimensions";
 
 const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
   const setLoggedInUser = useAuthStore((state) => state.setLoggedInUser);
-  const { mutate, isLoading } = useMutation<
+  const { mutate, isLoading, data } = useMutation<
     LoginUser["response"],
     unknown,
     LoginUser["request"]
@@ -100,6 +100,11 @@ const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
               control={control}
             />
           </div>
+          {data && !data.ok && (
+            <span className={styles.Error}>
+              Sorry, the credentials you provided are incorrect.
+            </span>
+          )}
         </div>
       </Minipage>
     </Form>
