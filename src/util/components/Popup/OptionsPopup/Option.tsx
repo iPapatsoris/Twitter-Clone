@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export type SimpleOption = {
   component: React.ReactNode;
-  id: string;
+  id: number | string;
   onSelect?: () => void;
   // Wrap item with anchor
   link?: string;

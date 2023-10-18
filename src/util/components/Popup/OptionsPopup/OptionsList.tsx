@@ -18,7 +18,7 @@ const OptionsList = ({
   const [options, setOptions] = useState<OptionWithNested[]>(initialOptions);
 
   // Toggle nested options visibility for clicked option
-  const handleOptionClick = (id: string) => {
+  const handleOptionClick = (id: string | number) => {
     const index = options.findIndex((option) => option.mainOption.id === id);
     const option = options[index];
     if (option.nestedOptions) {

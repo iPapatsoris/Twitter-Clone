@@ -3,7 +3,7 @@ import OptionsPopup from "../Popup/OptionsPopup/OptionsPopup";
 import styles from "../Input/InputWrapper.module.scss";
 import dropdownStyles from "./Dropdown.module.scss";
 import Icon from "../Icon/Icon";
-import {ReactComponent as DownArrowIcon }from "../../../assets/icons/options/down-arrow.svg";
+import { ReactComponent as DownArrowIcon } from "../../../assets/icons/options/down-arrow.svg";
 import { SimpleOption } from "../Popup/OptionsPopup/Option";
 import Popup from "../Popup/Popup";
 
@@ -37,7 +37,7 @@ const Dropdown = (props: DropdownProps) => {
   const labelStyles: styles.ClassNames[] = [];
   if (isActive) {
     wrapperStyles.push(styles.Focused);
-    labelStyles.push(styles.Blue);
+    labelStyles.push(styles.PrimaryColor);
   }
 
   return (
