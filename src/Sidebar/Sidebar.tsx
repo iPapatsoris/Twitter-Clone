@@ -5,10 +5,11 @@ import ProfileButton from "./ProfileButton/ProfileButton";
 import Button from "../util/components/Button/Button";
 import Icon from "../util/components/Icon/Icon";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuthStore } from "../store/AuthStore";
 import Modal from "../util/components/Modal/Modal";
 import CreateTweetModal from "./CreateTweetModal/CreateTweetModal";
+import { useLocation } from "react-router-dom";
 
 const Sidebar = () => {
   const { isSmallScreen, isPcBig } = useWindowDimensions();
@@ -19,6 +20,13 @@ const Sidebar = () => {
   );
 
   const [showCreateTweetModal, setShowCreateTweetModal] = useState(false);
+  const { state: routerState } = useLocation();
+
+  useEffect(() => {
+    if (routerState && routerState.closeCreateTweetModal) {
+      setShowCreateTweetModal(false);
+    }
+  }, [routerState]);
 
   const postTweetButton = isPcBig ? (
     <div className={styles.TweetButtonWrapper}>

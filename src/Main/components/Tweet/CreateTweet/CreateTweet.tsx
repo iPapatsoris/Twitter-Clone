@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./CreateTweet.module.scss";
 import { getPagePath } from "../../../../util/paths";
 import { useAuthStore } from "../../../../store/AuthStore";
@@ -66,6 +66,7 @@ const CreateTweet = ({
   };
 
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { mutate } = useMutation<
     CreateTweetAPI["response"],
@@ -78,6 +79,9 @@ const CreateTweet = ({
         queryClient.invalidateQueries(
           timelineKeys.timeline(queryClient).queryKey
         );
+        navigate(getPagePath("home"), {
+          state: { closeCreateTweetModal: true },
+        });
       }
     },
   });
