@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./Tweet.module.scss";
 import { ExpansionDirection, tweetThreadKeys } from "./TweetThread/queries";
 import { GetTweet } from "../../../../backend/src/api/tweet";
-import { GetUserThreadsAndRetweets } from "../../../../backend/src/api/user";
+import { GetUserThreads } from "../../../../backend/src/api/user";
 import { userTweetsKeys } from "../../routes/Profile/Tweets/queries";
 import { setTweet } from "./queries";
 
@@ -64,30 +64,28 @@ const ShowMoreTweets = ({
     } else if (direction === "upward" && upwardProps) {
       const { threadIndex, username } = upwardProps;
       const originalUserTweets = queryClient.getQueryData<
-        GetUserThreadsAndRetweets["response"]
+        GetUserThreads["response"]
       >(userTweetsKeys.tweetsOfUsername(username)._ctx.withReplies.queryKey);
 
       if (originalUserTweets && expandedReplies) {
         // Immutably Update user tweets with full conversation
         const originalThread =
-          originalUserTweets.data?.threadsAndRetweets[threadIndex].thread
-            ?.tweets;
+          originalUserTweets.data?.threads[threadIndex].tweets;
         const fullThread = [
           ...expandedReplies,
           originalThread![originalThread!.length - 1],
         ];
-        const newThreadsAndRetweets: NonNullable<
-          GetUserThreadsAndRetweets["response"]["data"]
-        >["threadsAndRetweets"] =
-          originalUserTweets.data?.threadsAndRetweets.map((t) => ({ ...t }))!;
-        newThreadsAndRetweets[threadIndex].thread = {
+        const newThreads: NonNullable<
+          GetUserThreads["response"]["data"]
+        >["threads"] = originalUserTweets.data?.threads.map((t) => ({ ...t }))!;
+        newThreads[threadIndex] = {
           hasMoreNestedReplies: false,
           tweets: fullThread,
         };
 
-        queryClient.setQueryData<GetUserThreadsAndRetweets["response"]>(
+        queryClient.setQueryData<GetUserThreads["response"]>(
           userTweetsKeys.tweetsOfUsername(username)._ctx.withReplies.queryKey,
-          { ok: true, data: { threadsAndRetweets: [...newThreadsAndRetweets] } }
+          { ok: true, data: { threads: [...newThreads] } }
         );
       }
     }

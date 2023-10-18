@@ -1,7 +1,7 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { getData } from "../../../../util/request";
 import {
-  GetUserThreadsAndRetweets,
+  GetUserThreads,
   GetUserTweetsAndRetweets,
 } from "../../../../../backend/src/api/user";
 import { GetTweets } from "../../../../../backend/src/api/tweet";
@@ -15,8 +15,8 @@ export const userTweetsKeys = createQueryKeys("userTweets", {
     queryFn: () => userTweetsQuery(username),
     contextQueries: {
       withReplies: {
-        queryKey: ["withReplies"],
-        queryFn: () => userTweetsWithRepliesQuery(username),
+        queryKey: ["replies"],
+        queryFn: () => userRepliesQuery(username),
       },
       likedTweets: {
         queryKey: ["likedTweets"],
@@ -37,8 +37,8 @@ const userTweetsQuery = async (username: string) => {
   return res;
 };
 
-const userTweetsWithRepliesQuery = async (username: string) => {
-  const res = await getData<GetUserThreadsAndRetweets["response"]>(
+const userRepliesQuery = async (username: string) => {
+  const res = await getData<GetUserThreads["response"]>(
     "user/" + username + "/replies"
   );
 
@@ -73,7 +73,7 @@ export const userTweetsLoader =
     return data;
   };
 
-export const userTweetsWithRepliesLoader =
+export const userRepliesLoader =
   (queryClient: QueryClient) =>
   async ({ params }: LoaderFunctionArgs) => {
     const { queryKey, queryFn } = userTweetsKeys.tweetsOfUsername(
@@ -81,12 +81,8 @@ export const userTweetsWithRepliesLoader =
     )._ctx.withReplies;
 
     const data = await queryClient.fetchQuery({ queryKey, queryFn });
-    data.data?.threadsAndRetweets.forEach((t) => {
-      if (t.retweet) {
-        setTweet(t.retweet.tweet, queryClient);
-      } else {
-        t.thread?.tweets.forEach((tweet) => setTweet(tweet, queryClient));
-      }
+    data.data?.threads.forEach((thread) => {
+      thread.tweets.forEach((tweet) => setTweet(tweet, queryClient));
     });
     return data;
   };

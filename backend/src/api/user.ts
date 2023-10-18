@@ -58,12 +58,9 @@ export type GetUserFolloweeSuggestions<T extends GetUserFields> = {
   }>;
 };
 
-export type GetUserThreadsAndRetweets = {
+export type GetUserThreads = {
   response: NormalResponse<{
-    threadsAndRetweets: Array<{
-      thread?: Thread;
-      retweet?: Retweet;
-    }>;
+    threads: Thread[];
   }>;
 };
 

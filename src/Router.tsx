@@ -22,13 +22,13 @@ import Circle from "./Main/routes/Circle/Circle";
 import { circleLoader } from "./Main/routes/Circle/queries";
 import TweetThread from "./Main/components/Tweet/TweetThread/TweetThread";
 import { tweetThreadLoader } from "./Main/components/Tweet/TweetThread/queries";
-import TweetsWithReplies from "./Main/routes/Profile/Tweets/TweetsWithReplies";
+import TweetsWithReplies from "./Main/routes/Profile/Tweets/Replies";
 import Tweets from "./Main/routes/Profile/Tweets/Tweets";
 import LikedTweets from "./Main/routes/Profile/Tweets/LikedTweets";
 import {
   userLikedTweetsLoader,
   userTweetsLoader,
-  userTweetsWithRepliesLoader,
+  userRepliesLoader,
 } from "./Main/routes/Profile/Tweets/queries";
 import { homeLoader } from "./Home/queries";
 import { ComponentProps } from "react";
@@ -99,7 +99,7 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
             />
             <Route
               path={getPagePath("profileWithReplies")}
-              loader={userTweetsWithRepliesLoader(queryClient)}
+              loader={userRepliesLoader(queryClient)}
               element={<TweetsWithReplies />}
               errorElement={<ErrorPage />}
             />

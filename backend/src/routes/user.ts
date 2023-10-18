@@ -11,7 +11,7 @@ import {
   GetUserFolloweeSuggestions,
   GetUserFollowers,
   GetUsernameExists,
-  GetUserThreadsAndRetweets,
+  GetUserThreads,
   GetUserTweetsAndRetweets,
   UpdateUser,
 } from "../api/user.js";
@@ -27,7 +27,6 @@ import {
   getTweets,
   getUniqueThreads,
   getUserRetweets,
-  mergeThreadsAndRetweets,
   mergeTweetsAndRetweets,
 } from "../services/tweet.js";
 import {
@@ -344,38 +343,32 @@ router.get(
   "/:username/replies",
   async (
     req: TypedRequestQuery<{ username: string }>,
-    res: Response<GetUserThreadsAndRetweets["response"]>
+    res: Response<GetUserThreads["response"]>
   ) => {
     const { username } = req.params;
     const currentUserID = req.session.userID || -1;
+
     const replyIDs = await runQuery<{ id: number }>(
       "SELECT tweet.id \
        FROM tweet, user \
-       WHERE authorID = user.id AND user.username = ?",
+       WHERE authorID = user.id AND user.username = ? AND isReply = true",
       [username]
     );
 
-    const tweetsAndReplies = await getTweets(
+    const replies = await getTweets(
       replyIDs.map(({ id }) => id),
       currentUserID
     );
 
     // Don't show a thread multiple times, if the user has multiple responses
     // within the thread
-    const uniqueTweetsAndReplies = getUniqueThreads(tweetsAndReplies);
+    const uniqueReplies = getUniqueThreads(replies);
 
-    const tweetsAndRepliesWithNested: Thread[] = await Promise.all(
-      uniqueTweetsAndReplies.map(async (tweet) => {
-        if (!tweet.isReply || !tweet.referencedTweetID) {
-          // Tweet is not a reply; return 1 tweet
-          return {
-            tweets: [tweet],
-            hasMoreNestedReplies: false,
-          };
-        }
+    const repliesWithNested: Thread[] = await Promise.all(
+      uniqueReplies.map(async (tweet) => {
         // Tweet is a reply; get referenced tweet
         const previousReply = await getTweet(
-          tweet.referencedTweetID,
+          tweet.referencedTweetID!,
           currentUserID
         );
         let originalTweet: Tweet | null = null;
@@ -408,15 +401,10 @@ router.get(
       })
     );
 
-    const retweets = await getUserRetweets(username, currentUserID);
-
     res.send({
       ok: true,
       data: {
-        threadsAndRetweets: mergeThreadsAndRetweets(
-          tweetsAndRepliesWithNested,
-          retweets
-        ),
+        threads: repliesWithNested,
       },
     });
   }

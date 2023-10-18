@@ -42,7 +42,7 @@ export const getPagePath = (
     bookmarks: "/i/bookmarks",
     lists: "/" + usernameInPath + "/lists",
     profile: "/" + usernameInPath,
-    profileWithReplies: "/" + usernameInPath + "/with_replies",
+    profileWithReplies: "/" + usernameInPath + "/replies",
     profileLikes: "/" + usernameInPath + "/likes",
     tweet: "/" + usernameInPath + "/status/" + tweetInPath,
     error: "/error",
