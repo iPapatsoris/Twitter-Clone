@@ -42,6 +42,7 @@ const ActualComponent = <FormInput extends FieldValues>(
     leader,
     showStatusIcon,
     onBlur: onBlurUser = () => {},
+    autocomplete,
   } = props;
   const {
     field: { onChange, onBlur, value, ref: register },
@@ -87,6 +88,7 @@ const ActualComponent = <FormInput extends FieldValues>(
       type={type}
       leader={leader}
       showStatusIcon={showStatusIcon}
+      autocomplete={autocomplete}
     />
   );
 };

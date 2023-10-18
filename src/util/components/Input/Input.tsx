@@ -32,6 +32,7 @@ interface InputProps {
   helper?: React.ReactElement;
   showStatusIcon?: boolean;
   leader?: React.ReactNode;
+  autocomplete?: HTMLProps<HTMLInputElement>["autoComplete"];
 }
 
 export type RefType = HTMLInputElement | HTMLTextAreaElement;
@@ -53,6 +54,7 @@ const Input = forwardRef<RefType, InputProps>(
       type: initialType = "text",
       showStatusIcon = false,
       leader = "",
+      autocomplete,
     },
     fref
   ) => {
@@ -194,6 +196,7 @@ const Input = forwardRef<RefType, InputProps>(
           {...inputProps}
           ref={ref as ForwardedRef<HTMLInputElement>}
           type={inputType}
+          autoComplete={autocomplete}
         />
       );
     }

@@ -93,11 +93,14 @@ const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
               name="email"
               placeholder="Email"
               control={control}
+              autocomplete="email"
             />
             <FormInput
               name="password"
               placeholder="Password"
               control={control}
+              type="password"
+              autocomplete="current-password"
             />
           </div>
           {data && !data.ok && (
