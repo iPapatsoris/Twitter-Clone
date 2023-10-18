@@ -74,13 +74,12 @@ const MobileSidepanel = () => {
         alt="Logout"
         icon={LogoutIcon}
         size="small"
-        onClick={() => {
-          logout();
-          setIsActive(false);
-        }}
       />
     ),
     id: "logout",
+    onSelect: () => {
+      logout();
+    },
   });
 
   return (
