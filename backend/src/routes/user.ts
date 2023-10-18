@@ -126,9 +126,6 @@ router
       const values: any = [];
       fields.forEach((key) => values.push(user[key]));
 
-      console.log(preparedFields);
-      console.log(values);
-
       await runQuery(
         "UPDATE user SET " + preparedFields.join("") + " WHERE id = ?",
         [...values, currentUserID]

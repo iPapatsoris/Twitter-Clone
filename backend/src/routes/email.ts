@@ -18,7 +18,6 @@ router.get(
     res: Response<GetEmail["response"]>
   ) => {
     const { email } = req.params;
-    console.log(email);
 
     res.send({
       ok: true,

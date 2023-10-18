@@ -105,7 +105,6 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
       }
     );
   };
-  console.log(user);
 
   const scrollToInput = (ref: RefObject<HTMLInputElement>) => {
     if (ref && ref.current) ref.current.scrollIntoView({ behavior: "smooth" });

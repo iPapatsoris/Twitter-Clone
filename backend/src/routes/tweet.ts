@@ -312,8 +312,6 @@ router.get(
         )
       )
     ).flat();
-    console.log("tweets ", tweets);
-    console.log("retweets ", retweets);
 
     res.send({
       ok: true,
