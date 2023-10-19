@@ -1,6 +1,7 @@
 import { SetStateAction } from "react";
 import Popup from "../../../../util/components/Popup/Popup";
 import Profile from "./ProfileFace";
+import useWindowDimensions from "../../../../util/hooks/useWindowDimensions";
 
 interface ProfileHoverPreviewProps {
   isOpen: boolean;
@@ -14,8 +15,10 @@ const ProfileHoverPreview = ({
   setIsOpen,
   targetAreaRef,
   username,
-}: ProfileHoverPreviewProps) =>
-  !isOpen ? null : (
+}: ProfileHoverPreviewProps) => {
+  const { isSmallScreen } = useWindowDimensions();
+
+  return !isOpen || isSmallScreen ? null : (
     <Popup
       position={{ block: "bottom", inline: "leftCover" }}
       setIsActive={setIsOpen}
@@ -32,5 +35,6 @@ const ProfileHoverPreview = ({
       />
     </Popup>
   );
+};
 
 export default ProfileHoverPreview;
