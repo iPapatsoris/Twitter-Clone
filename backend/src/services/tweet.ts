@@ -229,14 +229,15 @@ export const mergeTweetsAndRetweets = (
   tweets: Tweet[],
   retweets: Retweet[]
 ) => {
-  const wrappedTweets: Array<{
-    tweet?: Tweet;
-    retweet?: Retweet;
-  }> = tweets.map((tweet) => ({
-    tweet,
-  }));
+  const tweetsWithoutSelfRetweets: Array<{ tweet?: Tweet; retweet?: Retweet }> =
+    [];
+  tweets.forEach((tweet) => {
+    if (!retweets.find((retweet) => retweet.tweet.id === tweet.id)) {
+      tweetsWithoutSelfRetweets.push({ tweet });
+    }
+  });
 
-  const tweetsAndRetweets = wrappedTweets.concat(
+  const tweetsAndRetweets = tweetsWithoutSelfRetweets.concat(
     retweets.map((retweet) => ({ retweet: retweet }))
   );
 
