@@ -1,12 +1,12 @@
 import styles from "./TweetActions.module.scss";
-import {ReactComponent as RetweetIcon }from "../../../../assets/icons/tweet/retweet.svg";
-import {ReactComponent as RetweetActiveIcon} from "../../../../assets/icons/tweet/retweet-active.svg";
-import {ReactComponent as ReplyIcon} from "../../../../assets/icons/tweet/reply.svg";
-import {ReactComponent as LikeIcon } from "../../../../assets/icons/tweet/like.svg";
-import {ReactComponent as LikedIcon } from "../../../../assets/icons/tweet/liked.svg";
-import {ReactComponent as ViewsIcon } from "../../../../assets/icons/tweet/views.svg";
-import {ReactComponent as ShareIcon } from "../../../../assets/icons/tweet/share.svg";
-import {ReactComponent as BookmarkIcon }from "../../../../assets/icons/tweet/bookmark.svg";
+import { ReactComponent as RetweetIcon } from "../../../../assets/icons/tweet/retweet.svg";
+import { ReactComponent as RetweetActiveIcon } from "../../../../assets/icons/tweet/retweet-active.svg";
+import { ReactComponent as ReplyIcon } from "../../../../assets/icons/tweet/reply.svg";
+import { ReactComponent as LikeIcon } from "../../../../assets/icons/tweet/like.svg";
+import { ReactComponent as LikedIcon } from "../../../../assets/icons/tweet/liked.svg";
+import { ReactComponent as ViewsIcon } from "../../../../assets/icons/tweet/views.svg";
+import { ReactComponent as ShareIcon } from "../../../../assets/icons/tweet/share.svg";
+import { ReactComponent as BookmarkIcon } from "../../../../assets/icons/tweet/bookmark.svg";
 import Icon, { IconProps } from "../../../../util/components/Icon/Icon";
 import {
   QueryClient,
@@ -24,6 +24,8 @@ import {
 } from "./queries";
 import { tweetKeys } from "../queries";
 import { SingleTweetResponse } from "../../../../../backend/src/api/tweet";
+import { useNavigate } from "react-router-dom";
+import { getPagePath } from "../../../../util/paths";
 
 export const getRefreshTweetCallback =
   (
@@ -58,6 +60,7 @@ const TweetActions = ({
 }: TweetActionsProps) => {
   const { stats, isLiked, isRetweeted, id, author } = tweet;
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { mutate: likeTweetMutation } = useMutation(likeTweetQuery, {
     onSuccess: getRefreshTweetCallback(queryClient),
@@ -85,19 +88,24 @@ const TweetActions = ({
       ].join(" ")}
     >
       <Icon
-        src={ReplyIcon }
+        src={ReplyIcon}
         hover="primary"
         title="Reply"
         text={includeText ? stats.totalReplies.toString() : ""}
         noBottomMargin
         noInlineMargin
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate(getPagePath("tweet", author.username, id), {
+            state: { autofocus: true },
+          });
+        }}
         {...extraIconProps}
       />
       <Icon
         noBottomMargin
         noInlineMargin
-        src={isRetweeted ? RetweetActiveIcon  : RetweetIcon }
+        src={isRetweeted ? RetweetActiveIcon : RetweetIcon}
         hover="green"
         title={isRetweeted ? "Undo Retweet" : "Retweet"}
         text={includeText ? stats.totalRetweets.toString() : ""}
@@ -112,7 +120,7 @@ const TweetActions = ({
       <Icon
         noBottomMargin
         noInlineMargin
-        src={isLiked ? LikedIcon  : LikeIcon }
+        src={isLiked ? LikedIcon : LikeIcon}
         hover="pink"
         title={isLiked ? "Unlike" : "Like"}
         text={includeText ? stats.totalLikes.toString() : ""}
@@ -128,7 +136,7 @@ const TweetActions = ({
         <Icon
           noBottomMargin
           noInlineMargin
-          src={BookmarkIcon }
+          src={BookmarkIcon}
           hover="primary"
           title="Bookmark"
           text={includeText ? stats.views.toString() : ""}
@@ -139,7 +147,7 @@ const TweetActions = ({
         <Icon
           noBottomMargin
           noInlineMargin
-          src={ViewsIcon }
+          src={ViewsIcon}
           hover="primary"
           title="Views"
           text={includeText ? stats.views.toString() : ""}
@@ -151,7 +159,7 @@ const TweetActions = ({
         noBottomMargin
         noInlineMargin
         onClick={(e) => e.stopPropagation()}
-        src={ShareIcon }
+        src={ShareIcon}
         hover="primary"
         title="Share"
         {...extraIconProps}

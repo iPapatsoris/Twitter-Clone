@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./CreateTweet.module.scss";
 import { getPagePath } from "../../../../util/paths";
 import { useAuthStore } from "../../../../store/AuthStore";
@@ -39,7 +39,7 @@ const CreateTweet = ({
   referencedTweetID,
 }: CreateTweetProps) => {
   const { loggedInUser } = useAuthStore();
-  const params = useParams();
+  const { state: routerState } = useLocation();
   const { setIsActive } = useContext(ModalContext);
   const isReply = referencedTweetID !== undefined;
 
@@ -94,7 +94,9 @@ const CreateTweet = ({
           queryClient.invalidateQueries(
             tweetThreadKeys.tweetID(referencedTweetID, queryClient).queryKey
           );
-          navigate(getPagePath("tweet", params.username, data.data?.tweetID));
+          navigate(
+            getPagePath("tweet", loggedInUser?.username, data.data?.tweetID)
+          );
         }
       }
     },
@@ -137,7 +139,7 @@ const CreateTweet = ({
             value: value,
             onChange,
             placeholder: isReply ? "Post a reply" : "What is happening?!",
-            autoFocus: autofocus,
+            autoFocus: autofocus || (routerState && routerState.autofocus),
           }}
           refToAlignTopRowWith={avatarRef}
         />
