@@ -25,6 +25,10 @@
 .TweetWrapper {
   &.Simple {
     min-height: 6rem;
+
+    .Text {
+      padding-bottom: 1rem;
+    }
   }
 
   display: flex;

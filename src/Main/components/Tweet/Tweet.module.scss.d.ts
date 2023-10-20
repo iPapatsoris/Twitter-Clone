@@ -9,6 +9,7 @@ declare const classNames: typeof globalClassNames & {
   readonly RetweetIcon: "RetweetIcon";
   readonly TweetWrapper: "TweetWrapper";
   readonly Simple: "Simple";
+  readonly Text: "Text";
   readonly Avatar: "Avatar";
   readonly ReplyLine: "ReplyLine";
   readonly ShowMoreIcon: "ShowMoreIcon";
@@ -19,7 +20,6 @@ declare const classNames: typeof globalClassNames & {
   readonly NameAndVerified: "NameAndVerified";
   readonly Subinfo: "Subinfo";
   readonly MoreIcon: "MoreIcon";
-  readonly Text: "Text";
 };
 export = classNames;
 export type ClassNames =
@@ -30,6 +30,7 @@ export type ClassNames =
   | "RetweetIcon"
   | "TweetWrapper"
   | "Simple"
+  | "Text"
   | "Avatar"
   | "ReplyLine"
   | "ShowMoreIcon"
@@ -40,5 +41,4 @@ export type ClassNames =
   | "NameAndVerified"
   | "Subinfo"
   | "MoreIcon"
-  | "Text"
   | GlobalClassNames;

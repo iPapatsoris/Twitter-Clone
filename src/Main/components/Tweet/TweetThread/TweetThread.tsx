@@ -8,12 +8,14 @@ import List from "../../../layouts/ContentRight/List/List";
 import ShowMoreTweets from "../ShowMoreTweets";
 import { useRef, useState, useLayoutEffect } from "react";
 import CreateTweet from "../CreateTweet/CreateTweet";
+import useWindowDimensions from "../../../../util/hooks/useWindowDimensions";
 
 interface TweetThreadProps {}
 
 const TweetThread = ({}: TweetThreadProps) => {
   const params = useParams();
   const queryClient = useQueryClient();
+  const { isSmallScreen } = useWindowDimensions();
   const { data, isSuccess } = useQuery(
     tweetThreadKeys.tweetID(parseInt(params.tweetID!), queryClient)
   );
@@ -73,7 +75,7 @@ const TweetThread = ({}: TweetThreadProps) => {
       {!refExists ? null : (
         <MainTweet tweetThreadRef={ref} tweetID={tweet.id} />
       )}
-      <CreateTweet referencedTweetID={tweet.id} />
+      {!isSmallScreen && <CreateTweet referencedTweetID={tweet.id} />}
       <List>{repliesJSX}</List>
     </div>
   );
