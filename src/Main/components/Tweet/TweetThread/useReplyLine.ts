@@ -1,5 +1,6 @@
 import { useLayoutEffect } from "react";
 import { toPixels } from "../../../../util/string";
+import useWindowDimensions from "../../../../util/hooks/useWindowDimensions";
 
 type RefType = React.RefObject<HTMLDivElement>;
 
@@ -15,6 +16,7 @@ export const useReplyLine = (
   avatarRef: RefType,
   lineRef: RefType
 ) => {
+  const { width, height } = useWindowDimensions();
   useLayoutEffect(() => {
     if (drawLine && avatarRef.current && tweetRef.current && lineRef.current) {
       const avatarCoordinates = avatarRef.current?.getBoundingClientRect();
@@ -41,5 +43,5 @@ export const useReplyLine = (
               2 * gapBetweenLineAndAvatar
       );
     }
-  }, [drawLine, tweetRef, avatarRef, lineRef, noLineExtension]);
+  }, [drawLine, tweetRef, avatarRef, lineRef, noLineExtension, width, height]);
 };
