@@ -10,9 +10,7 @@ import Modal from "../../../util/components/Modal/Modal";
 import Signup from "../../../Signup/Signup";
 import Login from "../../../Login/Login";
 
-interface WelcomeProps {}
-
-const Welcome = ({}: WelcomeProps) => {
+const Welcome = () => {
   const [login, setLogin] = useState(false);
   const [signup, setSignup] = useState(false);
   const { state: routerState } = useLocation();

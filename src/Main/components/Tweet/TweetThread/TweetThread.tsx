@@ -10,9 +10,7 @@ import { useRef, useState, useLayoutEffect } from "react";
 import CreateTweet from "../CreateTweet/CreateTweet";
 import useWindowDimensions from "../../../../util/hooks/useWindowDimensions";
 
-interface TweetThreadProps {}
-
-const TweetThread = ({}: TweetThreadProps) => {
+const TweetThread = () => {
   const params = useParams();
   const queryClient = useQueryClient();
   const { isSmallScreen } = useWindowDimensions();

@@ -5,7 +5,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { charLimits, UpdateUser } from "../../../../../../backend/src/api/user";
 import { UpdateUserFields } from "../../../../../../backend/src/permissions";
-import { useAuthStore } from "../../../../../store/AuthStore";
 import Form from "../../../../../util/components/Form/Form";
 import Minipage from "../../../../../util/layouts/Minipage/Minipage";
 import yup from "../../../../../util/yup";

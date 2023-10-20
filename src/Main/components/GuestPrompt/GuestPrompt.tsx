@@ -4,9 +4,7 @@ import styles from "./GuestPrompt.module.scss";
 import { useNavigate } from "react-router-dom";
 import { getPagePath } from "../../../util/paths";
 
-interface GuestPromptProps {}
-
-const GuestPrompt = ({}: GuestPromptProps) => {
+const GuestPrompt = () => {
   const navigate = useNavigate();
 
   const handleClick = (signup: boolean) => {

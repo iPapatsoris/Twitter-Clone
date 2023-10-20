@@ -7,7 +7,6 @@ import {
 import { LoaderFunctionArgs } from "react-router-dom";
 import { NormalResponse } from "../../../../backend/src/api/common";
 import {
-  GetUser,
   GetUserFollowees,
   GetUserFollowers,
 } from "../../../../backend/src/api/user";

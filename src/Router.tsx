@@ -10,9 +10,6 @@ import App from "./App";
 import Home from "./Home/Home";
 import ErrorPage from "./Main/routes/ErrorPage/ErrorPage";
 import Explore from "./Main/routes/Explore/Explore";
-import Notifications from "./Main/routes/Notifications/Notifications";
-import NotificationsVerified from "./Main/routes/Notifications/NotificationsVerified";
-import NotificationsMentions from "./Main/routes/Notifications/NotificationsMentions";
 import { getPagePath } from "./util/paths";
 import Profile from "./Main/routes/Profile/Profile";
 import { profileLoader } from "./Main/routes/Profile/ProfileFace/queries";
@@ -69,17 +66,14 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
           <Route
             path={getPagePath("notifications")}
             loader={protectedLoader()}
-            element={<Notifications />}
           />
           <Route
             path={getPagePath("notificationsVerified")}
             loader={protectedLoader()}
-            element={<NotificationsVerified />}
           />
           <Route
             path={getPagePath("notificationsMentions")}
             loader={protectedLoader()}
-            element={<NotificationsMentions />}
           />
           <Route path={getPagePath("messages")} loader={protectedLoader()} />
           <Route path={getPagePath("bookmarks")} />

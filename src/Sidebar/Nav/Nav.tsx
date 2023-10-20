@@ -28,7 +28,7 @@ const Nav = () => {
   const loggedInUser = useAuthStore(
     (state) => state.loggedInUser && { username: state.loggedInUser.username }
   );
-  const { isSmallScreen, isPcBig } = useWindowDimensions();
+  const { isSmallScreen } = useWindowDimensions();
 
   let itemPath = getPagePath("explore");
   const explore = (

@@ -4,9 +4,7 @@ import MobileSidepanel from "../../../../Sidebar/MobileSidepanel";
 import Avatar from "../../../routes/Profile/ProfileFace/Avatar/Avatar";
 import { useAuthStore } from "../../../../store/AuthStore";
 
-interface HeaderAvatarProps {}
-
-const HeaderAvatar = ({}: HeaderAvatarProps) => {
+const HeaderAvatar = () => {
   const [showMobileSidePanel, setShowMobileSidePanel] = useState(false);
   const { loggedInUser } = useAuthStore();
   return (
