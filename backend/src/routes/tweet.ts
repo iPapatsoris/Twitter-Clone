@@ -98,7 +98,7 @@ router.post(
         )
       );
     }
-    res.send({ ok: true });
+    res.send({ ok: true, data: { tweetID: result.insertId } });
   }
 );
 

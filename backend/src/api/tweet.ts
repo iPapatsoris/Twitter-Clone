@@ -7,7 +7,7 @@ export type CreateTweet = {
   request: {
     tweet: Pick<Tweet, "text" | "isReply" | "referencedTweetID">;
   };
-  response: NormalResponse;
+  response: NormalResponse<{ tweetID: number }>;
 };
 
 export type GetTweets = {

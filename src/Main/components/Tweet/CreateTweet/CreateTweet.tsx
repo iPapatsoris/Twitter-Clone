@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styles from "./CreateTweet.module.scss";
 import { getPagePath } from "../../../../util/paths";
 import { useAuthStore } from "../../../../store/AuthStore";
@@ -39,6 +39,7 @@ const CreateTweet = ({
   referencedTweetID,
 }: CreateTweetProps) => {
   const { loggedInUser } = useAuthStore();
+  const params = useParams();
   const { setIsActive } = useContext(ModalContext);
   const isReply = referencedTweetID !== undefined;
 
@@ -93,6 +94,7 @@ const CreateTweet = ({
           queryClient.invalidateQueries(
             tweetThreadKeys.tweetID(referencedTweetID, queryClient).queryKey
           );
+          navigate(getPagePath("tweet", params.username, data.data?.tweetID));
         }
       }
     },
