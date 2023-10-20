@@ -28,7 +28,6 @@ const Replies = () => {
             tweetID={tweet.id}
           />
         );
-        console.log("first ", tweet.id);
 
         if (!isFullThread) {
           repliesJSX.push(
@@ -43,7 +42,6 @@ const Replies = () => {
               }}
             />
           );
-          console.log("show more");
         }
       } else {
         repliesJSX.push(
@@ -53,12 +51,9 @@ const Replies = () => {
             tweetID={tweet.id}
           />
         );
-        console.log("last ", tweet.id);
       }
     });
   });
-
-  console.log(repliesJSX);
 
   return <List>{repliesJSX}</List>;
 };

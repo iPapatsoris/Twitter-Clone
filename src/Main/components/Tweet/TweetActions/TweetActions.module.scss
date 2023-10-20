@@ -10,7 +10,6 @@
   }
 }
 
-// TODO: put globally in Modal component?
 .Modal {
   @include media.multi(pc-small, pc) {
     height: min-content !important;
