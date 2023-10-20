@@ -8,6 +8,7 @@ declare const classNames: typeof globalClassNames & {
   readonly RetweetIconWrapper: "RetweetIconWrapper";
   readonly RetweetIcon: "RetweetIcon";
   readonly TweetWrapper: "TweetWrapper";
+  readonly Simple: "Simple";
   readonly Avatar: "Avatar";
   readonly ReplyLine: "ReplyLine";
   readonly ShowMoreIcon: "ShowMoreIcon";
@@ -28,6 +29,7 @@ export type ClassNames =
   | "RetweetIconWrapper"
   | "RetweetIcon"
   | "TweetWrapper"
+  | "Simple"
   | "Avatar"
   | "ReplyLine"
   | "ShowMoreIcon"

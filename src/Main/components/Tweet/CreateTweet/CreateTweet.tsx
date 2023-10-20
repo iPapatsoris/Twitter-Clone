@@ -23,6 +23,7 @@ import Icon from "../../../../util/components/Icon/Icon";
 import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg";
 import { ModalContext } from "../../../../util/components/Modal/Modal";
 import { tweetThreadKeys } from "../TweetThread/queries";
+import Tweet from "../Tweet";
 
 interface CreateTweetProps {
   autofocus?: boolean;
@@ -42,6 +43,7 @@ const CreateTweet = ({
   const { state: routerState } = useLocation();
   const { setIsActive } = useContext(ModalContext);
   const isReply = referencedTweetID !== undefined;
+  const isReplyInModal = isReply && asModalContent;
 
   const schema: any = yup.object().shape({
     tweet: yup.string().required().max(tweetCharLimit),
@@ -81,9 +83,8 @@ const CreateTweet = ({
   >((body) => postData("tweet", body), {
     onSuccess: (data) => {
       if (data.ok) {
-        form.reset();
-
         if (!isReply) {
+          form.reset();
           queryClient.invalidateQueries(
             timelineKeys.timeline(queryClient).queryKey
           );
@@ -95,7 +96,8 @@ const CreateTweet = ({
             tweetThreadKeys.tweetID(referencedTweetID, queryClient).queryKey
           );
           navigate(
-            getPagePath("tweet", loggedInUser?.username, data.data?.tweetID)
+            getPagePath("tweet", loggedInUser?.username, data.data?.tweetID),
+            { state: { closeCreateTweetModal: true } }
           );
         }
       }
@@ -114,7 +116,7 @@ const CreateTweet = ({
       className={[
         styles.CreateTweet,
         asModalContent ? styles.AsModalContent : "",
-        isReply ? styles.Reply : "",
+        isReply ? styles.Replying : "",
       ].join(" ")}
     >
       {asModalContent && (
@@ -124,7 +126,13 @@ const CreateTweet = ({
           title="Close"
           alt="Close"
           extraWrapperStyles={[styles.CloseIcon]}
+          noInlineMargin
         />
+      )}
+      {isReplyInModal && (
+        <div className={styles.TweetToReplyTo}>
+          <Tweet tweetID={referencedTweetID} drawReplyLine simpleView />
+        </div>
       )}
       <div ref={avatarRef} className={styles.Avatar}>
         <Link to={getPagePath("profile", loggedInUser?.username)}>

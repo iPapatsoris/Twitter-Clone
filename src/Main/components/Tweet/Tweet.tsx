@@ -23,8 +23,11 @@ interface TweetProps {
   // Conect a tweet with its reply with a line
   drawReplyLine?: boolean;
   // Make reply line stop at current tweet and not extend to next tweet.
-  // Is typically used when the next tweet is a "showMoreTweets" option.
+  // Used when the next tweet is a "showMoreTweets" option.
   noLineExtension?: boolean;
+  // Simple view that omits several subcomponents. Used in the modal that
+  // responds to a tweet.
+  simpleView?: boolean;
 }
 
 const Tweet = ({
@@ -32,6 +35,7 @@ const Tweet = ({
   retweet,
   drawReplyLine = false,
   noLineExtension = false,
+  simpleView = false,
 }: TweetProps) => {
   const tweetRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
@@ -117,7 +121,12 @@ const Tweet = ({
             </div>
           </div>
         )}
-        <div className={styles.TweetWrapper}>
+        <div
+          className={[
+            styles.TweetWrapper,
+            simpleView ? styles.Simple : "",
+          ].join(" ")}
+        >
           <Link to={getProfileLink()}>
             <div
               className={styles.Avatar}
@@ -169,31 +178,35 @@ const Tweet = ({
                     </span>
                   </Link>
                 </div>
-                <div ref={tweetOptionsRef} className={styles.MoreIcon}>
-                  <Icon
-                    src={DotsIcon}
-                    title="More"
-                    alt="More options"
-                    hover="primary"
-                    noBlockMargin
-                    noLeftMargin
-                    noRightMargin
-                  />
-                </div>
+                {!simpleView && (
+                  <div ref={tweetOptionsRef} className={styles.MoreIcon}>
+                    <Icon
+                      src={DotsIcon}
+                      title="More"
+                      alt="More options"
+                      hover="primary"
+                      noBlockMargin
+                      noLeftMargin
+                      noRightMargin
+                    />
+                  </div>
+                )}
               </div>
               <div className={styles.Text}>{tweet.text}</div>
-              <TweetActions
-                includeText
-                bookmarkInsteadOfViews={false}
-                justifyContent="space-between"
-                tweet={{
-                  id: tweet.id,
-                  stats: tweet.stats,
-                  isLiked: tweet.isLiked,
-                  isRetweeted: tweet.isRetweeted,
-                  author: tweet.author,
-                }}
-              />
+              {!simpleView && (
+                <TweetActions
+                  includeText
+                  bookmarkInsteadOfViews={false}
+                  justifyContent="space-between"
+                  tweet={{
+                    id: tweet.id,
+                    stats: tweet.stats,
+                    isLiked: tweet.isLiked,
+                    isRetweeted: tweet.isRetweeted,
+                    author: tweet.author,
+                  }}
+                />
+              )}
             </>
           </div>
         </div>

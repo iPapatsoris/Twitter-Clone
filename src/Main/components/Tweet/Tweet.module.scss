@@ -23,6 +23,10 @@
 }
 
 .TweetWrapper {
+  &.Simple {
+    min-height: 6rem;
+  }
+
   display: flex;
   gap: 1rem;
 

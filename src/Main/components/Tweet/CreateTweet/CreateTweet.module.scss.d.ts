@@ -4,7 +4,8 @@ import globalClassNames, {
 declare const classNames: typeof globalClassNames & {
   readonly CreateTweet: "CreateTweet";
   readonly AsModalContent: "AsModalContent";
-  readonly Reply: "Reply";
+  readonly Replying: "Replying";
+  readonly TweetToReplyTo: "TweetToReplyTo";
   readonly CloseIcon: "CloseIcon";
   readonly Border: "Border";
   readonly Avatar: "Avatar";
@@ -20,7 +21,8 @@ export = classNames;
 export type ClassNames =
   | "CreateTweet"
   | "AsModalContent"
-  | "Reply"
+  | "Replying"
+  | "TweetToReplyTo"
   | "CloseIcon"
   | "Border"
   | "Avatar"

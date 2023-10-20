@@ -30,9 +30,43 @@
         "border border  border"
         ".      widgets progress ";
     }
-  }
 
-  &.Reply {
+    &.Replying {
+      /*
+      When we are replying to a tweet and we are within a modal, we don't want
+      a gap between every row, so we remove the gap property add extra 
+      whitespace rows where needed. 
+      */
+      gap: 0;
+      grid-template-rows: auto 1rem auto 1fr 1rem auto 1rem auto;
+      grid-template-areas:
+        "icon   .       .        .      ."
+        ".      .       .        .      ."
+        "tweet  tweet   tweet    tweet  tweet"
+        "avatar input   input    input  input"
+        ".      .       .        .      ."
+        "border border  border   border border"
+        ".      .       .        .      ."
+        ".      widgets progress .      action";
+
+      @include media.multi(mobile, tablet) {
+        grid-template-areas:
+          "icon   .       action"
+          ".      .       .     "
+          "tweet  tweet   tweet "
+          "avatar input   input"
+          ".      .       .     "
+          "border border  border"
+          ".      .       .     "
+          ".      widgets progress ";
+      }
+
+      .TweetToReplyTo {
+        grid-area: tweet;
+      }
+    }
+  }
+  &.Replying:not(.AsModalContent) {
     border-top: none !important;
     padding-top: 0;
   }
@@ -43,6 +77,7 @@
 
   .CloseIcon {
     grid-area: icon;
+    justify-self: center;
   }
 
   .Border {

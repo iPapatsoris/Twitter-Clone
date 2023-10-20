@@ -24,8 +24,10 @@ import {
 } from "./queries";
 import { tweetKeys } from "../queries";
 import { SingleTweetResponse } from "../../../../../backend/src/api/tweet";
-import { useNavigate } from "react-router-dom";
-import { getPagePath } from "../../../../util/paths";
+import { useState } from "react";
+import Modal from "../../../../util/components/Modal/Modal";
+import CreateTweetModal from "../../../../Sidebar/CreateTweetModal/CreateTweetModal";
+import useCloseCreateTweetModal from "../CreateTweet/useCloseCreateTweetModal";
 
 export const getRefreshTweetCallback =
   (
@@ -58,9 +60,8 @@ const TweetActions = ({
   extraIconProps = {},
   tweet,
 }: TweetActionsProps) => {
-  const { stats, isLiked, isRetweeted, id, author } = tweet;
+  const { stats, isLiked, isRetweeted, id } = tweet;
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   const { mutate: likeTweetMutation } = useMutation(likeTweetQuery, {
     onSuccess: getRefreshTweetCallback(queryClient),
@@ -78,93 +79,101 @@ const TweetActions = ({
     onSuccess: getRefreshTweetCallback(queryClient),
   });
 
+  const [showReplyModal, setShowReplyModal] = useState(false);
+  useCloseCreateTweetModal(setShowReplyModal);
+
   return (
-    <div
-      className={[
-        styles.TweetActions,
-        justifyContent === "space-between"
-          ? styles.SpaceBetween
-          : styles.SpaceAround,
-      ].join(" ")}
-    >
-      <Icon
-        src={ReplyIcon}
-        hover="primary"
-        title="Reply"
-        text={includeText ? stats.totalReplies.toString() : ""}
-        noBottomMargin
-        noInlineMargin
-        onClick={(e) => {
-          e.stopPropagation();
-          navigate(getPagePath("tweet", author.username, id), {
-            state: { autofocus: true },
-          });
-        }}
-        {...extraIconProps}
-      />
-      <Icon
-        noBottomMargin
-        noInlineMargin
-        src={isRetweeted ? RetweetActiveIcon : RetweetIcon}
-        hover="green"
-        title={isRetweeted ? "Undo Retweet" : "Retweet"}
-        text={includeText ? stats.totalRetweets.toString() : ""}
-        onClick={(e) => {
-          e.stopPropagation();
-          isRetweeted
-            ? undoRetweetMutation({ tweetID: tweet.id })
-            : retweetMutation({ tweetID: tweet.id });
-        }}
-        {...extraIconProps}
-      />
-      <Icon
-        noBottomMargin
-        noInlineMargin
-        src={isLiked ? LikedIcon : LikeIcon}
-        hover="pink"
-        title={isLiked ? "Unlike" : "Like"}
-        text={includeText ? stats.totalLikes.toString() : ""}
-        onClick={(e) => {
-          e.stopPropagation();
-          isLiked
-            ? unlikeTweetMutation({ tweetID: tweet.id })
-            : likeTweetMutation({ tweetID: tweet.id });
-        }}
-        {...extraIconProps}
-      />
-      {bookmarkInsteadOfViews ? (
-        <Icon
-          noBottomMargin
-          noInlineMargin
-          src={BookmarkIcon}
-          hover="primary"
-          title="Bookmark"
-          text={includeText ? stats.views.toString() : ""}
-          onClick={(e) => e.stopPropagation()}
-          {...extraIconProps}
-        />
-      ) : (
-        <Icon
-          noBottomMargin
-          noInlineMargin
-          src={ViewsIcon}
-          hover="primary"
-          title="Views"
-          text={includeText ? stats.views.toString() : ""}
-          onClick={(e) => e.stopPropagation()}
-          {...extraIconProps}
-        />
+    <>
+      {showReplyModal && (
+        <Modal extraStyles={[styles.Modal]} setIsActive={setShowReplyModal}>
+          <CreateTweetModal replyingToTweetID={id} />
+        </Modal>
       )}
-      <Icon
-        noBottomMargin
-        noInlineMargin
-        onClick={(e) => e.stopPropagation()}
-        src={ShareIcon}
-        hover="primary"
-        title="Share"
-        {...extraIconProps}
-      />
-    </div>
+      <div
+        className={[
+          styles.TweetActions,
+          justifyContent === "space-between"
+            ? styles.SpaceBetween
+            : styles.SpaceAround,
+        ].join(" ")}
+      >
+        <Icon
+          src={ReplyIcon}
+          hover="primary"
+          title="Reply"
+          text={includeText ? stats.totalReplies.toString() : ""}
+          noBottomMargin
+          noInlineMargin
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowReplyModal(true);
+          }}
+          {...extraIconProps}
+        />
+        <Icon
+          noBottomMargin
+          noInlineMargin
+          src={isRetweeted ? RetweetActiveIcon : RetweetIcon}
+          hover="green"
+          title={isRetweeted ? "Undo Retweet" : "Retweet"}
+          text={includeText ? stats.totalRetweets.toString() : ""}
+          onClick={(e) => {
+            e.stopPropagation();
+            isRetweeted
+              ? undoRetweetMutation({ tweetID: tweet.id })
+              : retweetMutation({ tweetID: tweet.id });
+          }}
+          {...extraIconProps}
+        />
+        <Icon
+          noBottomMargin
+          noInlineMargin
+          src={isLiked ? LikedIcon : LikeIcon}
+          hover="pink"
+          title={isLiked ? "Unlike" : "Like"}
+          text={includeText ? stats.totalLikes.toString() : ""}
+          onClick={(e) => {
+            e.stopPropagation();
+            isLiked
+              ? unlikeTweetMutation({ tweetID: tweet.id })
+              : likeTweetMutation({ tweetID: tweet.id });
+          }}
+          {...extraIconProps}
+        />
+        {bookmarkInsteadOfViews ? (
+          <Icon
+            noBottomMargin
+            noInlineMargin
+            src={BookmarkIcon}
+            hover="primary"
+            title="Bookmark"
+            text={includeText ? stats.views.toString() : ""}
+            onClick={(e) => e.stopPropagation()}
+            {...extraIconProps}
+          />
+        ) : (
+          <Icon
+            noBottomMargin
+            noInlineMargin
+            src={ViewsIcon}
+            hover="primary"
+            title="Views"
+            text={includeText ? stats.views.toString() : ""}
+            onClick={(e) => e.stopPropagation()}
+            {...extraIconProps}
+          />
+        )}
+        <Icon
+          noBottomMargin
+          noInlineMargin
+          onClick={(e) => e.stopPropagation()}
+          src={ShareIcon}
+          hover="primary"
+          title="Share"
+          {...extraIconProps}
+        />
+      </div>
+    </>
   );
 };
 
