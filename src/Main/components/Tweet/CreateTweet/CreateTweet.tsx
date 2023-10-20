@@ -83,8 +83,10 @@ const CreateTweet = ({
   >((body) => postData("tweet", body), {
     onSuccess: (data) => {
       if (data.ok) {
-        if (!isReply) {
+        if (!asModalContent) {
           form.reset();
+        }
+        if (!isReply) {
           queryClient.invalidateQueries(
             timelineKeys.timeline(queryClient).queryKey
           );
