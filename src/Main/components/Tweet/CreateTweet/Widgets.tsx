@@ -7,9 +7,11 @@ import { ReactComponent as ScheduleIcon } from "../../../../assets/icons/tweet/c
 import { ReactComponent as LocationIcon } from "../../../../assets/icons/location.svg";
 import Icon from "../../../../util/components/Icon/Icon";
 
-interface WidgetsProps {}
+interface WidgetsProps {
+  isReply?: boolean;
+}
 
-const Widgets = ({}: WidgetsProps) => (
+const Widgets = ({ isReply }: WidgetsProps) => (
   <div className={styles.Widgets}>
     <Icon
       src={FileIcon}
@@ -27,14 +29,16 @@ const Widgets = ({}: WidgetsProps) => (
       noInlineMargin
       noBlockMargin
     />
-    <Icon
-      src={PollIcon}
-      title="Poll"
-      alt="Add poll"
-      hover="primary"
-      noInlineMargin
-      noBlockMargin
-    />
+    {!isReply && (
+      <Icon
+        src={PollIcon}
+        title="Poll"
+        alt="Add poll"
+        hover="primary"
+        noInlineMargin
+        noBlockMargin
+      />
+    )}
     <Icon
       src={EmojiIcon}
       title="Emoji"
@@ -43,14 +47,16 @@ const Widgets = ({}: WidgetsProps) => (
       noInlineMargin
       noBlockMargin
     />
-    <Icon
-      src={ScheduleIcon}
-      title="Schedule"
-      alt="Schedule an event"
-      hover="primary"
-      noInlineMargin
-      noBlockMargin
-    />
+    {!isReply && (
+      <Icon
+        src={ScheduleIcon}
+        title="Schedule"
+        alt="Schedule an event"
+        hover="primary"
+        noInlineMargin
+        noBlockMargin
+      />
+    )}
     <Icon
       src={LocationIcon}
       title="Location"

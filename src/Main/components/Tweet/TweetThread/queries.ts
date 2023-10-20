@@ -1,5 +1,5 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import { getData, postData } from "../../../../util/request";
+import { getData } from "../../../../util/request";
 import {
   ExpandTweetReplies,
   GetTweet,
@@ -16,9 +16,9 @@ import { setTweet } from "../queries";
 
 export type ExpansionDirection = "downward" | "upward";
 export const tweetThreadKeys = createQueryKeys("tweetThread", {
-  tweetID: (id: number) => ({
+  tweetID: (id: number, queryClient) => ({
     queryKey: [id],
-    queryFn: () => tweetThreadQuery(id),
+    queryFn: () => tweetThreadQuery(id, queryClient),
   }),
   expandReply: (replyToExpand: number, direction: ExpansionDirection) => ({
     queryKey: ["expand", direction, replyToExpand],
@@ -26,12 +26,33 @@ export const tweetThreadKeys = createQueryKeys("tweetThread", {
   }),
 });
 
-const tweetThreadQuery = async (tweetID: number) => {
+const tweetThreadQuery = async (tweetID: number, queryClient: QueryClient) => {
   const res = await getData<GetTweet["response"]>("/tweet/" + tweetID);
 
   if (!res.ok) {
     throw new Error();
   }
+  // Set tweet's author profile cache
+  const tweetAuthor = res.data?.tweet.author;
+  queryClient.setQueryData<GetUser<SmallProfileRequestFields>["response"]>(
+    profileKeys
+      .username(tweetAuthor?.username!)
+      ._ctx.fields(smallPreviewProfileFields).queryKey,
+    {
+      ok: true,
+      data: { user: { ...tweetAuthor!, isFollowedByActiveUser: false } },
+    }
+  );
+
+  const { tweet, previousReplies, replies } = res.data!;
+
+  setTweet(tweet, queryClient);
+
+  previousReplies.forEach((reply) => setTweet(reply, queryClient));
+  replies.forEach(({ tweets }) =>
+    tweets.forEach((reply) => setTweet(reply, queryClient))
+  );
+
   return res;
 };
 
@@ -39,34 +60,14 @@ export const tweetThreadLoader =
   (queryClient: QueryClient) =>
   async ({ params }: LoaderFunctionArgs) => {
     const { queryKey, queryFn } = tweetThreadKeys.tweetID(
-      parseInt(params.tweetID!)
+      parseInt(params.tweetID!),
+      queryClient
     );
 
     const tweetThreadData = await queryClient.fetchQuery({
       queryKey,
       queryFn,
     });
-
-    // Set tweet's author profile cache
-    const tweetAuthor = tweetThreadData.data?.tweet.author;
-    queryClient.setQueryData<GetUser<SmallProfileRequestFields>["response"]>(
-      profileKeys
-        .username(tweetAuthor?.username!)
-        ._ctx.fields(smallPreviewProfileFields).queryKey,
-      {
-        ok: true,
-        data: { user: { ...tweetAuthor!, isFollowedByActiveUser: false } },
-      }
-    );
-
-    const { tweet, previousReplies, replies } = tweetThreadData.data!;
-
-    setTweet(tweet, queryClient);
-
-    previousReplies.forEach((reply) => setTweet(reply, queryClient));
-    replies.forEach(({ tweets }) =>
-      tweets.forEach((reply) => setTweet(reply, queryClient))
-    );
 
     return tweetThreadData;
   };

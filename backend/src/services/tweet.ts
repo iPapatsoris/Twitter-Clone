@@ -104,9 +104,8 @@ export const updateParentTweetReplyDepth = async (
   }
 };
 
-type Tags = { id: number; username: string };
 export const getTweetTags = async (tweetID: number) => {
-  return await runQuery<Tags>(
+  return await runQuery<NonNullable<Tweet["usernameTags"]>[number]>(
     "SELECT username, userID FROM tweet_tags_user, user \
      WHERE tweetID = ? AND user.id = userID",
     [tweetID]
@@ -306,3 +305,18 @@ export const getUniqueThreads = (tweets: Tweet[]) => {
   }
   return Array.from(rootTweetToLeastRecent.values());
 };
+
+export const sort = (threads: Thread[]) =>
+  threads.sort((a, b) => {
+    const aDate = a.tweets[0].creationDate;
+    const bDate = b.tweets[0].creationDate;
+
+    if (aDate && bDate) {
+      if (new Date(aDate) > new Date(bDate)) {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
+    return 0;
+  });

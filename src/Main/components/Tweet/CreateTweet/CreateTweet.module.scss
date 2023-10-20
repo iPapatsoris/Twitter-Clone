@@ -32,6 +32,11 @@
     }
   }
 
+  &.Reply {
+    border-top: none !important;
+    padding-top: 0;
+  }
+
   &:not(.AsModalContent) {
     border-block: var(--border);
   }

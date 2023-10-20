@@ -40,7 +40,7 @@ const ShowMoreTweets = ({
     if (direction === "downward" && downwardProps) {
       const { originalTweetID, replyIndex } = downwardProps;
       const originalTweet = queryClient.getQueryData<GetTweet["response"]>(
-        tweetThreadKeys.tweetID(originalTweetID).queryKey
+        tweetThreadKeys.tweetID(originalTweetID, queryClient).queryKey
       );
 
       if (originalTweet?.data && expandedReplies) {
@@ -54,7 +54,7 @@ const ShowMoreTweets = ({
           ],
         };
         queryClient.setQueryData<GetTweet["response"]>(
-          tweetThreadKeys.tweetID(originalTweetID).queryKey,
+          tweetThreadKeys.tweetID(originalTweetID, queryClient).queryKey,
           {
             ...originalTweet,
             data: { ...originalTweet.data, replies: newReplies },

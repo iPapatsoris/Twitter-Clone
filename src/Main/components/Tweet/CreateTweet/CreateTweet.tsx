@@ -22,10 +22,13 @@ import ProgressBar from "./ProgressBar";
 import Icon from "../../../../util/components/Icon/Icon";
 import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg";
 import { ModalContext } from "../../../../util/components/Modal/Modal";
+import { tweetThreadKeys } from "../TweetThread/queries";
 
 interface CreateTweetProps {
   autofocus?: boolean;
   asModalContent?: boolean;
+  // Pass this prop only if we are replying to a tweet
+  referencedTweetID?: number;
 }
 
 type FormT = { tweet: string };
@@ -33,9 +36,11 @@ type FormT = { tweet: string };
 const CreateTweet = ({
   autofocus = false,
   asModalContent,
+  referencedTweetID,
 }: CreateTweetProps) => {
   const { loggedInUser } = useAuthStore();
   const { setIsActive } = useContext(ModalContext);
+  const isReply = referencedTweetID !== undefined;
 
   const schema: any = yup.object().shape({
     tweet: yup.string().required().max(tweetCharLimit),
@@ -62,7 +67,7 @@ const CreateTweet = ({
 
   const onSubmit = () => {
     const { tweet } = getValues();
-    mutate({ tweet: { text: tweet, isReply: false } });
+    mutate({ tweet: { text: tweet, isReply, referencedTweetID } });
   };
 
   const queryClient = useQueryClient();
@@ -76,12 +81,19 @@ const CreateTweet = ({
     onSuccess: (data) => {
       if (data.ok) {
         form.reset();
-        queryClient.invalidateQueries(
-          timelineKeys.timeline(queryClient).queryKey
-        );
-        navigate(getPagePath("home"), {
-          state: { closeCreateTweetModal: true },
-        });
+
+        if (!isReply) {
+          queryClient.invalidateQueries(
+            timelineKeys.timeline(queryClient).queryKey
+          );
+          navigate(getPagePath("home"), {
+            state: { closeCreateTweetModal: true },
+          });
+        } else {
+          queryClient.invalidateQueries(
+            tweetThreadKeys.tweetID(referencedTweetID, queryClient).queryKey
+          );
+        }
       }
     },
   });
@@ -98,6 +110,7 @@ const CreateTweet = ({
       className={[
         styles.CreateTweet,
         asModalContent ? styles.AsModalContent : "",
+        isReply ? styles.Reply : "",
       ].join(" ")}
     >
       {asModalContent && (
@@ -121,17 +134,17 @@ const CreateTweet = ({
             name: "tweet",
             value: value,
             onChange,
-            placeholder: "What is happening?!",
+            placeholder: isReply ? "Post a reply" : "What is happening?!",
             autoFocus: autofocus,
           }}
           refToAlignTopRowWith={avatarRef}
         />
         {asModalContent ? <div className={styles.Border}></div> : <></>}
-        <Widgets />
+        <Widgets isReply={isReply} />
         <ProgressBar tweetCharLimit={tweetCharLimit} {...progressBarInfo} />
         <div className={styles.Action}>
           <Button type="submit" disabled={!isValid} size="medium">
-            Post
+            {isReply ? "Reply" : "Post"}
           </Button>
         </div>
       </Form>

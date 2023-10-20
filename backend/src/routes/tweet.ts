@@ -28,6 +28,7 @@ import {
   getUserReactionsToTweet,
   getUserRetweets,
   mergeTweetsAndRetweets,
+  sort,
   updateParentTweetReplyDepth,
 } from "../services/tweet.js";
 import { GetUserTweetsAndRetweets } from "../api/user.js";
@@ -82,17 +83,17 @@ router.post(
       );
       if (
         usernameTags &&
-        usernameTags.findIndex((user) => user.id === currentUserID) === -1
+        usernameTags.findIndex((tag) => tag.userID === currentUserID) === -1
       ) {
-        usernameTags.push({ username, id: currentUserID });
+        usernameTags.push({ username, userID: currentUserID });
       } else if (!usernameTags) {
-        usernameTags = [{ username, id: currentUserID }];
+        usernameTags = [{ username, userID: currentUserID }];
       }
       await Promise.all(
         usernameTags.map((taggedUser) =>
           runQuery(
             "INSERT INTO tweet_tags_user (tweetID, userID) VALUES (?, ?)",
-            [tweetID, taggedUser.id]
+            [tweetID, taggedUser.userID]
           )
         )
       );
@@ -437,7 +438,7 @@ router.get(
       ok: true,
       data: {
         tweet: middleTweet,
-        replies: threads,
+        replies: sort(threads),
         previousReplies: previousReplies,
       },
     });

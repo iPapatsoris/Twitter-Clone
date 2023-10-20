@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./TweetThread.module.scss";
 import { tweetThreadKeys } from "./queries";
 import { useParams } from "react-router-dom";
@@ -7,13 +7,15 @@ import Tweet from "../Tweet";
 import List from "../../../layouts/ContentRight/List/List";
 import ShowMoreTweets from "../ShowMoreTweets";
 import { useRef, useState, useLayoutEffect } from "react";
+import CreateTweet from "../CreateTweet/CreateTweet";
 
 interface TweetThreadProps {}
 
 const TweetThread = ({}: TweetThreadProps) => {
   const params = useParams();
+  const queryClient = useQueryClient();
   const { data, isSuccess } = useQuery(
-    tweetThreadKeys.tweetID(parseInt(params.tweetID!))
+    tweetThreadKeys.tweetID(parseInt(params.tweetID!), queryClient)
   );
 
   const ref = useRef<HTMLDivElement>(null);
@@ -71,6 +73,7 @@ const TweetThread = ({}: TweetThreadProps) => {
       {!refExists ? null : (
         <MainTweet tweetThreadRef={ref} tweetID={tweet.id} />
       )}
+      <CreateTweet referencedTweetID={tweet.id} />
       <List>{repliesJSX}</List>
     </div>
   );

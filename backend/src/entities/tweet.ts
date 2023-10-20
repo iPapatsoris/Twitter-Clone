@@ -10,7 +10,7 @@ export type Tweet = {
   rootTweetID: number;
   usernameTags?: Array<{
     username: string;
-    id: number;
+    userID: number;
   }>;
   author: Pick<User, "id" | "name" | "username" | "isVerified" | "avatar">;
   stats: {
