@@ -57,7 +57,7 @@ const TweetThread = () => {
       if (isFinalReply && reply.hasMoreNestedReplies) {
         repliesJSX.push(
           <ShowMoreTweets
-            key={"more"}
+            key={tweet.id + " " + nestedReply.id + "more"}
             direction="downward"
             replyToExpand={array[array.length - 1].id}
             downwardProps={{ originalTweetID: tweet.id, replyIndex }}
