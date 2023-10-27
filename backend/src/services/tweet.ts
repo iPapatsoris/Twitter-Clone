@@ -1,11 +1,11 @@
 /* eslint-disable no-multi-str */
-import { runQuery } from "../util.js";
+import { runInsertQuery, runQuery } from "../util.js";
 import {
   convertQueryResultToTweets,
   Retweet,
   Tweet,
 } from "../entities/tweet.js";
-import { Thread } from "../api/tweet.js";
+import { CreateTweet, Thread } from "../api/tweet.js";
 
 // Get past thread conversation that current tweet responds to
 export const getTweetPreviousReplies = async (
@@ -320,3 +320,107 @@ export const sort = (threads: Thread[]) =>
     }
     return 0;
   });
+
+export const insertTweet = async (
+  tweet: CreateTweet["request"]["tweet"],
+  currentUserID: number
+) => {
+  let rootTweetID: number | null = null;
+  if (tweet.isReply) {
+    [{ rootTweetID }] = await runQuery<{ rootTweetID: number }>(
+      "SELECT rootTweetID FROM tweet WHERE id = ?",
+      [tweet.referencedTweetID]
+    );
+    if (!rootTweetID && tweet.referencedTweetID !== undefined) {
+      rootTweetID = tweet.referencedTweetID;
+    }
+  }
+
+  const result = await runInsertQuery<{ insertId: number }>(
+    "INSERT INTO tweet \
+      (authorID, text, isReply, referencedTweetID, views, \
+      replyDepth, rootTweetID, creationDate)\
+      VALUES (?, ?, ?, ?, 0, 0, ?, NOW())",
+    [
+      currentUserID,
+      tweet.text,
+      tweet.isReply,
+      tweet.referencedTweetID,
+      rootTweetID,
+    ]
+  );
+
+  if (tweet.isReply && tweet.referencedTweetID !== undefined) {
+    const tweetID = result.insertId;
+    const [{ username }] = await runQuery<{ username: string }>(
+      "SELECT username FROM user WHERE id = ?",
+      [currentUserID]
+    );
+    updateParentTweetReplyDepth(tweet.referencedTweetID, 1);
+    let { usernameTags } = await getTweet(
+      tweet.referencedTweetID,
+      currentUserID
+    );
+    if (
+      usernameTags &&
+      usernameTags.findIndex((tag) => tag.userID === currentUserID) === -1
+    ) {
+      usernameTags.push({ username, userID: currentUserID });
+    } else if (!usernameTags) {
+      usernameTags = [{ username, userID: currentUserID }];
+    }
+    await Promise.all(
+      usernameTags.map((taggedUser) =>
+        runQuery(
+          "INSERT INTO tweet_tags_user (tweetID, userID) VALUES (?, ?)",
+          [tweetID, taggedUser.userID]
+        )
+      )
+    );
+  }
+
+  return result.insertId;
+};
+
+export const insertRetweet = async (tweetID: number, userID: number) => {
+  const { isLike, isRetweet } = await getUserReactionsToTweet(tweetID, userID!);
+
+  let query = "";
+  if (isRetweet) {
+    return false;
+  } else if (isLike) {
+    query =
+      "UPDATE user_reacts_to_tweet \
+        SET isRetweet = true \
+        WHERE userID = ? AND tweetID = ?";
+  } else {
+    query =
+      "INSERT INTO user_reacts_to_tweet \
+        (userID, tweetID, reactionDate, isRetweet, isLike) \
+         VALUES (?, ?, NOW(), true, false)";
+  }
+  await runQuery(query, [userID, tweetID]);
+  return true;
+};
+
+export const insertLike = async (tweetID: number, userID: number) => {
+  const { isLike, isRetweet } = await getUserReactionsToTweet(tweetID, userID!);
+
+  let query = "";
+  if (isLike) {
+    return false;
+  } else if (isRetweet) {
+    query =
+      "UPDATE user_reacts_to_tweet \
+        SET isLike = true \
+        WHERE userID = ? AND tweetID = ?";
+  } else {
+    query =
+      "INSERT INTO user_reacts_to_tweet \
+        (userID, tweetID, reactionDate, isRetweet, isLike) \
+         VALUES (?, ?, NOW(), false, true)";
+  }
+
+  await runQuery(query, [userID, tweetID]);
+  return true;
+};

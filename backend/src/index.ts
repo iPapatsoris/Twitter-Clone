@@ -8,14 +8,14 @@ import tweetRoutes from "./routes/tweet.js";
 import userRoutes from "./routes/user.js";
 import emailRoutes from "./routes/email.js";
 import dotenv from "dotenv";
-import { checkSession } from "./middleware/auth.js";
+import {
+  SessionData as SessionDataI,
+  checkSession,
+} from "./middleware/auth.js";
 
 // Augment express-session with a custom SessionData object
 declare module "express-session" {
-  interface SessionData {
-    isLoggedIn: boolean;
-    userID: number;
-  }
+  interface SessionData extends SessionDataI {}
 }
 dotenv.config();
 

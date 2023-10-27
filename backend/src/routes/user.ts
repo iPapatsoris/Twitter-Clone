@@ -30,8 +30,10 @@ import {
   mergeTweetsAndRetweets,
 } from "../services/tweet.js";
 import {
+  addFollower,
   getUser,
   getUserCircle,
+  getUserIDFromUsername,
   prepareUserQuery,
   usernameExists,
 } from "../services/user.js";
@@ -165,15 +167,16 @@ router
   .route("/:username/follow")
   .post(
     requireAuth,
-    (
+    async (
       req: TypedRequestQuery<{ username: string }>,
       res: Response<NormalResponse>
     ) => {
-      simpleQuery(
-        res,
-        "INSERT INTO user_follows (followerID, followeeID) VALUES (?, (SELECT id FROM user WHERE username = ?))",
-        [req.session.userID, req.params.username]
-      );
+      res.send({
+        ok: await addFollower({
+          followeeID: await getUserIDFromUsername(req.params.username),
+          followerID: req.session.userID!,
+        }),
+      });
     }
   )
   .delete(

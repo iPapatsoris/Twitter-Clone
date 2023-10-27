@@ -1,6 +1,5 @@
 /* eslint-disable no-multi-str */
 import { Response } from "express";
-import { Session, SessionData } from "express-session";
 import { sha256 } from "js-sha256";
 import { NormalResponse, extraQueryFields } from "../api/common.js";
 import ErrorCodes from "../api/errorCodes.js";
@@ -9,6 +8,7 @@ import { User } from "../entities/user.js";
 import { checkPermissions, GetUserFields } from "../permissions.js";
 import { removeArrayFields, runQuery } from "../util.js";
 import { getTotalUserTweets } from "./tweet.js";
+import { SessionData } from "../middleware/auth.js";
 
 export const usernameExists = async (username: string) => {
   const count = (
@@ -61,7 +61,7 @@ export const getUser = async ({
 }: {
   username: string;
   views: string[];
-  session: Session & Partial<SessionData>;
+  session: Partial<SessionData>;
   getTotalFollowees: boolean;
   getTotalFollowers: boolean;
   getTotalTweets: boolean;
@@ -109,10 +109,10 @@ export const getUser = async ({
     }
   }
 
-  const activeUserID = session.userID;
   user.isFollowedByActiveUser = false;
 
-  if (session.isLoggedIn && getIsFollowedByActiveUser) {
+  if (session && session.isLoggedIn && getIsFollowedByActiveUser) {
+    const activeUserID = session && session.userID;
     user.isFollowedByActiveUser = await checkUserFollowedByActiveUser(
       userID,
       activeUserID!
@@ -147,7 +147,7 @@ export const prepareUserQuery = ({
 
   // Remove parameters that are not direct user properties, but will
   // be retrived by separate queries. Also remove extra generic query options.
-  const seperatedFields = removeArrayFields<typeof fields[0]>(fields, [
+  const seperatedFields = removeArrayFields<(typeof fields)[0]>(fields, [
     "totalFollowees",
     "totalFollowers",
     "totalTweets",
@@ -195,7 +195,7 @@ export const getUserCircle = async ({
 }: {
   query: string;
   username: string;
-  session: Session & Partial<SessionData>;
+  session: Partial<SessionData>;
   optionsResult: ReturnType<typeof prepareUserQuery>;
 }): Promise<
   NormalResponse<Array<NonNullable<GetUserResponseData>["user"]>>
@@ -223,4 +223,56 @@ export const getUserCircle = async ({
   }
 
   return { ok: true, data: followers };
+};
+
+export const friendshipExists = async ({
+  followerID,
+  followeeID,
+}: {
+  followerID: number;
+  followeeID: number;
+}) => {
+  const [friendship] = await runQuery<{ id: number }>(
+    "SELECT id FROM user_follows WHERE followerID = ? AND followeeID = ?",
+    [followerID, followeeID]
+  );
+  return friendship;
+};
+
+export const addFollower = async ({
+  followerID,
+  followeeID,
+}: {
+  followerID: number;
+  followeeID: number;
+}) => {
+  if (
+    followerID === followeeID ||
+    (await friendshipExists({ followeeID, followerID }))
+  ) {
+    return false;
+  }
+
+  await runQuery(
+    "INSERT INTO user_follows (followerID, followeeID) VALUES (?, ?)",
+    [followerID, followeeID]
+  );
+
+  return true;
+};
+
+export const getUsernameFromID = async (id: number) => {
+  const [res] = await runQuery<{ username: string }>(
+    "SELECT username FROM user WHERE id = ?",
+    [id]
+  );
+  return res.username;
+};
+
+export const getUserIDFromUsername = async (username: string) => {
+  const [res] = await runQuery<{ id: number }>(
+    "SELECT id FROM user WHERE username = ?",
+    [username]
+  );
+  return res.id;
 };

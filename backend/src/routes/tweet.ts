@@ -27,9 +27,11 @@ import {
   getTweets,
   getUserReactionsToTweet,
   getUserRetweets,
+  insertLike,
+  insertRetweet,
+  insertTweet,
   mergeTweetsAndRetweets,
   sort,
-  updateParentTweetReplyDepth,
 } from "../services/tweet.js";
 import { GetUserTweetsAndRetweets } from "../api/user.js";
 import { requireAuth } from "../middleware/auth.js";
@@ -45,60 +47,9 @@ router.post(
   ) => {
     const { tweet } = req.body;
     const currentUserID = req.session.userID!;
-    let rootTweetID: number | null = null;
-    if (tweet.isReply) {
-      [{ rootTweetID }] = await runQuery<{ rootTweetID: number }>(
-        "SELECT rootTweetID FROM tweet WHERE id = ?",
-        [tweet.referencedTweetID]
-      );
-      if (!rootTweetID && tweet.referencedTweetID !== undefined) {
-        rootTweetID = tweet.referencedTweetID;
-      }
-    }
 
-    const result = await runInsertQuery<{ insertId: number }>(
-      "INSERT INTO tweet \
-      (authorID, text, isReply, referencedTweetID, views, \
-      replyDepth, rootTweetID, creationDate)\
-      VALUES (?, ?, ?, ?, 0, 0, ?, NOW())",
-      [
-        currentUserID,
-        tweet.text,
-        tweet.isReply,
-        tweet.referencedTweetID,
-        rootTweetID,
-      ]
-    );
-
-    if (tweet.isReply && tweet.referencedTweetID !== undefined) {
-      const tweetID = result.insertId;
-      const [{ username }] = await runQuery<{ username: string }>(
-        "SELECT username FROM user WHERE id = ?",
-        [currentUserID]
-      );
-      updateParentTweetReplyDepth(tweet.referencedTweetID, 1);
-      let { usernameTags } = await getTweet(
-        tweet.referencedTweetID,
-        currentUserID
-      );
-      if (
-        usernameTags &&
-        usernameTags.findIndex((tag) => tag.userID === currentUserID) === -1
-      ) {
-        usernameTags.push({ username, userID: currentUserID });
-      } else if (!usernameTags) {
-        usernameTags = [{ username, userID: currentUserID }];
-      }
-      await Promise.all(
-        usernameTags.map((taggedUser) =>
-          runQuery(
-            "INSERT INTO tweet_tags_user (tweetID, userID) VALUES (?, ?)",
-            [tweetID, taggedUser.userID]
-          )
-        )
-      );
-    }
-    res.send({ ok: true, data: { tweetID: result.insertId } });
+    const tweetID = await insertTweet(tweet, currentUserID);
+    res.send({ ok: true, data: { tweetID: tweetID } });
   }
 );
 
@@ -132,31 +83,9 @@ router.post(
   ) => {
     const { tweetID } = req.params;
     const { userID } = req.session;
-
-    const { isLike, isRetweet } = await getUserReactionsToTweet(
-      parseInt(tweetID),
-      userID!
-    );
-
-    let query = "";
-    if (isRetweet) {
-      res.send({ ok: false });
-      return;
-    } else if (isLike) {
-      query =
-        "UPDATE user_reacts_to_tweet \
-        SET isRetweet = true \
-        WHERE userID = ? AND tweetID = ?";
-    } else {
-      query =
-        "INSERT INTO user_reacts_to_tweet \
-        (userID, tweetID, reactionDate, isRetweet, isLike) \
-         VALUES (?, ?, NOW(), true, false)";
-    }
-
-    await runQuery(query, [userID, tweetID]);
+    const success = await insertRetweet(parseInt(tweetID), userID!);
     res.send({
-      ok: true,
+      ok: success,
       data: { ...(await getTweet(parseInt(tweetID), userID!)) },
     });
   }
@@ -208,30 +137,10 @@ router.post(
   ) => {
     const { tweetID } = req.params;
     const { userID } = req.session;
-    const { isLike, isRetweet } = await getUserReactionsToTweet(
-      parseInt(tweetID),
-      userID!
-    );
+    const success = await insertLike(parseInt(tweetID), userID!);
 
-    let query = "";
-    if (isLike) {
-      res.send({ ok: false });
-      return;
-    } else if (isRetweet) {
-      query =
-        "UPDATE user_reacts_to_tweet \
-        SET isLike = true \
-        WHERE userID = ? AND tweetID = ?";
-    } else {
-      query =
-        "INSERT INTO user_reacts_to_tweet \
-        (userID, tweetID, reactionDate, isRetweet, isLike) \
-         VALUES (?, ?, NOW(), false, true)";
-    }
-
-    await runQuery(query, [userID, tweetID]);
     res.send({
-      ok: true,
+      ok: success,
       data: { ...(await getTweet(parseInt(tweetID), userID!)) },
     });
   }

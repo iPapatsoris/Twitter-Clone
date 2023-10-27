@@ -4,6 +4,11 @@ import { NormalResponse } from "../api/common.js";
 import { loginPath, logoutPath } from "../routes/auth.js";
 import ErrorCodes from "../api/errorCodes.js";
 
+export interface SessionData {
+  isLoggedIn: boolean;
+  userID: number;
+}
+
 export const checkSession = (
   req: Request,
   res: Response<NormalResponse>,

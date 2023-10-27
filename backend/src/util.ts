@@ -85,3 +85,13 @@ export const shuffleArray = (array: any[]) => {
     [array[i], array[j]] = [array[j], array[i]];
   }
 };
+
+export const getRandomInt = (max: number) => getRandomIntRange(0, max);
+export const getRandomIntRange = (min: number, max: number) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min);
+};
+
+export const capitalizeFirstLetter = (text: string) =>
+  text.charAt(0).toUpperCase() + text.slice(1);

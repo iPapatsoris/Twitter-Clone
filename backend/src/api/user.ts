@@ -84,6 +84,6 @@ export const charLimits: {
 } = {
   name: 50,
   bio: 160,
-  location: 30,
+  location: 50,
   website: 100,
 };
