@@ -79,11 +79,12 @@ export type GetUsernameExists = {
 
 export const charLimits: {
   [K in keyof Required<
-    Pick<User, "name" | "bio" | "location" | "website">
+    Pick<User, "name" | "username" | "bio" | "location" | "website">
   >]: number;
 } = {
   name: 50,
   bio: 160,
   location: 50,
   website: 100,
+  username: 15,
 };

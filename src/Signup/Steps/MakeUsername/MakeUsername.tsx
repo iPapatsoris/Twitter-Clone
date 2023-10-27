@@ -2,7 +2,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import React, { SetStateAction } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
-import { GetUsernameExists } from "../../../../backend/src/api/user";
+import {
+  GetUsernameExists,
+  charLimits,
+} from "../../../../backend/src/api/user";
 import Form from "../../../util/components/Form/Form";
 import FormInput from "../../../util/components/Input/FormInput";
 import useStepper from "../../../util/hooks/useStepper";
@@ -46,7 +49,10 @@ const MakeUsername = ({
       yup
         .string()
         .required("Please enter a username.")
-        .max(15, "Your username cannot be longer than 15 characters.")
+        .max(
+          charLimits.username,
+          "Your username cannot be longer than 15 characters."
+        )
         .matches(
           /^\w*$/,
           "Your usename can only contain alphanumeric characters and underscores."
