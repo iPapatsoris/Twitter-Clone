@@ -33,7 +33,7 @@ const populateUsers = async (populateOptions: PopulateOptions) => {
         0,
         15
       ),
-      email: faker.internet.email({ firstName, lastName }),
+      email: faker.internet.email({ firstName, lastName }).toLowerCase(),
       password: passwordHash,
       avatar: faker.internet.avatar(),
       coverPic: faker.image.urlLoremFlickr({
