@@ -1,6 +1,6 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import { getData } from "../../../util/request";
-import { GetTweet, GetTweetParams } from "../../../../backend/src/api/tweet";
+import { addQueryParams, getData } from "../../../util/request";
+import { GetTweet } from "../../../../backend/src/api/tweet";
 import { NormalResponse } from "../../../../backend/src/api/common";
 import { Tweet } from "../../../../backend/src/entities/tweet";
 import { QueryClient } from "@tanstack/react-query";
@@ -13,9 +13,9 @@ export const tweetKeys = createQueryKeys("tweet", {
 });
 
 const getTweet = async (tweetID: number): Promise<NormalResponse<Tweet>> => {
-  const res = await getData<GetTweet["response"], GetTweetParams>(
+  const res = await getData<GetTweet["response"]>(
     "/tweet/" + tweetID,
-    ["noThread"]
+    addQueryParams(["noThread"])
   );
   if (!res.ok) {
     throw new Error();

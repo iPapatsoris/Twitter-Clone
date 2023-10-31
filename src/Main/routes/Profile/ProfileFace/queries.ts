@@ -3,7 +3,7 @@ import { GetUser } from "../../../../../backend/src/api/user";
 import { GetUserFields } from "../../../../../backend/src/permissions";
 import { QueryClient } from "@tanstack/react-query";
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import { getData } from "../../../../util/request";
+import { addQueryParams, getData } from "../../../../util/request";
 
 // Fields to query in user-list, tweet-list, tweet-view preview modes
 export const smallPreviewProfileFields = [
@@ -61,9 +61,9 @@ const profileQuery = async <T extends Readonly<FullProfileRequestFields[]>>(
   username: string,
   fieldsToQuery: T
 ) => {
-  const res = await getData<GetUser<T[number]>["response"], T[number]>(
+  const res = await getData<GetUser<T[number]>["response"]>(
     "user/" + username,
-    fieldsToQuery
+    addQueryParams(fieldsToQuery)
   );
 
   if (!res.ok) {

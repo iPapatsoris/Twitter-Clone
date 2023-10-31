@@ -15,7 +15,7 @@ import EditProfileInfo, {
   PhotoInputRefs,
 } from "./EditProfileInfo/EditProfileInfo";
 import EditProfilePhotos from "./EditProfilePhotos/EditProfilePhotos";
-import { patchData } from "../../../../../util/request";
+import { addQueryParams, patchData } from "../../../../../util/request";
 
 interface EditProfileProps {
   user: UserProfileT;
@@ -76,10 +76,11 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
     unknown,
     UpdateUser<UpdateUserFields>["request"]
   >(async (body) =>
-    patchData<
-      UpdateUser<(typeof requestFields)[number]>["response"],
-      (typeof requestFields)[number]
-    >("user", body, requestFields)
+    patchData<UpdateUser<(typeof requestFields)[number]>["response"]>(
+      "user",
+      body,
+      addQueryParams(requestFields)
+    )
   );
 
   const isValidForm = isValid && day !== -1 && month !== -1 && year !== -1;

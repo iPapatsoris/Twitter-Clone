@@ -2,9 +2,6 @@ import globalClassNames, {
   ClassNames as GlobalClassNames,
 } from "../../../../style.d";
 declare const classNames: typeof globalClassNames & {
-  readonly List: "List";
-  readonly BackgroundColor: "BackgroundColor";
-  readonly Title: "Title";
   readonly CreateTweet: "CreateTweet";
   readonly AsModalContent: "AsModalContent";
   readonly Replying: "Replying";
@@ -22,9 +19,6 @@ declare const classNames: typeof globalClassNames & {
 };
 export = classNames;
 export type ClassNames =
-  | "List"
-  | "BackgroundColor"
-  | "Title"
   | "CreateTweet"
   | "AsModalContent"
   | "Replying"

@@ -1,7 +1,7 @@
 /* eslint-disable no-multi-str */
 import express, { Request, Response } from "express";
 import { faker } from "@faker-js/faker";
-import { NormalResponse } from "../api/common.js";
+import { GetParams, NormalResponse } from "../api/common.js";
 import {
   CreateTweet,
   ExpandTweetReplies,
@@ -11,10 +11,11 @@ import {
   Thread,
   Trend,
   GetTrends,
+  GetTimeline,
 } from "../api/tweet.js";
 import {
   Fields,
-  runInsertQuery,
+  getPagination,
   runQuery,
   shuffleArray,
   TypedRequestQuery,
@@ -33,7 +34,6 @@ import {
   mergeTweetsAndRetweets,
   sort,
 } from "../services/tweet.js";
-import { GetUserTweetsAndRetweets } from "../api/user.js";
 import { requireAuth } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -184,19 +184,18 @@ router.delete(
 );
 
 /**
- * Get all tweets from all followees of logged in user.
- * This is an extremely simplified timeline, for testing purposes with trivial
- * datasets.
- * There is not even pagination, ALL tweets are retrieved.
- * In a real world scenario, tweet selection is fine tuned to optimize
- * engagement and is tailored to user's preferences.
+ * Get all tweets/retweets from all followees of logged in user.
+ * In a real world scenario, tweet selection would be fine tuned to optimize
+ * engagement and tailor to user's preferences.
+ * For better performance, switch to a cursor implementation instead of
+ * pagination.
  */
 router.get(
   "/timeline",
   requireAuth,
   async (
-    req: TypedRequestQuery<{}>,
-    res: Response<GetUserTweetsAndRetweets["response"]>
+    req: Request<{}, {}, {}, GetTimeline["requestQueryParams"]>,
+    res: Response<GetTimeline["response"]>
   ) => {
     const currentUserID = req.session.userID || -1;
     const tweetIDs = await runQuery<{ id: number }>(
@@ -223,9 +222,23 @@ router.get(
       )
     ).flat();
 
+    const tweetsAndRetweets = mergeTweetsAndRetweets(tweets, retweets);
+    const { offset, pageSize, totalPages } = getPagination({
+      ...req.query,
+      totalItems: tweetsAndRetweets.length,
+    });
+
     res.send({
       ok: true,
-      data: { tweetsAndRetweets: mergeTweetsAndRetweets(tweets, retweets) },
+      data: {
+        // For better performance, keep desired rows based on pagination using
+        // database functions instead of slicing array
+        tweetsAndRetweets: tweetsAndRetweets.slice(offset, offset + pageSize),
+        pagination: {
+          totalPages,
+          currentPage: parseInt(req.query.page),
+        },
+      },
     });
   }
 );

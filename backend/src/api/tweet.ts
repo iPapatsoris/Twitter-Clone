@@ -1,5 +1,9 @@
 import { Tweet } from "../entities/tweet.js";
-import { NormalResponse } from "./common";
+import {
+  NormalResponse,
+  PaginationQueryParamsBackEnd,
+  ResponseWithPagination,
+} from "./common";
 import { GetUserTweetsAndRetweets } from "./user.js";
 
 export type CreateTweetFields = keyof CreateTweet["request"]["tweet"];
@@ -33,8 +37,12 @@ export type ExpandTweetReplies = {
   response: NormalResponse<{ replies: Tweet[] }>;
 };
 
-export type GetTimeline = GetUserTweetsAndRetweets;
-
+export type GetTimeline = {
+  requestQueryParams: PaginationQueryParamsBackEnd;
+  response: ResponseWithPagination<
+    GetUserTweetsAndRetweets["response"]["data"]
+  >;
+};
 export type SingleTweetResponse = NormalResponse<Tweet>;
 
 export type GetTrends = {

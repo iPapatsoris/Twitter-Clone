@@ -11,7 +11,12 @@ import {
   GetUserFollowers,
 } from "../../../../backend/src/api/user";
 import { GetUserFields } from "../../../../backend/src/permissions";
-import { deleteData, getData, postData } from "../../../util/request";
+import {
+  addQueryParams,
+  deleteData,
+  getData,
+  postData,
+} from "../../../util/request";
 import {
   profileKeys,
   smallPreviewProfileFields,
@@ -44,7 +49,7 @@ export const circleKeys = createQueryKeys("circle", {
 const circleQuery = async (username: string, circle: CircleType) => {
   const res = await getData<CircleResponse>(
     "user/" + username + "/" + circle,
-    smallPreviewProfileFields
+    addQueryParams(smallPreviewProfileFields)
   );
 
   if (!res.ok) {

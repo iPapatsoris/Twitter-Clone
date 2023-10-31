@@ -1,7 +1,7 @@
 import mysql, { MysqlError } from "mysql";
 import { Query } from "express-serve-static-core";
 import { Response } from "express";
-import { NormalResponse } from "./api/common.js";
+import { NormalResponse, PaginationQueryParamsBackEnd } from "./api/common.js";
 import db from "./connection.js";
 
 export interface TypedRequestQuery<P, Q extends Query = {}, B = {}>
@@ -95,3 +95,17 @@ export const getRandomIntRange = (min: number, max: number) => {
 
 export const capitalizeFirstLetter = (text: string) =>
   text.charAt(0).toUpperCase() + text.slice(1);
+
+export const getPagination = (
+  params: PaginationQueryParamsBackEnd & { totalItems: number }
+) => {
+  let { pageSize: pageSizeParam, page: pageParam, totalItems } = params;
+  const pageSize = parseInt(pageSizeParam);
+  let page = parseInt(pageParam);
+  const totalPages = Math.ceil(totalItems / pageSize);
+  if (page > totalPages) {
+    page = totalPages;
+  }
+
+  return { totalPages, offset: (page - 1) * pageSize, pageSize };
+};

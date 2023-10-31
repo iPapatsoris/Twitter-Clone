@@ -7,7 +7,7 @@ export const likeTweetQuery: MutateFunction<
   unknown,
   { tweetID: number }
 > = async (body) => {
-  const res = await postData<SingleTweetResponse, "">(
+  const res = await postData<SingleTweetResponse>(
     "tweet/" + body.tweetID + "/like",
     {}
   );
@@ -23,7 +23,7 @@ export const unlikeTweetQuery: MutateFunction<
   unknown,
   { tweetID: number }
 > = async (body) => {
-  const res = await deleteData<SingleTweetResponse, "">(
+  const res = await deleteData<SingleTweetResponse>(
     "tweet/" + body.tweetID + "/like"
   );
 
@@ -38,7 +38,7 @@ export const retweetQuery: MutateFunction<
   unknown,
   { tweetID: number }
 > = async (body) => {
-  const res = await postData<SingleTweetResponse, "">(
+  const res = await postData<SingleTweetResponse>(
     "tweet/" + body.tweetID + "/retweet",
     {}
   );
@@ -54,7 +54,7 @@ export const undoRetweetQuery: MutateFunction<
   unknown,
   { tweetID: number }
 > = async (body) => {
-  const res = await deleteData<SingleTweetResponse, "">(
+  const res = await deleteData<SingleTweetResponse>(
     "tweet/" + body.tweetID + "/retweet"
   );
 

@@ -7,7 +7,7 @@ export const addViewQuery: MutateFunction<
   unknown,
   { tweetID: number }
 > = async (body) => {
-  const res = await patchData<SingleTweetResponse, "">(
+  const res = await patchData<SingleTweetResponse>(
     "tweet/" + body.tweetID + "/addView",
     {}
   );
