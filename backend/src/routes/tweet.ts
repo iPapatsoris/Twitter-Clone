@@ -49,7 +49,8 @@ router.post(
     const currentUserID = req.session.userID!;
 
     const tweetID = await insertTweet(tweet, currentUserID);
-    res.send({ ok: true, data: { tweetID: tweetID } });
+    const newTweet = await getTweet(tweetID, currentUserID);
+    res.send({ ok: true, data: { tweet: newTweet } });
   }
 );
 

@@ -15,7 +15,6 @@ import yup from "../../../../util/yup";
 import { UseFormReturn, useController, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Form from "../../../../util/components/Form/Form";
-import { timelineKeys } from "../../../../Home/queries";
 import TextArea from "../../../../util/components/TextArea/TextArea";
 import { useContext, useRef } from "react";
 import ProgressBar from "./ProgressBar";
@@ -24,6 +23,7 @@ import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg"
 import { ModalContext } from "../../../../util/components/Modal/Modal";
 import { tweetThreadKeys } from "../TweetThread/queries";
 import Tweet from "../Tweet";
+import { updateTimelineOnTweetCreate } from "./queries";
 
 interface CreateTweetProps {
   autofocus?: boolean;
@@ -87,9 +87,7 @@ const CreateTweet = ({
           form.reset();
         }
         if (!isReply) {
-          queryClient.invalidateQueries(
-            timelineKeys.timeline(queryClient).queryKey
-          );
+          updateTimelineOnTweetCreate({ data, queryClient });
           navigate(getPagePath("home"), {
             state: { closeCreateTweetModal: true },
           });
@@ -98,7 +96,7 @@ const CreateTweet = ({
             tweetThreadKeys.tweetID(referencedTweetID, queryClient).queryKey
           );
           navigate(
-            getPagePath("tweet", loggedInUser?.username, data.data?.tweetID),
+            getPagePath("tweet", loggedInUser?.username, data.data?.tweet.id),
             { state: { closeCreateTweetModal: true } }
           );
         }
