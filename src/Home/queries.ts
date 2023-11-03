@@ -1,7 +1,7 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { addQueryParams, getData } from "../util/request";
 import { GetTimeline } from "../../backend/src/api/tweet";
-import { QueryClient } from "@tanstack/react-query";
+import { InfiniteData, QueryClient } from "@tanstack/react-query";
 import { setTweet } from "../Main/components/Tweet/queries";
 import ErrorCode from "../../backend/src/api/errorCodes";
 import { PaginationQueryParamsFrontEnd } from "../../backend/src/api/common";
@@ -20,18 +20,25 @@ export const timelineGetNextPageParam = (
 export const timelineKeys = createQueryKeys("timeline", {
   timeline: (
     queryClient: QueryClient,
-    setMaxPageToRender?: React.Dispatch<SetStateAction<number>>
+    setMaxPageToRender?: React.Dispatch<SetStateAction<number>>,
+    maxPageToRender?: number
   ) => ({
     queryKey: ["timeline"],
     queryFn: ({ pageParam = 1 }) =>
-      timelineQuery(queryClient, pageParam, setMaxPageToRender),
+      timelineQuery(
+        queryClient,
+        pageParam,
+        setMaxPageToRender,
+        maxPageToRender
+      ),
   }),
 });
 
 const timelineQuery = async (
   queryClient: QueryClient,
   pageParam: any,
-  setMaxPageToRender?: React.Dispatch<SetStateAction<number>>
+  setMaxPageToRender?: React.Dispatch<SetStateAction<number>>,
+  maxPageToRender?: number
 ) => {
   const pagination: PaginationQueryParamsFrontEnd = {
     page: pageParam,
@@ -49,8 +56,16 @@ const timelineQuery = async (
     setTweet(t.tweet || t.retweet?.tweet!, queryClient)
   );
 
-  // Update rendered timeline
-  if (setMaxPageToRender) {
+  const cache = queryClient.getQueryData<InfiniteData<GetTimeline["response"]>>(
+    timelineKeys.timeline(queryClient).queryKey
+  );
+  const cacheSize = (cache && cache.pages && cache.pages.length) || 0;
+
+  const isBackgroundRefetch = pageParam <= cacheSize;
+
+  if (setMaxPageToRender && !isBackgroundRefetch) {
+    // Render more timeline only if query was initiated by the user scrolling,
+    // and not through a background refetch of an already existing cache
     setMaxPageToRender(pageParam);
   }
 
