@@ -1,5 +1,4 @@
 import styles from "./List.module.scss";
-import * as React from "react";
 
 interface ListProps {
   children: React.ReactNode;
