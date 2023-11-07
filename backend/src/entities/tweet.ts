@@ -27,6 +27,7 @@ export type Retweet = {
   retweetDate: string;
   tweet: Tweet;
   retweeter: Pick<User, "id" | "name">;
+  id: number;
 };
 
 export const convertQueryResultToTweets = (resultArray: any[]): Tweet[] => {

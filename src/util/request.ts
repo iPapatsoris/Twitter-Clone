@@ -13,6 +13,9 @@ export const addQueryParams = (
   valuelessFields.forEach((param) => (queryParams[param] = ""));
   if (params) {
     for (const [key, value] of Object.entries(params)) {
+      if (value === undefined) {
+        continue;
+      }
       queryParams[key] = value.toString();
     }
   }

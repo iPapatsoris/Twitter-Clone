@@ -1,7 +1,7 @@
 /* eslint-disable no-multi-str */
 import express, { Request, Response } from "express";
 import { faker } from "@faker-js/faker";
-import { GetParams, NormalResponse } from "../api/common.js";
+import { NormalResponse } from "../api/common.js";
 import {
   CreateTweet,
   ExpandTweetReplies,
@@ -13,13 +13,7 @@ import {
   GetTrends,
   GetTimeline,
 } from "../api/tweet.js";
-import {
-  Fields,
-  getPagination,
-  runQuery,
-  shuffleArray,
-  TypedRequestQuery,
-} from "../util.js";
+import { Fields, runQuery, shuffleArray, TypedRequestQuery } from "../util.js";
 import { Tweet } from "../entities/tweet.js";
 import {
   getTweet,
@@ -180,9 +174,7 @@ router.delete(
 /**
  * Get all tweets/retweets from all followees of logged in user.
  * In a real world scenario, tweet selection would be fine tuned to optimize
- * engagement and tailor to user's preferences.
- * For better performance, switch to a cursor implementation instead of
- * pagination.
+ * engagement and tailor to user's preferences. Uses cursor based pagination.
  */
 router.get(
   "/timeline",
@@ -191,12 +183,18 @@ router.get(
     req: Request<{}, {}, {}, GetTimeline["requestQueryParams"]>,
     res: Response<GetTimeline["response"]>
   ) => {
+    const cursor =
+      req.query.nextCursor === undefined
+        ? undefined
+        : parseInt(req.query.nextCursor);
+
     const currentUserID = req.session.userID || -1;
     const tweetIDs = await runQuery<{ id: number }>(
       "SELECT distinct(tweet.id) \
        FROM tweet, user_follows as friendship \
-       WHERE isReply = false AND (authorID = ? OR (authorID = followeeID AND followerID = ?))",
-      [currentUserID, currentUserID]
+       WHERE isReply = false AND (authorID = ? OR (authorID = followeeID AND \
+       followerID = ?)) " + (cursor !== undefined ? " AND tweet.id <= ?" : ""),
+      [currentUserID, currentUserID, cursor]
     );
     const tweets = await Promise.all(
       tweetIDs.map(({ id }) => getTweet(id, currentUserID))
@@ -211,26 +209,29 @@ router.get(
     const retweets = (
       await Promise.all(
         followedUsers.map(({ username }) =>
-          getUserRetweets(username, currentUserID)
+          getUserRetweets(username, currentUserID, cursor)
         )
       )
     ).flat();
 
     const tweetsAndRetweets = mergeTweetsAndRetweets(tweets, retweets);
-    const { offset, pageSize, totalPages } = getPagination({
-      ...req.query,
-      totalItems: tweetsAndRetweets.length,
-    });
+
+    const pageSize = parseInt(req.query.pageSize);
+    const pageResults = tweetsAndRetweets.slice(0, pageSize);
+    let nextCursor: number | undefined = undefined;
+
+    if (pageResults.length === pageSize) {
+      nextCursor = tweetsAndRetweets[pageSize].tweet
+        ? tweetsAndRetweets[pageSize].tweet?.id
+        : tweetsAndRetweets[pageSize].retweet?.id;
+    }
 
     res.send({
       ok: true,
       data: {
-        // For better performance, keep desired rows based on pagination using
-        // database functions instead of slicing array
-        tweetsAndRetweets: tweetsAndRetweets.slice(offset, offset + pageSize),
+        tweetsAndRetweets: pageResults,
         pagination: {
-          totalPages,
-          currentPage: parseInt(req.query.page),
+          nextCursor,
         },
       },
     });

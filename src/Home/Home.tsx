@@ -7,7 +7,7 @@ import "react-circular-progressbar/dist/styles.css";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
 import { TailSpin } from "react-loader-spinner";
 import styles from "./Home.module.scss";
-import { ReactElement, useRef, useState } from "react";
+import { ReactElement, useState } from "react";
 import useScrollNearBottom from "../util/hooks/useScrollNearBottom";
 
 export const timelinePageSize = 10;
@@ -23,16 +23,17 @@ const Home = () => {
   const { isSmallScreen } = useWindowDimensions();
 
   const [maxPageToRender, setMaxPageToRender] = useState<number>(1);
+  const [createdTweets, setCreatedTweets] = useState<number[]>([]);
 
   const { data, isSuccess, fetchNextPage, isFetching } = useInfiniteQuery({
-    ...timelineKeys.timeline(queryClient, setMaxPageToRender, maxPageToRender),
+    ...timelineKeys.timeline(queryClient, setMaxPageToRender),
     getNextPageParam: timelineGetNextPageParam,
   });
 
-  const timelineRef = useRef<HTMLDivElement>(null);
-
   useScrollNearBottom({
     scrollHandler: () => {
+      console.log(data, isFetching);
+
       if (data && maxPageToRender + 1 <= data.pages.length!) {
         // We already have the next page in the cache, include it to be rendered
         setMaxPageToRender(maxPageToRender + 1);
@@ -52,19 +53,26 @@ const Home = () => {
     tweets = tweets.concat(
       page.data!.tweetsAndRetweets.map((t) => (
         <Tweet
-          key={t.tweet ? t.tweet.id : t.retweet?.tweet.id}
+          key={t.tweet ? t.tweet.id : t.retweet?.id}
           tweetID={t.tweet ? t.tweet.id : t.retweet?.tweet.id!}
           retweet={t.retweet}
         />
       ))
     );
   }
-  const renderedTweets = tweets.slice(0, maxPageToRender * timelinePageSize);
+
+  const createdTweetsJSX = createdTweets.map((tweetID) => (
+    <Tweet key={tweetID} tweetID={tweetID} />
+  ));
+
+  const renderedTweets = createdTweetsJSX.concat(
+    tweets.slice(0, maxPageToRender * timelinePageSize)
+  );
 
   return (
     <div>
-      <div className="Home" ref={timelineRef}>
-        {!isSmallScreen && <CreateTweet />}
+      <div className="Home">
+        {!isSmallScreen && <CreateTweet setCreatedTweets={setCreatedTweets} />}
         <List>{renderedTweets}</List>
         {isFetching && (
           <TailSpin

@@ -55,10 +55,21 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
+-- Table `twitter`.`shared_unique_id`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `twitter`.`shared_unique_id` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `referencedObject` ENUM('tweet', 'reaction') NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `twitter`.`tweet`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `twitter`.`tweet` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id` INT(11) NOT NULL,
   `authorID` INT(11) NOT NULL,
   `text` VARCHAR(280) NOT NULL,
   `isReply` TINYINT(1) NOT NULL,
@@ -78,6 +89,11 @@ CREATE TABLE IF NOT EXISTS `twitter`.`tweet` (
   CONSTRAINT `fk_Tweet_Reference`
     FOREIGN KEY (`referencedTweetID`)
     REFERENCES `twitter`.`tweet` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_id`
+    FOREIGN KEY (`id`)
+    REFERENCES `twitter`.`shared_unique_id` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -141,7 +157,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `twitter`.`user_reacts_to_tweet`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `twitter`.`user_reacts_to_tweet` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id` INT(11) NOT NULL,
   `userID` INT(11) NOT NULL,
   `tweetID` INT(11) NOT NULL,
   `reactionDate` DATETIME NOT NULL,
@@ -159,6 +175,11 @@ CREATE TABLE IF NOT EXISTS `twitter`.`user_reacts_to_tweet` (
   CONSTRAINT `fk_retweet_userID`
     FOREIGN KEY (`userID`)
     REFERENCES `twitter`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_reaction_id`
+    FOREIGN KEY (`id`)
+    REFERENCES `twitter`.`shared_unique_id` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

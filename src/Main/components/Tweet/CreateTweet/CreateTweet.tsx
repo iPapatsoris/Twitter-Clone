@@ -16,20 +16,23 @@ import { UseFormReturn, useController, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Form from "../../../../util/components/Form/Form";
 import TextArea from "../../../../util/components/TextArea/TextArea";
-import { useContext, useRef } from "react";
+import { SetStateAction, useContext, useRef } from "react";
 import ProgressBar from "./ProgressBar";
 import Icon from "../../../../util/components/Icon/Icon";
 import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg";
 import { ModalContext } from "../../../../util/components/Modal/Modal";
 import { tweetThreadKeys } from "../TweetThread/queries";
 import Tweet from "../Tweet";
-import { updateTimelineOnTweetCreate } from "./queries";
+import { NormalResponse } from "../../../../../backend/src/api/common";
+import { Tweet as TweetT } from "../../../../../backend/src/entities/tweet";
+import { tweetKeys } from "../queries";
 
 interface CreateTweetProps {
   autofocus?: boolean;
   asModalContent?: boolean;
   // Pass this prop only if we are replying to a tweet
   referencedTweetID?: number;
+  setCreatedTweets: React.Dispatch<SetStateAction<number[]>>;
 }
 
 type FormT = { tweet: string };
@@ -38,6 +41,7 @@ const CreateTweet = ({
   autofocus = false,
   asModalContent,
   referencedTweetID,
+  setCreatedTweets,
 }: CreateTweetProps) => {
   const { loggedInUser } = useAuthStore();
   const { state: routerState } = useLocation();
@@ -87,7 +91,14 @@ const CreateTweet = ({
           form.reset();
         }
         if (!isReply) {
-          updateTimelineOnTweetCreate({ data, queryClient });
+          queryClient.setQueryData<NormalResponse<TweetT>>(
+            tweetKeys.tweetID(data.data?.tweet.id!).queryKey,
+            () => ({ ok: data.ok, data: data.data?.tweet })
+          );
+          setCreatedTweets((createdTweets) => [
+            data.data?.tweet.id!,
+            ...createdTweets,
+          ]);
           navigate(getPagePath("home"), {
             state: { closeCreateTweetModal: true },
           });

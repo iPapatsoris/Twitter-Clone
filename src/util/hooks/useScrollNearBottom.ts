@@ -8,7 +8,7 @@ const useScrollNearBottom = ({
   useEffect(() => {
     const scrollHandler = () => {
       const scrollPercentage = getScrollPercentage();
-      if (scrollPercentage >= 65) {
+      if (scrollPercentage >= 55) {
         userScrollHandler();
       }
     };

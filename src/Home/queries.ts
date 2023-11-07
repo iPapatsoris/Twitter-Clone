@@ -12,36 +12,26 @@ type TimelineResult = GetTimeline["response"];
 export const timelineGetNextPageParam = (
   lastPage: TimelineResult,
   pages: TimelineResult[]
-) => {
-  const { currentPage, totalPages } = lastPage.data?.pagination!;
-  return currentPage === totalPages ? undefined : currentPage + 1;
-};
+) => lastPage.data?.pagination?.nextCursor;
 
 export const timelineKeys = createQueryKeys("timeline", {
   timeline: (
     queryClient: QueryClient,
-    setMaxPageToRender?: React.Dispatch<SetStateAction<number>>,
-    maxPageToRender?: number
+    setMaxPageToRender?: React.Dispatch<SetStateAction<number>>
   ) => ({
     queryKey: ["timeline"],
-    queryFn: ({ pageParam = 1 }) =>
-      timelineQuery(
-        queryClient,
-        pageParam,
-        setMaxPageToRender,
-        maxPageToRender
-      ),
+    queryFn: ({ pageParam }) =>
+      timelineQuery(queryClient, pageParam, setMaxPageToRender),
   }),
 });
 
 const timelineQuery = async (
   queryClient: QueryClient,
   pageParam: any,
-  setMaxPageToRender?: React.Dispatch<SetStateAction<number>>,
-  maxPageToRender?: number
+  setMaxPageToRender?: React.Dispatch<SetStateAction<number>>
 ) => {
   const pagination: PaginationQueryParamsFrontEnd = {
-    page: pageParam,
+    nextCursor: pageParam,
     pageSize: timelinePageSize,
   };
   const res = await getData<GetTimeline["response"]>(
@@ -56,17 +46,13 @@ const timelineQuery = async (
     setTweet(t.tweet || t.retweet?.tweet!, queryClient)
   );
 
-  const cache = queryClient.getQueryData<InfiniteData<GetTimeline["response"]>>(
-    timelineKeys.timeline(queryClient).queryKey
-  );
-  const cacheSize = (cache && cache.pages && cache.pages.length) || 0;
-
-  const isBackgroundRefetch = pageParam <= cacheSize;
-
-  if (setMaxPageToRender && !isBackgroundRefetch) {
+  if (
+    setMaxPageToRender &&
+    !isBackgroundRefetch({ queryClient, data: res.data })
+  ) {
     // Render more timeline only if query was initiated by the user scrolling,
     // and not through a background refetch of an already existing cache
-    setMaxPageToRender(pageParam);
+    setMaxPageToRender((currentMaxPage) => currentMaxPage + 1);
   }
 
   return res;
@@ -82,4 +68,39 @@ export const homeLoader = (queryClient: QueryClient) => async () => {
       getNextPageParam: timelineGetNextPageParam,
     }));
   return data;
+};
+
+const isBackgroundRefetch = ({
+  queryClient,
+  data,
+}: {
+  queryClient: QueryClient;
+  data: GetTimeline["response"]["data"];
+}) => {
+  const cache = queryClient.getQueryData<InfiniteData<GetTimeline["response"]>>(
+    timelineKeys.timeline(queryClient).queryKey
+  );
+
+  if (!cache || !cache.pages.length) {
+    return false;
+  }
+
+  const lastCachedPage = cache.pages[cache?.pages.length - 1];
+  const minCachedItem =
+    lastCachedPage.data?.tweetsAndRetweets[
+      lastCachedPage.data.tweetsAndRetweets.length - 1
+    ];
+  const minCachedID = minCachedItem?.tweet
+    ? minCachedItem.tweet.id
+    : minCachedItem?.retweet?.id;
+  console.log(minCachedID);
+  console.log(data?.pagination.nextCursor);
+
+  const lastReveicedItem =
+    data?.tweetsAndRetweets[data.tweetsAndRetweets.length - 1];
+  const minReceivedID = lastReveicedItem?.tweet
+    ? lastReveicedItem.tweet.id
+    : lastReveicedItem?.retweet!.id;
+
+  return minCachedID! <= minReceivedID!;
 };

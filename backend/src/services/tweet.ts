@@ -114,16 +114,19 @@ export const getTweetTags = async (tweetID: number) => {
 
 export const getUserRetweets = async (
   username: string,
-  currentUserID: number
+  currentUserID: number,
+  nextCursor?: number
 ): Promise<Retweet[]> => {
   const query =
-    "SELECT tweetID, reactionDate as retweetDate \
+    "SELECT tweetID, user_reacts_to_tweet.id as reactionID, reactionDate as retweetDate \
      FROM user_reacts_to_tweet, user \
-     WHERE userID = user.id AND reaction = 'retweet' AND user.username = ?";
-  const retweets = await runQuery<{ tweetID: number; retweetDate: string }>(
-    query,
-    [username]
-  );
+     WHERE userID = user.id AND reaction = 'retweet' AND user.username = ?" +
+    (nextCursor !== undefined ? " AND user_reacts_to_tweet.id <= ?" : "");
+  const retweets = await runQuery<{
+    tweetID: number;
+    retweetDate: string;
+    reactionID: number;
+  }>(query, [username, nextCursor]);
   if (!retweets || !retweets.length) {
     return [];
   }
@@ -136,6 +139,7 @@ export const getUserRetweets = async (
   );
 
   return retweets.map((retweet, index) => ({
+    id: retweet.reactionID,
     retweeter,
     retweetDate: retweet.retweetDate,
     tweet: tweets[index],
@@ -247,48 +251,11 @@ export const mergeTweetsAndRetweets = (
   );
 
   return tweetsAndRetweets.sort((a, b) => {
-    const aDate = a.tweet ? a.tweet.creationDate : a.retweet?.retweetDate;
-    const bDate = b.tweet ? b.tweet.creationDate : b.retweet?.retweetDate;
+    const aID = a.tweet ? a.tweet.id : a.retweet?.id;
+    const bID = b.tweet ? b.tweet.id : b.retweet?.id;
 
-    if (aDate && bDate) {
-      if (new Date(aDate) > new Date(bDate)) {
-        return -1;
-      } else {
-        return 1;
-      }
-    }
-    return 0;
-  });
-};
-
-// Merge tweets, replies and retweets and sort by most recent first
-export const mergeThreadsAndRetweets = (
-  threads: Thread[],
-  retweets: Retweet[]
-) => {
-  const wrappedThreads: Array<{
-    thread?: Thread;
-    retweet?: Retweet;
-  }> = threads.map((thread) => ({
-    thread,
-  }));
-  const threadsAndRetweets = wrappedThreads.concat(
-    retweets.map((retweet) => ({ retweet: retweet }))
-  );
-
-  const getMostRecentReplyDate = (thread: Thread) =>
-    thread.tweets[thread.tweets.length - 1].creationDate;
-
-  return threadsAndRetweets.sort((a, b) => {
-    const aDate = a.thread
-      ? getMostRecentReplyDate(a.thread)
-      : a.retweet?.retweetDate;
-    const bDate = b.thread
-      ? getMostRecentReplyDate(b.thread)
-      : b.retweet?.retweetDate;
-
-    if (aDate && bDate) {
-      if (new Date(aDate) > new Date(bDate)) {
+    if (aID && bID) {
+      if (aID > bID) {
         return -1;
       } else {
         return 1;
@@ -342,12 +309,16 @@ export const insertTweet = async (
     }
   }
 
-  const result = await runInsertQuery<{ insertId: number }>(
+  const uniqueIDRes = await insertSharedUniqueID("tweet");
+  const tweetID = uniqueIDRes.insertId;
+
+  await runInsertQuery<{ insertId: number }>(
     "INSERT INTO tweet \
-      (authorID, text, isReply, referencedTweetID, views, \
+      (id, authorID, text, isReply, referencedTweetID, views, \
       replyDepth, rootTweetID, creationDate)\
-      VALUES (?, ?, ?, ?, 0, 0, ?, NOW())",
+      VALUES (?, ?, ?, ?, ?, 0, 0, ?, NOW())",
     [
+      tweetID,
       currentUserID,
       tweet.text,
       tweet.isReply,
@@ -357,7 +328,6 @@ export const insertTweet = async (
   );
 
   if (tweet.isReply && tweet.referencedTweetID !== undefined) {
-    const tweetID = result.insertId;
     const [{ username }] = await runQuery<{ username: string }>(
       "SELECT username FROM user WHERE id = ?",
       [currentUserID]
@@ -385,7 +355,7 @@ export const insertTweet = async (
     );
   }
 
-  return result.insertId;
+  return tweetID;
 };
 
 export const insertUserReaction = async (
@@ -401,11 +371,22 @@ export const insertUserReaction = async (
   ) {
     return false;
   }
+  const uniqueIDRes = await insertSharedUniqueID("reaction");
+
   await runQuery(
     "INSERT INTO user_reacts_to_tweet \
-      (userID, tweetID, reactionDate, reaction) \
-       VALUES (?, ?, NOW(), ?)",
-    [userID, tweetID, reaction]
+      (id, userID, tweetID, reactionDate, reaction) \
+       VALUES (?, ?, ?, NOW(), ?)",
+    [uniqueIDRes.insertId, userID, tweetID, reaction]
   );
   return true;
+};
+
+export const insertSharedUniqueID = async (
+  referencedObject: "tweet" | "reaction"
+) => {
+  return await runInsertQuery<{ insertId: number }>(
+    "INSERT INTO shared_unique_id (referencedObject) VALUES (?)",
+    [referencedObject]
+  );
 };

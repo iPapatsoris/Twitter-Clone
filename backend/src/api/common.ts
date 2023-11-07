@@ -15,15 +15,14 @@ export const extraQueryFields: Array<keyof ExtraQueryFields> = ["limit"];
 
 type PaginationQueryParams<T> = {
   pageSize: T;
-  page: T;
+  nextCursor: T;
 };
 
 export type PaginationQueryParamsBackEnd = PaginationQueryParams<string>;
 export type PaginationQueryParamsFrontEnd = PaginationQueryParams<number>;
 export type PaginationResponse = {
   pagination: {
-    totalPages: number;
-    currentPage: number;
+    nextCursor?: number;
   };
 };
 
