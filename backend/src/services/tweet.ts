@@ -119,7 +119,7 @@ export const getUserRetweets = async (
   const query =
     "SELECT tweetID, reactionDate as retweetDate \
      FROM user_reacts_to_tweet, user \
-     WHERE userID = user.id AND isRetweet = true AND user.username = ?";
+     WHERE userID = user.id AND reaction = 'retweet' AND user.username = ?";
   const retweets = await runQuery<{ tweetID: number; retweetDate: string }>(
     query,
     [username]
@@ -147,12 +147,12 @@ export const getTweetStats = async (tweetID: number) => {
     await Promise.all([
       runQuery<{ totalRetweets: number }>(
         "SELECT count(*) as totalRetweets FROM user_reacts_to_tweet \
-         WHERE tweetID = ? AND isRetweet = true",
+         WHERE tweetID = ? AND reaction = 'retweet'",
         [tweetID]
       ),
       runQuery<{ totalLikes: number }>(
         "SELECT count(*) as totalLikes FROM user_reacts_to_tweet \
-         WHERE tweetID = ? AND isLike = true",
+         WHERE tweetID = ? AND reaction= 'like'",
         [tweetID]
       ),
       runQuery<{ totalReplies: number }>(
@@ -184,17 +184,23 @@ export const getUserReactionsToTweet = async (
       isLike: false,
     };
   }
-  const [reaction] = await runQuery<{
-    isRetweet: boolean;
-    isLike: boolean;
+  const reaction = await runQuery<{
+    id: number;
+    reaction: "retweet" | "like";
   }>(
-    "SELECT isRetweet, isLike FROM user_reacts_to_tweet \
+    "SELECT id, reaction FROM user_reacts_to_tweet \
      WHERE tweetID = ? AND userID = ?",
     [tweetID, currentUserID]
   );
+  if (reaction.length === 2) {
+    return { isRetweet: true, isLike: true };
+  }
+
   return {
-    isRetweet: reaction && reaction.isRetweet,
-    isLike: reaction && reaction.isLike,
+    isRetweet:
+      reaction && reaction.length === 1 && reaction[0].reaction === "retweet",
+    isLike:
+      reaction && reaction.length === 1 && reaction[0].reaction === "like",
   };
 };
 
@@ -382,45 +388,24 @@ export const insertTweet = async (
   return result.insertId;
 };
 
-export const insertRetweet = async (tweetID: number, userID: number) => {
+export const insertUserReaction = async (
+  tweetID: number,
+  userID: number,
+  reaction: "retweet" | "like"
+) => {
   const { isLike, isRetweet } = await getUserReactionsToTweet(tweetID, userID!);
 
-  let query = "";
-  if (isRetweet) {
+  if (
+    (reaction === "retweet" && isRetweet) ||
+    (reaction === "like" && isLike)
+  ) {
     return false;
-  } else if (isLike) {
-    query =
-      "UPDATE user_reacts_to_tweet \
-        SET isRetweet = true \
-        WHERE userID = ? AND tweetID = ?";
-  } else {
-    query =
-      "INSERT INTO user_reacts_to_tweet \
-        (userID, tweetID, reactionDate, isRetweet, isLike) \
-         VALUES (?, ?, NOW(), true, false)";
   }
-  await runQuery(query, [userID, tweetID]);
-  return true;
-};
-
-export const insertLike = async (tweetID: number, userID: number) => {
-  const { isLike, isRetweet } = await getUserReactionsToTweet(tweetID, userID!);
-
-  let query = "";
-  if (isLike) {
-    return false;
-  } else if (isRetweet) {
-    query =
-      "UPDATE user_reacts_to_tweet \
-        SET isLike = true \
-        WHERE userID = ? AND tweetID = ?";
-  } else {
-    query =
-      "INSERT INTO user_reacts_to_tweet \
-        (userID, tweetID, reactionDate, isRetweet, isLike) \
-         VALUES (?, ?, NOW(), false, true)";
-  }
-
-  await runQuery(query, [userID, tweetID]);
+  await runQuery(
+    "INSERT INTO user_reacts_to_tweet \
+      (userID, tweetID, reactionDate, reaction) \
+       VALUES (?, ?, NOW(), ?)",
+    [userID, tweetID, reaction]
+  );
   return true;
 };

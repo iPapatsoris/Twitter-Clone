@@ -424,7 +424,7 @@ router.get(
     const tweetIDs = await runQuery<{ id: number }>(
       "SELECT tweetID as id \
        FROM user, user_reacts_to_tweet \
-       WHERE userID = user.id AND isLike = true AND user.username = ? \
+       WHERE userID = user.id AND reaction = 'like' AND user.username = ? \
        ORDER BY reactionDate DESC",
       [username]
     );

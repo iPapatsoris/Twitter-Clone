@@ -53,7 +53,7 @@ const populateUsers = async (populateOptions: PopulateOptions) => {
      VALUES (?, ?, ?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?)",
       [
         user.username,
-        password,
+        user.password,
         user.email,
         user.name,
         user.birthDate,

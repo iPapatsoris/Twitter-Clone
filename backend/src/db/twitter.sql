@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS `twitter`.`email_code` (
   `code` VARCHAR(6) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 35
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -35,12 +34,12 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `twitter`.`user` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(15) NOT NULL ,
+  `username` VARCHAR(15) NOT NULL,
   `name` VARCHAR(50) NOT NULL,
   `avatar` VARCHAR(150) NULL DEFAULT 'https://media.idownloadblog.com/wp-content/uploads/2017/03/Twitter-new-2017-avatar-001.png',
   `coverPic` VARCHAR(100) NULL DEFAULT NULL,
   `isVerified` TINYINT(1) NOT NULL DEFAULT '0',
-  `bio` VARCHAR(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `bio` VARCHAR(160) CHARACTER SET 'utf8mb4' NULL DEFAULT NULL,
   `location` VARCHAR(50) NULL DEFAULT NULL,
   `website` VARCHAR(100) NULL DEFAULT NULL,
   `birthDate` DATE NULL DEFAULT NULL,
@@ -51,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `twitter`.`user` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC))
 ENGINE = InnoDB
-AUTO_INCREMENT = 40
+AUTO_INCREMENT = 90
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -82,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `twitter`.`tweet` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 141
+AUTO_INCREMENT = 1668
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -108,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `twitter`.`tweet_tags_user` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 125
+AUTO_INCREMENT = 3142
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -134,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `twitter`.`user_follows` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 93
+AUTO_INCREMENT = 456
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -146,13 +145,12 @@ CREATE TABLE IF NOT EXISTS `twitter`.`user_reacts_to_tweet` (
   `userID` INT(11) NOT NULL,
   `tweetID` INT(11) NOT NULL,
   `reactionDate` DATETIME NOT NULL,
-  `isRetweet` TINYINT(1) NOT NULL,
-  `isLike` TINYINT(1) NOT NULL,
+  `reaction` ENUM('retweet', 'like') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `reaction_UNIQUE` (`tweetID` ASC, `userID` ASC, `isLike` ASC, `isRetweet` ASC),
   INDEX `fk_userID_idx` (`userID` ASC),
   INDEX `fk_tweetID_idx` (`tweetID` ASC),
+  UNIQUE INDEX `reaction_UNIQUE` (`userID` ASC, `tweetID` ASC, `reaction` ASC),
   CONSTRAINT `fk_retweet_tweetID`
     FOREIGN KEY (`tweetID`)
     REFERENCES `twitter`.`tweet` (`id`)
@@ -164,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `twitter`.`user_reacts_to_tweet` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 30
+AUTO_INCREMENT = 2435
 DEFAULT CHARACTER SET = latin1;
 
 

@@ -1,10 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { CreateTweet, tweetCharLimit } from "../../api/tweet.js";
-import {
-  insertLike,
-  insertRetweet,
-  insertTweet,
-} from "../../services/tweet.js";
+import { insertTweet, insertUserReaction } from "../../services/tweet.js";
 import { getRandomInt, getRandomIntRange, runQuery } from "../../util.js";
 
 const minUserOriginalTweets = 1;
@@ -84,8 +80,6 @@ const populateRetweetsOrLikes = async (
   for (let iteration = 0; iteration < iterations; iteration++) {
     const userID = userIDs[getRandomInt(userIDs.length)].id;
     const tweetID = tweetIDs[getRandomInt(tweetIDs.length)].id;
-    await (forRetweets
-      ? insertRetweet(tweetID, userID)
-      : insertLike(tweetID, userID));
+    await insertUserReaction(tweetID, userID, forRetweets ? "retweet" : "like");
   }
 };

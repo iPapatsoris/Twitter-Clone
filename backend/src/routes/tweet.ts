@@ -28,9 +28,8 @@ import {
   getTweets,
   getUserReactionsToTweet,
   getUserRetweets,
-  insertLike,
-  insertRetweet,
   insertTweet,
+  insertUserReaction,
   mergeTweetsAndRetweets,
   sort,
 } from "../services/tweet.js";
@@ -84,7 +83,11 @@ router.post(
   ) => {
     const { tweetID } = req.params;
     const { userID } = req.session;
-    const success = await insertRetweet(parseInt(tweetID), userID!);
+    const success = await insertUserReaction(
+      parseInt(tweetID),
+      userID!,
+      "retweet"
+    );
     res.send({
       ok: success,
       data: { ...(await getTweet(parseInt(tweetID), userID!)) },
@@ -101,27 +104,20 @@ router.delete(
   ) => {
     const { tweetID } = req.params;
     const { userID } = req.session;
-    const { isLike, isRetweet } = await getUserReactionsToTweet(
+    const { isRetweet } = await getUserReactionsToTweet(
       parseInt(tweetID),
       userID!
     );
 
-    let query = "";
     if (!isRetweet) {
       res.send({ ok: false });
       return;
-    } else if (isLike) {
-      query =
-        "UPDATE user_reacts_to_tweet \
-        SET isRetweet = false \
-        WHERE userID = ? AND tweetID = ?";
-    } else {
-      query =
-        "DELETE FROM user_reacts_to_tweet \
-          WHERE userID = ? AND tweetID = ?";
     }
-
-    await runQuery(query, [userID, tweetID]);
+    await runQuery(
+      "DELETE FROM user_reacts_to_tweet \
+        WHERE userID = ? AND tweetID = ? AND reaction = 'retweet'",
+      [userID, tweetID]
+    );
     res.send({
       ok: true,
       data: { ...(await getTweet(parseInt(tweetID), userID!)) },
@@ -138,7 +134,11 @@ router.post(
   ) => {
     const { tweetID } = req.params;
     const { userID } = req.session;
-    const success = await insertLike(parseInt(tweetID), userID!);
+    const success = await insertUserReaction(
+      parseInt(tweetID),
+      userID!,
+      "like"
+    );
 
     res.send({
       ok: success,
@@ -156,27 +156,20 @@ router.delete(
   ) => {
     const { tweetID } = req.params;
     const { userID } = req.session;
-    const { isLike, isRetweet } = await getUserReactionsToTweet(
+    const { isLike } = await getUserReactionsToTweet(
       parseInt(tweetID),
       userID!
     );
 
-    let query = "";
     if (!isLike) {
       res.send({ ok: false });
       return;
-    } else if (isRetweet) {
-      query =
-        "UPDATE user_reacts_to_tweet \
-        SET isLike = false \
-        WHERE userID = ? AND tweetID = ?";
-    } else {
-      query =
-        "DELETE FROM user_reacts_to_tweet \
-         WHERE userID = ? AND tweetID = ?";
     }
-
-    await runQuery(query, [userID, tweetID]);
+    await runQuery(
+      "DELETE FROM user_reacts_to_tweet \
+        WHERE userID = ? AND tweetID = ? AND reaction = 'like'",
+      [userID, tweetID]
+    );
     res.send({
       ok: true,
       data: { ...(await getTweet(parseInt(tweetID), userID!)) },
