@@ -53,6 +53,15 @@ const ModalWrapper = ({
     e.stopPropagation();
   };
 
+  const onOuterClick = (e: React.MouseEvent) => {
+    /* This is needed because usually modals belong to a deep component.
+       Even though with the use of "React.createPortal" they are rendered at the
+       root level, events can still bubble up to the component that owns them
+       and cause side effects.
+    */
+    e.stopPropagation();
+  };
+
   const innerWrapper = (
     <div
       ref={innerRef}
@@ -73,6 +82,7 @@ const ModalWrapper = ({
         ...outerStyles,
       ].join(" ")}
       onMouseUp={onOuterMouseup}
+      onClick={onOuterClick}
     >
       {innerWrapper}
     </div>
