@@ -76,6 +76,7 @@ const Tweet = ({
 
   const navToTweet = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (
+      !simpleView &&
       refsExist(nestedLinkRefs) &&
       !elementIsContainedInRefs(e, nestedLinkRefs)
     ) {
