@@ -221,9 +221,13 @@ router.get(
     let nextCursor: number | undefined = undefined;
 
     if (pageResults.length === pageSize) {
-      nextCursor = tweetsAndRetweets[pageSize].tweet
-        ? tweetsAndRetweets[pageSize].tweet?.id
-        : tweetsAndRetweets[pageSize].retweet?.id;
+      if (tweetsAndRetweets.length > pageSize) {
+        nextCursor = tweetsAndRetweets[pageSize].tweet
+          ? tweetsAndRetweets[pageSize].tweet?.id
+          : tweetsAndRetweets[pageSize].retweet?.id;
+      } else {
+        nextCursor = undefined;
+      }
     }
 
     res.send({
