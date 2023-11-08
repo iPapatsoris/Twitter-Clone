@@ -16,7 +16,7 @@ import { UseFormReturn, useController, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Form from "../../../../util/components/Form/Form";
 import TextArea from "../../../../util/components/TextArea/TextArea";
-import { SetStateAction, useContext, useRef } from "react";
+import { useContext, useRef } from "react";
 import ProgressBar from "./ProgressBar";
 import Icon from "../../../../util/components/Icon/Icon";
 import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg";
@@ -26,13 +26,13 @@ import Tweet from "../Tweet";
 import { NormalResponse } from "../../../../../backend/src/api/common";
 import { Tweet as TweetT } from "../../../../../backend/src/entities/tweet";
 import { tweetKeys } from "../queries";
+import useCreatedTweetsStore from "../../../../Home/useCreatedTweetsStore";
 
 interface CreateTweetProps {
   autofocus?: boolean;
   asModalContent?: boolean;
   // Pass this prop only if we are replying to a tweet
   referencedTweetID?: number;
-  setCreatedTweets: React.Dispatch<SetStateAction<number[]>>;
 }
 
 type FormT = { tweet: string };
@@ -41,13 +41,15 @@ const CreateTweet = ({
   autofocus = false,
   asModalContent,
   referencedTweetID,
-  setCreatedTweets,
 }: CreateTweetProps) => {
   const { loggedInUser } = useAuthStore();
   const { state: routerState } = useLocation();
   const { setIsActive } = useContext(ModalContext);
   const isReply = referencedTweetID !== undefined;
   const isReplyInModal = isReply && asModalContent;
+  const addCreatedTweetID = useCreatedTweetsStore(
+    (state) => state.addCreatedTweetID
+  );
 
   const schema: any = yup.object().shape({
     tweet: yup.string().required().max(tweetCharLimit),
@@ -95,10 +97,7 @@ const CreateTweet = ({
             tweetKeys.tweetID(data.data?.tweet.id!).queryKey,
             () => ({ ok: data.ok, data: data.data?.tweet })
           );
-          setCreatedTweets((createdTweets) => [
-            data.data?.tweet.id!,
-            ...createdTweets,
-          ]);
+          addCreatedTweetID(data.data?.tweet.id!);
           navigate(getPagePath("home"), {
             state: { closeCreateTweetModal: true },
           });

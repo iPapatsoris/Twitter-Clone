@@ -9,6 +9,7 @@ import { TailSpin } from "react-loader-spinner";
 import styles from "./Home.module.scss";
 import { ReactElement, useState } from "react";
 import useScrollNearBottom from "../util/hooks/useScrollNearBottom";
+import useCreatedTweetsStore from "./useCreatedTweetsStore";
 
 export const timelinePageSize = 10;
 
@@ -23,7 +24,9 @@ const Home = () => {
   const { isSmallScreen } = useWindowDimensions();
 
   const [maxPageToRender, setMaxPageToRender] = useState<number>(1);
-  const [createdTweets, setCreatedTweets] = useState<number[]>([]);
+  const createdTweetIDs = useCreatedTweetsStore(
+    (state) => state.createdTweetIDs
+  );
 
   const { data, isSuccess, fetchNextPage, isFetching } = useInfiniteQuery({
     ...timelineKeys.timeline(queryClient, setMaxPageToRender),
@@ -61,18 +64,18 @@ const Home = () => {
     );
   }
 
-  const createdTweetsJSX = createdTweets.map((tweetID) => (
+  const createdTweets = createdTweetIDs.map((tweetID) => (
     <Tweet key={tweetID} tweetID={tweetID} />
   ));
 
-  const renderedTweets = createdTweetsJSX.concat(
+  const renderedTweets = createdTweets.concat(
     tweets.slice(0, maxPageToRender * timelinePageSize)
   );
 
   return (
     <div>
       <div className="Home">
-        {!isSmallScreen && <CreateTweet setCreatedTweets={setCreatedTweets} />}
+        {!isSmallScreen && <CreateTweet />}
         <List>{renderedTweets}</List>
         {isFetching && (
           <TailSpin
