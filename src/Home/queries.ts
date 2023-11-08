@@ -93,8 +93,6 @@ const isBackgroundRefetch = ({
   const minCachedID = minCachedItem?.tweet
     ? minCachedItem.tweet.id
     : minCachedItem?.retweet?.id;
-  console.log(minCachedID);
-  console.log(data?.pagination.nextCursor);
 
   const lastReveicedItem =
     data?.tweetsAndRetweets[data.tweetsAndRetweets.length - 1];

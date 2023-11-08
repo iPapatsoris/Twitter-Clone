@@ -35,8 +35,6 @@ const Home = () => {
 
   useScrollNearBottom({
     scrollHandler: () => {
-      console.log(data, isFetching);
-
       if (data && maxPageToRender + 1 <= data.pages.length!) {
         // We already have the next page in the cache, include it to be rendered
         setMaxPageToRender(maxPageToRender + 1);
