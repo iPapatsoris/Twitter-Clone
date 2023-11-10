@@ -26,7 +26,7 @@ import Tweet from "../Tweet";
 import { NormalResponse } from "../../../../../backend/src/api/common";
 import { Tweet as TweetT } from "../../../../../backend/src/entities/tweet";
 import { tweetKeys } from "../queries";
-import useCreatedTweetsStore from "../../../../Home/useCreatedTweetsStore";
+import { useExtraTweetActions } from "../../../../Home/useExtraTweetsStore";
 
 interface CreateTweetProps {
   autofocus?: boolean;
@@ -47,9 +47,7 @@ const CreateTweet = ({
   const { setIsActive } = useContext(ModalContext);
   const isReply = referencedTweetID !== undefined;
   const isReplyInModal = isReply && asModalContent;
-  const addCreatedTweetID = useCreatedTweetsStore(
-    (state) => state.addCreatedTweetID
-  );
+  const { addTweetsAtFront } = useExtraTweetActions();
 
   const schema: any = yup.object().shape({
     tweet: yup.string().required().max(tweetCharLimit),
@@ -97,7 +95,7 @@ const CreateTweet = ({
             tweetKeys.tweetID(data.data?.tweet.id!).queryKey,
             () => ({ ok: data.ok, data: data.data?.tweet })
           );
-          addCreatedTweetID(data.data?.tweet.id!);
+          addTweetsAtFront([{ id: data.data?.tweet.id! }]);
           navigate(getPagePath("home"), {
             state: { closeCreateTweetModal: true },
           });

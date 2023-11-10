@@ -1,6 +1,10 @@
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import CreateTweet from "../Main/components/Tweet/CreateTweet/CreateTweet";
-import { timelineGetNextPageParam, timelineKeys } from "./queries";
+import {
+  useDownTimelineInfiniteQuery,
+  useFetchNextUpTimelinePageInterval,
+  useUpTimelineInfiniteQuery,
+} from "./queries";
 import Tweet from "../Main/components/Tweet/Tweet";
 import List from "../Main/layouts/ContentRight/List/List";
 import "react-circular-progressbar/dist/styles.css";
@@ -9,7 +13,17 @@ import { TailSpin } from "react-loader-spinner";
 import styles from "./Home.module.scss";
 import { ReactElement, useState } from "react";
 import useScrollNearBottom from "../util/hooks/useScrollNearBottom";
-import useCreatedTweetsStore from "./useCreatedTweetsStore";
+import {
+  useExtraTimelineTweets,
+  useMaxLoadedTweetIDFromUpTimeline,
+} from "./useExtraTweetsStore";
+import {
+  getFreshUpTimelineTweets,
+  getInternalTweetID,
+  getMaxDownTimelineTweetID,
+  getTweetOrRetweetID,
+} from "./util";
+import ExpandUpTimelineButton from "./ExpandUpTimelineButton";
 
 export const timelinePageSize = 10;
 
@@ -17,65 +31,121 @@ export const timelinePageSize = 10;
   Timeline with infinite scroll. Tweets are loaded paginated into the cache
   as we scroll down. In the case that we already have a cached
   timeline, we render it gradually as we scroll and not all at once, 
-  to avoid slowdown.
+  to avoid slowdown. New tweets are also periodically fetched and cached in the 
+  background, and can be loaded into the UI via user prompt.
+
+  ------------
+  |Terminology|
+  ------------
+
+  downTimeline: the timeline as we scroll down, consisting of tweets that are
+                older than the first time we visited the page, sorted by most 
+                recent first.
+  upTimeline:   new tweets that have been created by other users after the first 
+                time we visited the page, sorted by most recent first. They
+                are periodically fetched and cached paginated in the background, 
+                but are not loaded in the UI, unless the user prompts.
+  
 */
 const Home = () => {
   const queryClient = useQueryClient();
   const { isSmallScreen } = useWindowDimensions();
 
-  const [maxPageToRender, setMaxPageToRender] = useState<number>(1);
-  const createdTweetIDs = useCreatedTweetsStore(
-    (state) => state.createdTweetIDs
-  );
+  // For gradual rendering of the down-timeline cache
+  const [maxDownPageToRender, setMaxDownPageToRender] = useState<number>(1);
 
-  const { data, isSuccess, fetchNextPage, isFetching } = useInfiniteQuery({
-    ...timelineKeys.timeline(queryClient, setMaxPageToRender),
-    getNextPageParam: timelineGetNextPageParam,
+  // Tweets either loaded from up-timeline cache and/or created by the user
+  // through the UI
+  const extraTweets = useExtraTimelineTweets();
+
+  // Highest tweet ID that has been loaded to the UI from the up-timeline cache.
+  // For determining which cached up-timeline tweets have not yet been
+  // displayed to the user.
+  const maxLoadedTweetIDFromUpTimeline = useMaxLoadedTweetIDFromUpTimeline();
+
+  const {
+    data: downTimelineCache,
+    isSuccess: downTimelineIsSuccess,
+    fetchNextPage: downTimelineFetchNextPage,
+    isFetching: downTimelineIsFetching,
+  } = useDownTimelineInfiniteQuery(queryClient, setMaxDownPageToRender);
+
+  const maxDownTweetID = getMaxDownTimelineTweetID(downTimelineCache);
+
+  const {
+    data: upTimelineCache,
+    isFetching: upTimelineIsFetching,
+    fetchNextPage: upTimelineFetchNextPage,
+  } = useUpTimelineInfiniteQuery(queryClient, maxDownTweetID);
+
+  useFetchNextUpTimelinePageInterval({
+    maxDownTweetID,
+    upTimelineIsFetching,
+    upTimelineFetchNextPage,
   });
 
   useScrollNearBottom({
     scrollHandler: () => {
-      if (data && maxPageToRender + 1 <= data.pages.length!) {
+      if (
+        downTimelineCache &&
+        maxDownPageToRender + 1 <= downTimelineCache.pages.length!
+      ) {
         // We already have the next page in the cache, include it to be rendered
-        setMaxPageToRender(maxPageToRender + 1);
-      } else if (!isFetching) {
+        setMaxDownPageToRender(maxDownPageToRender + 1);
+      } else if (!downTimelineIsFetching) {
         // We don't have the next page in the cache, fetch it
-        fetchNextPage();
+        downTimelineFetchNextPage();
       }
     },
   });
 
-  if (!isSuccess) {
+  if (!downTimelineIsSuccess) {
     return null;
   }
 
-  let tweets: ReactElement[] = [];
-  for (const page of data.pages) {
-    tweets = tweets.concat(
+  let downTimelineTweetsJSX: ReactElement[] = [];
+  for (const page of downTimelineCache.pages) {
+    downTimelineTweetsJSX = downTimelineTweetsJSX.concat(
       page.data!.tweetsAndRetweets.map((t) => (
         <Tweet
-          key={t.tweet ? t.tweet.id : t.retweet?.id}
-          tweetID={t.tweet ? t.tweet.id : t.retweet?.tweet.id!}
+          key={getTweetOrRetweetID(t)}
+          tweetID={getInternalTweetID(t)}
           retweet={t.retweet}
         />
       ))
     );
   }
 
-  const createdTweets = createdTweetIDs.map((tweetID) => (
-    <Tweet key={tweetID} tweetID={tweetID} />
+  const extraTweetsJSX = extraTweets.map((t) => (
+    <Tweet
+      key={t.id}
+      tweetID={t.retweet ? t.retweet.innerTweetID : t.id}
+      retweet={t.retweet}
+    />
   ));
 
-  const renderedTweets = createdTweets.concat(
-    tweets.slice(0, maxPageToRender * timelinePageSize)
+  // Combine user created tweets and up-timeline with down-timeline.
+  // Limit down-timeline results, for gradual rendering
+  const renderedTweets = extraTweetsJSX.concat(
+    downTimelineTweetsJSX.slice(0, maxDownPageToRender * timelinePageSize)
+  );
+
+  const freshTweets = getFreshUpTimelineTweets(
+    upTimelineCache,
+    maxLoadedTweetIDFromUpTimeline
   );
 
   return (
     <div>
       <div className="Home">
         {!isSmallScreen && <CreateTweet />}
-        <List>{renderedTweets}</List>
-        {isFetching && (
+        <List>
+          {freshTweets.length > 0 ? (
+            <ExpandUpTimelineButton freshTweets={freshTweets} />
+          ) : null}
+          {renderedTweets}
+        </List>
+        {downTimelineIsFetching && (
           <TailSpin
             height="30"
             width="30"

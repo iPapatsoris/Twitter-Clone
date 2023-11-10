@@ -115,13 +115,17 @@ export const getTweetTags = async (tweetID: number) => {
 export const getUserRetweets = async (
   username: string,
   currentUserID: number,
-  nextCursor?: number
+  nextCursor?: number,
+  fetchIDsBiggerThanCursor?: boolean
 ): Promise<Retweet[]> => {
+  const comparison = fetchIDsBiggerThanCursor ? ">" : "<=";
   const query =
     "SELECT tweetID, user_reacts_to_tweet.id as reactionID, reactionDate as retweetDate \
      FROM user_reacts_to_tweet, user \
      WHERE userID = user.id AND reaction = 'retweet' AND user.username = ?" +
-    (nextCursor !== undefined ? " AND user_reacts_to_tweet.id <= ?" : "");
+    (nextCursor !== undefined
+      ? " AND user_reacts_to_tweet.id " + comparison + " ?"
+      : "");
   const retweets = await runQuery<{
     tweetID: number;
     retweetDate: string;
@@ -233,10 +237,11 @@ export const getTweet = async (tweetID: number, currentUserID: number) => {
   return tweet;
 };
 
-// Merge tweets and retweets and sort by most recent first
+// Merge tweets and retweets and sort
 export const mergeTweetsAndRetweets = (
   tweets: Tweet[],
-  retweets: Retweet[]
+  retweets: Retweet[],
+  leastRecentFirst: boolean = false
 ) => {
   const tweetsWithoutSelfRetweets: Array<{ tweet?: Tweet; retweet?: Retweet }> =
     [];
@@ -256,9 +261,9 @@ export const mergeTweetsAndRetweets = (
 
     if (aID && bID) {
       if (aID > bID) {
-        return -1;
+        return leastRecentFirst ? 1 : -1;
       } else {
-        return 1;
+        return leastRecentFirst ? -1 : 1;
       }
     }
     return 0;

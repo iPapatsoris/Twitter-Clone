@@ -172,12 +172,14 @@ router.delete(
 );
 
 /**
- * Get all tweets/retweets from all followees of logged in user.
+ * Get tweets/retweets from followees of logged in user.
  * In a real world scenario, tweet selection would be fine tuned to optimize
- * engagement and tailor to user's preferences. Uses cursor based pagination.
+ * engagement and tailor to user's preferences. Uses cursor based pagination
+ * to retrieve tweets that are less recent than previous page (for infinite
+ * scrolling).
  */
 router.get(
-  "/timeline",
+  "/timeline/down",
   requireAuth,
   async (
     req: Request<{}, {}, {}, GetTimeline["requestQueryParams"]>,
@@ -228,6 +230,74 @@ router.get(
       } else {
         nextCursor = undefined;
       }
+    }
+
+    res.send({
+      ok: true,
+      data: {
+        tweetsAndRetweets: pageResults,
+        pagination: {
+          nextCursor,
+        },
+      },
+    });
+  }
+);
+
+/**
+ * Get tweets/retweets from followees of logged in user, that are more recent
+ * than given cursor.
+ */
+router.get(
+  "/timeline/up",
+  requireAuth,
+  async (
+    req: Request<{}, {}, {}, GetTimeline["requestQueryParams"]>,
+    res: Response<GetTimeline["response"]>
+  ) => {
+    const cursor =
+      req.query.nextCursor === undefined
+        ? undefined
+        : parseInt(req.query.nextCursor);
+
+    const currentUserID = req.session.userID || -1;
+    const tweetIDs = await runQuery<{ id: number }>(
+      "SELECT distinct(tweet.id) \
+       FROM tweet, user_follows as friendship \
+       WHERE isReply = false AND authorID = followeeID AND \
+       followerID = ? " + (cursor !== undefined ? " AND tweet.id > ?" : ""),
+      [currentUserID, cursor]
+    );
+    const tweets = await Promise.all(
+      tweetIDs.map(({ id }) => getTweet(id, currentUserID))
+    );
+
+    const followedUsers = await runQuery<{ username: string }>(
+      "SELECT user.username \
+       FROM user_follows, user\
+       WHERE user.id = followeeID AND followerID = ?",
+      [currentUserID]
+    );
+    const retweets = (
+      await Promise.all(
+        followedUsers.map(({ username }) =>
+          getUserRetweets(username, currentUserID, cursor, true)
+        )
+      )
+    ).flat();
+
+    const tweetsAndRetweets = mergeTweetsAndRetweets(tweets, retweets, true);
+
+    const pageSize = parseInt(req.query.pageSize);
+    const pageResults = tweetsAndRetweets.slice(0, pageSize);
+    let nextCursor: number | undefined = undefined;
+    if (pageResults.length > 0) {
+      const mostRecentTweet = pageResults[pageResults.length - 1];
+      nextCursor = mostRecentTweet.tweet
+        ? mostRecentTweet.tweet.id
+        : mostRecentTweet.retweet!.id;
+    } else {
+      nextCursor = cursor;
     }
 
     res.send({

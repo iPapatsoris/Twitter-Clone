@@ -1,41 +1,70 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { addQueryParams, getData } from "../util/request";
 import { GetTimeline } from "../../backend/src/api/tweet";
-import { InfiniteData, QueryClient } from "@tanstack/react-query";
+import { QueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { setTweet } from "../Main/components/Tweet/queries";
 import ErrorCode from "../../backend/src/api/errorCodes";
 import { PaginationQueryParamsFrontEnd } from "../../backend/src/api/common";
-import { SetStateAction } from "react";
+import { SetStateAction, useEffect } from "react";
 import { timelinePageSize } from "./Home";
 
 type TimelineResult = GetTimeline["response"];
-export const timelineGetNextPageParam = (
+const timelineGetNextPageParam = (
   lastPage: TimelineResult,
   pages: TimelineResult[]
-) => lastPage.data?.pagination?.nextCursor;
+) => {
+  return lastPage.data?.pagination?.nextCursor;
+};
 
 export const timelineKeys = createQueryKeys("timeline", {
-  timeline: (
+  down: (
     queryClient: QueryClient,
-    setMaxPageToRender?: React.Dispatch<SetStateAction<number>>
+    setMaxDownPageToRender?: React.Dispatch<SetStateAction<number>>
   ) => ({
-    queryKey: ["timeline"],
+    queryKey: ["down"],
     queryFn: ({ pageParam }) =>
-      timelineQuery(queryClient, pageParam, setMaxPageToRender),
+      downTimelineQuery(queryClient, pageParam, setMaxDownPageToRender),
+  }),
+  up: (queryClient: QueryClient, initialMaxID: number | undefined) => ({
+    queryKey: ["up"],
+    queryFn: ({ pageParam = initialMaxID }) =>
+      upTimelineQuery(queryClient, pageParam),
   }),
 });
+
+export const downTimelineQuery = async (
+  queryClient: QueryClient,
+  pageParam: any,
+  // Sets timeline state after fetch. Optional because we do not have access to
+  // it yet when query is run through the route loader.
+  setMaxDownPageToRender?: React.Dispatch<SetStateAction<number>>
+) => {
+  const res = await timelineQuery(queryClient, pageParam, "down");
+
+  if (setMaxDownPageToRender) {
+    setMaxDownPageToRender((currentMaxPage) => currentMaxPage + 1);
+  }
+  return res;
+};
+
+export const upTimelineQuery = async (
+  queryClient: QueryClient,
+  pageParam: any
+) => {
+  return await timelineQuery(queryClient, pageParam, "up");
+};
 
 const timelineQuery = async (
   queryClient: QueryClient,
   pageParam: any,
-  setMaxPageToRender?: React.Dispatch<SetStateAction<number>>
+  direction: "up" | "down"
 ) => {
   const pagination: PaginationQueryParamsFrontEnd = {
     nextCursor: pageParam,
     pageSize: timelinePageSize,
   };
   const res = await getData<GetTimeline["response"]>(
-    "tweet/timeline",
+    "tweet/timeline/" + direction,
     addQueryParams([], pagination)
   );
 
@@ -46,20 +75,11 @@ const timelineQuery = async (
     setTweet(t.tweet || t.retweet?.tweet!, queryClient)
   );
 
-  if (
-    setMaxPageToRender &&
-    !isBackgroundRefetch({ queryClient, data: res.data })
-  ) {
-    // Render more timeline only if query was initiated by the user scrolling,
-    // and not through a background refetch of an already existing cache
-    setMaxPageToRender((currentMaxPage) => currentMaxPage + 1);
-  }
-
   return res;
 };
 
 export const homeLoader = (queryClient: QueryClient) => async () => {
-  const { queryKey, queryFn } = timelineKeys.timeline(queryClient);
+  const { queryKey, queryFn } = timelineKeys.down(queryClient);
   const data =
     queryClient.getQueryData(queryKey) ??
     (await queryClient.fetchInfiniteQuery({
@@ -70,35 +90,49 @@ export const homeLoader = (queryClient: QueryClient) => async () => {
   return data;
 };
 
-const isBackgroundRefetch = ({
-  queryClient,
-  data,
+export const useDownTimelineInfiniteQuery = (
+  queryClient: QueryClient,
+  setMaxDownPageToRender: React.Dispatch<SetStateAction<number>>
+) =>
+  useInfiniteQuery({
+    ...timelineKeys.down(queryClient, setMaxDownPageToRender),
+    getNextPageParam: timelineGetNextPageParam,
+    staleTime: Infinity,
+  });
+
+export const useUpTimelineInfiniteQuery = (
+  queryClient: QueryClient,
+  maxDownTweetID: number | undefined
+) =>
+  useInfiniteQuery({
+    ...timelineKeys.up(queryClient, maxDownTweetID),
+    getNextPageParam: timelineGetNextPageParam,
+    staleTime: Infinity,
+    enabled: maxDownTweetID !== undefined,
+  });
+
+// Periodically query for potential new tweets (up-timeline)
+export const useFetchNextUpTimelinePageInterval = ({
+  maxDownTweetID,
+  upTimelineIsFetching,
+  upTimelineFetchNextPage,
 }: {
-  queryClient: QueryClient;
-  data: GetTimeline["response"]["data"];
-}) => {
-  const cache = queryClient.getQueryData<InfiniteData<GetTimeline["response"]>>(
-    timelineKeys.timeline(queryClient).queryKey
-  );
-
-  if (!cache || !cache.pages.length) {
-    return false;
-  }
-
-  const lastCachedPage = cache.pages[cache?.pages.length - 1];
-  const minCachedItem =
-    lastCachedPage.data?.tweetsAndRetweets[
-      lastCachedPage.data.tweetsAndRetweets.length - 1
-    ];
-  const minCachedID = minCachedItem?.tweet
-    ? minCachedItem.tweet.id
-    : minCachedItem?.retweet?.id;
-
-  const lastReveicedItem =
-    data?.tweetsAndRetweets[data.tweetsAndRetweets.length - 1];
-  const minReceivedID = lastReveicedItem?.tweet
-    ? lastReveicedItem.tweet.id
-    : lastReveicedItem?.retweet!.id;
-
-  return minCachedID! <= minReceivedID!;
-};
+  maxDownTweetID: number | undefined;
+  upTimelineIsFetching: boolean;
+  upTimelineFetchNextPage: ReturnType<
+    typeof useUpTimelineInfiniteQuery
+  >["fetchNextPage"];
+}) =>
+  useEffect(() => {
+    let intervalID: ReturnType<typeof setInterval> | undefined;
+    if (maxDownTweetID !== undefined) {
+      intervalID = setInterval(() => {
+        !upTimelineIsFetching && upTimelineFetchNextPage();
+      }, 10000);
+    }
+    return () => {
+      if (intervalID !== undefined) {
+        clearInterval(intervalID);
+      }
+    };
+  }, [maxDownTweetID, upTimelineFetchNextPage, upTimelineIsFetching]);
