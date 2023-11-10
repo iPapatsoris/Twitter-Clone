@@ -45,6 +45,13 @@ export const timelinePageSize = 10;
                 time we visited the page, sorted by most recent first. They
                 are periodically fetched and cached paginated in the background, 
                 but are not loaded in the UI, unless the user prompts.
+
+  Optimization todo: include upTimeline cache entries only if they are non-empty. 
+                     Infinite query populates cache entries every interval 
+                     regardless of if they hold actual content. Over a long 
+                     period of time, this could create a big cache that is less 
+                     performant to access, even if the traversal functions
+                     are optimized with early termination.                    
   
 */
 const Home = () => {
