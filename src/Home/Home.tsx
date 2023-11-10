@@ -34,9 +34,9 @@ export const timelinePageSize = 10;
   to avoid slowdown. New tweets are also periodically fetched and cached in the 
   background, and can be loaded into the UI via user prompt.
 
-  ------------
+  -------------
   |Terminology|
-  ------------
+  -------------
 
   downTimeline: the timeline as we scroll down, consisting of tweets that are
                 older than the first time we visited the page, sorted by most 
@@ -46,12 +46,25 @@ export const timelinePageSize = 10;
                 are periodically fetched and cached paginated in the background, 
                 but are not loaded in the UI, unless the user prompts.
 
-  Optimization todo: include upTimeline cache entries only if they are non-empty. 
-                     Infinite query populates cache entries every interval 
-                     regardless of if they hold actual content. Over a long 
-                     period of time, this could create a big cache that is less 
-                     performant to access, even if the traversal functions
-                     are optimized with early termination.                    
+  ----------------------------
+  |Scaling Optimisation todos|
+  ----------------------------
+
+  1) Include upTimeline cache entries only if they are non-empty. 
+     Infinite query populates cache entries every interval regardless of if they 
+     hold actual content. Over a long period of time, this could create a big 
+     cache that is less performant to access, even if the traversal functions
+     are optimized with early termination.   
+     
+  2) Gradually render upTimeline, instead of all at once, using a library like
+     "react-window".
+     Currently downTimeline is rendered progressively from the cache as the user 
+     scrolls down, however upTimeline is rendered all at once, when the user 
+     clicks the "Show x new tweets" button. Even though upTimeline is fetched
+     in chunks using pagination, if the cache grows too big before being loaded 
+     in the UI, too many elements will be rendered at once, which could cause 
+     a noticeable slowdown. 
+
   
 */
 const Home = () => {
