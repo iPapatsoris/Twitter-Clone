@@ -1,5 +1,4 @@
 import Profile from "../Main/routes/Profile/Profile";
-import { useAuthStore, useLogoutMutation } from "../store/AuthStore";
 import IconAndTitle from "../util/components/Popup/OptionsPopup/IconAndTitle/IconAndTitle";
 import {
   OptionWithNested,
@@ -14,12 +13,17 @@ import OptionsList from "../util/components/Popup/OptionsPopup/OptionsList";
 import { navMoreOptionsList } from "./Nav/MoreOptionsNavItem/navMoreOptionsList";
 import { useContext } from "react";
 import { ModalContext } from "../util/components/Modal/Modal";
+import { useLoggedInUser, useLogoutMutation } from "../store/AuthStore";
 
 const MobileSidepanel = () => {
-  const { loggedInUser } = useAuthStore();
+  const loggedInUser = useLoggedInUser();
   const { setIsActive } = useContext(ModalContext);
   const closeModal = () => setIsActive(false);
   const { mutate: logout } = useLogoutMutation();
+
+  if (!loggedInUser) {
+    return null;
+  }
 
   const options: OptionWithNested[] = [
     {

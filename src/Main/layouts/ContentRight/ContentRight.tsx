@@ -8,16 +8,13 @@ import { useRef } from "react";
 import useDynamicSticky from "../../../util/hooks/useDynamicSticky";
 import GuestPrompt from "../../components/GuestPrompt/GuestPrompt";
 import { getPagePath } from "../../../util/paths";
-import { useAuthStore } from "../../../store/AuthStore";
+import { useLoggedInUser } from "../../../store/AuthStore";
 
 const ContentRight = () => {
   const path = useLocation().pathname;
   const ref = useRef<HTMLDivElement>(null);
   useDynamicSticky(ref);
-  const loggedInUser = useAuthStore(
-    (state) => state.loggedInUser && { id: state.loggedInUser?.id }
-  );
-
+  const loggedInUser = useLoggedInUser();
   const guestView = <GuestPrompt />;
   const regularView = (
     <div>

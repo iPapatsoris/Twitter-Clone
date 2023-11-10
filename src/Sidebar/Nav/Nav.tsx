@@ -18,16 +18,14 @@ import { ReactComponent as SettingsIconActive } from "../../assets/icons/nav/set
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 import NavItem from "./NavItem";
 import { getPagePath } from "../../util/paths";
-import { useAuthStore } from "../../store/AuthStore";
+import { useLoggedInUser } from "../../store/AuthStore";
 import Icon from "../../util/components/Icon/Icon";
 import { Link } from "react-router-dom";
 import styles from "./Nav.module.scss";
 import useWindowDimensions from "../../util/hooks/useWindowDimensions";
 
 const Nav = () => {
-  const loggedInUser = useAuthStore(
-    (state) => state.loggedInUser && { username: state.loggedInUser.username }
-  );
+  const loggedInUser = useLoggedInUser();
   const { isSmallScreen } = useWindowDimensions();
 
   let itemPath = getPagePath("explore");

@@ -14,7 +14,7 @@ import { getPagePath } from "./util/paths";
 import Profile from "./Main/routes/Profile/Profile";
 import { profileLoader } from "./Main/routes/Profile/ProfileFace/queries";
 import { QueryClient } from "@tanstack/react-query";
-import { useAuthStore } from "./store/AuthStore";
+import { useJustSignedUp, useLoggedInUser } from "./store/AuthStore";
 import Circle from "./Main/routes/Circle/Circle";
 import { circleLoader } from "./Main/routes/Circle/queries";
 import TweetThread from "./Main/components/Tweet/TweetThread/TweetThread";
@@ -32,8 +32,8 @@ import { ComponentProps } from "react";
 import Welcome from "./Main/routes/Welcome/Welcome";
 
 const Router = ({ queryClient }: { queryClient: QueryClient }) => {
-  const loggedInUser = useAuthStore((state) => state.loggedInUser);
-  const justSignedUp = useAuthStore((state) => state.justSignedUp);
+  const loggedInUser = useLoggedInUser();
+  const justSignedUp = useJustSignedUp();
 
   const protectedLoader = (
     loader: NonNullable<ComponentProps<typeof Route>["loader"]> = () => ({})

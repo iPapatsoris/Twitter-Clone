@@ -1,5 +1,5 @@
 import { GetParams, NormalResponse } from "../../backend/src/api/common";
-import { useAuthStore } from "../store/AuthStore";
+import { getNonReactiveAuthState } from "../store/AuthStore";
 
 // Convert values to query parameters in the following way:
 // create an object with "valuelessFields" as keys with empty string values,
@@ -53,9 +53,9 @@ const request = async (
   const res = await fetch(buildURL(path, params), options);
 
   const data: NormalResponse = await res.json();
-  const { loggedInUser, setLoggedInUser } = useAuthStore.getState();
+  const { loggedInUser, actions } = getNonReactiveAuthState();
   if (loggedInUser && data.loggedOut) {
-    setLoggedInUser(null);
+    actions.setLoggedInUser(null);
   }
 
   return data as any;

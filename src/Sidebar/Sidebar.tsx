@@ -6,7 +6,7 @@ import Button from "../util/components/Button/Button";
 import Icon from "../util/components/Icon/Icon";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
 import { useRef, useState } from "react";
-import { useAuthStore } from "../store/AuthStore";
+import { useLoggedInUser } from "../store/AuthStore";
 import Modal from "../util/components/Modal/Modal";
 import CreateTweetModal from "./CreateTweetModal/CreateTweetModal";
 import useCloseCreateTweetModal from "../Main/components/Tweet/CreateTweet/useCloseCreateTweetModal";
@@ -15,9 +15,7 @@ const Sidebar = () => {
   const { isSmallScreen, isPcBig } = useWindowDimensions();
   const ref = useRef<HTMLElement>(null);
 
-  const loggedInUser = useAuthStore(
-    (state) => state.loggedInUser && { username: state.loggedInUser.username }
-  );
+  const loggedInUser = useLoggedInUser();
 
   const [showCreateTweetModal, setShowCreateTweetModal] = useState(false);
   useCloseCreateTweetModal(setShowCreateTweetModal);

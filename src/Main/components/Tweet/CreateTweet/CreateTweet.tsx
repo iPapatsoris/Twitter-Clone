@@ -1,7 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./CreateTweet.module.scss";
 import { getPagePath } from "../../../../util/paths";
-import { useAuthStore } from "../../../../store/AuthStore";
 import Avatar from "../../../routes/Profile/ProfileFace/Avatar/Avatar";
 import Widgets from "./Widgets";
 import Button from "../../../../util/components/Button/Button";
@@ -27,6 +26,7 @@ import { NormalResponse } from "../../../../../backend/src/api/common";
 import { Tweet as TweetT } from "../../../../../backend/src/entities/tweet";
 import { tweetKeys } from "../queries";
 import { useExtraTweetActions } from "../../../../Home/useExtraTweetsStore";
+import { useLoggedInUser } from "../../../../store/AuthStore";
 
 interface CreateTweetProps {
   autofocus?: boolean;
@@ -42,7 +42,7 @@ const CreateTweet = ({
   asModalContent,
   referencedTweetID,
 }: CreateTweetProps) => {
-  const { loggedInUser } = useAuthStore();
+  const loggedInUser = useLoggedInUser();
   const { state: routerState } = useLocation();
   const { setIsActive } = useContext(ModalContext);
   const isReply = referencedTweetID !== undefined;

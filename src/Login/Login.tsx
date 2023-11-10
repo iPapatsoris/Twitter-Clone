@@ -11,16 +11,16 @@ import LogoHeader from "../util/layouts/Minipage/LogoHeader/LogoHeader";
 import Minipage from "../util/layouts/Minipage/Minipage";
 import yup from "../util/yup";
 import styles from "./Login.module.scss";
-import { useAuthStore } from "../store/AuthStore";
 import { postData } from "../util/request";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
 import {
   mediumPreviewProfileFields,
   profileKeys,
 } from "../Main/routes/Profile/ProfileFace/queries";
+import { useAuthStoreActions } from "../store/AuthStore";
 
 const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
-  const setLoggedInUser = useAuthStore((state) => state.setLoggedInUser);
+  const { setLoggedInUser } = useAuthStoreActions();
   const queryClient = useQueryClient();
 
   const { mutate, isLoading, data } = useMutation<

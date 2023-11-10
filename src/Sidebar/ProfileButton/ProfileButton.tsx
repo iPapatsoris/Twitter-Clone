@@ -4,7 +4,7 @@ import Icon from "../../util/components/Icon/Icon";
 import OptionsPopup from "../../util/components/Popup/OptionsPopup/OptionsPopup";
 import { useRef, useState } from "react";
 import { OptionWithNested } from "../../util/components/Popup/OptionsPopup/Option";
-import { useAuthStore, useLogoutMutation } from "../../store/AuthStore";
+import { useLoggedInUser, useLogoutMutation } from "../../store/AuthStore";
 import Profile from "../../Main/routes/Profile/Profile";
 import useWindowDimensions from "../../util/hooks/useWindowDimensions";
 
@@ -13,7 +13,7 @@ const ProfileButton = () => {
   const { isPcBig } = useWindowDimensions();
 
   const profileButtonRef = useRef(null);
-  const user = useAuthStore((state) => state.loggedInUser);
+  const user = useLoggedInUser();
   const { mutate: logout } = useLogoutMutation();
 
   if (!user) return null;

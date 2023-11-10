@@ -2,11 +2,11 @@ import { useState } from "react";
 import Modal from "../../../../util/components/Modal/Modal";
 import MobileSidepanel from "../../../../Sidebar/MobileSidepanel";
 import Avatar from "../../../routes/Profile/ProfileFace/Avatar/Avatar";
-import { useAuthStore } from "../../../../store/AuthStore";
+import { useLoggedInUser } from "../../../../store/AuthStore";
 
 const HeaderAvatar = () => {
   const [showMobileSidePanel, setShowMobileSidePanel] = useState(false);
-  const { loggedInUser } = useAuthStore();
+  const loggedInUser = useLoggedInUser();
   return (
     <>
       {showMobileSidePanel && (

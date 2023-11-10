@@ -18,8 +18,7 @@ import Modal from "../../../../util/components/Modal/Modal";
 import EditProfile from "./EditProfile/EditProfile";
 import { defaultCoverColor } from "./defaultPics";
 import { useQuery } from "@tanstack/react-query";
-import { useAuthStore } from "../../../../store/AuthStore";
-import { shallow } from "zustand/shallow";
+import { useLoggedInUser } from "../../../../store/AuthStore";
 import { getPagePath } from "../../../../util/paths";
 import {
   fullProfileFields,
@@ -36,10 +35,7 @@ import { useHoverPopup } from "../../../../util/hooks/useHoverPopup";
 import Avatar from "./Avatar/Avatar";
 
 const ProfileFace = ({ preview }: ProfileProps) => {
-  const loggedInUser = useAuthStore(
-    (state) => state.loggedInUser && { id: state.loggedInUser.id },
-    shallow
-  );
+  const loggedInUser = useLoggedInUser();
   const { setUserHeader } = useContext(HeaderProfileContext);
   const params = useParams();
   const username = preview ? preview.username : params.username!;

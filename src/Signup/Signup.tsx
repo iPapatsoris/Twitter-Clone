@@ -13,7 +13,7 @@ import { postData } from "../util/request";
 import Minipage from "../util/layouts/Minipage/Minipage";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
 import StepHeader from "./Steps/StepHeader";
-import { useAuthStore } from "../store/AuthStore";
+import { useAuthStoreActions } from "../store/AuthStore";
 
 interface SignupProps {
   removeSignup: VoidFunction;
@@ -48,7 +48,7 @@ const Signup = ({ removeSignup }: SignupProps) => {
   const [password, setPassword] = useState("");
   const [performRegistration, setPerformRegistration] = useState(false);
   const [inputToFocus, setInputToFocus] = useState<keyof AccountInfoT>("name");
-  const handleSignup = useAuthStore((state) => state.handleSignup);
+  const { handleSignup } = useAuthStoreActions();
 
   const { mutate } = useMutation<
     CreateUser["response"],
