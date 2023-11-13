@@ -91,9 +91,9 @@ const CreateTweet = ({
           form.reset();
         }
         if (!isReply) {
-          queryClient.setQueryData<NormalResponse<TweetT>>(
+          queryClient.setQueryData<{ tweet: TweetT }>(
             tweetKeys.tweetID(data.data?.tweet.id!).queryKey,
-            () => ({ ok: data.ok, data: data.data?.tweet })
+            () => ({ tweet: data.data?.tweet! })
           );
           addTweetsAtFront([{ id: data.data?.tweet.id! }]);
           navigate(getPagePath("home"), {

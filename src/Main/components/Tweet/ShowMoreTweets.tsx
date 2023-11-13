@@ -53,39 +53,38 @@ const ShowMoreTweets = ({
             ...expandedReplies.slice(1),
           ],
         };
-        queryClient.setQueryData<GetTweet["response"]>(
+        queryClient.setQueryData<GetTweet["response"]["data"]>(
           tweetThreadKeys.tweetID(originalTweetID, queryClient).queryKey,
           {
-            ...originalTweet,
-            data: { ...originalTweet.data, replies: newReplies },
+            ...originalTweet.data,
+            replies: newReplies,
           }
         );
       }
     } else if (direction === "upward" && upwardProps) {
       const { threadIndex, username } = upwardProps;
       const originalUserTweets = queryClient.getQueryData<
-        GetUserThreads["response"]
+        GetUserThreads["response"]["data"]
       >(userTweetsKeys.tweetsOfUsername(username)._ctx.withReplies.queryKey);
 
       if (originalUserTweets && expandedReplies) {
         // Immutably Update user tweets with full conversation
-        const originalThread =
-          originalUserTweets.data?.threads[threadIndex].tweets;
+        const originalThread = originalUserTweets.threads[threadIndex].tweets;
         const fullThread = [
           ...expandedReplies,
           originalThread![originalThread!.length - 1],
         ];
         const newThreads: NonNullable<
           GetUserThreads["response"]["data"]
-        >["threads"] = originalUserTweets.data?.threads.map((t) => ({ ...t }))!;
+        >["threads"] = originalUserTweets.threads.map((t) => ({ ...t }))!;
         newThreads[threadIndex] = {
           hasMoreNestedReplies: false,
           tweets: fullThread,
         };
 
-        queryClient.setQueryData<GetUserThreads["response"]>(
+        queryClient.setQueryData<GetUserThreads["response"]["data"]>(
           userTweetsKeys.tweetsOfUsername(username)._ctx.withReplies.queryKey,
-          { ok: true, data: { threads: [...newThreads] } }
+          { threads: [...newThreads] }
         );
       }
     }

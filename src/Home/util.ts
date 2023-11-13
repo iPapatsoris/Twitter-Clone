@@ -3,11 +3,11 @@ import { GetTimeline } from "../../backend/src/api/tweet";
 
 // Get most recent tweet from down-timeline
 export const getMaxDownTimelineTweetID = (
-  downTimelineCache: InfiniteData<GetTimeline["response"]> | undefined
+  downTimelineCache: InfiniteData<GetTimeline["response"]["data"]> | undefined
 ) => {
-  const mostRecentDownTweet = downTimelineCache?.pages[0]?.data
-    ?.tweetsAndRetweets?.length
-    ? downTimelineCache.pages[0]?.data?.tweetsAndRetweets[0]
+  const mostRecentDownTweet = downTimelineCache?.pages[0]?.tweetsAndRetweets
+    ?.length
+    ? downTimelineCache.pages[0]?.tweetsAndRetweets[0]
     : null;
   return mostRecentDownTweet?.tweet
     ? getTweetOrRetweetID(mostRecentDownTweet)
@@ -25,7 +25,7 @@ export const getInternalTweetID = (
 // Get up-timeline tweets that are in the cache but have not been loaded
 // in the UI yet.
 export const getFreshUpTimelineTweets = (
-  upTimelineCache: InfiniteData<GetTimeline["response"]> | undefined,
+  upTimelineCache: InfiniteData<GetTimeline["response"]["data"]> | undefined,
   maxLoadedTweetIDFromUpTimeline: number
 ) => {
   const freshTweets: NonNullable<
@@ -38,7 +38,7 @@ export const getFreshUpTimelineTweets = (
       pageIndex >= 0;
       pageIndex--
     ) {
-      const page = upTimelineCache.pages[pageIndex].data?.tweetsAndRetweets;
+      const page = upTimelineCache.pages[pageIndex]?.tweetsAndRetweets;
       if (!page) {
         continue;
       }

@@ -126,7 +126,7 @@ const Home = () => {
   let downTimelineTweetsJSX: ReactElement[] = [];
   for (const page of downTimelineCache.pages) {
     downTimelineTweetsJSX = downTimelineTweetsJSX.concat(
-      page.data!.tweetsAndRetweets.map((t) => (
+      page!.tweetsAndRetweets.map((t) => (
         <Tweet
           key={getTweetOrRetweetID(t)}
           tweetID={getInternalTweetID(t)}

@@ -9,11 +9,8 @@ import { SetStateAction, useEffect } from "react";
 import { timelinePageSize } from "./Home";
 
 type TimelineResult = GetTimeline["response"];
-const timelineGetNextPageParam = (
-  lastPage: TimelineResult,
-  pages: TimelineResult[]
-) => {
-  return lastPage.data?.pagination?.nextCursor;
+const timelineGetNextPageParam = (lastPage: TimelineResult["data"]) => {
+  return lastPage?.pagination?.nextCursor;
 };
 
 export const timelineKeys = createQueryKeys("timeline", {
@@ -75,7 +72,7 @@ const timelineQuery = async (
     setTweet(t.tweet || t.retweet?.tweet!, queryClient)
   );
 
-  return res;
+  return res.data;
 };
 
 export const homeLoader = (queryClient: QueryClient) => async () => {
