@@ -21,5 +21,5 @@ const whoToFollowQuery = async <T extends Readonly<FullProfileRequestFields[]>>(
   if (!res.ok) {
     throw new Error();
   }
-  return res;
+  return res.data;
 };

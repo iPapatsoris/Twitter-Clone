@@ -3,7 +3,7 @@ import { SingleTweetResponse } from "../../../../../../backend/src/api/tweet";
 import { patchData } from "../../../../../util/request";
 
 export const addViewQuery: MutateFunction<
-  SingleTweetResponse,
+  { tweet: SingleTweetResponse["data"] },
   unknown,
   { tweetID: number }
 > = async (body) => {
@@ -15,5 +15,5 @@ export const addViewQuery: MutateFunction<
   if (!res.ok) {
     throw new Error();
   }
-  return res;
+  return { tweet: res.data };
 };

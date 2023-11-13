@@ -3,7 +3,7 @@ import { deleteData, postData } from "../../../../util/request";
 import { SingleTweetResponse } from "../../../../../backend/src/api/tweet";
 
 export const likeTweetQuery: MutateFunction<
-  SingleTweetResponse,
+  { tweet: SingleTweetResponse["data"] },
   unknown,
   { tweetID: number }
 > = async (body) => {
@@ -15,11 +15,11 @@ export const likeTweetQuery: MutateFunction<
   if (!res.ok) {
     throw new Error();
   }
-  return res;
+  return { tweet: res.data };
 };
 
 export const unlikeTweetQuery: MutateFunction<
-  SingleTweetResponse,
+  { tweet: SingleTweetResponse["data"] },
   unknown,
   { tweetID: number }
 > = async (body) => {
@@ -30,11 +30,11 @@ export const unlikeTweetQuery: MutateFunction<
   if (!res.ok) {
     throw new Error();
   }
-  return res;
+  return { tweet: res.data };
 };
 
 export const retweetQuery: MutateFunction<
-  SingleTweetResponse,
+  { tweet: SingleTweetResponse["data"] },
   unknown,
   { tweetID: number }
 > = async (body) => {
@@ -46,11 +46,11 @@ export const retweetQuery: MutateFunction<
   if (!res.ok) {
     throw new Error();
   }
-  return res;
+  return { tweet: res.data };
 };
 
 export const undoRetweetQuery: MutateFunction<
-  SingleTweetResponse,
+  { tweet: SingleTweetResponse["data"] },
   unknown,
   { tweetID: number }
 > = async (body) => {
@@ -61,5 +61,5 @@ export const undoRetweetQuery: MutateFunction<
   if (!res.ok) {
     throw new Error();
   }
-  return res;
+  return { tweet: res.data };
 };

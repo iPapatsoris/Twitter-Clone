@@ -64,10 +64,10 @@ const Tweet = ({
     enabled: false,
   });
 
-  if (!data || !data.data) {
+  if (!data || !data?.tweet) {
     return null;
   }
-  const tweet = data.data;
+  const tweet = data.tweet!;
 
   const getProfileLink = () => getPagePath("profile", tweet.author.username);
 

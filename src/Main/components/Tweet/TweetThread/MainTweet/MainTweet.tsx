@@ -51,7 +51,10 @@ const MainTweet = ({ tweetID, tweetThreadRef }: MainTweetProps) => {
   if (!isSuccess) {
     return null;
   }
-  const tweet = data.data!;
+  const { tweet } = data;
+  if (!tweet) {
+    return null;
+  }
 
   return (
     <div ref={ref} className={styles.MainTweet}>

@@ -17,7 +17,7 @@ const Replies = () => {
   }
 
   const repliesJSX: React.ReactElement[] = [];
-  data.data!.threads.forEach((thread, threadIndex) => {
+  data?.threads.forEach((thread, threadIndex) => {
     thread.tweets.forEach((tweet, index) => {
       if (!index) {
         const isFullThread = !thread.hasMoreNestedReplies;

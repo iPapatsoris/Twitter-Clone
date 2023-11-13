@@ -14,7 +14,7 @@ const Tweets = () => {
     return null;
   }
 
-  const tweets = data.data!.tweetsAndRetweets.map((t) => {
+  const tweets = data!.tweetsAndRetweets.map((t) => {
     return (
       <Tweet
         key={t.tweet ? t.tweet.id : t.retweet?.tweet.id}

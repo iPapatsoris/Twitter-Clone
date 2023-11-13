@@ -53,7 +53,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
   const { data, isSuccess } = useQuery(
     profileKeys.username(username)._ctx.fields(fieldsToQuery)
   );
-  const user = data?.data?.user!;
+  const user = data?.user!;
 
   const { useFollowMutation, useUnfollowMutation } = useCircleMutation({
     username,

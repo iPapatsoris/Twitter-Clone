@@ -34,7 +34,7 @@ const userTweetsQuery = async (username: string) => {
   if (!res.ok) {
     throw new Error();
   }
-  return res;
+  return res.data;
 };
 
 const userRepliesQuery = async (username: string) => {
@@ -45,7 +45,7 @@ const userRepliesQuery = async (username: string) => {
   if (!res.ok) {
     throw new Error();
   }
-  return res;
+  return res.data;
 };
 
 const userLikedTweetsQuery = async (username: string) => {
@@ -56,7 +56,7 @@ const userLikedTweetsQuery = async (username: string) => {
   if (!res.ok) {
     throw new Error();
   }
-  return res;
+  return res.data;
 };
 
 export const userTweetsLoader =
@@ -67,7 +67,7 @@ export const userTweetsLoader =
     );
 
     const data = await queryClient.fetchQuery({ queryKey, queryFn });
-    data.data?.tweetsAndRetweets.forEach((t) =>
+    data?.tweetsAndRetweets.forEach((t) =>
       setTweet(t.tweet || t.retweet?.tweet!, queryClient)
     );
     return data;
@@ -81,7 +81,7 @@ export const userRepliesLoader =
     )._ctx.withReplies;
 
     const data = await queryClient.fetchQuery({ queryKey, queryFn });
-    data.data?.threads.forEach((thread) => {
+    data?.threads.forEach((thread) => {
       thread.tweets.forEach((tweet) => setTweet(tweet, queryClient));
     });
     return data;
@@ -95,6 +95,6 @@ export const userLikedTweetsLoader =
     )._ctx.likedTweets;
 
     const data = await queryClient.fetchQuery({ queryKey, queryFn });
-    data.data?.tweets.forEach((t) => setTweet(t, queryClient));
+    data?.tweets.forEach((t) => setTweet(t, queryClient));
     return data;
   };

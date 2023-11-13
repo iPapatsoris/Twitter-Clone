@@ -33,7 +33,7 @@ const Circle = () => {
 
   useLayoutEffect(() => {
     if (isHeaderSuccess) {
-      const { user } = headerData?.data!;
+      const { user } = headerData;
       setUserHeader({
         username: user.username,
         isVerified: user.isVerified,
@@ -48,9 +48,9 @@ const Circle = () => {
 
   const userList =
     circle === "followers"
-      ? (circleData.data as GetUserFollowers<SmallProfileRequestFields>["response"]["data"])!
+      ? (circleData as GetUserFollowers<SmallProfileRequestFields>["response"]["data"])!
           .followers
-      : (circleData.data as GetUserFollowees<SmallProfileRequestFields>["response"]["data"])!
+      : (circleData as GetUserFollowees<SmallProfileRequestFields>["response"]["data"])!
           .followees;
 
   const userCircle = userList.map((f) => (

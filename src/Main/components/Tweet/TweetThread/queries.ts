@@ -34,13 +34,14 @@ const tweetThreadQuery = async (tweetID: number, queryClient: QueryClient) => {
   }
   // Set tweet's author profile cache
   const tweetAuthor = res.data?.tweet.author;
-  queryClient.setQueryData<GetUser<SmallProfileRequestFields>["response"]>(
+  queryClient.setQueryData<
+    GetUser<SmallProfileRequestFields>["response"]["data"]
+  >(
     profileKeys
       .username(tweetAuthor?.username!)
       ._ctx.fields(smallPreviewProfileFields).queryKey,
     {
-      ok: true,
-      data: { user: { ...tweetAuthor!, isFollowedByActiveUser: false } },
+      user: { ...tweetAuthor!, isFollowedByActiveUser: false },
     }
   );
 
@@ -84,5 +85,5 @@ const expandTweetRepliesQuery = async (
   if (!res.ok) {
     throw new Error();
   }
-  return res;
+  return res.data;
 };

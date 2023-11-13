@@ -15,7 +15,6 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { Tweet } from "../../../../../backend/src/entities/tweet";
-import { NormalResponse } from "../../../../../backend/src/api/common";
 import {
   likeTweetQuery,
   retweetQuery,
@@ -33,15 +32,15 @@ export const getRefreshTweetCallback =
   (
     queryClient: QueryClient
   ): UseMutationOptions<
-    SingleTweetResponse,
+    { tweet: SingleTweetResponse["data"] },
     unknown,
     { tweetID: number }
   >["onSuccess"] =>
-  (resp, { tweetID }) => {
-    if (resp.ok) {
-      queryClient.setQueryData<NormalResponse<Tweet>>(
+  (res, { tweetID }) => {
+    if (res.tweet) {
+      queryClient.setQueryData<{ tweet: Tweet }>(
         tweetKeys.tweetID(tweetID).queryKey,
-        { ok: true, data: resp.data }
+        { tweet: res.tweet }
       );
     }
   };

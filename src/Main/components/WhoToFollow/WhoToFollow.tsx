@@ -30,7 +30,7 @@ const WhoToFollow = () => {
 
   return (
     <>
-      {data.data?.followeeSuggestions.map((user) => (
+      {data?.followeeSuggestions.map((user) => (
         <div
           key={user.id}
           onClick={() => navigate(getPagePath("profile", user.username))}

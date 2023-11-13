@@ -33,7 +33,7 @@ const ShowMoreTweets = ({
 
   const expandReplies = async () => {
     const res = await refetch();
-    const expandedReplies = res.data?.data?.replies!;
+    const expandedReplies = res.data?.replies!;
 
     expandedReplies.forEach((r) => setTweet(r, queryClient));
 

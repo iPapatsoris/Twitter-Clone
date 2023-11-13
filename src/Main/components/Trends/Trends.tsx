@@ -12,7 +12,7 @@ const Trends = () => {
     return null;
   }
 
-  const trends = data.data!.trends.map((trend) => (
+  const trends = data!.trends.map((trend) => (
     <Trend key={trend.trend + trend.tweets} trend={trend} />
   ));
 

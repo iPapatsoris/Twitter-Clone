@@ -55,7 +55,7 @@ const circleQuery = async (username: string, circle: CircleType) => {
   if (!res.ok) {
     throw new Error();
   }
-  return res;
+  return res.data!;
 };
 
 // Fetch user header info and circle
@@ -82,13 +82,13 @@ export const circleLoader =
         queryFn: circleQueryFn,
       }),
     ]);
-    const circleResult = promsieResults[1];
+    const circleResult = promsieResults[1]!;
 
     const list =
       circle === "followers"
-        ? (circleResult.data as GetUserFollowers<SmallProfileRequestFields>["response"]["data"])!
+        ? (circleResult as GetUserFollowers<SmallProfileRequestFields>["response"]["data"])!
             .followers
-        : (circleResult.data as GetUserFollowees<SmallProfileRequestFields>["response"]["data"])!
+        : (circleResult as GetUserFollowees<SmallProfileRequestFields>["response"]["data"])!
             .followees;
 
     // Populate profile cache for each follower / followee to not re-fetch
@@ -98,8 +98,7 @@ export const circleLoader =
           .username(user.username)
           ._ctx.fields(smallPreviewProfileFields).queryKey,
         {
-          ...circleResult,
-          data: { user },
+          user,
         }
       );
     });

@@ -16,5 +16,5 @@ const trendsQuery = async () => {
     throw new Error();
   }
 
-  return res;
+  return res.data;
 };
