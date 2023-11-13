@@ -1368,7 +1368,7 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@lukemorales/query-key-factory@^1.2.0":
+"@lukemorales/query-key-factory@^1.3.2":
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/@lukemorales/query-key-factory/-/query-key-factory-1.3.2.tgz#b3113e3c4d168397842b876554d6c11a61330ec3"
   integrity sha512-SFOWcB5ec+RhlKjLjZxTAbOPF2uXNED6lqXiMu3TUt2twKzxE/QLhnYkdbxOBMK5Wwc2Ia+WP3yqCPRKWywnwQ==
@@ -1510,34 +1510,29 @@
     "@svgr/hast-util-to-babel-ast" "^7.0.0"
     svg-parser "^2.0.4"
 
-"@tanstack/match-sorter-utils@^8.7.0":
-  version "8.8.4"
-  resolved "https://registry.yarnpkg.com/@tanstack/match-sorter-utils/-/match-sorter-utils-8.8.4.tgz#0b2864d8b7bac06a9f84cb903d405852cc40a457"
-  integrity sha512-rKH8LjZiszWEvmi01NR72QWZ8m4xmXre0OOwlRGnjU01Eqz/QnN+cqpty2PJ0efHblq09+KilvyR7lsbzmXVEw==
-  dependencies:
-    remove-accents "0.4.2"
+"@tanstack/query-core@5.8.3":
+  version "5.8.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.8.3.tgz#7c6d62721518223e8b27f1a0b5e9bd4e3bb7ecd8"
+  integrity sha512-SWFMFtcHfttLYif6pevnnMYnBvxKf3C+MHMH7bevyYfpXpTMsLB9O6nNGBdWSoPwnZRXFNyNeVZOw25Wmdasow==
 
-"@tanstack/query-core@4.29.17":
-  version "4.29.17"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.29.17.tgz#bbef3a30190732ae3554187702f6e34c5caaefd8"
-  integrity sha512-iDbO8yZOpm1lqgq6L8mpxGbKaoiyZSjthxEB3WGU7mNPYss9q4H3Q67+e2xXGwkemEVmtEX/WwvtFitrvVU8TA==
+"@tanstack/query-devtools@5.8.3":
+  version "5.8.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-devtools/-/query-devtools-5.8.3.tgz#5e794e9aaa33d1c34bf14e34222b13f0cf818a45"
+  integrity sha512-tgVzqWpIg611UXqoIkyOLjEdrV3uNXg86kPrst0/OUP59znma68mOAHw8OEy/xxjN3t94InOfWhmVtkSQ9E8Lg==
 
-"@tanstack/react-query-devtools@^4.29.7":
-  version "4.29.18"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query-devtools/-/react-query-devtools-4.29.18.tgz#3c0a3f8f2c467740fd975c009a473b75a5ee8989"
-  integrity sha512-MH0EFL1lDzYBLbhCeD7GaNku4pOE7bPEm5HIFGw4YdRrmDjkTkkbGWqDJ15odGwp7qOvOgLbCxyTCqfof29Dag==
+"@tanstack/react-query-devtools@^5.8.3":
+  version "5.8.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-devtools/-/react-query-devtools-5.8.3.tgz#fc754b49da95fe274f3498847f98be873e76a9a7"
+  integrity sha512-C36SQVh3wEjj+wEage2nyPBXQJj+gMqmbyXvUAVwywUjHC8OdpyYFkTiVQVRlPcxh+Td2qhsrn1IHPxd39YkrQ==
   dependencies:
-    "@tanstack/match-sorter-utils" "^8.7.0"
-    superjson "^1.10.0"
-    use-sync-external-store "^1.2.0"
+    "@tanstack/query-devtools" "5.8.3"
 
-"@tanstack/react-query@^4.29.5":
-  version "4.29.18"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.29.18.tgz#bd22a2df60a6c8eb6f024479ca3bd15b9aea6763"
-  integrity sha512-CyoxrT8U7MWLZOdl0XLCiHC+W5cnXNELafFtzcsrwrALiUulONEfWFl6TzgvENfhC50OBjVGy/6Yl3YsIhAM6g==
+"@tanstack/react-query@^5.8.3":
+  version "5.8.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.8.3.tgz#3d5db417a4c62b0e04a9b4091ac748cac1bac06c"
+  integrity sha512-EDRrsMgUtKM+SjVmhDYBd4jwWWyHAw3kCaurKLIO90OfPQr/UhpwcqM2l/eQOaUYon9lfDB2ejQi1edHK7zEdA==
   dependencies:
-    "@tanstack/query-core" "4.29.17"
-    use-sync-external-store "^1.2.0"
+    "@tanstack/query-core" "5.8.3"
 
 "@types/eslint@^8.4.5":
   version "8.40.2"
@@ -2067,13 +2062,6 @@ convert-source-map@^1.7.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.9.0.tgz#7faae62353fb4213366d0ca98358d22e8368b05f"
   integrity sha512-ASFBup0Mz1uyiIjANan1jzLQami9z1PoYSZCiiYW2FczPbenXc45FZdBZLzOT+r6+iciuEModtmCti+hjaAk0A==
-
-copy-anything@^3.0.2:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/copy-anything/-/copy-anything-3.0.5.tgz#2d92dce8c498f790fa7ad16b01a1ae5a45b020a0"
-  integrity sha512-yCEafptTtb4bk7GLEQoM8KVJpxAfdBJYaXyzQEgQQQgYrZiDp8SJmGKlYza6CYjEDNstAdNdKA3UuoULlEbS6w==
-  dependencies:
-    is-what "^4.1.8"
 
 core-js-compat@^3.30.1, core-js-compat@^3.30.2:
   version "3.31.0"
@@ -3116,11 +3104,6 @@ is-weakref@^1.0.2:
   dependencies:
     call-bind "^1.0.2"
 
-is-what@^4.1.8:
-  version "4.1.15"
-  resolved "https://registry.yarnpkg.com/is-what/-/is-what-4.1.15.tgz#de43a81090417a425942d67b1ae86e7fae2eee0e"
-  integrity sha512-uKua1wfy3Yt+YqsD6mTUEa2zSi3G1oPlqTflgaPJ7z63vUGN5pxFpnQfeSLMFnJDEsdvOtkp1rUWkYjB4YfhgA==
-
 isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
@@ -3675,11 +3658,6 @@ regjsparser@^0.9.1:
   dependencies:
     jsesc "~0.5.0"
 
-remove-accents@0.4.2:
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/remove-accents/-/remove-accents-0.4.2.tgz#0a43d3aaae1e80db919e07ae254b285d9e1c7bb5"
-  integrity sha512-7pXIJqJOq5tFgG1A2Zxti3Ht8jJF337m4sowbuHsW30ZnkQFnDzy9qBNhgzX8ZLW4+UBcXiiR7SwR6pokHsxiA==
-
 resolve-from@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-4.0.0.tgz#4abcd852ad32dd7baabfe9b40e00a36db5f392e6"
@@ -3903,13 +3881,6 @@ styled-tools@^1.7.2:
   resolved "https://registry.yarnpkg.com/styled-tools/-/styled-tools-1.7.2.tgz#a8f71198535cf785d7db0927cc1c1b88337c4440"
   integrity sha512-IjLxzM20RMwAsx8M1QoRlCG/Kmq8lKzCGyospjtSXt/BTIIcvgTonaxQAsKnBrsZNwhpHzO9ADx5te0h76ILVg==
 
-superjson@^1.10.0:
-  version "1.12.4"
-  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.12.4.tgz#cfea35b0d1eb0f12d8b185f1d871272555f5a61f"
-  integrity sha512-vkpPQAxdCg9SLfPv5GPC5fnGrui/WryktoN9O5+Zif/14QIMjw+RITf/5LbBh+9QpBFb3KNvJth+puz2H8o6GQ==
-  dependencies:
-    copy-anything "^3.0.2"
-
 supports-color@^5.3.0, supports-color@^5.5.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-5.5.0.tgz#e2e69a44ac8772f78a1ec0b35b689df6530efc8f"
@@ -4084,7 +4055,7 @@ use-latest@^1.2.1:
   dependencies:
     use-isomorphic-layout-effect "^1.1.1"
 
-use-sync-external-store@1.2.0, use-sync-external-store@^1.2.0:
+use-sync-external-store@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
   integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==

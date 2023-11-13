@@ -75,13 +75,14 @@ const EditProfile = ({ user, closeModal }: EditProfileProps) => {
     UpdateUser<(typeof requestFields)[number]>["response"],
     unknown,
     UpdateUser<UpdateUserFields>["request"]
-  >(async (body) =>
-    patchData<UpdateUser<(typeof requestFields)[number]>["response"]>(
-      "user",
-      body,
-      addQueryParams(requestFields)
-    )
-  );
+  >({
+    mutationFn: async (body) =>
+      patchData<UpdateUser<(typeof requestFields)[number]>["response"]>(
+        "user",
+        body,
+        addQueryParams(requestFields)
+      ),
+  });
 
   const isValidForm = isValid && day !== -1 && month !== -1 && year !== -1;
 

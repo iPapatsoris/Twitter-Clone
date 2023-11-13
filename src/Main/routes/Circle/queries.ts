@@ -114,7 +114,7 @@ export const useCircleMutation = ({
   queryKeyToInvalidate: readonly string[];
 }) => {
   const queryClient = useQueryClient();
-  const options: Parameters<typeof useMutation<NormalResponse>>["2"] = {
+  const options: Parameters<typeof useMutation<NormalResponse>>["0"] = {
     onSuccess: async (data) => {
       if (data.ok) {
         await queryClient.invalidateQueries({
@@ -125,13 +125,13 @@ export const useCircleMutation = ({
   };
 
   return {
-    useFollowMutation: useMutation<NormalResponse, unknown, void>(
-      () => postData("user/" + username + "/follow", {}),
-      options
-    ),
-    useUnfollowMutation: useMutation<NormalResponse, unknown, void>(
-      () => deleteData("user/" + username + "/follow"),
-      options
-    ),
+    useFollowMutation: useMutation<NormalResponse, Error, void>({
+      mutationFn: () => postData("user/" + username + "/follow", {}),
+      ...options,
+    }),
+    useUnfollowMutation: useMutation<NormalResponse, Error, void>({
+      mutationFn: () => deleteData("user/" + username + "/follow"),
+      ...options,
+    }),
   };
 };

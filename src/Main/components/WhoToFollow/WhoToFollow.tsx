@@ -11,7 +11,7 @@ const WhoToFollow = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    queryClient.invalidateQueries(whoToFollowKeys._def);
+    queryClient.invalidateQueries({ queryKey: whoToFollowKeys._def });
   }, [location, queryClient]);
 
   const { data, isSuccess } = useQuery(

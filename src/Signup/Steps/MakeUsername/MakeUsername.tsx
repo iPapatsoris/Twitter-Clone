@@ -36,13 +36,13 @@ const MakeUsername = ({
     setPerformRegistration(true);
   };
 
-  const { refetch } = useQuery<GetUsernameExists["response"]>(
-    ["usernameExists"],
-    () => {
+  const { refetch } = useQuery<GetUsernameExists["response"]>({
+    queryKey: ["usernameExists"],
+    queryFn: () => {
       return getData("user/usernameExists/" + getValues("username"));
     },
-    { enabled: false }
-  );
+    enabled: false,
+  });
 
   const schema: any = yup.object().shape({
     username: yupSequentialStringSchema([

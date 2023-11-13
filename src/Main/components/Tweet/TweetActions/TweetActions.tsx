@@ -62,19 +62,23 @@ const TweetActions = ({
   const { stats, isLiked, isRetweeted, id } = tweet;
   const queryClient = useQueryClient();
 
-  const { mutate: likeTweetMutation } = useMutation(likeTweetQuery, {
+  const { mutate: likeTweetMutation } = useMutation({
+    mutationFn: likeTweetQuery,
     onSuccess: getRefreshTweetCallback(queryClient),
   });
 
-  const { mutate: unlikeTweetMutation } = useMutation(unlikeTweetQuery, {
+  const { mutate: unlikeTweetMutation } = useMutation({
+    mutationFn: unlikeTweetQuery,
     onSuccess: getRefreshTweetCallback(queryClient),
   });
 
-  const { mutate: retweetMutation } = useMutation(retweetQuery, {
+  const { mutate: retweetMutation } = useMutation({
+    mutationFn: retweetQuery,
     onSuccess: getRefreshTweetCallback(queryClient),
   });
 
-  const { mutate: undoRetweetMutation } = useMutation(undoRetweetQuery, {
+  const { mutate: undoRetweetMutation } = useMutation({
+    mutationFn: undoRetweetQuery,
     onSuccess: getRefreshTweetCallback(queryClient),
   });
 

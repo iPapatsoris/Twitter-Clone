@@ -7,7 +7,7 @@ const useSendEmailCode = (key: string) => {
     CreateEmailCode["response"],
     unknown,
     CreateEmailCode["request"]
-  >(async (body) => postData("email/code", body));
+  >({ mutationFn: async (body) => postData("email/code", body) });
 };
 
 export default useSendEmailCode;

@@ -54,7 +54,8 @@ const Signup = ({ removeSignup }: SignupProps) => {
     CreateUser["response"],
     unknown,
     CreateUser["request"]
-  >(async (body) => postData("user", body), {
+  >({
+    mutationFn: async (body) => postData("user", body),
     onSuccess: (res) => {
       handleSignup(res.data?.user!);
     },

@@ -36,7 +36,7 @@ const VerifyEmail = ({
     VerifyEmailCode["response"],
     unknown,
     VerifyEmailCode["request"]
-  >(async (body) => postData("email/code/verify", body));
+  >({ mutationFn: async (body) => postData("email/code/verify", body) });
 
   const handleSubmit = () => {
     verifyCode(

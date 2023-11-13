@@ -35,13 +35,13 @@ const AccountInfo = ({
   const [day, setDay] = useState(birthDate ? birthDate.date() : -1);
   const [year, setYear] = useState(birthDate ? birthDate.year() : -1);
 
-  const { refetch } = useQuery<GetEmail["response"]>(
-    ["emailExists"],
-    () => {
+  const { refetch } = useQuery<GetEmail["response"]>({
+    queryKey: ["emailExists"],
+    queryFn: () => {
       return getData("email/" + getValues("email"));
     },
-    { enabled: false }
-  );
+    enabled: false,
+  });
 
   const schema: any = yup.object().shape({
     name: yup.string().required("What's your name?").max(charLimits.name),

@@ -18,7 +18,8 @@ interface MainTweetProps {
 
 const MainTweet = ({ tweetID, tweetThreadRef }: MainTweetProps) => {
   const queryClient = useQueryClient();
-  const { mutate: addViewMutation } = useMutation(addViewQuery, {
+  const { mutate: addViewMutation } = useMutation({
+    mutationFn: addViewQuery,
     onSuccess: getRefreshTweetCallback(queryClient),
   });
 

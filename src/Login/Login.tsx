@@ -1,7 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LoginUser } from "../../backend/src/api/auth";
 import Button from "../util/components/Button/Button";
 import Form from "../util/components/Form/Form";
@@ -11,35 +10,11 @@ import LogoHeader from "../util/layouts/Minipage/LogoHeader/LogoHeader";
 import Minipage from "../util/layouts/Minipage/Minipage";
 import yup from "../util/yup";
 import styles from "./Login.module.scss";
-import { postData } from "../util/request";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
-import {
-  mediumPreviewProfileFields,
-  profileKeys,
-} from "../Main/routes/Profile/ProfileFace/queries";
-import { useAuthStoreActions } from "../store/AuthStore";
+import { useLoginMutation } from "../store/AuthStore";
 
 const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
-  const { setLoggedInUser } = useAuthStoreActions();
-  const queryClient = useQueryClient();
-
-  const { mutate, isLoading, data } = useMutation<
-    LoginUser["response"],
-    unknown,
-    LoginUser["request"]
-  >(["login"], (body) => postData("auth/login", body), {
-    onSuccess: (data) => {
-      if (data.data) {
-        setLoggedInUser(data.data.user);
-        queryClient.prefetchQuery(
-          profileKeys
-            .username(data.data.user.username)
-            ._ctx.fields(mediumPreviewProfileFields)
-        );
-      }
-    },
-  });
-
+  const { mutate, isPending, data } = useLoginMutation();
   const schema: any = yup.object().shape({
     email: yup
       .string()
@@ -90,7 +65,7 @@ const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
             color="primary"
             stretch
             disabled={!isValid}
-            isLoading={isLoading}
+            isLoading={isPending}
           >
             Sign in
           </Button>

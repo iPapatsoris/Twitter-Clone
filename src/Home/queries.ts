@@ -19,19 +19,21 @@ export const timelineKeys = createQueryKeys("timeline", {
     setMaxDownPageToRender?: React.Dispatch<SetStateAction<number>>
   ) => ({
     queryKey: ["down"],
-    queryFn: ({ pageParam }) =>
+    // @ts-ignore awaiting new version of "@lukemorales/query-key-factory"
+    queryFn: ({ pageParam }: { pageParam: number }) =>
       downTimelineQuery(queryClient, pageParam, setMaxDownPageToRender),
   }),
   up: (queryClient: QueryClient, initialMaxID: number | undefined) => ({
     queryKey: ["up"],
-    queryFn: ({ pageParam = initialMaxID }) =>
+    // @ts-ignore awaiting new version of "@lukemorales/query-key-factory"
+    queryFn: ({ pageParam = initialMaxID }: { pageParam: number }) =>
       upTimelineQuery(queryClient, pageParam),
   }),
 });
 
 export const downTimelineQuery = async (
   queryClient: QueryClient,
-  pageParam: any,
+  pageParam: number,
   // Sets timeline state after fetch. Optional because we do not have access to
   // it yet when query is run through the route loader.
   setMaxDownPageToRender?: React.Dispatch<SetStateAction<number>>
@@ -46,14 +48,14 @@ export const downTimelineQuery = async (
 
 export const upTimelineQuery = async (
   queryClient: QueryClient,
-  pageParam: any
+  pageParam: number
 ) => {
   return await timelineQuery(queryClient, pageParam, "up");
 };
 
 const timelineQuery = async (
   queryClient: QueryClient,
-  pageParam: any,
+  pageParam: number,
   direction: "up" | "down"
 ) => {
   const pagination: PaginationQueryParamsFrontEnd = {
@@ -76,13 +78,12 @@ const timelineQuery = async (
 };
 
 export const homeLoader = (queryClient: QueryClient) => async () => {
-  const { queryKey, queryFn } = timelineKeys.down(queryClient);
+  const { queryKey } = timelineKeys.down(queryClient);
   const data =
     queryClient.getQueryData(queryKey) ??
     (await queryClient.fetchInfiniteQuery({
-      queryKey,
-      queryFn,
-      getNextPageParam: timelineGetNextPageParam,
+      ...timelineKeys.down(queryClient),
+      initialPageParam: 1,
     }));
   return data;
 };
@@ -95,6 +96,7 @@ export const useDownTimelineInfiniteQuery = (
     ...timelineKeys.down(queryClient, setMaxDownPageToRender),
     getNextPageParam: timelineGetNextPageParam,
     staleTime: Infinity,
+    initialPageParam: 1,
   });
 
 export const useUpTimelineInfiniteQuery = (
@@ -106,6 +108,7 @@ export const useUpTimelineInfiniteQuery = (
     getNextPageParam: timelineGetNextPageParam,
     staleTime: Infinity,
     enabled: maxDownTweetID !== undefined,
+    initialPageParam: 1,
   });
 
 // Periodically query for potential new tweets (up-timeline)

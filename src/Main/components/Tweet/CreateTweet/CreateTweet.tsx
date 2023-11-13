@@ -22,7 +22,6 @@ import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg"
 import { ModalContext } from "../../../../util/components/Modal/Modal";
 import { tweetThreadKeys } from "../TweetThread/queries";
 import Tweet from "../Tweet";
-import { NormalResponse } from "../../../../../backend/src/api/common";
 import { Tweet as TweetT } from "../../../../../backend/src/entities/tweet";
 import { tweetKeys } from "../queries";
 import { useExtraTweetActions } from "../../../../Home/useExtraTweetsStore";
@@ -84,7 +83,8 @@ const CreateTweet = ({
     CreateTweetAPI["response"],
     unknown,
     CreateTweetAPI["request"]
-  >((body) => postData("tweet", body), {
+  >({
+    mutationFn: (body) => postData("tweet", body),
     onSuccess: (data) => {
       if (data.ok) {
         if (!asModalContent) {
@@ -100,9 +100,10 @@ const CreateTweet = ({
             state: { closeCreateTweetModal: true },
           });
         } else {
-          queryClient.invalidateQueries(
-            tweetThreadKeys.tweetID(referencedTweetID, queryClient).queryKey
-          );
+          queryClient.invalidateQueries({
+            queryKey: tweetThreadKeys.tweetID(referencedTweetID, queryClient)
+              .queryKey,
+          });
           navigate(
             getPagePath("tweet", loggedInUser?.username, data.data?.tweet.id),
             { state: { closeCreateTweetModal: true } }
