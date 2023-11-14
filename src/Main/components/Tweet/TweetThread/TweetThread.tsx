@@ -31,7 +31,7 @@ const TweetThread = () => {
     return null;
   }
 
-  const { tweet, replies, previousReplies } = data.data!;
+  const { tweet, replies, previousReplies } = data;
   const previousRepliesJSX: React.ReactElement[] = [];
 
   previousReplies.forEach((reply) => {
