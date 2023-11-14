@@ -85,6 +85,14 @@ const Tweet = ({
   };
 
   const tweetBorderClass = drawReplyLine ? "" : styles.WithBorder;
+  const verified = tweet.author.isVerified ? (
+    <Icon
+      extraWrapperStyles={[styles.Verified]}
+      src={VerifiedIcon}
+      hover="none"
+      size={18}
+    />
+  ) : null;
 
   return (
     <>
@@ -145,7 +153,7 @@ const Tweet = ({
             <>
               <div className={styles.Info}>
                 <Link ref={nameRef} to={getProfileLink()}>
-                  <div className={styles.NameAndVerified}>
+                  <div className={styles.Name}>
                     <span
                       className={[styles.BigText, styles.Bold].join(" ")}
                       onMouseEnter={() => setIsHoverPopupOpen(true)}
@@ -153,16 +161,9 @@ const Tweet = ({
                     >
                       {tweet.author.name}
                     </span>
-                    {tweet.author.isVerified ? (
-                      <div
-                        onMouseEnter={() => setIsHoverPopupOpen(true)}
-                        onMouseLeave={abortHoverPopupOpen}
-                      >
-                        <Icon src={VerifiedIcon} hover="none" size={18} />
-                      </div>
-                    ) : null}
                   </div>
                 </Link>
+                {verified}
                 <div className={[styles.LightColor, styles.Subinfo].join(" ")}>
                   <Link ref={usernameRef} to={getProfileLink()}>
                     <span
@@ -187,7 +188,7 @@ const Tweet = ({
                       alt="More options"
                       hover="primary"
                       noBlockMargin
-                      noLeftMargin
+                      // noLeftMargin
                       noRightMargin
                     />
                   </div>

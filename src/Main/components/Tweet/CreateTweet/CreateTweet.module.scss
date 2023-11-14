@@ -58,7 +58,8 @@
           ".      .       .     "
           "border border  border"
           ".      .       .     "
-          ".      widgets progress ";
+          ".      widgets progress";
+        grid-template-columns: var(--avatar-small-height) 1fr auto;
       }
 
       .TweetToReplyTo {

@@ -23,6 +23,10 @@
 }
 
 .TweetWrapper {
+  a {
+    display: contents;
+  }
+
   &.Simple {
     min-height: 6rem;
 
@@ -82,27 +86,32 @@
 
     .Info {
       display: grid;
-      column-gap: 0.5rem;
-      grid-template-areas: "name info more";
-      grid-template-columns: auto auto 1fr;
+      grid-template-areas: "name . verified . info . more";
+      grid-template-columns: auto 3px auto 3px auto 1rem 1fr;
 
       @include media.mobile {
         grid-template-areas:
-          "name . more"
-          "info info info";
+          "name . verified . more"
+          "info info info info info";
+        grid-template-columns: auto 3px auto 1fr;
       }
 
-      .NameAndVerified {
+      .Name {
         grid-area: name;
-        display: flex;
-        align-items: center;
-        gap: 0.2rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         span:hover {
           text-decoration: underline;
         }
       }
 
+      .Verified {
+        grid-area: verified;
+        display: inline-block;
+        vertical-align: top;
+      }
       .Subinfo {
         grid-area: info;
         font-size: var(--big-text);
