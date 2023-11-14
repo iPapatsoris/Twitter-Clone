@@ -4,16 +4,8 @@ import { getPagePath } from "../../../../util/paths";
 import Avatar from "../../../routes/Profile/ProfileFace/Avatar/Avatar";
 import Widgets from "./Widgets";
 import Button from "../../../../util/components/Button/Button";
-import {
-  queryOptions,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import {
-  CreateTweet as CreateTweetAPI,
-  tweetCharLimit,
-} from "../../../../../backend/src/api/tweet";
-import { postData } from "../../../../util/request";
+import {} from "@tanstack/react-query";
+import { tweetCharLimit } from "../../../../../backend/src/api/tweet";
 import yup from "../../../../util/yup";
 import { UseFormReturn, useController, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -24,12 +16,9 @@ import ProgressBar from "./ProgressBar";
 import Icon from "../../../../util/components/Icon/Icon";
 import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg";
 import { ModalContext } from "../../../../util/components/Modal/Modal";
-import { tweetThreadKeys } from "../TweetThread/queries";
 import Tweet from "../Tweet";
-import { Tweet as TweetT } from "../../../../../backend/src/entities/tweet";
-import { tweetKeys } from "../queries";
-import { useExtraTweetActions } from "../../../../Home/useExtraTweetsStore";
 import { useLoggedInUser } from "../../../../store/AuthStore";
+import useCreateTweetMutation from "./queries";
 
 interface CreateTweetProps {
   autofocus?: boolean;
@@ -38,7 +27,7 @@ interface CreateTweetProps {
   referencedTweetID?: number;
 }
 
-type FormT = { tweet: string };
+export type CreateTweetForm = { tweet: string };
 
 const CreateTweet = ({
   autofocus = false,
@@ -50,13 +39,12 @@ const CreateTweet = ({
   const { setIsActive } = useContext(ModalContext);
   const isReply = referencedTweetID !== undefined;
   const isReplyInModal = isReply && asModalContent;
-  const { addTweetsAtFront } = useExtraTweetActions();
 
   const schema: any = yup.object().shape({
     tweet: yup.string().required().max(tweetCharLimit),
   });
 
-  const form = useForm<FormT>({
+  const form = useForm<CreateTweetForm>({
     mode: "onTouched",
     resolver: yupResolver(schema),
     defaultValues: {
@@ -80,43 +68,12 @@ const CreateTweet = ({
     mutate({ tweet: { text: tweet, isReply, referencedTweetID } });
   };
 
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-
-  const { mutate } = useMutation<
-    CreateTweetAPI["response"],
-    unknown,
-    CreateTweetAPI["request"]
-  >({
-    mutationFn: (body) => postData("tweet", body),
-    onSuccess: (data) => {
-      if (data.ok) {
-        if (!asModalContent) {
-          form.reset();
-        }
-        if (!isReply) {
-          const options = tweetKeys.tweetID(data.data?.tweet.id!);
-          queryClient.setQueryData(queryOptions(options).queryKey, () => ({
-            tweet: data.data?.tweet!,
-          }));
-          addTweetsAtFront([{ id: data.data?.tweet.id! }]);
-          navigate(getPagePath("home"), {
-            state: { closeCreateTweetModal: true },
-          });
-        } else {
-          queryClient.invalidateQueries({
-            queryKey: tweetThreadKeys.tweetID(referencedTweetID, queryClient)
-              .queryKey,
-          });
-          navigate(
-            getPagePath("tweet", loggedInUser?.username, data.data?.tweet.id),
-            { state: { closeCreateTweetModal: true } }
-          );
-        }
-      }
-    },
+  const { mutate } = useCreateTweetMutation({
+    referencedTweetID,
+    asModalContent,
+    isReply,
+    form,
   });
-
   const avatarRef = useRef<HTMLDivElement>(null);
 
   if (!loggedInUser) {
@@ -177,7 +134,7 @@ const CreateTweet = ({
   );
 };
 
-const getProgressBarInfo = (form: UseFormReturn<FormT>) => {
+const getProgressBarInfo = (form: UseFormReturn<CreateTweetForm>) => {
   const charsWritten = form.getValues("tweet").length;
   const showCharsWarning = charsWritten >= tweetCharLimit - 20;
   let progressColor = "var(--primary-color)";
