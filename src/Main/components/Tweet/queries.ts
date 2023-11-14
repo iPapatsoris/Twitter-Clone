@@ -2,7 +2,7 @@ import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { addQueryParams, getData } from "../../../util/request";
 import { GetTweet } from "../../../../backend/src/api/tweet";
 import { Tweet } from "../../../../backend/src/entities/tweet";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, queryOptions } from "@tanstack/react-query";
 
 export const tweetKeys = createQueryKeys("tweet", {
   tweetID: (id: number) => ({
@@ -23,8 +23,7 @@ const getTweet = async (tweetID: number) => {
   return { tweet: res.data?.tweet };
 };
 
-export const setTweet = (tweet: Tweet, queryClient: QueryClient) =>
-  queryClient.setQueryData<{ tweet: Tweet }>(
-    tweetKeys.tweetID(tweet.id).queryKey,
-    { tweet }
-  );
+export const setTweet = (tweet: Tweet, queryClient: QueryClient) => {
+  const options = tweetKeys.tweetID(tweet.id);
+  return queryClient.setQueryData(queryOptions(options).queryKey, { tweet });
+};

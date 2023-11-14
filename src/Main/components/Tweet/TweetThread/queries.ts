@@ -4,7 +4,7 @@ import {
   ExpandTweetReplies,
   GetTweet,
 } from "../../../../../backend/src/api/tweet";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, queryOptions } from "@tanstack/react-query";
 import { LoaderFunctionArgs } from "react-router-dom";
 import { GetUser } from "../../../../../backend/src/api/user";
 import {
@@ -34,16 +34,14 @@ const tweetThreadQuery = async (tweetID: number, queryClient: QueryClient) => {
   }
   // Set tweet's author profile cache
   const tweetAuthor = res.data?.tweet.author;
+  const options = profileKeys
+    .username(tweetAuthor?.username!)
+    ._ctx.fields(smallPreviewProfileFields);
   queryClient.setQueryData<
     GetUser<SmallProfileRequestFields>["response"]["data"]
-  >(
-    profileKeys
-      .username(tweetAuthor?.username!)
-      ._ctx.fields(smallPreviewProfileFields).queryKey,
-    {
-      user: { ...tweetAuthor!, isFollowedByActiveUser: false },
-    }
-  );
+  >(queryOptions(options).queryKey, {
+    user: { ...tweetAuthor!, isFollowedByActiveUser: false },
+  });
 
   const { tweet, previousReplies, replies } = res.data!;
 
@@ -54,7 +52,7 @@ const tweetThreadQuery = async (tweetID: number, queryClient: QueryClient) => {
     tweets.forEach((reply) => setTweet(reply, queryClient))
   );
 
-  return res;
+  return res.data!;
 };
 
 export const tweetThreadLoader =
@@ -85,5 +83,5 @@ const expandTweetRepliesQuery = async (
   if (!res.ok) {
     throw new Error();
   }
-  return res.data;
+  return res.data!;
 };

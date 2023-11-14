@@ -11,6 +11,7 @@ import Icon, { IconProps } from "../../../../util/components/Icon/Icon";
 import {
   QueryClient,
   UseMutationOptions,
+  queryOptions,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
@@ -38,10 +39,10 @@ export const getRefreshTweetCallback =
   >["onSuccess"] =>
   (res, { tweetID }) => {
     if (res.tweet) {
-      queryClient.setQueryData<{ tweet: Tweet }>(
-        tweetKeys.tweetID(tweetID).queryKey,
-        { tweet: res.tweet }
-      );
+      const options = tweetKeys.tweetID(tweetID);
+      queryClient.setQueryData(queryOptions(options).queryKey, {
+        tweet: res.tweet,
+      });
     }
   };
 interface TweetActionsProps {

@@ -1,7 +1,6 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./Tweet.module.scss";
 import { ExpansionDirection, tweetThreadKeys } from "./TweetThread/queries";
-import { GetTweet } from "../../../../backend/src/api/tweet";
 import { GetUserThreads } from "../../../../backend/src/api/user";
 import { userTweetsKeys } from "../../routes/Profile/Tweets/queries";
 import { setTweet } from "./queries";
@@ -39,13 +38,14 @@ const ShowMoreTweets = ({
 
     if (direction === "downward" && downwardProps) {
       const { originalTweetID, replyIndex } = downwardProps;
-      const originalTweet = queryClient.getQueryData<GetTweet["response"]>(
-        tweetThreadKeys.tweetID(originalTweetID, queryClient).queryKey
+      const options = queryOptions(
+        tweetThreadKeys.tweetID(originalTweetID, queryClient)
       );
+      const originalTweet = queryClient.getQueryData(options.queryKey);
 
-      if (originalTweet?.data && expandedReplies) {
+      if (originalTweet && expandedReplies) {
         // Immutably update tweet with full reply list
-        const newReplies = [...originalTweet.data?.replies];
+        const newReplies = [...originalTweet.replies];
         newReplies[replyIndex] = {
           hasMoreNestedReplies: false,
           tweets: [
@@ -53,19 +53,19 @@ const ShowMoreTweets = ({
             ...expandedReplies.slice(1),
           ],
         };
-        queryClient.setQueryData<GetTweet["response"]["data"]>(
-          tweetThreadKeys.tweetID(originalTweetID, queryClient).queryKey,
-          {
-            ...originalTweet.data,
-            replies: newReplies,
-          }
-        );
+        const options = tweetThreadKeys.tweetID(originalTweetID, queryClient);
+        queryClient.setQueryData(queryOptions(options).queryKey, {
+          ...originalTweet,
+          replies: newReplies,
+        });
       }
     } else if (direction === "upward" && upwardProps) {
       const { threadIndex, username } = upwardProps;
-      const originalUserTweets = queryClient.getQueryData<
-        GetUserThreads["response"]["data"]
-      >(userTweetsKeys.tweetsOfUsername(username)._ctx.withReplies.queryKey);
+      const options =
+        userTweetsKeys.tweetsOfUsername(username)._ctx.withReplies;
+      const originalUserTweets = queryClient.getQueryData(
+        queryOptions(options).queryKey
+      );
 
       if (originalUserTweets && expandedReplies) {
         // Immutably Update user tweets with full conversation
@@ -81,11 +81,11 @@ const ShowMoreTweets = ({
           hasMoreNestedReplies: false,
           tweets: fullThread,
         };
-
-        queryClient.setQueryData<GetUserThreads["response"]["data"]>(
-          userTweetsKeys.tweetsOfUsername(username)._ctx.withReplies.queryKey,
-          { threads: [...newThreads] }
-        );
+        const options =
+          userTweetsKeys.tweetsOfUsername(username)._ctx.withReplies;
+        queryClient.setQueryData(queryOptions(options).queryKey, {
+          threads: [...newThreads],
+        });
       }
     }
   };

@@ -47,16 +47,20 @@ export const profileKeys = createQueryKeys("userProfile", {
     queryKey: [username],
     contextQueries: {
       fields: <T extends Readonly<FullProfileRequestFields[]>>(fields: T) => ({
-        queryKey: [fields as any],
-        queryFn: () => profileQuery(username, fields),
+        queryKey: [fields],
+        queryFn: (ctx) => profileQuery(username, fields),
       }),
     },
   }),
 });
 
-// Get specific user profile information, according to fieldsToQuery.
-// Type safety ensures that the query result's properties will be limited only
-// to the ones mentioned on fieldsToQuery.
+/* Get specific user profile information, according to fieldsToQuery.
+   Type safety ensures that the query result's properties will be limited only
+   to the ones mentioned on fieldsToQuery.
+   
+   TODO: If we call profileQuery directly, types work correctly, however
+   if we get it through the query-key-factory, the fields are not narrowed down
+*/
 const profileQuery = async <T extends Readonly<FullProfileRequestFields[]>>(
   username: string,
   fieldsToQuery: T

@@ -4,7 +4,11 @@ import { getPagePath } from "../../../../util/paths";
 import Avatar from "../../../routes/Profile/ProfileFace/Avatar/Avatar";
 import Widgets from "./Widgets";
 import Button from "../../../../util/components/Button/Button";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  queryOptions,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   CreateTweet as CreateTweetAPI,
   tweetCharLimit,
@@ -91,10 +95,10 @@ const CreateTweet = ({
           form.reset();
         }
         if (!isReply) {
-          queryClient.setQueryData<{ tweet: TweetT }>(
-            tweetKeys.tweetID(data.data?.tweet.id!).queryKey,
-            () => ({ tweet: data.data?.tweet! })
-          );
+          const options = tweetKeys.tweetID(data.data?.tweet.id!);
+          queryClient.setQueryData(queryOptions(options).queryKey, () => ({
+            tweet: data.data?.tweet!,
+          }));
           addTweetsAtFront([{ id: data.data?.tweet.id! }]);
           navigate(getPagePath("home"), {
             state: { closeCreateTweetModal: true },
