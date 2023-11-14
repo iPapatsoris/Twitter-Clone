@@ -115,7 +115,7 @@ export const getTweetTags = async (tweetID: number) => {
 export const getUserRetweets = async (
   username: string,
   currentUserID: number,
-  nextCursor?: number,
+  nextCursor: number = -1,
   fetchIDsBiggerThanCursor?: boolean
 ): Promise<Retweet[]> => {
   const comparison = fetchIDsBiggerThanCursor ? ">" : "<=";
@@ -123,7 +123,7 @@ export const getUserRetweets = async (
     "SELECT tweetID, user_reacts_to_tweet.id as reactionID, reactionDate as retweetDate \
      FROM user_reacts_to_tweet, user \
      WHERE userID = user.id AND reaction = 'retweet' AND user.username = ?" +
-    (nextCursor !== undefined
+    (nextCursor !== -1
       ? " AND user_reacts_to_tweet.id " + comparison + " ?"
       : "");
   const retweets = await runQuery<{

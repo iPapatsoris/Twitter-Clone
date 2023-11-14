@@ -185,17 +185,14 @@ router.get(
     req: Request<{}, {}, {}, GetTimeline["requestQueryParams"]>,
     res: Response<GetTimeline["response"]>
   ) => {
-    const cursor =
-      req.query.nextCursor === undefined
-        ? undefined
-        : parseInt(req.query.nextCursor);
+    const cursor = parseInt(req.query.nextCursor);
 
     const currentUserID = req.session.userID || -1;
     const tweetIDs = await runQuery<{ id: number }>(
       "SELECT distinct(tweet.id) \
        FROM tweet, user_follows as friendship \
        WHERE isReply = false AND (authorID = ? OR (authorID = followeeID AND \
-       followerID = ?)) " + (cursor !== undefined ? " AND tweet.id <= ?" : ""),
+       followerID = ?)) " + (cursor !== -1 ? " AND tweet.id <= ?" : ""),
       [currentUserID, currentUserID, cursor]
     );
     const tweets = await Promise.all(
@@ -220,16 +217,15 @@ router.get(
 
     const pageSize = parseInt(req.query.pageSize);
     const pageResults = tweetsAndRetweets.slice(0, pageSize);
-    let nextCursor: number | undefined = undefined;
+    let nextCursor = -1;
 
-    if (pageResults.length === pageSize) {
-      if (tweetsAndRetweets.length > pageSize) {
-        nextCursor = tweetsAndRetweets[pageSize].tweet
-          ? tweetsAndRetweets[pageSize].tweet?.id
-          : tweetsAndRetweets[pageSize].retweet?.id;
-      } else {
-        nextCursor = undefined;
-      }
+    if (
+      pageResults.length === pageSize &&
+      tweetsAndRetweets.length > pageSize
+    ) {
+      nextCursor = tweetsAndRetweets[pageSize].tweet
+        ? tweetsAndRetweets[pageSize].tweet?.id!
+        : tweetsAndRetweets[pageSize].retweet?.id!;
     }
 
     res.send({

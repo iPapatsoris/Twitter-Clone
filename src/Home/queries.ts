@@ -83,7 +83,7 @@ export const homeLoader = (queryClient: QueryClient) => async () => {
     queryClient.getQueryData(queryKey) ??
     (await queryClient.fetchInfiniteQuery({
       ...timelineKeys.down(queryClient),
-      initialPageParam: 1,
+      initialPageParam: -1,
     }));
   return data;
 };
@@ -96,7 +96,7 @@ export const useDownTimelineInfiniteQuery = (
     ...timelineKeys.down(queryClient, setMaxDownPageToRender),
     getNextPageParam: timelineGetNextPageParam,
     staleTime: Infinity,
-    initialPageParam: 1,
+    initialPageParam: -1,
   });
 
 export const useUpTimelineInfiniteQuery = (
@@ -108,7 +108,7 @@ export const useUpTimelineInfiniteQuery = (
     getNextPageParam: timelineGetNextPageParam,
     staleTime: Infinity,
     enabled: maxDownTweetID !== undefined,
-    initialPageParam: 1,
+    initialPageParam: maxDownTweetID,
   });
 
 // Periodically query for potential new tweets (up-timeline)
