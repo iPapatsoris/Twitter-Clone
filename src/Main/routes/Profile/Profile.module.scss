@@ -38,13 +38,15 @@ Profile grid */
     "cover1  cover1  cover1  cover1 "
     "cover2  avatar  cover3  cover3 "
     ".       avatar  actions .      "
-    ".       title   .       .      "
+    ".       .  actions .      "
+    ".       title   title   .      "
     ".       content content .      ";
 
   grid-template-rows:
     calc(var(--cover-height) - var(--avatar-full-height) / 2)
     calc(var(--avatar-full-height) / 2)
     calc(var(--avatar-full-height) / 2)
+    1rem
     auto
     auto;
 
@@ -133,7 +135,6 @@ Profile grid */
 :not(.Preview) > .Actions {
   @include media.mobile {
     padding-top: 1rem;
-    align-items: start;
   }
 }
 
@@ -187,6 +188,12 @@ Profile grid */
 
     h1 {
       font-weight: 800;
+    }
+
+    .Verified {
+      display: inline-block;
+      margin-left: 3px;
+      vertical-align: top;
     }
   }
 }

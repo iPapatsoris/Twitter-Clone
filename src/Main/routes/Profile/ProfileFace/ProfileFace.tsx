@@ -213,10 +213,17 @@ const ProfileFace = ({ preview }: ProfileProps) => {
 
   const nameAndVerified = (
     <>
-      <h1 className={[styles.BiggestText, styles.EllipsisOverlow].join(" ")}>
+      <h1 className={styles.BiggestText}>
         {user.name}
+
+        {user.isVerified ? (
+          <Icon
+            extraWrapperStyles={[styles.Verified]}
+            src={VerifiedIcon}
+            hover="none"
+          />
+        ) : null}
       </h1>
-      {user.isVerified ? <Icon src={VerifiedIcon} hover="none" /> : null}
     </>
   );
 
