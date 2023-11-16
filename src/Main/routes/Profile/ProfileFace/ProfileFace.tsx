@@ -33,6 +33,7 @@ import { ProfileProps } from "../Profile";
 import { elementIsContainedInRefs, refsExist } from "../../../../util/ref";
 import { useHoverPopup } from "../../../../util/hooks/useHoverPopup";
 import Avatar from "./Avatar/Avatar";
+import NameAndVerified from "../../../components/NameAndVerified/NameAndVerified";
 
 const ProfileFace = ({ preview }: ProfileProps) => {
   const loggedInUser = useLoggedInUser();
@@ -211,21 +212,28 @@ const ProfileFace = ({ preview }: ProfileProps) => {
       </Link>
     );
 
-  const nameAndVerified = (
-    <>
-      <h1 className={styles.BiggestText}>
-        {user.name}
+  const nameAndVerified =
+    preview && preview.type === "user-list" ? (
+      <NameAndVerified
+        size="small"
+        name={user.name}
+        isVerified={user.isVerified}
+      />
+    ) : (
+      <>
+        <h1 className={styles.BiggestText}>
+          {user.name}
 
-        {user.isVerified ? (
-          <Icon
-            extraWrapperStyles={[styles.Verified]}
-            src={VerifiedIcon}
-            hover="none"
-          />
-        ) : null}
-      </h1>
-    </>
-  );
+          {user.isVerified ? (
+            <Icon
+              extraWrapperStyles={[styles.Verified]}
+              src={VerifiedIcon}
+              hover="none"
+            />
+          ) : null}
+        </h1>
+      </>
+    );
 
   const usernameText = (
     <div
