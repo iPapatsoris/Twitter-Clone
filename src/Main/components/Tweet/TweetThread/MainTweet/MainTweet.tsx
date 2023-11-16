@@ -65,7 +65,14 @@ const MainTweet = ({ tweetID, tweetThreadRef }: MainTweetProps) => {
             type: "user-list",
             username: tweet.author.username!,
             iconAction: (
-              <Icon src={DotsIcon} title="More" hover="primary" noRightMargin />
+              <Icon
+                src={DotsIcon}
+                title="More"
+                hover="primary"
+                noBlockMargin
+                noRightMargin
+                extraWrapperStyles={[styles.DotsIcon]}
+              />
             ),
           }}
         />

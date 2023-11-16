@@ -1,6 +1,7 @@
 .IconAndTextWrapper {
   display: flex;
   flex-direction: row;
+  align-items: center;
   position: relative;
   width: min-content;
   --icon-size: 20px;
@@ -129,7 +130,6 @@
     width: var(--icon-size);
     height: var(--icon-size);
     cursor: pointer;
-    transition: var(--transition-duration);
     fill: var(--light-color);
 
     &.NoCursorPointer {
