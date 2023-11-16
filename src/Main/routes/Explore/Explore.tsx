@@ -5,7 +5,7 @@ import List from "../../layouts/ContentRight/List/List";
 
 const Explore = () => {
   return (
-    <List title="Trends for you" withExpand>
+    <List title="Trends for you">
       <Trends />
     </List>
   );

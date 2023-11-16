@@ -19,11 +19,11 @@ const ContentRight = () => {
   const regularView = (
     <div>
       {path !== getPagePath("explore") && (
-        <List title="Trends for you" withBackgroundColor withExpand>
+        <List title="Trends for you" withBackgroundColor>
           <Trends />
         </List>
       )}
-      <List title="Who to follow" withBackgroundColor withExpand>
+      <List title="Who to follow" withBackgroundColor>
         <WhoToFollow />
       </List>
     </div>
