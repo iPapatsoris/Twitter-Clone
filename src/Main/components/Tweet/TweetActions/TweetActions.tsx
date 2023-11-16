@@ -57,7 +57,7 @@ const TweetActions = ({
   includeText,
   bookmarkInsteadOfViews,
   justifyContent,
-  extraIconProps = {},
+  extraIconProps: extraIconReceivedProps = {},
   tweet,
 }: TweetActionsProps) => {
   const { stats, isLiked, isRetweeted, id } = tweet;
@@ -85,6 +85,12 @@ const TweetActions = ({
 
   const [showReplyModal, setShowReplyModal] = useState(false);
   useCloseCreateTweetModal(setShowReplyModal);
+
+  let extraStyles: string[] = [styles.Transition];
+  if (extraIconReceivedProps.extraStyles) {
+    extraStyles = extraStyles.concat(extraIconReceivedProps.extraStyles);
+  }
+  const extraIconProps: IconProps = { ...extraIconReceivedProps, extraStyles };
 
   return (
     <>

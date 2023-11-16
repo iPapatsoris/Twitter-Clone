@@ -8,6 +8,10 @@
   &.SpaceBetween {
     justify-content: space-between;
   }
+
+  .Transition {
+    transition: var(--transition-duration);
+  }
 }
 
 .Modal {
