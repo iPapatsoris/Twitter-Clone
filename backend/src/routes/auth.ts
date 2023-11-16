@@ -21,8 +21,8 @@ router.post(
     req: TypedRequestQuery<{}, {}, LoginUser["request"]>,
     res: Response<LoginUser["response"]>
   ) => {
-    const { email, password } = req.body.user;
-    const user = await checkCredentials({ email, password });
+    const { username, password } = req.body.user;
+    const user = await checkCredentials({ username, password });
     if (!user) {
       res.send({ ok: false });
       return;

@@ -16,10 +16,7 @@ import { useLoginMutation } from "../store/AuthStore";
 const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
   const { mutate, isPending, data } = useLoginMutation();
   const schema: any = yup.object().shape({
-    email: yup
-      .string()
-      .required("Please enter your email.")
-      .email("Please enter a valid email."),
+    username: yup.string().required("Please enter your username."),
     password: yup.string().required(),
   });
 
@@ -27,7 +24,7 @@ const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
     mode: "onTouched",
     resolver: yupResolver(schema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
@@ -76,10 +73,10 @@ const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
           <div className={styles.Form}>
             <FormInput
               autofocus
-              name="email"
-              placeholder="Email"
+              name="username"
+              placeholder="Username"
               control={control}
-              autocomplete="email"
+              autocomplete="username"
             />
             <FormInput
               name="password"

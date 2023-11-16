@@ -21,17 +21,17 @@ export const usernameExists = async (username: string) => {
 };
 
 export const checkCredentials = async ({
-  email,
+  username,
   password,
 }: {
-  email: string;
+  username: string;
   password: string;
 }) => {
   const hash = sha256(password);
   const user = (
     await runQuery<User>(
-      "SELECT id, name, username, avatar FROM user WHERE email = ? AND password = ?",
-      [email, hash]
+      "SELECT id, name, username, avatar FROM user WHERE username = ? AND password = ?",
+      [username, hash]
     )
   )[0];
 
