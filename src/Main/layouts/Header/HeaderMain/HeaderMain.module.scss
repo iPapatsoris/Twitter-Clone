@@ -40,6 +40,10 @@
     .Title {
       grid-area: title;
       overflow: hidden;
+
+      .Name {
+        font-size: 20px;
+      }
     }
 
     .Subtitle {

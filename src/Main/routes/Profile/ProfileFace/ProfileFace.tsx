@@ -212,28 +212,14 @@ const ProfileFace = ({ preview }: ProfileProps) => {
       </Link>
     );
 
-  const nameAndVerified =
-    preview && preview.type === "user-list" ? (
-      <NameAndVerified
-        size="small"
-        name={user.name}
-        isVerified={user.isVerified}
-      />
-    ) : (
-      <>
-        <h1 className={styles.BiggestText}>
-          {user.name}
-
-          {user.isVerified ? (
-            <Icon
-              extraWrapperStyles={[styles.Verified]}
-              src={VerifiedIcon}
-              hover="none"
-            />
-          ) : null}
-        </h1>
-      </>
-    );
+  const nameAndVerified = (
+    <NameAndVerified
+      name={user.name}
+      isVerified={user.isVerified}
+      nameStyles={[styles.Name]}
+      abbreviateOverflow={preview !== undefined}
+    />
+  );
 
   const usernameText = (
     <div

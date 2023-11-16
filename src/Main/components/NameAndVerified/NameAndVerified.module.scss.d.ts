@@ -3,12 +3,16 @@ import globalClassNames, {
 } from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly NameAndVerified: "NameAndVerified";
+  readonly AbbreviateOverflow: "AbbreviateOverflow";
+  readonly Name: "Name";
   readonly UnderlineOnHover: "UnderlineOnHover";
-  readonly Big: "Big";
+  readonly VerifiedIcon: "VerifiedIcon";
 };
 export = classNames;
 export type ClassNames =
   | "NameAndVerified"
+  | "AbbreviateOverflow"
+  | "Name"
   | "UnderlineOnHover"
-  | "Big"
+  | "VerifiedIcon"
   | GlobalClassNames;

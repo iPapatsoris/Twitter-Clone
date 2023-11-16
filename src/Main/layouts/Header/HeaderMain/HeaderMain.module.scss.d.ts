@@ -8,6 +8,7 @@ declare const classNames: typeof globalClassNames & {
   readonly Main: "Main";
   readonly TitleSubtitle: "TitleSubtitle";
   readonly Title: "Title";
+  readonly Name: "Name";
   readonly Subtitle: "Subtitle";
   readonly SearchContainer: "SearchContainer";
 };
@@ -19,6 +20,7 @@ export type ClassNames =
   | "Main"
   | "TitleSubtitle"
   | "Title"
+  | "Name"
   | "Subtitle"
   | "SearchContainer"
   | GlobalClassNames;

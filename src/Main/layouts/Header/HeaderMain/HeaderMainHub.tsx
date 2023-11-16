@@ -36,7 +36,8 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
     <NameAndVerified
       name={user.name!}
       isVerified={user.isVerified!}
-      size="big"
+      nameStyles={[styles.Name]}
+      cursorPointerOnVerifiedHover={false}
     />
   );
 

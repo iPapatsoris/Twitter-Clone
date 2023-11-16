@@ -158,6 +158,10 @@ Profile grid */
 
 :not(.Preview) > .Title {
   padding-block: 1rem;
+  .Name {
+    font-weight: 800;
+    font-size: 20px;
+  }
 }
 
 .Preview:not(.NoHoverUnderline) .Title .NameAndVerified h1:hover {
@@ -180,18 +184,6 @@ Profile grid */
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-
-  .NameAndVerified {
-    h1 {
-      font-weight: 800;
-    }
-
-    .Verified {
-      display: inline-block;
-      margin-left: 3px;
-      vertical-align: top;
-    }
-  }
 }
 
 .ProfileInfo {

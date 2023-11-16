@@ -1,21 +1,23 @@
 .NameAndVerified {
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-
-  span {
+  &.AbbreviateOverflow {
+    display: flex;
+    align-items: center;
+    gap: 2px;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-weight: 700;
 
-    &.UnderlineOnHover:hover {
-      text-decoration: underline;
+    .Name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
-  &.Big span {
-    font-size: 17px;
+  .Name.UnderlineOnHover:hover {
+    text-decoration: underline;
+  }
+
+  &:not(.AbbreviateOverflow) .VerifiedIcon {
+    display: inline-block;
+    margin-left: 2px;
   }
 }

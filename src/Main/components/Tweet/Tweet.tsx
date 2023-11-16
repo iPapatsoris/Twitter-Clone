@@ -2,7 +2,6 @@ import { Retweet } from "../../../../backend/src/entities/tweet";
 import Icon from "../../../util/components/Icon/Icon";
 import Avatar from "../../routes/Profile/ProfileFace/Avatar/Avatar";
 import styles from "./Tweet.module.scss";
-import { ReactComponent as VerifiedIcon } from "../../../assets/icons/verified.svg";
 import { ReactComponent as DotsIcon } from "../../../assets/icons/dots-gray.svg";
 import { ReactComponent as RetweetIcon } from "../../../assets/icons/tweet/retweet.svg";
 import dayjs from "dayjs";
@@ -51,7 +50,6 @@ const Tweet = ({
     useHoverPopup();
 
   const navigate = useNavigate();
-
   useReplyLine(
     drawReplyLine,
     noLineExtension,
@@ -154,7 +152,6 @@ const Tweet = ({
                   <NameAndVerified
                     name={tweet.author.name}
                     isVerified={tweet.author.isVerified}
-                    size={"small"}
                     underlineNameOnHover
                   />
                 </Link>
@@ -182,7 +179,6 @@ const Tweet = ({
                       alt="More options"
                       hover="primary"
                       noBlockMargin
-                      // noLeftMargin
                       noRightMargin
                     />
                   </div>
