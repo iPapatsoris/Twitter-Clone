@@ -16,6 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 import { tweetKeys } from "./queries";
 import { elementIsContainedInRefs, refsExist } from "../../../util/ref";
 import { useHoverPopup } from "../../../util/hooks/useHoverPopup";
+import NameAndVerified from "../NameAndVerified/NameAndVerified";
 
 interface TweetProps {
   tweetID: number;
@@ -85,14 +86,6 @@ const Tweet = ({
   };
 
   const tweetBorderClass = drawReplyLine ? "" : styles.WithBorder;
-  const verified = tweet.author.isVerified ? (
-    <Icon
-      extraWrapperStyles={[styles.Verified]}
-      src={VerifiedIcon}
-      hover="none"
-      size={18}
-    />
-  ) : null;
 
   return (
     <>
@@ -152,18 +145,19 @@ const Tweet = ({
           <div className={styles.Wrapper}>
             <>
               <div className={styles.Info}>
-                <Link ref={nameRef} to={getProfileLink()}>
-                  <div className={styles.Name}>
-                    <span
-                      className={[styles.BigText, styles.Bold].join(" ")}
-                      onMouseEnter={() => setIsHoverPopupOpen(true)}
-                      onMouseLeave={abortHoverPopupOpen}
-                    >
-                      {tweet.author.name}
-                    </span>
-                  </div>
+                <Link
+                  ref={nameRef}
+                  to={getProfileLink()}
+                  onMouseEnter={() => setIsHoverPopupOpen(true)}
+                  onMouseLeave={abortHoverPopupOpen}
+                >
+                  <NameAndVerified
+                    name={tweet.author.name}
+                    isVerified={tweet.author.isVerified}
+                    size={"small"}
+                    underlineNameOnHover
+                  />
                 </Link>
-                {verified}
                 <div className={[styles.LightColor, styles.Subinfo].join(" ")}>
                   <Link ref={usernameRef} to={getProfileLink()}>
                     <span
@@ -175,7 +169,7 @@ const Tweet = ({
                   </Link>
                   <span>·</span>
                   <Link to={getTweetThreadLink()}>
-                    <span>
+                    <span className={styles.UnderlineOnHover}>
                       {dayjs(tweet.creationDate).format("MMM D, YYYY")}
                     </span>
                   </Link>

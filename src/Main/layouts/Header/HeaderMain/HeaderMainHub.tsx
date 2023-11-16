@@ -11,11 +11,11 @@ import { HeaderProfileUser } from "../../Main";
 import HeaderMain from "./HeaderMain";
 // import {ReactComponent as SparkIcon }from "../../../../assets/icons/spark.svg";
 import { ReactComponent as SettingsIcon } from "../../../../assets/icons/settings.svg";
-import { ReactComponent as VerifiedIcon } from "../../../../assets/icons/verified.svg";
 import styles from "./HeaderMain.module.scss";
 import HeaderLinkMenu from "./HeaderLinkMenu/HeaderLinkMenu";
 import useWindowDimensions from "../../../../util/hooks/useWindowDimensions";
 import HeaderAvatar from "./HeaderAvatar";
+import NameAndVerified from "../../../components/NameAndVerified/NameAndVerified";
 
 interface HeaderMainHubProps {
   user: HeaderProfileUser;
@@ -32,11 +32,12 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
   const isTweetPage = useRouteMatch(getPagePath("tweet"));
   const { isSmallScreen } = useWindowDimensions();
 
-  const userTitle = (
-    <>
-      <h2>{user?.name}</h2>
-      {user?.isVerified ? <Icon src={VerifiedIcon} hover="none" /> : null}
-    </>
+  const userTitle = !user ? null : (
+    <NameAndVerified
+      name={user.name!}
+      isVerified={user.isVerified!}
+      size="big"
+    />
   );
 
   let header = (
@@ -65,7 +66,7 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
   } else if (isProfilePage) {
     header = (
       <HeaderMain
-        title={userTitle}
+        title={userTitle!}
         subtitle={<>{user?.totalTweets} Tweets</>}
         leftCornerBackIcon
       />
@@ -98,7 +99,7 @@ const HeaderMainHub = ({ user }: HeaderMainHubProps) => {
     );
     header = (
       <HeaderMain
-        title={userTitle}
+        title={userTitle!}
         subtitle={<>@{user?.username}</>}
         extension={headerExtension}
         leftCornerBackIcon

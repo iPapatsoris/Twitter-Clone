@@ -1,0 +1,21 @@
+.NameAndVerified {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 700;
+
+    &.UnderlineOnHover:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &.Big span {
+    font-size: 17px;
+  }
+}

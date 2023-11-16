@@ -30,15 +30,20 @@
     flex-grow: 1;
 
     .TitleSubtitle {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      display: grid;
+      row-gap: 3px;
+      grid-template:
+        "title" auto
+        "subtitle" auto / 1fr;
     }
 
     .Title {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
+      grid-area: title;
+      overflow: hidden;
+    }
+
+    .Subtitle {
+      grid-area: subtitle;
     }
   }
 }

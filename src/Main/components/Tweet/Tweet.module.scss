@@ -86,32 +86,17 @@
 
     .Info {
       display: grid;
-      grid-template-areas: "name . verified . info . more";
-      grid-template-columns: auto 3px auto 3px auto 1rem 1fr;
+      column-gap: 0.5rem;
+      grid-template-areas: "name  info  more";
+      grid-template-columns: auto auto 1fr;
 
       @include media.mobile {
         grid-template-areas:
-          "name . verified . more"
-          "info info info info info";
-        grid-template-columns: auto 3px auto 1fr;
+          "name  more"
+          "info info";
+        grid-template-columns: auto 1fr;
       }
 
-      .Name {
-        grid-area: name;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-
-        span:hover {
-          text-decoration: underline;
-        }
-      }
-
-      .Verified {
-        grid-area: verified;
-        display: inline-block;
-        vertical-align: top;
-      }
       .Subinfo {
         grid-area: info;
         font-size: var(--big-text);
@@ -126,6 +111,10 @@
       .MoreIcon {
         grid-area: more;
         margin-left: auto;
+      }
+
+      .UnderlineOnHover:hover {
+        text-decoration: underline;
       }
     }
     .Text {

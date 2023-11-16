@@ -31,7 +31,13 @@ const HeaderMain = ({
     <div className={styles.TitleSubtitle}>
       <div className={styles.Title}>{title}</div>
       {subtitle && (
-        <div className={[styles.SmallText, styles.LightColor].join(" ")}>
+        <div
+          className={[
+            styles.SmallText,
+            styles.LightColor,
+            styles.Subtitle,
+          ].join(" ")}
+        >
           {subtitle}
         </div>
       )}
