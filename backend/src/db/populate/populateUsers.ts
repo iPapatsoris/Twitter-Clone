@@ -27,12 +27,14 @@ const populateUsers = async (populateOptions: PopulateOptions) => {
     const firstName = faker.person.firstName();
     const lastName = faker.person.lastName();
     const name = firstName + " " + lastName;
+    const username =
+      u < totalUsers - 1
+        ? (lastName.toLocaleLowerCase() + getRandomInt(100)).substring(0, 15)
+        : "user123";
+
     const user: UserT = {
       name,
-      username: (lastName.toLocaleLowerCase() + getRandomInt(100)).substring(
-        0,
-        15
-      ),
+      username,
       email: faker.internet.email({ firstName, lastName }).toLowerCase(),
       password: passwordHash,
       avatar: faker.internet.avatar(),
