@@ -34,6 +34,7 @@ import { elementIsContainedInRefs, refsExist } from "../../../../util/ref";
 import { useHoverPopup } from "../../../../util/hooks/useHoverPopup";
 import Avatar from "./Avatar/Avatar";
 import NameAndVerified from "../../../components/NameAndVerified/NameAndVerified";
+import ProfileLink from "./ProfileLink";
 
 const ProfileFace = ({ preview }: ProfileProps) => {
   const loggedInUser = useLoggedInUser();
@@ -191,26 +192,17 @@ const ProfileFace = ({ preview }: ProfileProps) => {
     }
   };
 
-  const getProfileLink = () => getPagePath("profile", user.username);
-
   const avatar = (
-    <div
-      className={styles.Semantic}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      <Avatar src={user.avatar} withBorder={!preview} />
-    </div>
+    <ProfileLink preview={preview} username={username}>
+      <div
+        className={styles.Semantic}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
+        <Avatar src={user.avatar} withBorder={!preview} />
+      </div>
+    </ProfileLink>
   );
-
-  const finalAvatar =
-    !preview || preview.noNavOnClick ? (
-      avatar
-    ) : (
-      <Link className={styles.Semantic} to={getProfileLink()}>
-        {avatar}
-      </Link>
-    );
 
   const nameAndVerified = (
     <NameAndVerified
@@ -260,22 +252,14 @@ const ProfileFace = ({ preview }: ProfileProps) => {
         onMouseLeave={onMouseLeave}
       >
         <div className={styles.NameAndVerified}>
-          {!preview || preview.noNavOnClick ? (
-            nameAndVerified
-          ) : (
-            <Link className={styles.Semantic} to={getProfileLink()}>
-              {nameAndVerified}
-            </Link>
-          )}
+          <ProfileLink preview={preview} username={username}>
+            {nameAndVerified}
+          </ProfileLink>
         </div>
         <div>
-          {!preview || preview.noNavOnClick ? (
-            usernameText
-          ) : (
-            <Link className={styles.Semantic} to={getProfileLink()}>
-              {usernameText}
-            </Link>
-          )}
+          <ProfileLink preview={preview} username={username}>
+            {usernameText}
+          </ProfileLink>
         </div>
       </div>
       <div className={styles.ProfileInfo}>
@@ -321,7 +305,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
         ref={profileRef}
       >
         {!preview && <div className={styles.Cover} style={coverStyle} />}
-        {finalAvatar}
+        {avatar}
         {!(preview && preview.showJustAvatar) && (
           <>
             {(!preview || preview.type !== "mobile-sidebar") && actions}

@@ -1,7 +1,7 @@
 import Icon from "../../Icon/Icon";
 import { ReactComponent as DownArrowIcon } from "../../../../assets/icons/options/down-arrow.svg";
 import styles from "./Option.module.scss";
-import { Link } from "react-router-dom";
+import LinkCondition from "../../LinkCondition/LinkCondition";
 
 export type SimpleOption = {
   component: React.ReactNode;
@@ -49,10 +49,13 @@ const Option = ({
     </div>
   );
 
-  return mainOption.link ? (
-    <Link to={mainOption.link}>{option}</Link>
-  ) : (
-    <>{option}</>
+  return (
+    <LinkCondition
+      condition={mainOption.link !== undefined}
+      linkProps={{ to: mainOption.link! }}
+    >
+      {option}
+    </LinkCondition>
   );
 };
 
