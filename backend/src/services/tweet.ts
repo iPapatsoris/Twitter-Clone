@@ -395,3 +395,142 @@ export const insertSharedUniqueID = async (
     [referencedObject]
   );
 };
+
+export const getTimeline = async ({
+  cursor,
+  currentUserID,
+  pageSize,
+  direction,
+}: {
+  currentUserID: number;
+  cursor: number;
+  pageSize: number;
+  direction: "up" | "down";
+}) => {
+  const tweetIDs = await (direction === "down"
+    ? runQuery<{ id: number }>(
+        "SELECT distinct(tweet.id) \
+       FROM tweet, user_follows as friendship \
+       WHERE isReply = false AND (authorID = ? OR (authorID = followeeID AND \
+       followerID = ?)) " + (cursor !== -1 ? " AND tweet.id <= ?" : ""),
+        [currentUserID, currentUserID, cursor]
+      )
+    : runQuery<{ id: number }>(
+        "SELECT distinct(tweet.id) \
+       FROM tweet, user_follows as friendship \
+       WHERE isReply = false AND authorID = followeeID AND \
+       followerID = ? " + (cursor !== undefined ? " AND tweet.id > ?" : ""),
+        [currentUserID, cursor]
+      ));
+
+  const tweets = await Promise.all(
+    tweetIDs.map(({ id }) => getTweet(id, currentUserID))
+  );
+
+  const followedUsers = await runQuery<{ username: string }>(
+    "SELECT user.username \
+       FROM user_follows, user\
+       WHERE user.id = followeeID AND followerID = ?",
+    [currentUserID]
+  );
+  const retweets = (
+    await Promise.all(
+      followedUsers.map(({ username }) =>
+        getUserRetweets(username, currentUserID, cursor, direction === "up")
+      )
+    )
+  ).flat();
+
+  const tweetsAndRetweets = mergeTweetsAndRetweets(
+    tweets,
+    retweets,
+    direction === "up"
+  );
+
+  return getTweetsAndRetweetsPaginatedResponse({
+    tweetsAndRetweets,
+    pageSize: pageSize,
+    direction,
+    cursor,
+  });
+};
+
+export const getTweetsAndRetweetsPaginatedResponse = ({
+  tweetsAndRetweets,
+  pageSize,
+  direction,
+  cursor,
+}: {
+  tweetsAndRetweets: Array<{ tweet?: Tweet; retweet?: Retweet }>;
+  pageSize: number;
+  direction: "up" | "down";
+  cursor: number;
+}) => {
+  const pageResults = tweetsAndRetweets.slice(0, pageSize);
+  let nextCursor: number | undefined;
+
+  if (direction === "down") {
+    if (
+      pageResults.length === pageSize &&
+      tweetsAndRetweets.length > pageSize
+    ) {
+      nextCursor = tweetsAndRetweets[pageSize].tweet
+        ? tweetsAndRetweets[pageSize].tweet?.id!
+        : tweetsAndRetweets[pageSize].retweet?.id!;
+    }
+  } else {
+    if (pageResults.length > 0) {
+      const mostRecentTweet = pageResults[pageResults.length - 1];
+      nextCursor = mostRecentTweet.tweet
+        ? mostRecentTweet.tweet.id
+        : mostRecentTweet.retweet!.id;
+    } else {
+      nextCursor = cursor;
+    }
+  }
+
+  return { nextCursor, pageResults };
+};
+
+export const getUserTweetsAndRetweets = async ({
+  username,
+  cursor,
+  currentUserID,
+  pageSize,
+  direction,
+}: {
+  username: string;
+  currentUserID: number;
+  cursor: number;
+  pageSize: number;
+  direction: "up" | "down";
+}) => {
+  const cursorComparison = direction === "down" ? "<=" : ">";
+  const tweetIDs = await runQuery<{ id: number }>(
+    "SELECT tweet.id \
+     FROM tweet, user \
+     WHERE tweet.authorID = user.id AND isReply = false AND user.username = ?\
+     " + (cursor !== -1 ? " AND tweet.id " + cursorComparison + " ?" : ""),
+    [username, cursor]
+  );
+  const tweets = await Promise.all(
+    tweetIDs.map(async ({ id }) => getTweet(id, currentUserID))
+  );
+
+  const retweets = await getUserRetweets(
+    username,
+    currentUserID,
+    cursor,
+    direction === "up"
+  );
+  return getTweetsAndRetweetsPaginatedResponse({
+    tweetsAndRetweets: mergeTweetsAndRetweets(
+      tweets,
+      retweets,
+      direction === "up"
+    ),
+    pageSize,
+    direction,
+    cursor,
+  });
+};

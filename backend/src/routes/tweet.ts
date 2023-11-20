@@ -16,15 +16,14 @@ import {
 import { Fields, runQuery, shuffleArray, TypedRequestQuery } from "../util.js";
 import { Tweet } from "../entities/tweet.js";
 import {
+  getTimeline,
   getTweet,
   getTweetNestedReplies,
   getTweetPreviousReplies,
   getTweets,
   getUserReactionsToTweet,
-  getUserRetweets,
   insertTweet,
   insertUserReaction,
-  mergeTweetsAndRetweets,
   sort,
 } from "../services/tweet.js";
 import { requireAuth } from "../middleware/auth.js";
@@ -186,47 +185,15 @@ router.get(
     res: Response<GetTimeline["response"]>
   ) => {
     const cursor = parseInt(req.query.nextCursor);
-
-    const currentUserID = req.session.userID || -1;
-    const tweetIDs = await runQuery<{ id: number }>(
-      "SELECT distinct(tweet.id) \
-       FROM tweet, user_follows as friendship \
-       WHERE isReply = false AND (authorID = ? OR (authorID = followeeID AND \
-       followerID = ?)) " + (cursor !== -1 ? " AND tweet.id <= ?" : ""),
-      [currentUserID, currentUserID, cursor]
-    );
-    const tweets = await Promise.all(
-      tweetIDs.map(({ id }) => getTweet(id, currentUserID))
-    );
-
-    const followedUsers = await runQuery<{ username: string }>(
-      "SELECT user.username \
-       FROM user_follows, user\
-       WHERE user.id = followeeID AND followerID = ?",
-      [currentUserID]
-    );
-    const retweets = (
-      await Promise.all(
-        followedUsers.map(({ username }) =>
-          getUserRetweets(username, currentUserID, cursor)
-        )
-      )
-    ).flat();
-
-    const tweetsAndRetweets = mergeTweetsAndRetweets(tweets, retweets);
-
     const pageSize = parseInt(req.query.pageSize);
-    const pageResults = tweetsAndRetweets.slice(0, pageSize);
-    let nextCursor = -1;
+    const currentUserID = req.session.userID || -1;
 
-    if (
-      pageResults.length === pageSize &&
-      tweetsAndRetweets.length > pageSize
-    ) {
-      nextCursor = tweetsAndRetweets[pageSize].tweet
-        ? tweetsAndRetweets[pageSize].tweet?.id!
-        : tweetsAndRetweets[pageSize].retweet?.id!;
-    }
+    const { pageResults, nextCursor } = await getTimeline({
+      cursor,
+      currentUserID,
+      pageSize,
+      direction: "down",
+    });
 
     res.send({
       ok: true,
@@ -251,50 +218,16 @@ router.get(
     req: Request<{}, {}, {}, GetTimeline["requestQueryParams"]>,
     res: Response<GetTimeline["response"]>
   ) => {
-    const cursor =
-      req.query.nextCursor === undefined
-        ? undefined
-        : parseInt(req.query.nextCursor);
-
-    const currentUserID = req.session.userID || -1;
-    const tweetIDs = await runQuery<{ id: number }>(
-      "SELECT distinct(tweet.id) \
-       FROM tweet, user_follows as friendship \
-       WHERE isReply = false AND authorID = followeeID AND \
-       followerID = ? " + (cursor !== undefined ? " AND tweet.id > ?" : ""),
-      [currentUserID, cursor]
-    );
-    const tweets = await Promise.all(
-      tweetIDs.map(({ id }) => getTweet(id, currentUserID))
-    );
-
-    const followedUsers = await runQuery<{ username: string }>(
-      "SELECT user.username \
-       FROM user_follows, user\
-       WHERE user.id = followeeID AND followerID = ?",
-      [currentUserID]
-    );
-    const retweets = (
-      await Promise.all(
-        followedUsers.map(({ username }) =>
-          getUserRetweets(username, currentUserID, cursor, true)
-        )
-      )
-    ).flat();
-
-    const tweetsAndRetweets = mergeTweetsAndRetweets(tweets, retweets, true);
-
+    const cursor = parseInt(req.query.nextCursor);
     const pageSize = parseInt(req.query.pageSize);
-    const pageResults = tweetsAndRetweets.slice(0, pageSize);
-    let nextCursor: number | undefined = undefined;
-    if (pageResults.length > 0) {
-      const mostRecentTweet = pageResults[pageResults.length - 1];
-      nextCursor = mostRecentTweet.tweet
-        ? mostRecentTweet.tweet.id
-        : mostRecentTweet.retweet!.id;
-    } else {
-      nextCursor = cursor;
-    }
+    const currentUserID = req.session.userID || -1;
+
+    const { pageResults, nextCursor } = await getTimeline({
+      cursor,
+      currentUserID,
+      pageSize,
+      direction: "up",
+    });
 
     res.send({
       ok: true,

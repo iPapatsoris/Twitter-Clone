@@ -1,6 +1,11 @@
 import { Retweet, Tweet } from "../entities/tweet.js";
 import { User } from "../entities/user.js";
-import { ExtraQueryFields, NormalResponse } from "./common.js";
+import {
+  ExtraQueryFields,
+  NormalResponse,
+  PaginationQueryParamsBackEnd,
+  ResponseWithPagination,
+} from "./common.js";
 import { Thread } from "./tweet.js";
 import { GetUserFields, UpdateUserFields } from "../permissions.js";
 
@@ -65,7 +70,8 @@ export type GetUserThreads = {
 };
 
 export type GetUserTweetsAndRetweets = {
-  response: NormalResponse<{
+  requestQueryParams: PaginationQueryParamsBackEnd;
+  response: ResponseWithPagination<{
     tweetsAndRetweets: Array<{
       tweet?: Tweet;
       retweet?: Retweet;

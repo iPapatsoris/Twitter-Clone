@@ -26,8 +26,7 @@ import {
   getTweet,
   getTweets,
   getUniqueThreads,
-  getUserRetweets,
-  mergeTweetsAndRetweets,
+  getUserTweetsAndRetweets,
 } from "../services/tweet.js";
 import {
   addFollower,
@@ -301,31 +300,38 @@ router
     }
   );
 
-// Return user's tweets and retweets
-// Don't include replies
+// Return user's tweets and retweets, that are not replies
 router.get(
   "/:username/tweets",
   async (
-    req: TypedRequestQuery<{ username: string }>,
+    req: Request<
+      { username: string },
+      {},
+      {},
+      GetUserTweetsAndRetweets["requestQueryParams"]
+    >,
     res: Response<GetUserTweetsAndRetweets["response"]>
   ) => {
+    const cursor = parseInt(req.query.nextCursor);
+    const pageSize = parseInt(req.query.pageSize);
     const { username } = req.params;
     const currentUserID = req.session.userID || -1;
-    const tweetIDs = await runQuery<{ id: number }>(
-      "SELECT tweet.id \
-       FROM tweet, user \
-       WHERE tweet.authorID = user.id AND isReply = false AND user.username = ? ",
-      [username]
-    );
-    const tweets = await Promise.all(
-      tweetIDs.map(async ({ id }) => getTweet(id, currentUserID))
-    );
 
-    const retweets = await getUserRetweets(username, currentUserID);
+    const { pageResults, nextCursor } = await getUserTweetsAndRetweets({
+      username,
+      cursor,
+      currentUserID,
+      direction: "down",
+      pageSize,
+    });
+
     res.send({
       ok: true,
       data: {
-        tweetsAndRetweets: mergeTweetsAndRetweets(tweets, retweets),
+        tweetsAndRetweets: pageResults,
+        pagination: {
+          nextCursor,
+        },
       },
     });
   }

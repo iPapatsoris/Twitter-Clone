@@ -39,9 +39,7 @@ export type ExpandTweetReplies = {
 
 export type GetTimeline = {
   requestQueryParams: PaginationQueryParamsBackEnd;
-  response: ResponseWithPagination<
-    GetUserTweetsAndRetweets["response"]["data"]
-  >;
+  response: GetUserTweetsAndRetweets["response"];
 };
 export type SingleTweetResponse = NormalResponse<Tweet>;
 
