@@ -3,7 +3,7 @@ import express, { Request, Response } from "express";
 import { sha256 } from "js-sha256";
 import { ExtraQueryFields, NormalResponse } from "../api/common.js";
 import ErrorCodes from "../api/errorCodes.js";
-import { GetTweets, Thread } from "../api/tweet.js";
+import { GetUserLikes, Thread } from "../api/tweet.js";
 import {
   CreateUser,
   GetUser,
@@ -422,25 +422,52 @@ router.get(
 router.get(
   "/:username/likes",
   async (
-    req: TypedRequestQuery<{ username: string }>,
-    res: Response<GetTweets["response"]>
+    req: Request<
+      { username: string },
+      {},
+      {},
+      GetUserLikes["requestQueryParams"]
+    >,
+    res: Response<GetUserLikes["response"]>
   ) => {
     const { username } = req.params;
     const currentUserID = req.session.userID || -1;
-    const tweetIDs = await runQuery<{ id: number }>(
-      "SELECT tweetID as id \
+    const cursor = parseInt(req.query.nextCursor);
+    const pageSize = parseInt(req.query.pageSize);
+    const likeIDs = await runQuery<{ tweetID: number; reactionID: number }>(
+      "SELECT tweetID, user_reacts_to_tweet.id as reactionID \
        FROM user, user_reacts_to_tweet \
-       WHERE userID = user.id AND reaction = 'like' AND user.username = ? \
-       ORDER BY reactionDate DESC",
-      [username]
+       WHERE userID = user.id AND reaction = 'like' AND user.username = ?" +
+        (cursor !== -1 ? " AND user_reacts_to_tweet.id <= ?" : "") +
+        " ORDER BY user_reacts_to_tweet.id DESC LIMIT ?",
+      cursor !== -1
+        ? [username, cursor, pageSize + 1]
+        : [username, pageSize + 1]
     );
+    const tweets = await getTweets(
+      likeIDs.map(({ tweetID }) => tweetID),
+      currentUserID
+    );
+
+    const likes: NonNullable<GetUserLikes["response"]["data"]>["likes"] = [];
+    for (let t = 0; t < tweets.length; t++) {
+      likes.push({ tweet: tweets[t], reactionID: likeIDs[t].reactionID });
+    }
+
+    const pageResults = likes.slice(0, pageSize);
+    let nextCursor: number | undefined;
+
+    if (pageResults.length === pageSize && likes.length > pageSize) {
+      nextCursor = likes[pageSize].reactionID;
+    }
+
     res.send({
       ok: true,
       data: {
-        tweets: await getTweets(
-          tweetIDs.map(({ id }) => id),
-          currentUserID
-        ),
+        likes: pageResults,
+        pagination: {
+          nextCursor,
+        },
       },
     });
   }

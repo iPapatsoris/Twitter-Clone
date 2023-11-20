@@ -116,21 +116,31 @@ export const getUserRetweets = async (
   username: string,
   currentUserID: number,
   nextCursor: number = -1,
+  pageSize: number,
   fetchIDsBiggerThanCursor?: boolean
 ): Promise<Retweet[]> => {
   const comparison = fetchIDsBiggerThanCursor ? ">" : "<=";
+  const order = fetchIDsBiggerThanCursor ? "ASC" : "DESC";
   const query =
     "SELECT tweetID, user_reacts_to_tweet.id as reactionID, reactionDate as retweetDate \
      FROM user_reacts_to_tweet, user \
      WHERE userID = user.id AND reaction = 'retweet' AND user.username = ?" +
     (nextCursor !== -1
       ? " AND user_reacts_to_tweet.id " + comparison + " ?"
-      : "");
+      : "") +
+    " ORDER BY user_reacts_to_tweet.id " +
+    order +
+    " LIMIT ? ";
   const retweets = await runQuery<{
     tweetID: number;
     retweetDate: string;
     reactionID: number;
-  }>(query, [username, nextCursor]);
+  }>(
+    query,
+    nextCursor !== -1
+      ? [username, nextCursor, pageSize + 1]
+      : [username, pageSize + 1]
+  );
   if (!retweets || !retweets.length) {
     return [];
   }
@@ -241,6 +251,7 @@ export const getTweet = async (tweetID: number, currentUserID: number) => {
 export const mergeTweetsAndRetweets = (
   tweets: Tweet[],
   retweets: Retweet[],
+  pageSize: number,
   leastRecentFirst: boolean = false
 ) => {
   const tweetsWithoutSelfRetweets: Array<{ tweet?: Tweet; retweet?: Retweet }> =
@@ -255,7 +266,7 @@ export const mergeTweetsAndRetweets = (
     retweets.map((retweet) => ({ retweet: retweet }))
   );
 
-  return tweetsAndRetweets.sort((a, b) => {
+  const sorted = tweetsAndRetweets.sort((a, b) => {
     const aID = a.tweet ? a.tweet.id : a.retweet?.id;
     const bID = b.tweet ? b.tweet.id : b.retweet?.id;
 
@@ -268,6 +279,8 @@ export const mergeTweetsAndRetweets = (
     }
     return 0;
   });
+
+  return sorted.slice(0, pageSize + 1);
 };
 
 // From tweets/replies that have the same root thread ID,
@@ -412,15 +425,23 @@ export const getTimeline = async ({
         "SELECT distinct(tweet.id) \
        FROM tweet, user_follows as friendship \
        WHERE isReply = false AND (authorID = ? OR (authorID = followeeID AND \
-       followerID = ?)) " + (cursor !== -1 ? " AND tweet.id <= ?" : ""),
-        [currentUserID, currentUserID, cursor]
+       followerID = ?)) " +
+          (cursor !== -1 ? " AND tweet.id <= ?" : "") +
+          " ORDER BY tweet.id DESC LIMIT ? ",
+        cursor !== -1
+          ? [currentUserID, currentUserID, cursor, pageSize + 1]
+          : [currentUserID, currentUserID, pageSize + 1]
       )
     : runQuery<{ id: number }>(
         "SELECT distinct(tweet.id) \
        FROM tweet, user_follows as friendship \
        WHERE isReply = false AND authorID = followeeID AND \
-       followerID = ? " + (cursor !== undefined ? " AND tweet.id > ?" : ""),
-        [currentUserID, cursor]
+       followerID = ? " +
+          (cursor !== undefined ? " AND tweet.id > ?" : "") +
+          " ORDER BY tweet.id ASC LIMIT ?",
+        cursor !== -1
+          ? [currentUserID, cursor, pageSize + 1]
+          : [currentUserID, pageSize + 1]
       ));
 
   const tweets = await Promise.all(
@@ -436,7 +457,13 @@ export const getTimeline = async ({
   const retweets = (
     await Promise.all(
       followedUsers.map(({ username }) =>
-        getUserRetweets(username, currentUserID, cursor, direction === "up")
+        getUserRetweets(
+          username,
+          currentUserID,
+          cursor,
+          pageSize,
+          direction === "up"
+        )
       )
     )
   ).flat();
@@ -444,6 +471,7 @@ export const getTimeline = async ({
   const tweetsAndRetweets = mergeTweetsAndRetweets(
     tweets,
     retweets,
+    pageSize,
     direction === "up"
   );
 
@@ -468,6 +496,8 @@ export const getTweetsAndRetweetsPaginatedResponse = ({
 }) => {
   const pageResults = tweetsAndRetweets.slice(0, pageSize);
   let nextCursor: number | undefined;
+
+  console.log(tweetsAndRetweets);
 
   if (direction === "down") {
     if (
@@ -510,9 +540,12 @@ export const getUserTweetsAndRetweets = async ({
     "SELECT tweet.id \
      FROM tweet, user \
      WHERE tweet.authorID = user.id AND isReply = false AND user.username = ?\
-     " + (cursor !== -1 ? " AND tweet.id " + cursorComparison + " ?" : ""),
-    [username, cursor]
+     " +
+      (cursor !== -1 ? " AND tweet.id " + cursorComparison + " ?" : "") +
+      " ORDER BY tweet.id DESC LIMIT ?",
+    cursor !== -1 ? [username, cursor, pageSize + 1] : [username, pageSize + 1]
   );
+
   const tweets = await Promise.all(
     tweetIDs.map(async ({ id }) => getTweet(id, currentUserID))
   );
@@ -521,12 +554,14 @@ export const getUserTweetsAndRetweets = async ({
     username,
     currentUserID,
     cursor,
+    pageSize,
     direction === "up"
   );
   return getTweetsAndRetweetsPaginatedResponse({
     tweetsAndRetweets: mergeTweetsAndRetweets(
       tweets,
       retweets,
+      pageSize,
       direction === "up"
     ),
     pageSize,

@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
-import { getNextPageParam, userTweetsKeys } from "./queries";
+import { getNextPageParamTweetsAndRetweets, userTweetsKeys } from "./queries";
 import Tweet from "../../../components/Tweet/Tweet";
 import List from "../../../layouts/ContentRight/List/List";
 import { useOutletContext } from "react-router-dom";
@@ -12,7 +12,7 @@ const Tweets = () => {
   const { data, isSuccess, isFetching, fetchNextPage } = useInfiniteQuery({
     ...userTweetsKeys.tweetsOfUsername(username, queryClient),
     initialPageParam: -1,
-    getNextPageParam,
+    getNextPageParam: getNextPageParamTweetsAndRetweets,
     staleTime: Infinity,
   });
 

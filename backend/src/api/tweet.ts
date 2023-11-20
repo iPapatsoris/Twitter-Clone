@@ -41,6 +41,14 @@ export type GetTimeline = {
   requestQueryParams: PaginationQueryParamsBackEnd;
   response: GetUserTweetsAndRetweets["response"];
 };
+
+export type GetUserLikes = {
+  requestQueryParams: PaginationQueryParamsBackEnd;
+  response: ResponseWithPagination<{
+    likes: { tweet: Tweet; reactionID: number }[];
+  }>;
+};
+
 export type SingleTweetResponse = NormalResponse<Tweet>;
 
 export type GetTrends = {

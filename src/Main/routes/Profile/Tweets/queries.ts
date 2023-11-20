@@ -4,7 +4,7 @@ import {
   GetUserThreads,
   GetUserTweetsAndRetweets,
 } from "../../../../../backend/src/api/user";
-import { GetTweets } from "../../../../../backend/src/api/tweet";
+import { GetUserLikes } from "../../../../../backend/src/api/tweet";
 import { QueryClient } from "@tanstack/react-query";
 import { LoaderFunctionArgs } from "react-router-dom";
 import { setTweet } from "../../../components/Tweet/queries";
@@ -19,8 +19,15 @@ import { timelinePageSize } from "../../../../Home/Home";
          only, rendering of new tweets on user prompt to avoid layout shifts)
 */
 
-// prettier-ignore
-export const getNextPageParam = (lastPage: GetUserTweetsAndRetweets["response"]["data"] ) => {
+export const getNextPageParamTweetsAndRetweets = (
+  lastPage: GetUserTweetsAndRetweets["response"]["data"]
+) => {
+  return lastPage?.pagination?.nextCursor;
+};
+
+export const getNextPageParamLikedTweets = (
+  lastPage: GetUserLikes["response"]["data"]
+) => {
   return lastPage?.pagination?.nextCursor;
 };
 
@@ -36,7 +43,8 @@ export const userTweetsKeys = createQueryKeys("userTweets", {
       },
       likedTweets: {
         queryKey: ["likedTweets"],
-        queryFn: () => userLikedTweetsQuery(username, queryClient),
+        queryFn: ({ pageParam }: { pageParam: number }) =>
+          userLikedTweetsQuery(username, pageParam, queryClient),
       },
     },
   }),
@@ -55,13 +63,13 @@ const userTweetsQuery = async (
     "user/" + username + "/tweets",
     addQueryParams([], pagination)
   );
-  res.data?.tweetsAndRetweets.forEach((t) =>
-    setTweet(t.tweet || t.retweet?.tweet!, queryClient)
-  );
 
   if (!res.ok) {
     throw new Error();
   }
+  res.data?.tweetsAndRetweets.forEach((t) =>
+    setTweet(t.tweet || t.retweet?.tweet!, queryClient)
+  );
   return res.data;
 };
 
@@ -82,16 +90,22 @@ const userRepliesQuery = async (username: string, queryClient: QueryClient) => {
 
 const userLikedTweetsQuery = async (
   username: string,
+  pageParam: number,
   queryClient: QueryClient
 ) => {
-  const res = await getData<GetTweets["response"]>(
-    "user/" + username + "/likes"
+  const pagination: PaginationQueryParamsFrontEnd = {
+    nextCursor: pageParam,
+    pageSize: timelinePageSize,
+  };
+  const res = await getData<GetUserLikes["response"]>(
+    "user/" + username + "/likes",
+    addQueryParams([], pagination)
   );
 
   if (!res.ok) {
     throw new Error();
   }
-  res.data?.tweets.forEach((t) => setTweet(t, queryClient));
+  res.data?.likes.forEach((t) => setTweet(t.tweet, queryClient));
   return res.data;
 };
 
@@ -102,13 +116,16 @@ export const userTweetsLoader =
       params.username!,
       queryClient
     ).queryKey;
+
     queryClient.resetQueries({ queryKey });
+
     const res = await queryClient.fetchInfiniteQuery<
       GetUserTweetsAndRetweets["response"]
     >({
       ...userTweetsKeys.tweetsOfUsername(params.username!, queryClient),
       initialPageParam: -1,
     });
+
     return res;
   };
 
@@ -126,10 +143,18 @@ export const userRepliesLoader =
 export const userLikedTweetsLoader =
   (queryClient: QueryClient) =>
   async ({ params }: LoaderFunctionArgs) => {
-    const { queryKey, queryFn } = userTweetsKeys.tweetsOfUsername(
+    const { queryKey } = userTweetsKeys.tweetsOfUsername(
       params.username!,
       queryClient
     )._ctx.likedTweets;
 
-    return await queryClient.fetchQuery({ queryKey, queryFn });
+    queryClient.resetQueries({ queryKey });
+
+    const res = await queryClient.fetchInfiniteQuery<GetUserLikes["response"]>({
+      ...userTweetsKeys.tweetsOfUsername(params.username!, queryClient)._ctx
+        .likedTweets,
+      initialPageParam: -1,
+    });
+
+    return res;
   };
