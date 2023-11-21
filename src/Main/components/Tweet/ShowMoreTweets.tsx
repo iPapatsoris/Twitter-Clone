@@ -1,4 +1,9 @@
-import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  queryOptions,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import styles from "./Tweet.module.scss";
 import { ExpansionDirection, tweetThreadKeys } from "./TweetThread/queries";
 import { GetUserThreads } from "../../../../backend/src/api/user";
@@ -15,6 +20,7 @@ interface ShowMoreTweetsProps {
   upwardProps?: {
     username: string;
     threadIndex: number;
+    pageIndex: number;
   };
 }
 
@@ -60,31 +66,43 @@ const ShowMoreTweets = ({
         });
       }
     } else if (direction === "upward" && upwardProps) {
-      const { threadIndex, username } = upwardProps;
-      const options =
-        userTweetsKeys.tweetsOfUsername(username)._ctx.withReplies;
-      const originalUserTweets = queryClient.getQueryData(
-        queryOptions(options).queryKey
-      );
+      const { threadIndex, pageIndex, username } = upwardProps;
+      const options = userTweetsKeys
+        .tweetsOfUsername(username, queryClient)
+        ._ctx.withReplies();
+      // TODO: why queryOptions TS doesn't work and I have to provide the type?
+      const originalUserTweets = queryClient.getQueryData<
+        InfiniteData<GetUserThreads["response"]["data"]>
+      >(queryOptions(options).queryKey);
 
       if (originalUserTweets && expandedReplies) {
-        // Immutably Update user tweets with full conversation
-        const originalThread = originalUserTweets.threads[threadIndex].tweets;
+        // Immutably update user tweets with full conversation
+        const originalThread =
+          originalUserTweets.pages[pageIndex]!.threads[threadIndex].tweets;
         const fullThread = [
           ...expandedReplies,
           originalThread![originalThread!.length - 1],
         ];
         const newThreads: NonNullable<
           GetUserThreads["response"]["data"]
-        >["threads"] = originalUserTweets.threads.map((t) => ({ ...t }))!;
+        >["threads"] = originalUserTweets.pages[pageIndex]!.threads.map(
+          (t) => ({ ...t })
+        )!;
         newThreads[threadIndex] = {
           hasMoreNestedReplies: false,
           tweets: fullThread,
         };
-        const options =
-          userTweetsKeys.tweetsOfUsername(username)._ctx.withReplies;
-        queryClient.setQueryData(queryOptions(options).queryKey, {
-          threads: [...newThreads],
+        const queryKey = userTweetsKeys
+          .tweetsOfUsername(username, queryClient)
+          ._ctx.withReplies().queryKey;
+        queryClient.setQueryData<
+          InfiniteData<GetUserThreads["response"]["data"]>
+        >(queryKey, {
+          pageParams: originalUserTweets.pageParams,
+          pages: originalUserTweets.pages.map((p, pIndex) => ({
+            pagination: p!.pagination,
+            threads: pageIndex === pIndex ? [...newThreads] : p!.threads,
+          })),
         });
       }
     }

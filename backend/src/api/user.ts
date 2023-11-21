@@ -64,7 +64,8 @@ export type GetUserFolloweeSuggestions<T extends GetUserFields> = {
 };
 
 export type GetUserThreads = {
-  response: NormalResponse<{
+  requestQueryParams: PaginationQueryParamsBackEnd;
+  response: ResponseWithPagination<{
     threads: Thread[];
   }>;
 };

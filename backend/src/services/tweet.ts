@@ -297,21 +297,6 @@ export const getUniqueThreads = (tweets: Tweet[]) => {
   return Array.from(rootTweetToLeastRecent.values());
 };
 
-export const sort = (threads: Thread[]) =>
-  threads.sort((a, b) => {
-    const aDate = a.tweets[0].creationDate;
-    const bDate = b.tweets[0].creationDate;
-
-    if (aDate && bDate) {
-      if (new Date(aDate) > new Date(bDate)) {
-        return -1;
-      } else {
-        return 1;
-      }
-    }
-    return 0;
-  });
-
 export const insertTweet = async (
   tweet: CreateTweet["request"]["tweet"],
   currentUserID: number

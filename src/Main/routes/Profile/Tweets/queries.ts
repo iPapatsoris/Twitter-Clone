@@ -10,6 +10,7 @@ import { LoaderFunctionArgs } from "react-router-dom";
 import { setTweet } from "../../../components/Tweet/queries";
 import { PaginationQueryParamsFrontEnd } from "../../../../../backend/src/api/common";
 import { timelinePageSize } from "../../../../Home/Home";
+import { ThreadIDs } from "./Replies";
 
 /* 
   Profile tweets cache is cleared on each route load to avoid layout shifts by
@@ -31,16 +32,23 @@ export const getNextPageParamLikedTweets = (
   return lastPage?.pagination?.nextCursor;
 };
 
+export const getNextPageParamReplies = (
+  lastPage: GetUserThreads["response"]["data"]
+) => {
+  return lastPage?.pagination?.nextCursor;
+};
+
 export const userTweetsKeys = createQueryKeys("userTweets", {
   tweetsOfUsername: (username: string, queryClient: QueryClient) => ({
     queryKey: [username],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       userTweetsQuery(username, pageParam, queryClient),
     contextQueries: {
-      withReplies: {
+      withReplies: (threadIDs: ThreadIDs | undefined = undefined) => ({
         queryKey: ["replies"],
-        queryFn: () => userRepliesQuery(username, queryClient),
-      },
+        queryFn: ({ pageParam }: { pageParam: number }) =>
+          userRepliesQuery(username, pageParam, queryClient, threadIDs),
+      }),
       likedTweets: {
         queryKey: ["likedTweets"],
         queryFn: ({ pageParam }: { pageParam: number }) =>
@@ -73,19 +81,43 @@ const userTweetsQuery = async (
   return res.data;
 };
 
-const userRepliesQuery = async (username: string, queryClient: QueryClient) => {
+const userRepliesQuery = async (
+  username: string,
+  pageParam: number,
+  queryClient: QueryClient,
+  threadIDs?: ThreadIDs
+): Promise<GetUserThreads["response"]["data"]> => {
+  if (!threadIDs) {
+    throw new Error("threadIDs not provided");
+  }
+  const pagination: PaginationQueryParamsFrontEnd = {
+    nextCursor: pageParam,
+    pageSize: timelinePageSize,
+  };
+
   const res = await getData<GetUserThreads["response"]>(
-    "user/" + username + "/replies"
+    "user/" + username + "/replies",
+    addQueryParams([], pagination)
   );
 
   if (!res.ok) {
     throw new Error();
   }
 
+  // In the case of multiple responses of the user to the same thread, show
+  // the thread only once
+  let uniqueThreads: NonNullable<
+    GetUserThreads["response"]["data"]
+  >["threads"] = [];
   res.data?.threads.forEach((thread) => {
-    thread.tweets.forEach((tweet) => setTweet(tweet, queryClient));
+    const rootID = thread.tweets[0].id;
+    if (!threadIDs.has(rootID)) {
+      threadIDs.add(thread.tweets[0].id);
+      uniqueThreads.push(thread);
+      thread.tweets.forEach((tweet) => setTweet(tweet, queryClient));
+    }
   });
-  return res.data;
+  return { threads: uniqueThreads, pagination: res.data?.pagination! };
 };
 
 const userLikedTweetsQuery = async (
@@ -132,12 +164,21 @@ export const userTweetsLoader =
 export const userRepliesLoader =
   (queryClient: QueryClient) =>
   async ({ params }: LoaderFunctionArgs) => {
-    const { queryKey, queryFn } = userTweetsKeys.tweetsOfUsername(
-      params.username!,
-      queryClient
-    )._ctx.withReplies;
+    const uniqueThreadIDs: ThreadIDs = new Set();
+    const { queryKey } = userTweetsKeys
+      .tweetsOfUsername(params.username!, queryClient)
+      ._ctx.withReplies(uniqueThreadIDs);
 
-    return await queryClient.fetchQuery({ queryKey, queryFn });
+    queryClient.resetQueries({ queryKey });
+
+    await queryClient.fetchInfiniteQuery<GetUserThreads["response"]>({
+      ...userTweetsKeys
+        .tweetsOfUsername(params.username!, queryClient)
+        ._ctx.withReplies(uniqueThreadIDs),
+      initialPageParam: -1,
+    });
+
+    return uniqueThreadIDs;
   };
 
 export const userLikedTweetsLoader =
@@ -150,11 +191,9 @@ export const userLikedTweetsLoader =
 
     queryClient.resetQueries({ queryKey });
 
-    const res = await queryClient.fetchInfiniteQuery<GetUserLikes["response"]>({
+    return await queryClient.fetchInfiniteQuery<GetUserLikes["response"]>({
       ...userTweetsKeys.tweetsOfUsername(params.username!, queryClient)._ctx
         .likedTweets,
       initialPageParam: -1,
     });
-
-    return res;
   };

@@ -24,7 +24,6 @@ import {
   getUserReactionsToTweet,
   insertTweet,
   insertUserReaction,
-  sort,
 } from "../services/tweet.js";
 import { requireAuth } from "../middleware/auth.js";
 
@@ -354,11 +353,13 @@ router.get(
       });
     }
 
+    const sortedThreads = threads.sort((a, b) => (a > b ? -1 : 1));
+
     res.send({
       ok: true,
       data: {
         tweet: middleTweet,
-        replies: sort(threads),
+        replies: sortedThreads,
         previousReplies: previousReplies,
       },
     });

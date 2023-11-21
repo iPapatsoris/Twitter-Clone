@@ -344,24 +344,36 @@ router.get(
  * hasMoreNestedReplies. If it has more than 3, instead of returning the 3rd
  * most recent nested reply, return the thread root tweet.
  *
- * If a thread has multiple tweets by the user, include it only
- * once. The featured tweet will be the one closest to the root tweet of the
- * thread.
+ * If a thread has multiple tweets by the user, we want to include it only
+ * once, and feature the tweet that is the closest to the root tweet of the
+ * thread. However, this is not trivial to implement, due to pagination.
+ * Each page guarantees uniqueness of threads within itself, but not in relation
+ * to previously served pages. For that we would need to either maintain more
+ * server state, or query all the records during each page request.
+ * For now, we leave it to the front end to handle duplicates.
  */
 router.get(
   "/:username/replies",
   async (
-    req: TypedRequestQuery<{ username: string }>,
+    req: Request<
+      { username: string },
+      {},
+      {},
+      GetUserLikes["requestQueryParams"]
+    >,
     res: Response<GetUserThreads["response"]>
   ) => {
     const { username } = req.params;
     const currentUserID = req.session.userID || -1;
+    const cursor = parseInt(req.query.nextCursor);
+    const pageSize = parseInt(req.query.pageSize);
 
     const replyIDs = await runQuery<{ id: number }>(
       "SELECT tweet.id \
        FROM tweet, user \
-       WHERE authorID = user.id AND user.username = ? AND isReply = true",
-      [username]
+       WHERE authorID = user.id AND user.username = ? AND isReply = true" +
+        (cursor !== -1 ? " AND tweet.id <= ?" : ""),
+      [username, cursor]
     );
 
     const replies = await getTweets(
@@ -371,10 +383,19 @@ router.get(
 
     // Don't show a thread multiple times, if the user has multiple responses
     // within the thread
-    const uniqueReplies = getUniqueThreads(replies);
+    const uniqueReplies = getUniqueThreads(replies).sort((a, b) =>
+      a.id > b.id ? -1 : 1
+    );
+
+    const pageResults = uniqueReplies.slice(0, pageSize);
+    let nextCursor: number | undefined;
+
+    if (pageResults.length === pageSize && uniqueReplies.length > pageSize) {
+      nextCursor = uniqueReplies[pageSize].id;
+    }
 
     const repliesWithNested: Thread[] = await Promise.all(
-      uniqueReplies.map(async (tweet) => {
+      pageResults.map(async (tweet) => {
         // Tweet is a reply; get referenced tweet
         const previousReply = await getTweet(
           tweet.referencedTweetID!,
@@ -414,6 +435,9 @@ router.get(
       ok: true,
       data: {
         threads: repliesWithNested,
+        pagination: {
+          nextCursor,
+        },
       },
     });
   }
