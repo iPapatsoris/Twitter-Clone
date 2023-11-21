@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import MainTweet from "./MainTweet/MainTweet";
 import Tweet from "../Tweet";
 import List from "../../../layouts/ContentRight/List/List";
-import ShowMoreTweets from "../ShowMoreTweets";
+import ShowMoreTweets from "../ShowMoreTweets/ShowMoreTweets";
 import { useRef, useState, useLayoutEffect } from "react";
 import CreateTweet from "../CreateTweet/CreateTweet";
 import useWindowDimensions from "../../../../util/hooks/useWindowDimensions";

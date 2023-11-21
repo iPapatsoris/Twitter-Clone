@@ -2,7 +2,7 @@ import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { getNextPageParamReplies, userTweetsKeys } from "./queries";
 import Tweet from "../../../components/Tweet/Tweet";
 import List from "../../../layouts/ContentRight/List/List";
-import ShowMoreTweets from "../../../components/Tweet/ShowMoreTweets";
+import ShowMoreTweets from "../../../components/Tweet/ShowMoreTweets/ShowMoreTweets";
 import { useLoaderData, useOutletContext } from "react-router-dom";
 import useScrollNearBottom from "../../../../util/hooks/useScrollNearBottom";
 import { useRef } from "react";

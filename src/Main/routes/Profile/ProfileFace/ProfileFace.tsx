@@ -11,7 +11,6 @@ import { HeaderProfileContext } from "../../../layouts/Main";
 import Icon from "../../../../util/components/Icon/Icon";
 import { ReactComponent as OptionsIcon } from "../../../../assets/icons/dots.svg";
 import { ReactComponent as NotificationsIcon } from "../../../../assets/icons/notifications.svg";
-import { ReactComponent as VerifiedIcon } from "../../../../assets/icons/verified.svg";
 import Button from "../../../../util/components/Button/Button";
 import Info from "./Info/Info";
 import Modal from "../../../../util/components/Modal/Modal";
