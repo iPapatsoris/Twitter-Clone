@@ -46,17 +46,10 @@
     width: var(--avatar-small-height);
     height: var(--avatar-small-height);
     position: relative;
-
-    .ReplyLine {
-      position: absolute;
-      background-color: $replyLineColor;
-      width: $replyLineWidth;
-      left: calc((var(--avatar-small-height) - $replyLineWidth) / 2);
-      height: 100%;
-    }
   }
 
   .ShowMoreIcon {
+    position: relative;
     width: var(--avatar-small-height);
     display: flex;
     flex-direction: column;
@@ -72,6 +65,14 @@
     .Transform {
       transform: rotate(90deg);
     }
+  }
+
+  .ReplyLine {
+    position: absolute;
+    background-color: $replyLineColor;
+    width: $replyLineWidth;
+    left: calc((var(--avatar-small-height) - $replyLineWidth) / 2);
+    height: 100%;
   }
 
   .Wrapper {

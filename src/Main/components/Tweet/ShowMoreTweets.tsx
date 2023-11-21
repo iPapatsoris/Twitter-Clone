@@ -9,6 +9,8 @@ import { ExpansionDirection, tweetThreadKeys } from "./TweetThread/queries";
 import { GetUserThreads } from "../../../../backend/src/api/user";
 import { userTweetsKeys } from "../../routes/Profile/Tweets/queries";
 import { setTweet } from "./queries";
+import { useReplyLine } from "./TweetThread/useReplyLine";
+import { useRef } from "react";
 
 interface ShowMoreTweetsProps {
   replyToExpand: number;
@@ -35,6 +37,17 @@ const ShowMoreTweets = ({
     enabled: false,
   });
   const queryClient = useQueryClient();
+  const showMoreTweetsWrapperRef = useRef<HTMLDivElement>(null);
+  const dotsContainerRef = useRef<HTMLDivElement>(null);
+  const replyLineRef = useRef<HTMLDivElement>(null);
+
+  useReplyLine(
+    direction === "upward",
+    false,
+    showMoreTweetsWrapperRef,
+    dotsContainerRef,
+    replyLineRef
+  );
 
   const expandReplies = async () => {
     const res = await refetch();
@@ -109,11 +122,16 @@ const ShowMoreTweets = ({
   };
 
   return (
-    <div className={styles.TweetWrapper} onClick={expandReplies}>
-      <div className={styles.ShowMoreIcon}>
+    <div
+      className={styles.TweetWrapper}
+      ref={showMoreTweetsWrapperRef}
+      onClick={expandReplies}
+    >
+      <div className={styles.ShowMoreIcon} ref={dotsContainerRef}>
         <div></div>
         <div></div>
         <div></div>
+        <div className={styles.ReplyLine} ref={replyLineRef}></div>
       </div>
       <div className={styles.Wrapper}>
         <div className={styles.ShowMore}>Show replies</div>
