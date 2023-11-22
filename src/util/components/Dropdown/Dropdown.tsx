@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import OptionsPopup from "../Popup/OptionsPopup/OptionsPopup";
-import styles from "../Input/InputWrapper.module.scss";
+import styles from "../Input/Input.module.scss";
 import dropdownStyles from "./Dropdown.module.scss";
 import Icon from "../Icon/Icon";
 import { ReactComponent as DownArrowIcon } from "../../../assets/icons/options/down-arrow.svg";

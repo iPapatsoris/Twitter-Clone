@@ -6,9 +6,7 @@ import {
   ForwardedRef,
   HTMLProps,
 } from "react";
-import useClickOutside from "../../hooks/useClickOutside";
-import styles from "./InputWrapper.module.scss";
-import inputStyles from "./Input.module.scss";
+import styles from "./Input.module.scss";
 import { ReactComponent as EyeIcon } from "../../../assets/icons/eye.svg";
 import { ReactComponent as EyeStrikeIcon } from "../../../assets/icons/eye-strike.svg";
 import { ReactComponent as SuccessIcon } from "../../../assets/icons/success.svg";
@@ -23,9 +21,12 @@ interface InputProps {
   maxLength?: number;
   autofocus?: boolean;
   readonly?: boolean;
-  onClick?: (e: React.MouseEvent) => void;
+  onFocus?: (e: React.FocusEvent) => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLInputElement>) => void;
+  onBlur?: (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   value: string;
   isValid?: boolean;
   error?: string;
@@ -44,9 +45,10 @@ const Input = forwardRef<RefType, InputProps>(
       maxLength,
       autofocus = false,
       readonly = false,
-      onClick,
+      onFocus,
       onChange,
       onBlur,
+      onClick,
       value,
       isValid = true,
       error,
@@ -76,71 +78,29 @@ const Input = forwardRef<RefType, InputProps>(
 
     useEffect(() => {
       if (autofocus && ref && ref.current) {
-        ref.current.style.visibility = "visible";
         ref.current?.focus({ preventScroll: true });
-        setIsFocused(true);
       }
     }, [autofocus, ref]);
-
-    useClickOutside({
-      ref: wrapperRef,
-      onMouseDown: true,
-      enabled: isFocused,
-      callback: () => {
-        setIsFocused(false);
-      },
-    });
-
-    /* We have an input element nested within a wrapper for custom styling.
-       Wrapper initially holds a placeholder div, and on wrapper mouse down,
-       we remove the placeholder, make the input visible and manually focus on
-       it.
-    */
-    useEffect(() => {
-      if (isFocused) {
-        ref.current.style.visibility = "visible";
-        ref.current.focus();
-      }
-    }, [ref, isFocused]);
 
     const handleWrapperMousedown = (e: React.MouseEvent) => {
       if (ref && ref.current && !readonly) {
         // Mouse down on wrapper div would blur the inner input that we are
         // trying to manually focus on, prevent this behavior.
         e.preventDefault();
-        /* 
-           Mouse down on wrapper removes input placeholder div (this is intended
-           behavior). Then, the mousedown handler in useClickOutside checks if 
-           the clicked area is within the wrapper, to decide if we should 
-           unfocus from the input or not. Because placeholder element has been 
-           removed, it is perceived as a click outside the wrapper, and so 
-           undesirably removes focus. Stop propagation to skip the 
-           useClickOutside handler.
-           */
-        e.stopPropagation();
-        setIsFocused(true);
+        ref.current.focus({ preventScroll: true });
       }
     };
 
     const wrapperStyles: styles.ClassNames[] = [styles.Wrapper];
-    const typingAreaStyles: inputStyles.ClassNames[] = [inputStyles.TypingArea];
-    const labelStyles: string[] = [inputStyles.InheritCursor];
-    const helperBoxStyles: styles.ClassNames[] = [styles.HelperBox];
-    const leaderStyles: inputStyles.ClassNames[] = [inputStyles.Leader];
 
     if (isFocused) {
       wrapperStyles.push(styles.Focused);
-      typingAreaStyles.push(inputStyles.Focused);
-      leaderStyles.push(inputStyles.Focused);
     }
     if (error) {
       wrapperStyles.push(styles.Error);
-      helperBoxStyles.push(styles.Error);
-      leaderStyles.push(inputStyles.Error);
     }
     if (!value.length) {
       wrapperStyles.push(styles.Empty);
-      typingAreaStyles.push(inputStyles.Empty);
     }
 
     let iconJSX;
@@ -159,7 +119,7 @@ const Input = forwardRef<RefType, InputProps>(
         iconJSX = (
           <Icon
             src={SuccessIcon}
-            extraStyles={[inputStyles.SuccessIcon]}
+            extraStyles={[styles.SuccessIcon]}
             hover="none"
           />
         );
@@ -170,14 +130,22 @@ const Input = forwardRef<RefType, InputProps>(
       name,
       maxLength,
       onChange,
-      onBlur,
+      onClick,
+      onFocus: (e) => {
+        setIsFocused(true);
+        onFocus && onFocus(e);
+      },
+      onBlur: (e) => {
+        setIsFocused(false);
+        onBlur && onBlur(e);
+      },
       value,
       readOnly: readonly,
       onMouseDown: (e: React.MouseEvent) => {
-        setIsFocused(true);
-        // Parent calls preventDefault() on onMouseDown. We need to stop
-        // propagation, because otherwise text highlighting (mouse down
-        // default behavior) will not work.
+        /* Parent Wrapper element calls preventDefault() on onMouseDown. We need 
+           to stop propagation from child input element, because otherwise text 
+           highlighting (mouse down default behavior) will not work.
+        */
         e.stopPropagation();
       },
     };
@@ -206,33 +174,34 @@ const Input = forwardRef<RefType, InputProps>(
         <div
           ref={wrapperRef}
           className={wrapperStyles.join(" ")}
-          onMouseDown={(e) => handleWrapperMousedown(e)}
-          onClick={onClick}
+          onMouseDown={handleWrapperMousedown}
         >
           {!isFocused && !value.length && (
-            <div className={inputStyles.Placeholder}>
+            <div className={styles.Placeholder}>
               <span>{placeholder}</span>
             </div>
           )}
-          <div className={typingAreaStyles.join(" ")}>
-            <div className={[styles.Info, inputStyles.Info].join(" ")}>
-              <label htmlFor="input" className={labelStyles.join(" ")}>
+          <div className={styles.TypingArea}>
+            <div className={styles.Info}>
+              <label htmlFor="input" className={styles.Label}>
                 {placeholder}
               </label>
               {maxLength && (
-                <span>
+                <span className={styles.MaxCount}>
                   {value.length} / {maxLength}
                 </span>
               )}
             </div>
-            <div className={inputStyles.Input}>
-              <span className={leaderStyles.join(" ")}>{leader}</span>
+            <div className={styles.Input}>
+              <span className={styles.Leader}>{leader}</span>
               {input}
               {iconJSX}
             </div>
           </div>
         </div>
-        <div className={helperBoxStyles.join(" ")}>
+        <div
+          className={[styles.HelperBox, error ? styles.Error : ""].join(" ")}
+        >
           {error ? error : helper}
         </div>
         {helper && error && <div className={styles.HelperBox}>{helper}</div>}

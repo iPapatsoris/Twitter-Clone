@@ -2,27 +2,35 @@ import globalClassNames, {
   ClassNames as GlobalClassNames,
 } from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
+  readonly Wrapper: "Wrapper";
+  readonly Label: "Label";
+  readonly Leader: "Leader";
+  readonly Focused: "Focused";
+  readonly Error: "Error";
+  readonly MaxCount: "MaxCount";
+  readonly Empty: "Empty";
+  readonly Info: "Info";
   readonly Placeholder: "Placeholder";
   readonly TypingArea: "TypingArea";
-  readonly Info: "Info";
-  readonly Focused: "Focused";
-  readonly Empty: "Empty";
   readonly Input: "Input";
-  readonly Leader: "Leader";
-  readonly Error: "Error";
   readonly InheritCursor: "InheritCursor";
   readonly SuccessIcon: "SuccessIcon";
+  readonly HelperBox: "HelperBox";
 };
 export = classNames;
 export type ClassNames =
+  | "Wrapper"
+  | "Label"
+  | "Leader"
+  | "Focused"
+  | "Error"
+  | "MaxCount"
+  | "Empty"
+  | "Info"
   | "Placeholder"
   | "TypingArea"
-  | "Info"
-  | "Focused"
-  | "Empty"
   | "Input"
-  | "Leader"
-  | "Error"
   | "InheritCursor"
   | "SuccessIcon"
+  | "HelperBox"
   | GlobalClassNames;

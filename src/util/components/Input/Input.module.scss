@@ -1,57 +1,102 @@
-.Placeholder {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
+.Wrapper {
+  padding: 0.5rem;
+  font-size: 17px;
+  color: rgb(83, 100, 113);
+  border-radius: 4px;
+  border: 1px solid rgb(207, 217, 222);
+  cursor: pointer;
+  position: relative;
 
-.TypingArea {
+  --color: auto;
+  --border-color: rgba(207, 217, 222, 1);
+
+  border-color: var(--border-color);
+
+  .Label,
+  .Leader {
+    color: var(--color);
+  }
+
+  &.Focused {
+    cursor: text;
+    --color: var(--primary-color);
+    --border-color: var(--primary-color);
+  }
+
+  &.Error {
+    --color: red;
+    --border-color: red;
+  }
+
+  &:not(.Focused) {
+    .MaxCount {
+      visibility: hidden;
+    }
+
+    &.Empty .Label {
+      visibility: hidden;
+    }
+  }
+
   .Info {
-    display: flex;
-    justify-content: space-between;
+    font-size: 12px;
+    padding-bottom: 0.5rem;
   }
 
-  &:not(.Focused).Empty {
-    visibility: hidden;
+  .Placeholder {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
   }
 
-  .Input {
-    display: flex;
-
-    .Leader {
-      &.Focused {
-        color: var(--primary-color);
-      }
-      &.Error {
-        color: red;
-      }
+  .TypingArea {
+    .Info {
+      display: flex;
+      justify-content: space-between;
     }
 
-    textarea {
-      resize: none;
-      height: 60px;
-    }
+    .Input {
+      display: flex;
 
-    input,
-    textarea {
-      border: 0;
-      width: 100%;
-      font-size: 16px;
-      cursor: inherit;
+      textarea {
+        resize: none;
+        height: 60px;
+      }
 
-      &:focus {
-        outline: none;
-        cursor: text;
+      input,
+      textarea {
+        border: 0;
+        width: 100%;
+        font-size: 16px;
+        cursor: inherit;
+
+        &:focus {
+          outline: none;
+          cursor: text;
+        }
       }
     }
+  }
+
+  .InheritCursor {
+    cursor: inherit;
+  }
+
+  .SuccessIcon {
+    fill: var(--green-color) !important;
   }
 }
 
-.InheritCursor {
-  cursor: inherit;
-}
+.HelperBox {
+  min-height: 18px;
+  padding-left: 0.5rem;
+  font-size: var(--small-text);
+  color: var(--primary-color);
 
-.SuccessIcon {
-  fill: var(--green-color) !important;
+  &.Error {
+    color: red;
+    margin-bottom: 1rem;
+  }
 }
