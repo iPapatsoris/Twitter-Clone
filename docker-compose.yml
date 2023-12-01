@@ -1,0 +1,50 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+    expose:
+      - "${DB_PORT}"
+    volumes:
+      - twitter-db:/twitter-db
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "/usr/bin/mysql",
+          "--user=${DB_USER}",
+          "--password=${DB_PASSWORD}",
+          "--execute",
+          "SHOW DATABASES;",
+        ]
+      interval: 2s
+      start_period: 10h
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "${VITE_SERVER_PORT}:${VITE_SERVER_PORT}"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - twitter-db:/twitter-db
+    healthcheck:
+      test:
+        ["CMD", "curl", "http://${VITE_SERVER_HOSTNAME}:${VITE_SERVER_PORT}"]
+      interval: 2s
+      start_period: 10h
+  frontend:
+    build: .
+    ports:
+      - "${VITE_CLIENT_PORT_PROD}:${VITE_CLIENT_PORT_PROD}"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  twitter-db:

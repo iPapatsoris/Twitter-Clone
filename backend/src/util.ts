@@ -60,9 +60,11 @@ const dbQuery = (
   query: string,
   queryEscapedValues: any[],
   resolve: any,
-  reject: any
-) =>
-  db.query(query, queryEscapedValues, (error, result) => {
+  reject: any,
+  connection?: mysql.Connection
+) => {
+  const conn = connection || db;
+  conn.query(query, queryEscapedValues, (error, result) => {
     if (error) {
       printError(error);
       reject(error);
@@ -70,10 +72,11 @@ const dbQuery = (
     }
     resolve(result);
   });
+};
 
 // prettier-ignore
-export const runQuery = <T,>(query: string, queryEscapedValues: any[]) =>
-  new Promise<T[]>((resolve, reject) => dbQuery(query, queryEscapedValues, resolve, reject));
+export const runQuery = <T,>(query: string, queryEscapedValues: any[], connection?: mysql.Connection) =>
+  new Promise<T[]>((resolve, reject) => dbQuery(query, queryEscapedValues, resolve, reject, connection));
 
 // prettier-ignore
 export const runInsertQuery = <T,>(query: string, queryEscapedValues: any[]) =>

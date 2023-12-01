@@ -1,5 +1,6 @@
 import { GetParams, NormalResponse } from "../../backend/src/api/common";
 import { getNonReactiveAuthState } from "../store/AuthStore";
+import { buildURLBase } from "../../backend/src/url";
 
 // Convert values to query parameters in the following way:
 // create an object with "valuelessFields" as keys with empty string values,
@@ -24,7 +25,10 @@ export const addQueryParams = (
 };
 
 const buildURL = (path: string, params: GetParams) => {
-  const base = import.meta.env.VITE_API_PATH;
+  const base = buildURLBase({
+    hostname: import.meta.env.VITE_SERVER_HOSTNAME,
+    port: import.meta.env.VITE_SERVER_PORT,
+  });
   const url = new URL(path, base);
   for (const [key, value] of Object.entries(params)) {
     url.searchParams.append(key, value);

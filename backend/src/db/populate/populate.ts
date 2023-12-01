@@ -8,6 +8,7 @@ import {
   populateTweets,
 } from "./populateTweets.js";
 import populateUsers from "./populateUsers.js";
+import importSchema from "./importSchema.js";
 
 export type PopulateOptions = {
   totalUsers: number;
@@ -28,6 +29,8 @@ const populateOptions: PopulateOptions = {
   ],
 };
 
+await importSchema();
+
 await populateUsers(populateOptions);
 const userIDs = await getAllUserIDs();
 await populateTweets(userIDs);
@@ -36,3 +39,4 @@ await populateRetweets(userIDs);
 await populateLikes(userIDs);
 await populateCircles(userIDs);
 console.log("Database populating finished");
+process.exit();

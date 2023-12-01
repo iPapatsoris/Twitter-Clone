@@ -7,24 +7,33 @@ import authRoutes, { authPath } from "./routes/auth.js";
 import tweetRoutes from "./routes/tweet.js";
 import userRoutes from "./routes/user.js";
 import emailRoutes from "./routes/email.js";
-import dotenv from "dotenv";
 import {
   SessionData as SessionDataI,
   checkSession,
 } from "./middleware/auth.js";
+import { buildURLBase } from "./url.js";
+import dotenv from "dotenv";
+import path from "path";
 
 // Augment express-session with a custom SessionData object
 declare module "express-session" {
   interface SessionData extends SessionDataI {}
 }
-dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), "../../.env") });
 
-const port = process.env.SERVER_PORT;
+const serverPort = process.env.VITE_SERVER_PORT;
+const clientPortDev = parseInt(process.env.VITE_CLIENT_PORT_DEV!);
+const clientPortProd = parseInt(process.env.VITE_CLIENT_PORT_PROD!);
+const clientHostname = process.env.VITE_CLIENT_HOSTNAME;
+
 const app = express();
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: [process.env.CLIENT_DOMAIN_DEV!, process.env.CLIENT_DOMAIN_PROD!],
+    origin: [
+      buildURLBase({ hostname: clientHostname!, port: clientPortDev }),
+      buildURLBase({ hostname: clientHostname!, port: clientPortProd }),
+    ],
     credentials: true,
   })
 );
@@ -56,6 +65,6 @@ app.use("/user/", userRoutes);
 app.use("/tweet/", tweetRoutes);
 app.use("/email/", emailRoutes);
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+app.listen(serverPort, () => {
+  console.log(`Listening on port ${serverPort}`);
 });

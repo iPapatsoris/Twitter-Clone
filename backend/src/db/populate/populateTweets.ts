@@ -46,7 +46,7 @@ export const populateTweets = async (userIDs: { id: number }[]) => {
 export const populateReplies = async (userIDs: { id: number }[]) => {
   console.log("Adding replies");
   for (let pass = 0; pass < numberOfReplyPasses; pass++) {
-    console.log("\t pass ", pass + 1);
+    console.log("\t pass", pass + 1 + "/" + numberOfReplyPasses);
 
     const tweetIDs = await getAllTweetIDs();
     const numberOfTweetsToBeReplied = Math.floor(

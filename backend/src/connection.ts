@@ -1,18 +1,18 @@
 import mysql from "mysql";
-const host = "localhost";
-const user = "root";
-const database = "twitter";
+import dotenv from "dotenv";
+import path from "path";
 
-const db = mysql.createConnection({
-  host,
-  user,
-  database,
+dotenv.config({ path: path.resolve(process.cwd(), "../../.env") });
+
+export const dbConnectionParams: mysql.ConnectionConfig = {
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: parseInt(process.env.DB_PORT!),
   charset: "utf8mb4",
-});
+} as mysql.ConnectionConfig;
 
-db.connect((err) => {
-  if (err) throw err;
-  console.log("Connected!");
-});
+const db = mysql.createPool(dbConnectionParams);
 
 export default db;

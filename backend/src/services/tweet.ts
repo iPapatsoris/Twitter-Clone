@@ -482,8 +482,6 @@ export const getTweetsAndRetweetsPaginatedResponse = ({
   const pageResults = tweetsAndRetweets.slice(0, pageSize);
   let nextCursor: number | undefined;
 
-  console.log(tweetsAndRetweets);
-
   if (direction === "down") {
     if (
       pageResults.length === pageSize &&
