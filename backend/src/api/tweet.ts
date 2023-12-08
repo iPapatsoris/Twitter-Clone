@@ -14,6 +14,13 @@ export type CreateTweet = {
   response: NormalResponse<{ tweet: Tweet }>;
 };
 
+export type SimulateNewTweets = {
+  request: {
+    numberOfNewTweets: number;
+  };
+  response: NormalResponse;
+};
+
 export type GetTweets = {
   response: NormalResponse<{
     tweets: Tweet[];

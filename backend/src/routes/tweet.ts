@@ -12,6 +12,7 @@ import {
   Trend,
   GetTrends,
   GetTimeline,
+  SimulateNewTweets,
 } from "../api/tweet.js";
 import { Fields, runQuery, shuffleArray, TypedRequestQuery } from "../util.js";
 import { Tweet } from "../entities/tweet.js";
@@ -26,6 +27,7 @@ import {
   insertUserReaction,
 } from "../services/tweet.js";
 import { requireAuth } from "../middleware/auth.js";
+import { createFakeTweet } from "../db/populate/populateTweets.js";
 
 const router = express.Router();
 
@@ -42,6 +44,33 @@ router.post(
     const tweetID = await insertTweet(tweet, currentUserID);
     const newTweet = await getTweet(tweetID, currentUserID);
     res.send({ ok: true, data: { tweet: newTweet } });
+  }
+);
+
+router.post(
+  "/timeline/simulateNewTweets",
+  requireAuth,
+  async (req: Request<{}, {}, SimulateNewTweets["request"]>, res: Response) => {
+    const currentUserID = req.session.userID!;
+    const followedUsers = await runQuery<{ id: number }>(
+      "SELECT user.id \
+       FROM user_follows, user\
+       WHERE user.id = followeeID AND followerID = ?",
+      [currentUserID]
+    );
+
+    if (!followedUsers.length) {
+      res.send({ ok: true });
+      return;
+    }
+
+    for (let i = 0; i < req.body.numberOfNewTweets; i++) {
+      const followedUser =
+        i < followedUsers.length ? followedUsers[i] : followedUsers[0];
+      await insertTweet(createFakeTweet(), followedUser.id);
+    }
+
+    res.send({ ok: true });
   }
 );
 

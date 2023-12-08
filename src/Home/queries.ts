@@ -1,12 +1,13 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import { addQueryParams, getData } from "../util/request";
-import { GetTimeline } from "../../backend/src/api/tweet";
+import { addQueryParams, getData, postData } from "../util/request";
+import { GetTimeline, SimulateNewTweets } from "../../backend/src/api/tweet";
 import { QueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { setTweet } from "../Main/components/Tweet/queries";
 import ErrorCode from "../../backend/src/api/errorCodes";
 import { PaginationQueryParamsFrontEnd } from "../../backend/src/api/common";
 import { SetStateAction, useEffect } from "react";
 import { timelinePageSize } from "./Home";
+import { getRandomIntRange } from "../util/random";
 
 type TimelineResult = GetTimeline["response"];
 const timelineGetNextPageParam = (lastPage: TimelineResult["data"]) => {
@@ -136,3 +137,42 @@ export const useFetchNextUpTimelinePageInterval = ({
       }
     };
   }, [maxDownTweetID, upTimelineFetchNextPage, upTimelineIsFetching]);
+
+// Signal backend to create some tweets from other users
+const simulateNewTweets = async (maxTweetsPerInterval: number) => {
+  const requestBody: SimulateNewTweets["request"] = {
+    numberOfNewTweets: getRandomIntRange(1, maxTweetsPerInterval),
+  };
+  const res = await postData<SimulateNewTweets["response"]>(
+    "tweet/timeline/simulateNewTweets",
+    requestBody
+  );
+
+  if (!res.ok && res.errorCode === ErrorCode.PermissionDenied) {
+    throw new Error("Server session has expired, please login");
+  }
+};
+
+// Periodically signal backend to create some tweets from other users.
+export const useSimulateNewTweetsInterval = ({
+  interval,
+  maxIntervals,
+  maxTweetsPerInterval,
+}: {
+  interval: number;
+  maxIntervals: number;
+  maxTweetsPerInterval: number;
+}) => {
+  useEffect(() => {
+    let currentIteration = 0;
+    const intervalID = setInterval(() => {
+      simulateNewTweets(maxTweetsPerInterval);
+
+      if (++currentIteration === maxIntervals) {
+        clearInterval(intervalID);
+      }
+    }, interval);
+
+    return () => clearInterval(intervalID);
+  }, [interval, maxIntervals, maxTweetsPerInterval]);
+};

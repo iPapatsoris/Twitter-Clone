@@ -3,6 +3,7 @@ import CreateTweet from "../Main/components/Tweet/CreateTweet/CreateTweet";
 import {
   useDownTimelineInfiniteQuery,
   useFetchNextUpTimelinePageInterval,
+  useSimulateNewTweetsInterval,
   useUpTimelineInfiniteQuery,
 } from "./queries";
 import Tweet from "../Main/components/Tweet/Tweet";
@@ -63,8 +64,13 @@ export const timelinePageSize = 10;
      clicks the "Show x new tweets" button. Even though upTimeline is fetched
      in chunks using pagination, if the cache grows too big before being loaded 
      in the UI, too many elements will be rendered at once, which could cause 
-     a noticeable slowdown. 
+     a slowdown. 
 
+  3) Merge upTimeline with downTimeline and use "react-window" library for both.
+     Currently, if several upTimeline tweets are loaded into the UI, and then we
+     switch routes and come back to the timeline, the preloaded upTimeline ones 
+     will be rendred all at once, potentially slowing down the app if they are 
+     several.
   
 */
 const Home = () => {
@@ -117,6 +123,12 @@ const Home = () => {
         downTimelineFetchNextPage();
       }
     },
+  });
+
+  useSimulateNewTweetsInterval({
+    interval: 5000,
+    maxIntervals: 2,
+    maxTweetsPerInterval: 5,
   });
 
   if (!downTimelineIsSuccess) {

@@ -19,7 +19,7 @@ const getAllTweetIDs = async () => {
   return await runQuery<{ id: number }>("SELECT id FROM tweet", []);
 };
 
-const createFakeTweet = (
+export const createFakeTweet = (
   referencedTweetID?: number
 ): CreateTweet["request"]["tweet"] => ({
   text: faker.lorem.paragraphs({ min: 1, max: 5 }).substring(0, tweetCharLimit),
