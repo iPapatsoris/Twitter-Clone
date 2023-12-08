@@ -2,7 +2,7 @@ import mysql from "mysql";
 import dotenv from "dotenv";
 import path from "path";
 
-dotenv.config({ path: path.resolve(process.cwd(), "../../.env") });
+dotenv.config({ path: path.resolve(process.cwd(), "../.env") });
 
 export const dbConnectionParams: mysql.ConnectionConfig = {
   host: process.env.DB_HOST,

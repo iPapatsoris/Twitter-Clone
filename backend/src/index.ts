@@ -19,7 +19,7 @@ import path from "path";
 declare module "express-session" {
   interface SessionData extends SessionDataI {}
 }
-dotenv.config({ path: path.resolve(process.cwd(), "../../.env") });
+dotenv.config({ path: path.resolve(process.cwd(), "../.env") });
 
 const serverPort = process.env.VITE_SERVER_PORT;
 const clientPortDev = parseInt(process.env.VITE_CLIENT_PORT_DEV!);
