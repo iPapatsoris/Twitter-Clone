@@ -33,7 +33,7 @@ https://github.com/iPapatsoris/twitter-clone/assets/16709388/1a6cc836-538e-4af8-
 While this is a front end oriented project, a backend end was additionally developed in order to
 test API interaction and caching, which uses Node, Express and MySQL. The back end does not
 necessarily follow the most up to date back end-specific programming guidelines in terms of security and maintainability,
-as the main focus of this project is front end work.
+as the main focus of this project is front end work. There is no correlation with the real public Twitter API.
 
 ## Main features
 
