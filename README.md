@@ -22,19 +22,25 @@ to any framework.
 
 ## Sample screens
 
+### Desktop
+https://github.com/iPapatsoris/twitter-clone/assets/16709388/b713698f-51bf-45da-8cf3-d3ca61cc07df
+
+### Mobile
+https://github.com/iPapatsoris/twitter-clone/assets/16709388/1a6cc836-538e-4af8-89f6-c4112bfb3edb
+
 ## Back end
 
 While this is a front end oriented project, a backend end was additionally developed in order to
 test API interaction and caching, which uses Node, Express and MySQL. The back end does not
 necessarily follow the most up to date back end-specific programming guidelines in terms of security and maintainability,
-as the main focus of this project is front end work.
+as the main focus of this project is front end work. There is no correlation with the real public Twitter API.
 
 ## Main features
 
 The following main features are currently included in this version of Twitter:
 
 - Account registration & login with form validation
-- Post Tweets, reply, retweet, and like a Tweets
+- Post Tweets, reply, retweet, and like Tweets
 - Infinite scrolling timeline with caching and background requests for newer tweets
 - Profile customization
 - View user profile and tweet activity
