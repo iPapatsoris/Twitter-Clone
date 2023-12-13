@@ -19,7 +19,6 @@
     "react-circular-progressbar": "^2.1.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.2",
-    "react-infinite-scroll-component": "^6.1.0",
     "react-loader-spinner": "5.3.4",
     "react-router-dom": "^6.5.0",
     "react-textarea-autosize": "^8.5.2",
