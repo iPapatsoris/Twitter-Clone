@@ -7,8 +7,7 @@ import svgr from "vite-plugin-svgr";
 
 const pathSrc = path.resolve(__dirname, "./src");
 const commonStylesPath = pathSrc + "/assets/styles/common";
-const commonBreakpointsPath =
-  pathSrc + "/assets/styles/breakpoints/breakpoints";
+const commonBreakpointsPath = pathSrc + "/assets/styles/breakpoints";
 
 const config = ({ mode }) => {
   process.env = Object.assign(process.env, loadEnv(mode, process.cwd(), ""));
@@ -21,7 +20,7 @@ const config = ({ mode }) => {
              @use "${commonStylesPath}" as common; 
              @use "${commonBreakpointsPath}" as media ;
           `,
-        }, 
+        },
       },
     },
     plugins: [
