@@ -1,3 +1,8 @@
+/* Breakpoints defined as SCSS variables to be used in media queries.
+   If their names are changed or more are added, also modify "global.scss".
+   When CSS will support declaring variables with env(), we'll be able to 
+   replace them. 
+*/
 $mobile-width: 425px;
 $tablet-width: 790px;
 $pc-small-width: 1295px;

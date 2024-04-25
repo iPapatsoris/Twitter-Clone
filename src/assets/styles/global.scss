@@ -1,6 +1,12 @@
 :root {
-  font: 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif;
+  font:
+    14px -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
   --primary-color: rgb(29, 155, 240);
   --primary-color-transparent: rgb(29, 155, 240, 0.1);
   --light-color: rgb(83, 100, 113);
@@ -21,6 +27,11 @@
   --box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px,
     rgb(101 119 134 / 15%) 0px 0px 3px 1px;
   box-sizing: border-box;
+
+  /* Because of no type safety across custom CSS properties and JS code,
+     changing the name of these demands also modifying 
+     "useWindowDimensions.ts" file
+  */
   --mobile-width: #{media.$mobile-width};
   --tablet-width: #{media.$tablet-width};
   --pc-small-width: #{media.$pc-small-width};
