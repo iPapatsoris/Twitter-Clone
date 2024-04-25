@@ -18,6 +18,8 @@ const useMapPropToCssVar = (params: {
   }, [prop, ref, cssVar]);
 };
 
+// Get a CSS var that is either defined on a ref
+// or globally if ref isn't provided
 const getCssVar = (cssVar: string, ref?: React.RefObject<HTMLElement>) => {
   const style = getComputedStyle(
     ref && ref.current ? ref.current : document.body
