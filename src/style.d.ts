@@ -11,14 +11,3 @@ declare const classNames: {
   readonly NoHighlighting: "NoHighlighting";
 };
 export = classNames;
-export type ClassNames =
-  | "Bold"
-  | "BiggestText"
-  | "BigText"
-  | "SmallText"
-  | "EllipsisOverlow"
-  | "PushRight"
-  | "Semantic"
-  | "PrimaryColor"
-  | "LightColor"
-  | "NoHighlighting";

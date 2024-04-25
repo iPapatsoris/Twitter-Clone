@@ -6,6 +6,9 @@ import eslint from "vite-plugin-eslint";
 import svgr from "vite-plugin-svgr";
 
 const pathSrc = path.resolve(__dirname, "./src");
+const commonStylesPath = pathSrc + "/assets/styles/common";
+const commonBreakpointsPath =
+  pathSrc + "/assets/styles/breakpoints/breakpoints";
 
 const config = ({ mode }) => {
   process.env = Object.assign(process.env, loadEnv(mode, process.cwd(), ""));
@@ -14,17 +17,11 @@ const config = ({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@use "@/styles" as common; @use "${pathSrc}/util/breakpoints/breakpoints" as media ;`,
-          importer(...args) {
-            if (args[0] !== "@/styles") {
-              return;
-            }
-
-            return {
-              file: `${pathSrc}`,
-            };
-          },
-        },
+          additionalData: `
+             @use "${commonStylesPath}" as common; 
+             @use "${commonBreakpointsPath}" as media ;
+          `,
+        }, 
       },
     },
     plugins: [
@@ -34,12 +31,10 @@ const config = ({ mode }) => {
         enabledMode: ["development", "production"],
         global: {
           generate: true,
-          outFile: `${pathSrc}/style.d.ts`,
+          outputFilePath: `${pathSrc}/style.d.ts`,
         },
       }),
-      eslint({
-        // failOnWarning: true,
-      }),
+      eslint(),
     ],
     server: {
       host: true,

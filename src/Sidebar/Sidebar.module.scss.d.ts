@@ -1,4 +1,4 @@
-import globalClassNames, { ClassNames as GlobalClassNames } from "../style.d";
+import globalClassNames from "../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly Wrapper: "Wrapper";
   readonly Sidebar: "Sidebar";
@@ -7,10 +7,3 @@ declare const classNames: typeof globalClassNames & {
   readonly TweetButtonWrapper: "TweetButtonWrapper";
 };
 export = classNames;
-export type ClassNames =
-  | "Wrapper"
-  | "Sidebar"
-  | "Modal"
-  | "TweetIconWrapper"
-  | "TweetButtonWrapper"
-  | GlobalClassNames;

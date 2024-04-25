@@ -1,6 +1,4 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../style.d";
+import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly NameAndVerified: "NameAndVerified";
   readonly AbbreviateOverflow: "AbbreviateOverflow";
@@ -9,10 +7,3 @@ declare const classNames: typeof globalClassNames & {
   readonly VerifiedIcon: "VerifiedIcon";
 };
 export = classNames;
-export type ClassNames =
-  | "NameAndVerified"
-  | "AbbreviateOverflow"
-  | "Name"
-  | "UnderlineOnHover"
-  | "VerifiedIcon"
-  | GlobalClassNames;

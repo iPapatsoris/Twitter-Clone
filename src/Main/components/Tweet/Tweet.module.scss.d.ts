@@ -1,6 +1,4 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../style.d";
+import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly Tweet: "Tweet";
   readonly WithBorder: "WithBorder";
@@ -22,23 +20,3 @@ declare const classNames: typeof globalClassNames & {
   readonly UnderlineOnHover: "UnderlineOnHover";
 };
 export = classNames;
-export type ClassNames =
-  | "Tweet"
-  | "WithBorder"
-  | "Retweet"
-  | "RetweetIconWrapper"
-  | "RetweetIcon"
-  | "TweetWrapper"
-  | "Simple"
-  | "Text"
-  | "Avatar"
-  | "ShowMoreIcon"
-  | "Transform"
-  | "ReplyLine"
-  | "Wrapper"
-  | "ShowMore"
-  | "Info"
-  | "Subinfo"
-  | "MoreIcon"
-  | "UnderlineOnHover"
-  | GlobalClassNames;

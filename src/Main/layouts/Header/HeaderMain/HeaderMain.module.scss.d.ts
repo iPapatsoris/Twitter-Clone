@@ -1,6 +1,4 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../../style.d";
+import globalClassNames from "../../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly HeaderMain: "HeaderMain";
   readonly HeaderExtendedGridArea: "HeaderExtendedGridArea";
@@ -13,14 +11,3 @@ declare const classNames: typeof globalClassNames & {
   readonly SearchContainer: "SearchContainer";
 };
 export = classNames;
-export type ClassNames =
-  | "HeaderMain"
-  | "HeaderExtendedGridArea"
-  | "Border"
-  | "Main"
-  | "TitleSubtitle"
-  | "Title"
-  | "Name"
-  | "Subtitle"
-  | "SearchContainer"
-  | GlobalClassNames;

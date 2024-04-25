@@ -1,6 +1,4 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../../style.d";
+import globalClassNames from "../../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly InboxSticky: "InboxSticky";
   readonly InboxStickyContent: "InboxStickyContent";
@@ -8,9 +6,3 @@ declare const classNames: typeof globalClassNames & {
   readonly Icon: "Icon";
 };
 export = classNames;
-export type ClassNames =
-  | "InboxSticky"
-  | "InboxStickyContent"
-  | "PushRight"
-  | "Icon"
-  | GlobalClassNames;

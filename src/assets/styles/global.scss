@@ -1,5 +1,3 @@
-@use "./util/breakpoints/variables.scss" as vars;
-
 :root {
   font: 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
@@ -23,9 +21,9 @@
   --box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px,
     rgb(101 119 134 / 15%) 0px 0px 3px 1px;
   box-sizing: border-box;
-  --mobile-width: #{vars.$mobile-width};
-  --tablet-width: #{vars.$tablet-width};
-  --pc-small-width: #{vars.$pc-small-width};
+  --mobile-width: #{media.$mobile-width};
+  --tablet-width: #{media.$tablet-width};
+  --pc-small-width: #{media.$pc-small-width};
 }
 
 a {

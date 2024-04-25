@@ -1,6 +1,4 @@
-import globalClassNames, {
-  ClassNames as GlobalClassNames,
-} from "../../../style.d";
+import globalClassNames from "../../../style.d";
 declare const classNames: typeof globalClassNames & {
   readonly Preview: "Preview";
   readonly Actions: "Actions";
@@ -23,24 +21,3 @@ declare const classNames: typeof globalClassNames & {
   readonly TweetMenu: "TweetMenu";
 };
 export = classNames;
-export type ClassNames =
-  | "Preview"
-  | "Actions"
-  | "Profile"
-  | "Hover"
-  | "MobileSidebar"
-  | "NameAndVerified"
-  | "Small"
-  | "JustAvatar"
-  | "Cover"
-  | "Edit"
-  | "EditAvatar"
-  | "FixedWidthButton"
-  | "Title"
-  | "Name"
-  | "NoHoverUnderline"
-  | "ProfileInfo"
-  | "Friendship"
-  | "Loading"
-  | "TweetMenu"
-  | GlobalClassNames;
