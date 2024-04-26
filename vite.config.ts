@@ -6,7 +6,7 @@ import eslint from "vite-plugin-eslint";
 import svgr from "vite-plugin-svgr";
 
 const pathSrc = path.resolve(__dirname, "./src");
-const commonStylesPath = pathSrc + "/assets/styles/common.scss";
+const commonStylesPath = pathSrc + "/assets/styles/common";
 
 const config = ({ mode }) => {
   process.env = Object.assign(process.env, loadEnv(mode, process.cwd(), ""));
@@ -16,7 +16,7 @@ const config = ({ mode }) => {
       preprocessorOptions: {
         scss: {
           additionalData: `
-             @use "${commonStylesPath}" as common; 
+             @use "${commonStylesPath}.scss" as common; 
           `,
         },
       },
@@ -28,7 +28,7 @@ const config = ({ mode }) => {
         enabledMode: ["development", "production"],
         global: {
           generate: true,
-          outputFilePath: `${pathSrc}/style.d.ts`,
+          outputFilePath: `${commonStylesPath}.d.ts`,
         },
       }),
       eslint(),

@@ -1,4 +1,4 @@
-import globalClassNames from "../../../../../style.d";
+import globalClassNames from "../../../../../assets/styles/common.d";
 declare const classNames: typeof globalClassNames & {
   readonly MainTweet: "MainTweet";
   readonly MainInfo: "MainInfo";
