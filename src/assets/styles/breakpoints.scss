@@ -5,25 +5,25 @@ $breakpoints: (
 );
 
 @mixin mobile {
-  @media (max-width: map-get($breakpoints, mobile)) {
+  @media (width <= map-get($breakpoints, mobile)) {
     @content;
   }
 }
 
 @mixin tablet {
-  @media ((min-width: map-get($breakpoints, mobile)) and (max-width: map-get($breakpoints, tablet))) {
+  @media ((map-get($breakpoints, mobile) < width <= map-get($breakpoints, tablet))) {
     @content;
   }
 }
 
 @mixin pc-small {
-  @media ((min-width: map-get($breakpoints, tablet)) and (max-width: map-get($breakpoints, pc-small))) {
+  @media ((map-get($breakpoints, tablet) < width <= map-get($breakpoints, pc-small))) {
     @content;
   }
 }
 
 @mixin pc {
-  @media (min-width: map-get($breakpoints, pc-small)) {
+  @media (width > map-get($breakpoints, pc-small)) {
     @content;
   }
 }

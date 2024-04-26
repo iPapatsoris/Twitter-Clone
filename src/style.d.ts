@@ -9,6 +9,5 @@ declare const classNames: {
   readonly PrimaryColor: "PrimaryColor";
   readonly LightColor: "LightColor";
   readonly NoHighlighting: "NoHighlighting";
-  readonly Neww: "Neww";
 };
 export = classNames;
