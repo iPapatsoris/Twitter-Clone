@@ -23,7 +23,7 @@
       ".      widgets progress . action";
     grid-template-rows: auto 1fr auto auto;
 
-    @include media.multi(mobile, tablet) {
+    @include common.multi(mobile, tablet) {
       grid-template-areas:
         "icon   .       action"
         "avatar input   input"
@@ -49,7 +49,7 @@
         ".      .       .        .      ."
         ".      widgets progress .      action";
 
-      @include media.multi(mobile, tablet) {
+      @include common.multi(mobile, tablet) {
         grid-template-areas:
           "icon   .       action"
           ".      .       .     "

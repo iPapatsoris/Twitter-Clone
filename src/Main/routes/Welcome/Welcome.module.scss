@@ -7,7 +7,7 @@
 
   min-height: 100vh;
 
-  @include media.multi(tablet, mobile) {
+  @include common.multi(tablet, mobile) {
     justify-items: center;
     grid-template:
       "." minmax(1rem, 1fr)
@@ -31,7 +31,7 @@
     font-size: 64px;
     font-weight: 700;
 
-    @include media.multi(tablet, mobile) {
+    @include common.multi(tablet, mobile) {
       font-size: 35px;
       align-self: center;
     }
@@ -45,7 +45,7 @@
     flex-direction: column;
     gap: 2rem;
 
-    @include media.multi(tablet, mobile) {
+    @include common.multi(tablet, mobile) {
       align-items: center;
     }
 
@@ -57,7 +57,7 @@
 
     h2 {
       font-size: 31px;
-      @include media.multi(tablet, mobile) {
+      @include common.multi(tablet, mobile) {
         font-size: 26px;
         align-self: center;
       }

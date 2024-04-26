@@ -8,13 +8,13 @@ Profile grid */
   --avatar-tiny-height: 32px; // For user menu header on mobile
 }
 
-@include media.multi(mobile, tablet) {
+@include common.multi(mobile, tablet) {
   :root {
     --avatar-small-height: 40px;
   }
 }
 
-@include media.multi(mobile) {
+@include common.multi(mobile) {
   :root {
     --avatar-full-height: 25vw;
   }
@@ -133,7 +133,7 @@ Profile grid */
 }
 
 :not(.Preview) > .Actions {
-  @include media.mobile {
+  @include common.mobile {
     padding-top: 1rem;
   }
 }

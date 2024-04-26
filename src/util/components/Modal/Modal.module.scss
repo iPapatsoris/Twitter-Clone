@@ -22,7 +22,7 @@
     min-width: 440px;
     max-width: 600px;
 
-    @include media.multi(mobile, tablet) {
+    @include common.multi(mobile, tablet) {
       width: 100vw;
       height: 100vh;
       max-width: unset;
@@ -31,7 +31,7 @@
   }
 
   .Modal {
-    @include media.multi(pc-small, pc) {
+    @include common.multi(pc-small, pc) {
       border-radius: 15px;
     }
     height: 100vh;

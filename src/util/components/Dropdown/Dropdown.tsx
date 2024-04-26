@@ -30,11 +30,11 @@ const Dropdown = (props: DropdownProps) => {
       mainOption: option,
     }));
 
-  const wrapperStyles: styles.ClassNames[] = [
+  const wrapperStyles: Array<keyof typeof styles> = [
     styles.Wrapper,
     dropdownStyles.Wrapper,
   ];
-  const labelStyles: styles.ClassNames[] = [];
+  const labelStyles: Array<keyof typeof styles> = [];
   if (isActive) {
     wrapperStyles.push(styles.Focused);
     labelStyles.push(styles.PrimaryColor);

@@ -14,7 +14,7 @@
   font-size: var(--bigger-text);
   grid-area: sidebar;
 
-  @include media.pc-small {
+  @include common.pc-small {
     // First align icons with each other
     align-items: center;
     // then push them to the right. If we used "align-items: flex-end" instead,
@@ -32,7 +32,7 @@
     }
   }
 
-  @include media.multi(mobile, tablet) {
+  @include common.multi(mobile, tablet) {
     max-width: unset;
     overflow-y: visible;
     bottom: 0;
@@ -48,7 +48,7 @@
 }
 
 .TweetIconWrapper {
-  @include media.multi(mobile, tablet) {
+  @include common.multi(mobile, tablet) {
     position: fixed;
     bottom: 5.5rem;
     right: 2rem;
@@ -56,7 +56,7 @@
 }
 
 .Modal {
-  @include media.multi(pc-small, pc) {
+  @include common.multi(pc-small, pc) {
     height: min-content !important;
   }
 }

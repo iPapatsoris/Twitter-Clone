@@ -1,0 +1,12 @@
+/*
+  Separate file for exporting variables, because "breakpoints.scss" is forwarded 
+  to "common.scss", which is included in every scss file. If we export directly 
+  from "breakpoints.scss", we get error: 
+  "Module loop: this module is already being loaded"
+*/
+
+:export {
+  mobileBreakpoint: map-get(common.$breakpoints, mobile);
+  tabletBreakpoint: map-get(common.$breakpoints, tablet);
+  pcSmallBreakpoint: map-get(common.$breakpoints, pc-small);
+}

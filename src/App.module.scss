@@ -12,7 +12,7 @@
     ". sidebar .            .  sticky-inbox sticky-inbox" auto
     / 1fr auto $content-main $content-main-right-gap $content-right 1fr;
 
-  @include media.pc-small {
+  @include common.pc-small {
     grid-template-areas:
       "sidebar header-main  .  header-right ."
       "sidebar header-extended  .  content-right ."
@@ -34,7 +34,7 @@
     grid-template-columns: 1fr $content-main 1fr;
   }
 
-  @include media.multi(mobile, tablet) {
+  @include common.multi(mobile, tablet) {
     grid-template-areas:
       "header-main"
       "header-extended"
@@ -44,7 +44,7 @@
   }
 
   &.NoHeaderRight {
-    @include media.pc {
+    @include common.pc {
       grid-template-areas:
         ". sidebar header-main  . content-right ."
         ". sidebar header-extended  . content-right ."
@@ -52,7 +52,7 @@
         ". sidebar .            . sticky-inbox sticky-inbox";
     }
 
-    @include media.pc-small {
+    @include common.pc-small {
       grid-template-areas:
         "sidebar header-main  . content-right ."
         "sidebar header-extended  . content-right ."

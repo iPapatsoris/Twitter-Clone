@@ -92,7 +92,7 @@
       grid-template-areas: "name  info  more";
       grid-template-columns: auto auto 1fr;
 
-      @include media.mobile {
+      @include common.mobile {
         grid-template-areas:
           "name  more"
           "info info";

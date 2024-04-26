@@ -1,6 +1,6 @@
 .Minipage {
   height: 100%;
-  @include media.multi(mobile, tablet) {
+  @include common.multi(mobile, tablet) {
     height: 100vh;
   }
 
@@ -64,7 +64,7 @@
     align-items: center;
     padding-block: 2rem;
 
-    @include media.mobile {
+    @include common.mobile {
       padding-block: 1rem;
     }
 

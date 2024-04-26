@@ -15,7 +15,7 @@
 }
 
 .Modal {
-  @include media.multi(pc-small, pc) {
+  @include common.multi(pc-small, pc) {
     height: min-content !important;
   }
 }

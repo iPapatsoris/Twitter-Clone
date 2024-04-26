@@ -10,7 +10,7 @@ main {
 .ContentMain {
   grid-area: content-main;
 
-  @media (min-width: media.$tablet-width) {
+  @media (min-width: map-get(common.$breakpoints, tablet)) {
     border-inline: var(--border);
   }
 }

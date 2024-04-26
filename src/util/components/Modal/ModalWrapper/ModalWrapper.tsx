@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { ReactElement, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import styles from "./ModalWrapper.module.scss";
 
@@ -88,7 +88,7 @@ const ModalWrapper = ({
     </div>
   );
 
-  return createPortal(modalWrapper, document.body);
+  return createPortal(modalWrapper, document.body) as ReactElement;
 };
 
 export default ModalWrapper;

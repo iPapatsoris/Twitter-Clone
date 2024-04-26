@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { getGlobalCssVar } from "./useMapPropToCssVar";
+import breakpoints from "../../assets/styles/exports.module.scss";
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
-  const mobileWidth = getGlobalCssVar("--mobile-width");
-  const tabletWidth = getGlobalCssVar("--tablet-width");
-  const pcSmallWidth = getGlobalCssVar("--pc-small-width");
+  const mobileWidth = parseInt(breakpoints.mobileBreakpoint);
+  const tabletWidth = parseInt(breakpoints.tabletBreakpoint);
+  const pcSmallWidth = parseInt(breakpoints.pcSmallBreakpoint);
 
   const isMobile = width <= mobileWidth;
   const isTablet = width > mobileWidth && width <= tabletWidth;

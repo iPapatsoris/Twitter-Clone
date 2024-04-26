@@ -2,7 +2,7 @@
   margin-top: auto;
   margin-bottom: 1rem;
 
-  @include media.multi(mobile, tablet, pc-small) {
+  @include common.multi(mobile, tablet, pc-small) {
     min-height: 5rem;
     position: relative;
   }
@@ -12,7 +12,7 @@
     border-radius: 40px;
     transition: var(--transition-duration);
 
-    @include media.pc {
+    @include common.pc {
       margin-right: 1rem;
     }
 

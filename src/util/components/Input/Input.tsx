@@ -91,7 +91,7 @@ const Input = forwardRef<RefType, InputProps>(
       }
     };
 
-    const wrapperStyles: styles.ClassNames[] = [styles.Wrapper];
+    const wrapperStyles: Array<keyof typeof styles> = [styles.Wrapper];
 
     if (isFocused) {
       wrapperStyles.push(styles.Focused);

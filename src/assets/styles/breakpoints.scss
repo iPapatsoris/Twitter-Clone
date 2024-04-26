@@ -1,32 +1,29 @@
-/* Breakpoints defined as SCSS variables to be used in media queries.
-   If their names are changed or more are added, also modify "global.scss".
-   When CSS will support declaring variables with env(), we'll be able to 
-   replace them. 
-*/
-$mobile-width: 425px;
-$tablet-width: 790px;
-$pc-small-width: 1295px;
+$breakpoints: (
+  mobile: 425px,
+  tablet: 790px,
+  pc-small: 1295px,
+);
 
 @mixin mobile {
-  @media (max-width: $mobile-width) {
+  @media (max-width: map-get($breakpoints, mobile)) {
     @content;
   }
 }
 
 @mixin tablet {
-  @media ((min-width: $mobile-width) and (max-width: $tablet-width)) {
+  @media ((min-width: map-get($breakpoints, mobile)) and (max-width: map-get($breakpoints, tablet))) {
     @content;
   }
 }
 
 @mixin pc-small {
-  @media ((min-width: $tablet-width) and (max-width: $pc-small-width)) {
+  @media ((min-width: map-get($breakpoints, tablet)) and (max-width: map-get($breakpoints, pc-small))) {
     @content;
   }
 }
 
 @mixin pc {
-  @media (min-width: $pc-small-width) {
+  @media (min-width: map-get($breakpoints, pc-small)) {
     @content;
   }
 }

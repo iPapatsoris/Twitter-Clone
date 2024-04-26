@@ -60,7 +60,7 @@ const Button = forwardRef(
 
     const buttonHoverStyle = hoverColor === "red" ? styles.HoverRed : "";
 
-    let sizeStyle: styles.ClassNames = styles.Medium;
+    let sizeStyle: keyof typeof styles = styles.Medium;
     if (size === "small") {
       sizeStyle = styles.Small;
     } else if (size === "large") {
