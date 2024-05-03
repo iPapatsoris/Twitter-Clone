@@ -137,8 +137,8 @@ const CreateTweet = ({
 const getProgressBarInfo = (form: UseFormReturn<CreateTweetForm>) => {
   const charsWritten = form.getValues("tweet").length;
   const showCharsWarning = charsWritten >= tweetCharLimit - 20;
-  let progressColor = "var(--primary-color)";
-  let textColor = "var(--light-color)";
+  let progressColor = "common.$primary-color";
+  let textColor = "common.$light-color";
   if (showCharsWarning) {
     progressColor = "rgb(255, 212, 0)";
   }

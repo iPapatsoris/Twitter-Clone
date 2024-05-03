@@ -1,10 +1,10 @@
 .Terms {
-  font-size: var(--big-text);
-  color: var(--light-color);
+  font-size: common.$big-text;
+  color: common.$light-color;
   font-weight: 400;
 
   a {
-    color: var(--primary-color);
+    color: common.$primary-color;
     &:hover {
       text-decoration: underline;
     }

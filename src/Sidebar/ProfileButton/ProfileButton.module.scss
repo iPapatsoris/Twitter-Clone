@@ -10,14 +10,14 @@
   .Wrapper {
     padding: 1rem;
     border-radius: 40px;
-    transition: var(--transition-duration);
+    transition: common.$transition-duration;
 
     @include common.pc {
       margin-right: 1rem;
     }
 
     &:hover {
-      background-color: var(--hover-bg);
+      background-color: common.$hover-bg;
     }
   }
 }

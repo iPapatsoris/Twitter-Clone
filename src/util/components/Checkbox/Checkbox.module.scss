@@ -18,12 +18,12 @@
     align-items: center;
 
     &:checked {
-      background-color: var(--primary-color);
-      border-color: var(--primary-color);
+      background-color: common.$primary-color;
+      border-color: common.$primary-color;
 
       &::after {
         content: "✓";
-        font-size: var(--biggest-text);
+        font-size: common.$biggest-text;
         color: white;
       }
     }

@@ -11,7 +11,7 @@
     ".       icon    header  .      "
     "content content content content"
     "footer  footer  footer  footer ";
-  grid-template-rows: var(--header-height) 1fr auto;
+  grid-template-rows: common.$header-height 1fr auto;
   grid-template-columns:
     var(--minipage-blank-area) minmax(auto, var(--minipage-icon-area-length))
     1fr var(--minipage-blank-area);
@@ -56,7 +56,7 @@
 
   .Footer {
     grid-area: footer;
-    box-shadow: var(--box-shadow);
+    box-shadow: common.$box-shadow;
     display: grid;
     grid-template:
       ". content ."

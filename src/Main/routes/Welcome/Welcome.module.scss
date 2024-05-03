@@ -76,16 +76,16 @@
     gap: 1.3rem;
 
     .Button {
-      color: var(--primary-color);
+      color: common.$primary-color;
     }
   }
 
   a {
-    color: (var(--primary-color));
+    color: (common.$primary-color);
   }
 
   .Button {
-    font-size: var(--big-text);
+    font-size: common.$big-text;
     padding-block: 1.5rem;
   }
 }

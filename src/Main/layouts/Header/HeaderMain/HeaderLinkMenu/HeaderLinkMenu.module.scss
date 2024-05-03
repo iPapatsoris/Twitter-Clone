@@ -9,15 +9,15 @@
 
   .Item {
     flex: 1;
-    transition: var(--transition-duration);
+    transition: common.$transition-duration;
     cursor: pointer;
     padding: 1rem;
     padding-bottom: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: var(--big-text);
-    border-bottom: var(--border);
+    font-size: common.$big-text;
+    border-bottom: common.$border;
 
     &:hover {
       background-color: rgba(15, 20, 25, 0.1);
@@ -32,7 +32,7 @@
     }
 
     &:not(.Active) {
-      color: var(--light-color);
+      color: common.$light-color;
       font-weight: 500;
     }
 
@@ -40,7 +40,7 @@
       font-weight: 700;
 
       &::after {
-        border-bottom-color: var(--primary-color);
+        border-bottom-color: common.$primary-color;
       }
     }
   }

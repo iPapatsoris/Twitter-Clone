@@ -6,13 +6,13 @@
   border-radius: 40px;
   padding-inline: 1rem;
   padding-block: 0.5rem;
-  transition: var(--transition-duration);
+  transition: common.$transition-duration;
   display: flex;
   justify-content: center;
   align-items: center;
 
   &.Primary {
-    background: var(--primary-color);
+    background: common.$primary-color;
     &:hover:not(.Disabled) {
       background-color: rgb(26, 140, 216);
     }

@@ -11,7 +11,7 @@ main {
   grid-area: content-main;
 
   @media (min-width: map-get(common.$breakpoints, tablet)) {
-    border-inline: var(--border);
+    border-inline: common.$border;
   }
 }
 

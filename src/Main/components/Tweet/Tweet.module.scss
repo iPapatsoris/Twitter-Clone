@@ -1,5 +1,5 @@
 .Tweet.WithBorder {
-  border-bottom: var(--border);
+  border-bottom: common.$border;
 }
 
 .Retweet {
@@ -82,7 +82,7 @@
     gap: 0.3rem;
 
     .ShowMore {
-      color: var(--primary-color);
+      color: common.$primary-color;
     }
 
     .Info {
@@ -101,12 +101,12 @@
 
       .Subinfo {
         grid-area: info;
-        font-size: var(--big-text);
+        font-size: common.$big-text;
         display: flex;
         gap: 0.5rem;
 
         a {
-          color: var(--light-color);
+          color: common.$light-color;
         }
       }
 

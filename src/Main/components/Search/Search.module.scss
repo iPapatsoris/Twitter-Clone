@@ -15,7 +15,7 @@
   border: 1px solid white;
 
   &:focus-within {
-    border-color: var(--primary-color);
+    border-color: common.$primary-color;
   }
 
   img {
@@ -28,7 +28,7 @@
     border: 0;
     background-color: transparent;
     width: 100%;
-    font-size: var(--big-text);
+    font-size: common.$big-text;
     padding: 0;
 
     &:focus-visible {

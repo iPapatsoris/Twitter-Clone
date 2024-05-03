@@ -25,8 +25,8 @@ Profile grid */
 
   // Columns for normal profile and medium preview
   @function defineGridColumns($avatar-width) {
-    @return var(--main-content-padding) $avatar-width minmax(180px, 1fr)
-      var(--main-content-padding);
+    @return common.$main-content-padding $avatar-width minmax(180px, 1fr)
+      common.$main-content-padding;
   }
   // Columns for small preview
   @function defineGridColumnsSmall() {
@@ -174,8 +174,8 @@ Profile grid */
 
 .Preview.Small .Title .NameAndVerified {
   h1 {
-    font-weight: var(--bold-text);
-    font-size: var(--big-text);
+    font-weight: common.$bold-text;
+    font-size: common.$big-text;
   }
 }
 

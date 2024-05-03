@@ -10,7 +10,7 @@
   }
 
   .Transition {
-    transition: var(--transition-duration);
+    transition: common.$transition-duration;
   }
 }
 

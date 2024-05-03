@@ -181,7 +181,7 @@ const Home = () => {
           <TailSpin
             height="30"
             width="30"
-            color="var(--primary-color)"
+            color="common.$primary-color"
             ariaLabel="tail-spin-loading"
             wrapperClass={styles.LoadingSpinner}
           />

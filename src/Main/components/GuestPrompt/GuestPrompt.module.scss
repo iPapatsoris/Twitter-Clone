@@ -1,6 +1,6 @@
 .GuestPrompt {
   border-radius: 10px;
-  border: 1px solid var(--section-bg);
+  border: 1px solid common.$section-bg;
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -11,6 +11,6 @@
   }
 
   a {
-    color: var(--primary-color);
+    color: common.$primary-color;
   }
 }

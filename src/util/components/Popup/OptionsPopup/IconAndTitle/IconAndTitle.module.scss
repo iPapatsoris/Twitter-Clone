@@ -4,7 +4,7 @@
   align-items: center;
 
   &.Large {
-    font-size: var(--biggest-text);
+    font-size: common.$biggest-text;
     gap: 1.5rem;
   }
 

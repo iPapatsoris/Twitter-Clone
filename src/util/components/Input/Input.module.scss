@@ -19,8 +19,8 @@
 
   &.Focused {
     cursor: text;
-    --color: var(--primary-color);
-    --border-color: var(--primary-color);
+    --color: common.$primary-color;
+    --border-color: common.$primary-color;
   }
 
   &.Error {
@@ -85,15 +85,15 @@
   }
 
   .SuccessIcon {
-    fill: var(--green-color) !important;
+    fill: common.$green-color !important;
   }
 }
 
 .HelperBox {
   min-height: 18px;
   padding-left: 0.5rem;
-  font-size: var(--small-text);
-  color: var(--primary-color);
+  font-size: common.$small-text;
+  color: common.$primary-color;
 
   &.Error {
     color: red;

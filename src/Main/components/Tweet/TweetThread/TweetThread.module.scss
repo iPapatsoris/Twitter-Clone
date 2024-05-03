@@ -1,6 +1,6 @@
 .TweetThread {
   .CreateTweet {
-    border-bottom: var(--border);
+    border-bottom: common.$border;
     padding-bottom: 1rem;
     padding-inline: 1rem;
   }

@@ -11,11 +11,11 @@
 
   .DateOfBirth {
     margin-top: 0.5rem;
-    color: var(--light-color);
+    color: common.$light-color;
   }
 
   h4 {
-    font-size: var(--big-text);
+    font-size: common.$big-text;
   }
 
   .Form {

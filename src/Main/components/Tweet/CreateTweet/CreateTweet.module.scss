@@ -72,7 +72,7 @@
   }
 
   &:not(.AsModalContent) {
-    border-block: var(--border);
+    border-block: common.$border;
   }
 
   .CloseIcon {
@@ -82,7 +82,7 @@
 
   .Border {
     grid-area: border;
-    border-block: var(--border);
+    border-block: common.$border;
   }
 
   .Avatar {
@@ -104,7 +104,7 @@
     height: 100%;
 
     .LocationIcon {
-      fill: var(--primary-color);
+      fill: common.$primary-color;
     }
   }
 

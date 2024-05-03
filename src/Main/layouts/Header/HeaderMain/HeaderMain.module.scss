@@ -3,27 +3,27 @@
   z-index: 1;
   position: sticky;
   background-color: white;
-  border-inline: var(--border);
+  border-inline: common.$border;
 }
 
 .HeaderExtendedGridArea {
-  border-bottom: var(--border);
+  border-bottom: common.$border;
   grid-area: header-extended;
-  top: var(--header-height);
+  top: common.$header-height;
 }
 
 .HeaderMain {
-  height: var(--header-height);
+  height: common.$header-height;
   grid-area: header-main;
   top: 0;
   display: flex;
 
   &.Border {
-    border-bottom: var(--border);
+    border-bottom: common.$border;
   }
 
   .Main {
-    padding-inline: var(--main-content-padding);
+    padding-inline: common.$main-content-padding;
     display: flex;
     align-items: center;
     gap: 2rem;
