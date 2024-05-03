@@ -4,7 +4,6 @@ import { getPagePath } from "../../../../util/paths";
 import Avatar from "../../../routes/Profile/ProfileFace/Avatar/Avatar";
 import Widgets from "./Widgets";
 import Button from "../../../../util/components/Button/Button";
-import {} from "@tanstack/react-query";
 import { tweetCharLimit } from "../../../../../backend/src/api/tweet";
 import yup from "../../../../util/yup";
 import { UseFormReturn, useController, useForm } from "react-hook-form";
@@ -19,6 +18,7 @@ import { ModalContext } from "../../../../util/components/Modal/Modal";
 import Tweet from "../Tweet";
 import { useLoggedInUser } from "../../../../store/AuthStore";
 import useCreateTweetMutation from "./queries";
+import scssExports from "../../../../assets/styles/exports.module.scss";
 
 interface CreateTweetProps {
   autofocus?: boolean;
@@ -137,8 +137,8 @@ const CreateTweet = ({
 const getProgressBarInfo = (form: UseFormReturn<CreateTweetForm>) => {
   const charsWritten = form.getValues("tweet").length;
   const showCharsWarning = charsWritten >= tweetCharLimit - 20;
-  let progressColor = "common.$primary-color";
-  let textColor = "common.$light-color";
+  let progressColor: React.CSSProperties["color"] = scssExports.primaryColor;
+  let textColor: React.CSSProperties["color"] = scssExports.lightColor;
   if (showCharsWarning) {
     progressColor = "rgb(255, 212, 0)";
   }

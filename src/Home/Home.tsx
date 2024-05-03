@@ -25,6 +25,7 @@ import {
   getTweetOrRetweetID,
 } from "./util";
 import ExpandUpTimelineButton from "./ExpandUpTimelineButton";
+import scssExports from "../assets/styles/exports.module.scss";
 
 export const timelinePageSize = 10;
 
@@ -181,7 +182,7 @@ const Home = () => {
           <TailSpin
             height="30"
             width="30"
-            color="common.$primary-color"
+            color={scssExports.primaryColor}
             ariaLabel="tail-spin-loading"
             wrapperClass={styles.LoadingSpinner}
           />

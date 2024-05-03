@@ -1,6 +1,7 @@
 import React, { ButtonHTMLAttributes, forwardRef, useState } from "react";
 import { TailSpin } from "react-loader-spinner";
 import styles from "./Button.module.scss";
+import scssExports from "../../../assets/styles/exports.module.scss";
 
 export interface ButtonProps {
   type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
@@ -93,7 +94,7 @@ const Button = forwardRef(
           <TailSpin
             height="30"
             width="30"
-            color="common.$primary-color"
+            color={scssExports.primaryColor}
             ariaLabel="tail-spin-loading"
           />
         ) : (

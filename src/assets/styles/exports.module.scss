@@ -9,4 +9,6 @@
   mobileBreakpoint: map-get(common.$breakpoints, mobile);
   tabletBreakpoint: map-get(common.$breakpoints, tablet);
   pcSmallBreakpoint: map-get(common.$breakpoints, pc-small);
+  primaryColor: common.$primary-color;
+  lightColor: common.$light-color;
 }
