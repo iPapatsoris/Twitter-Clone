@@ -15,8 +15,7 @@ const Welcome = () => {
   const [signup, setSignup] = useState(false);
   const { state: routerState } = useLocation();
 
-  const { isMobile, isTablet } = useWindowDimensions();
-  const isSmallScreen = isMobile || isTablet;
+  const { isSmallScreen } = useWindowDimensions();
   const showWelcomePage =
     !isSmallScreen || (isSmallScreen && !login && !signup);
 
@@ -43,7 +42,7 @@ const Welcome = () => {
     <div className={styles.Welcome}>
       <Icon
         src={Logo}
-        size={!isMobile && !isTablet ? 340 : 100}
+        size={!isSmallScreen ? 340 : 100}
         extraWrapperStyles={[styles.Logo]}
         title="Twitter"
         alt="Twitter logo"

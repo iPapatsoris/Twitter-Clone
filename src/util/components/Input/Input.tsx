@@ -193,7 +193,7 @@ const Input = forwardRef<RefType, InputProps>(
               )}
             </div>
             <div className={styles.Input}>
-              <span className={styles.Leader}>{leader}</span>
+              <span>{leader}</span>
               {input}
               {iconJSX}
             </div>

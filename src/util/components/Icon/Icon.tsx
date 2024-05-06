@@ -149,9 +149,16 @@ const Icon = forwardRef(
           fullSize ? styles.FullSize : "",
           ...extraWrapperStyles,
         ].join(" ")}
-        onClick={onClick}
         ref={iconAndTextRef}
         title={title}
+        onClick={onClick}
+        /* Prevent cursor position reset when clicking on "reveal password" icon */
+        onMouseDown={(e) => {
+          e.preventDefault();
+        }}
+        onMouseUp={(e) => {
+          e.preventDefault();
+        }}
       >
         <div
           // Prevent losing cursor position when an icon is clicked within an
