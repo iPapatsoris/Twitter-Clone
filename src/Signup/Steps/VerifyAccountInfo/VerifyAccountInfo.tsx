@@ -57,7 +57,7 @@ const VerifyAccountInfo = ({
             <TextInput
               name="name"
               placeholder="Name"
-              readonly
+              readOnly
               showStatusIcon
               value={accountInfo.name}
               onClick={() => {
@@ -69,7 +69,7 @@ const VerifyAccountInfo = ({
             <TextInput
               name="email"
               placeholder="Email"
-              readonly
+              readOnly
               showStatusIcon
               value={accountInfo.email}
               onClick={() => {
@@ -81,7 +81,7 @@ const VerifyAccountInfo = ({
             <TextInput
               name="birthDate"
               placeholder="Date of birth"
-              readonly
+              readOnly
               showStatusIcon
               value={accountInfo.birthDate!.format("MMM M, YYYY")}
               onClick={() => {

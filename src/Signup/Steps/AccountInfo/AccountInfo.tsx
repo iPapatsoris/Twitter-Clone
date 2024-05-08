@@ -101,13 +101,13 @@ const AccountInfo = ({
                   placeholder="Name"
                   control={control}
                   maxLength={50}
-                  autofocus={inputToFocus === "name"}
+                  autoFocus={inputToFocus === "name"}
                 />
                 <FormInput
                   name="email"
                   placeholder="Email"
                   control={control}
-                  autofocus={inputToFocus === "email"}
+                  autoFocus={inputToFocus === "email"}
                 />
               </div>
               <div>

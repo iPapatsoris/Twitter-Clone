@@ -68,7 +68,7 @@ const MakePassword = ({
               Make sure it's 8 characters or more.
             </span>
             <FormInput
-              autofocus
+              autoFocus
               name="password"
               placeholder="Password"
               control={control}

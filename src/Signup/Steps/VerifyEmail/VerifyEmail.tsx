@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState } from "react";
+import React, { FormEvent, SetStateAction, useState } from "react";
 import { MinipageProps } from "../../../util/layouts/Minipage/Minipage";
 import TextInput from "../../../util/components/Input/Input";
 import useStepper from "../../../util/hooks/useStepper";
@@ -10,6 +10,7 @@ import { VerifyEmailCode } from "../../../../backend/src/api/email";
 import useSendEmailCode from "./useSendEmailCode";
 import Form from "../../../util/components/Form/Form";
 import { postData } from "../../../util/request";
+import { ChangeHandler } from "react-hook-form";
 
 interface VerifyEmailProps {
   email: string;
@@ -89,8 +90,8 @@ const VerifyEmail = ({
               name="emailCode"
               placeholder="Verification code"
               value={code}
-              onChange={(e) => setCode(e.target.value)}
-              autofocus
+              onChange={((e) => setCode(e.target.value)) as ChangeHandler}
+              autoFocus
               helper={<Helper onResendCode={onResendCode} />}
               error={wrongCodeError}
             />

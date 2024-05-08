@@ -21,7 +21,7 @@ import useCreateTweetMutation from "./queries";
 import scssExports from "../../../../assets/styles/exports.module.scss";
 
 interface CreateTweetProps {
-  autofocus?: boolean;
+  autoFocus?: boolean;
   asModalContent?: boolean;
   // Pass this prop only if we are replying to a tweet
   referencedTweetID?: number;
@@ -30,7 +30,7 @@ interface CreateTweetProps {
 export type CreateTweetForm = { tweet: string };
 
 const CreateTweet = ({
-  autofocus = false,
+  autoFocus = false,
   asModalContent,
   referencedTweetID,
 }: CreateTweetProps) => {
@@ -117,7 +117,7 @@ const CreateTweet = ({
             value: value,
             onChange,
             placeholder: isReply ? "Post a reply" : "What is happening?!",
-            autoFocus: autofocus || (routerState && routerState.autofocus),
+            autoFocus: autoFocus || (routerState && routerState.autoFocus),
           }}
           refToAlignTopRowWith={avatarRef}
         />

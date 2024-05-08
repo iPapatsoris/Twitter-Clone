@@ -1,4 +1,5 @@
 import {
+  ChangeHandler,
   FieldValues,
   Path,
   useController,
@@ -37,12 +38,12 @@ const ActualComponent = <FormInput extends FieldValues>(
     control,
     placeholder,
     maxLength,
-    autofocus,
+    autoFocus,
     type,
     leader,
     showStatusIcon,
     onBlur: onBlurUser = () => {},
-    autocomplete,
+    autoComplete,
   } = props;
   const {
     field: { onChange, onBlur, value, ref: register },
@@ -73,9 +74,9 @@ const ActualComponent = <FormInput extends FieldValues>(
       name={name}
       placeholder={placeholder}
       maxLength={maxLength !== undefined ? maxLength : undefined}
-      autofocus={autofocus !== undefined ? autofocus : undefined}
+      autoFocus={autoFocus !== undefined ? autoFocus : undefined}
       onBlur={handleBlur}
-      onChange={onChange}
+      onChange={onChange as ChangeHandler}
       value={value}
       ref={(r) => {
         // Register input ref to form
@@ -90,7 +91,7 @@ const ActualComponent = <FormInput extends FieldValues>(
       type={type}
       leader={leader}
       showStatusIcon={showStatusIcon}
-      autocomplete={autocomplete}
+      autoComplete={autoComplete}
     />
   );
 };
@@ -98,7 +99,7 @@ const ActualComponent = <FormInput extends FieldValues>(
 // Workaround to have TS for a component that uses forwardRef and a generic type
 // at the same time
 const FormInput = React.forwardRef(ActualComponent) as <
-  FormInput extends FieldValues
+  FormInput extends FieldValues,
 >(
   props: FormInputProps<FormInput> & { ref?: Ref<HTMLInputElement> }
 ) => ReactElement;

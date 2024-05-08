@@ -87,7 +87,7 @@ const EditProfileInfo = forwardRef<PhotoInputRefs, EditProfileInfoProps>(
           placeholder="Avatar link"
           control={control}
           ref={avatarRef}
-          autofocus={focusOnAvatar}
+          autoFocus={focusOnAvatar}
           onBlur={() => setFocusOnAvatar(false)}
         />
         <FormInput
@@ -95,7 +95,7 @@ const EditProfileInfo = forwardRef<PhotoInputRefs, EditProfileInfoProps>(
           placeholder="Cover link"
           control={control}
           ref={coverRef}
-          autofocus={focusOnCover}
+          autoFocus={focusOnCover}
           onBlur={() => setFocusOnCover(false)}
         />
         <div>

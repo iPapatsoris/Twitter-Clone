@@ -72,18 +72,18 @@ const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
           <h1>Sign in to Twitter</h1>
           <div className={styles.Form}>
             <FormInput
-              autofocus
+              autoFocus
               name="username"
               placeholder="Username"
               control={control}
-              autocomplete="username"
+              autoComplete="username"
             />
             <FormInput
               name="password"
               placeholder="Password"
               control={control}
               type="password"
-              autocomplete="current-password"
+              autoComplete="current-password"
             />
           </div>
           {data && !data.ok && (

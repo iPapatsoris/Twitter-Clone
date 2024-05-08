@@ -10,7 +10,7 @@ const CreateTweetModal = ({
     <div className={styles.CreateTweetModal}>
       <CreateTweet
         asModalContent
-        autofocus
+        autoFocus
         referencedTweetID={replyingToTweetID}
       />
     </div>

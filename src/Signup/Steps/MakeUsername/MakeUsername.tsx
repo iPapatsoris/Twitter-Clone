@@ -115,7 +115,7 @@ const MakeUsername = ({
               Your @ username is unique. You can always change it later.
             </span>
             <FormInput
-              autofocus
+              autoFocus
               name="username"
               placeholder="Usename"
               control={control}
