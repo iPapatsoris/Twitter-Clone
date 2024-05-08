@@ -17,7 +17,7 @@ const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
   const { mutate, isPending, data } = useLoginMutation();
   const schema: any = yup.object().shape({
     username: yup.string().required("Please enter your username."),
-    password: yup.string().required(),
+    password: yup.string().required("Please enter your password"),
   });
 
   const form = useForm<LoginUser["request"]["user"]>({
@@ -42,7 +42,7 @@ const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
   };
 
   const { setIsActive } = useContext(ModalContext);
-  const { isMobile, isTablet } = useWindowDimensions();
+  const { isSmallScreen } = useWindowDimensions();
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -50,7 +50,7 @@ const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
         header={
           <LogoHeader
             onNavIconClick={
-              isMobile || isTablet ? removeLogin : () => setIsActive(false)
+              isSmallScreen ? removeLogin : () => setIsActive(false)
             }
           />
         }

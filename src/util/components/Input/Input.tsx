@@ -1,6 +1,5 @@
 import {
   forwardRef,
-  useEffect,
   useRef,
   useState,
   ForwardedRef,
@@ -50,7 +49,6 @@ const Input = forwardRef<RefType, InputProps>((props, fref) => {
   const {
     placeholder,
     maxLength,
-    autoFocus,
     readOnly,
     onFocus,
     onBlur,

@@ -1,5 +1,4 @@
 import {
-  ChangeHandler,
   FieldValues,
   Path,
   useController,
@@ -7,21 +6,21 @@ import {
 } from "react-hook-form";
 import Input, { RefType } from "./Input";
 import React, {
+  ComponentProps,
   MutableRefObject,
   ReactElement,
   Ref,
   useEffect,
   useState,
 } from "react";
-import TextInput from "./Input";
 
 type FormInputProps<FormInput extends FieldValues> = Omit<
   React.ComponentProps<typeof Input>,
-  "onChange" | "value" | "error"
+  "isValid" | "value" | "error"
 > & {
   control: UseFormReturn<FormInput, any>["control"];
   name: Path<FormInput>;
-} & Pick<React.ComponentProps<typeof TextInput>, "type">;
+};
 
 /**
  * react-hook-form wrapper for custom controller Input component.
@@ -36,17 +35,16 @@ const ActualComponent = <FormInput extends FieldValues>(
   const {
     name,
     control,
-    placeholder,
-    maxLength,
-    autoFocus,
-    type,
-    leader,
-    showStatusIcon,
-    onBlur: onBlurUser = () => {},
-    autoComplete,
+    onBlur: onBlurSideEffect,
+    onChange: onChangeSideEffect,
   } = props;
   const {
-    field: { onChange, onBlur, value, ref: register },
+    field: {
+      onChange: onChangeFormController,
+      onBlur: onBlurFormController,
+      value,
+      ref: register,
+    },
     fieldState: { isDirty, error, invalid },
   } = useController({ name, control });
 
@@ -62,36 +60,38 @@ const ActualComponent = <FormInput extends FieldValues>(
   const handleBlur = (
     e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    onBlurUser(e);
-    onBlur();
+    onBlurSideEffect && onBlurSideEffect(e);
+    onBlurFormController();
     if (hasBeenDirtied) {
       setShowErrors(true);
     }
   };
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    onChangeSideEffect && onChangeSideEffect(e);
+    onChangeFormController(e);
+  };
+
+  const handleRef: ComponentProps<typeof Input>["ref"] = (r) => {
+    // Register inner <Input> ref to form
+    register(r);
+    if (ref && r) {
+      // Assign inner <Input> ref to <FormInput> forwarded ref
+      (ref as MutableRefObject<RefType>).current = r;
+    }
+  };
+
   return (
     <Input
-      name={name}
-      placeholder={placeholder}
-      maxLength={maxLength !== undefined ? maxLength : undefined}
-      autoFocus={autoFocus !== undefined ? autoFocus : undefined}
-      onBlur={handleBlur}
-      onChange={onChange as ChangeHandler}
+      {...props}
       value={value}
-      ref={(r) => {
-        // Register input ref to form
-        register(r);
-        if (ref && r) {
-          // Assign forwarded ref
-          (ref as MutableRefObject<RefType>).current = r;
-        }
-      }}
+      onBlur={handleBlur}
+      onChange={handleChange}
+      ref={handleRef}
       isValid={hasBeenDirtied && !invalid}
       error={showErrors && error ? error.message : ""}
-      type={type}
-      leader={leader}
-      showStatusIcon={showStatusIcon}
-      autoComplete={autoComplete}
     />
   );
 };
