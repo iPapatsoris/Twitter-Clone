@@ -78,12 +78,6 @@ const Input = forwardRef<RefType, InputProps>((props, fref) => {
     }
   };
 
-  useEffect(() => {
-    if (autoFocus && ref && ref.current) {
-      ref.current?.focus({ preventScroll: true });
-    }
-  }, [autoFocus, ref]);
-
   const handleWrapperMousedown = (e: React.MouseEvent) => {
     if (ref && ref.current && !readOnly) {
       // Mouse down on wrapper div would blur the inner input that we are
