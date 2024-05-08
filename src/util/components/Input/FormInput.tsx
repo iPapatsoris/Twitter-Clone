@@ -4,7 +4,7 @@ import {
   useController,
   UseFormReturn,
 } from "react-hook-form";
-import Input, { RefType } from "./Input";
+import Input, { InputType } from "./Input";
 import React, {
   ComponentProps,
   MutableRefObject,
@@ -30,7 +30,7 @@ type FormInputProps<FormInput extends FieldValues> = Omit<
  */
 const ActualComponent = <FormInput extends FieldValues>(
   props: FormInputProps<FormInput>,
-  ref: Ref<HTMLInputElement>
+  ref: Ref<InputType>
 ) => {
   const {
     name,
@@ -57,9 +57,7 @@ const ActualComponent = <FormInput extends FieldValues>(
     }
   }, [isDirty, hasBeenDirtied, setHasBeenDirtied]);
 
-  const handleBlur = (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleBlur = (e: React.FocusEvent<InputType>) => {
     onBlurSideEffect && onBlurSideEffect(e);
     onBlurFormController();
     if (hasBeenDirtied) {
@@ -67,9 +65,7 @@ const ActualComponent = <FormInput extends FieldValues>(
     }
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<InputType>) => {
     onChangeSideEffect && onChangeSideEffect(e);
     onChangeFormController(e);
   };
@@ -79,7 +75,7 @@ const ActualComponent = <FormInput extends FieldValues>(
     register(r);
     if (ref && r) {
       // Assign inner <Input> ref to <FormInput> forwarded ref
-      (ref as MutableRefObject<RefType>).current = r;
+      (ref as MutableRefObject<InputType>).current = r;
     }
   };
 
@@ -101,7 +97,9 @@ const ActualComponent = <FormInput extends FieldValues>(
 const FormInput = React.forwardRef(ActualComponent) as <
   FormInput extends FieldValues,
 >(
-  props: FormInputProps<FormInput> & { ref?: Ref<HTMLInputElement> }
+  props: FormInputProps<FormInput> & {
+    ref?: Ref<InputType>;
+  }
 ) => ReactElement;
 
 export default FormInput;

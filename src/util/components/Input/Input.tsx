@@ -37,15 +37,13 @@ const nonHTMLProps = Object.keys(new NonHTMLProps()) as Array<
   keyof NonHTMLProps
 >;
 
-interface InputProps
-  extends HTMLProps<HTMLInputElement | HTMLTextAreaElement>,
-    NonHTMLProps {
+interface InputProps extends HTMLProps<InputType>, NonHTMLProps {
   type?: "text" | "password" | "textArea";
   value: string;
 }
 
-export type RefType = HTMLInputElement | HTMLTextAreaElement;
-const Input = forwardRef<RefType, InputProps>((props, fref) => {
+export type InputType = HTMLInputElement | HTMLTextAreaElement;
+const Input = forwardRef<InputType, InputProps>((props, fref) => {
   const {
     placeholder,
     maxLength,
@@ -62,7 +60,7 @@ const Input = forwardRef<RefType, InputProps>((props, fref) => {
     leader,
   } = props;
 
-  const inputRef = useRef<RefType>(null);
+  const inputRef = useRef<InputType>(null);
   const ref = useForwardRef(fref, inputRef);
   const [isFocused, setIsFocused] = useState(false);
   const [inputType, setInputType] = useState(initialType);
