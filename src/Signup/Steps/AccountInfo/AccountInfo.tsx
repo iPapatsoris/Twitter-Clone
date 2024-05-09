@@ -4,7 +4,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormInput from "../../../util/components/Input/FormInput";
-import { AccountInfoT } from "../../Signup";
 import useStepper from "../../../util/hooks/useStepper";
 import NextStepButton from "../NextStepButton";
 import Form from "../../../util/components/Form/Form";
@@ -15,6 +14,7 @@ import DatePicker from "../../../util/components/DatePicker/DatePicker";
 import { charLimits } from "../../../../backend/src/api/user";
 import { getData } from "../../../util/request";
 import { MinipageProps } from "../../../util/layouts/Minipage/Minipage";
+import { AccountInfoT } from "../../useSignupState";
 
 interface AccountInfoProps {
   accountInfo: AccountInfoT;

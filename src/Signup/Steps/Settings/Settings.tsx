@@ -1,5 +1,4 @@
 import React, { SetStateAction } from "react";
-import { SettingsT } from "../../Signup";
 import Setting from "./Setting";
 import styles from "./Settings.module.scss";
 import useStepper from "../../../util/hooks/useStepper";
@@ -7,6 +6,7 @@ import Terms from "../../Terms/Terms";
 import NextStepButton from "../NextStepButton";
 import { MinipageProps } from "../../../util/layouts/Minipage/Minipage";
 import Form from "../../../util/components/Form/Form";
+import { SettingsT } from "../../useSignupState";
 
 interface SettingsProps {
   settings: SettingsT;
@@ -56,6 +56,7 @@ const Settings = ({
   if (!minipage) {
     return null;
   }
+  console.log("settings");
 
   return (
     <Form onSubmit={nextStep}>

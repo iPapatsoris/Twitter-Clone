@@ -1,7 +1,7 @@
 import React from "react";
 import TextInput from "../../../util/components/Input/Input";
 import useStepper from "../../../util/hooks/useStepper";
-import { AccountInfoT } from "../../Signup";
+import { AccountInfoT } from "../../useSignupState";
 import styles from "./VerifyAccountInfo.module.scss";
 import Terms from "../../Terms/Terms";
 import { MinipageProps } from "../../../util/layouts/Minipage/Minipage";

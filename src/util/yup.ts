@@ -2,6 +2,7 @@ import * as yup from "yup";
 
 // Sequential yup validation instead of parallel, useful for async validation
 // Taken from https://github.com/jquense/yup/issues/851#issuecomment-1135881029
+// TS doesn't work correctly when using ObjectSchema
 export function yupSequentialStringSchema(schemas: yup.StringSchema[]) {
   return yup.string().test(async (value, context) => {
     try {

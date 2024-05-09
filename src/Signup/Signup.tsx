@@ -14,41 +14,15 @@ import Minipage from "../util/layouts/Minipage/Minipage";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
 import StepHeader from "./Steps/StepHeader";
 import { useAuthStoreActions } from "../store/AuthStore";
+import useSignupState from "./useSignupState";
 
 interface SignupProps {
   removeSignup: VoidFunction;
 }
 
-export type AccountInfoT = {
-  name: string;
-  email: string;
-  birthDate: dayjs.Dayjs | null;
-};
-
-export type SettingsT = {
-  receiveEmails: boolean;
-  beFoundByEmail: boolean;
-  personalizeAds: boolean;
-};
-
 const Signup = ({ removeSignup }: SignupProps) => {
-  const [accountInfo, setAccountInfo] = useState<AccountInfoT>({
-    name: "",
-    email: "",
-    birthDate: null,
-  });
-
-  const [settings, setSettings] = useState<SettingsT>({
-    receiveEmails: false,
-    beFoundByEmail: false,
-    personalizeAds: false,
-  });
-
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [performRegistration, setPerformRegistration] = useState(false);
-  const [inputToFocus, setInputToFocus] = useState<keyof AccountInfoT>("name");
   const { handleSignup } = useAuthStoreActions();
+  const { isSmallScreen } = useWindowDimensions();
 
   const { mutate } = useMutation<
     CreateUser["response"],
@@ -60,6 +34,23 @@ const Signup = ({ removeSignup }: SignupProps) => {
       handleSignup(res.data?.user!);
     },
   });
+
+  const {
+    performRegistration,
+    username,
+    password,
+    accountInfo,
+    settings,
+    setUsername,
+    setAccountInfo,
+    setPassword,
+    setEmailCodeHint,
+    setInputToFocus,
+    setPerformRegistration,
+    setSettings,
+    inputToFocus,
+    emailCodeHint,
+  } = useSignupState();
 
   useEffect(() => {
     if (performRegistration) {
@@ -74,9 +65,6 @@ const Signup = ({ removeSignup }: SignupProps) => {
       });
     }
   }, [performRegistration, accountInfo, mutate, username, password]);
-
-  const [emailCodeHint, setEmailCodeHint] = useState("");
-  const { isSmallScreen } = useWindowDimensions();
 
   const minipage = (
     <Minipage alignContent={isSmallScreen ? "icon" : "header"} />
@@ -115,6 +103,7 @@ const Signup = ({ removeSignup }: SignupProps) => {
     />,
   ];
 
+  // Add header prop to each step component
   const stepsWithHeader = steps.map((stepComponent, index) =>
     React.cloneElement(stepComponent, {
       key: index,
@@ -131,6 +120,8 @@ const Signup = ({ removeSignup }: SignupProps) => {
       }),
     })
   );
+
+  console.log("signup");
 
   return stepsWithHeader[stepper.step];
 };

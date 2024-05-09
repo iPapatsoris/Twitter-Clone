@@ -12,15 +12,17 @@ import yup from "../util/yup";
 import styles from "./Login.module.scss";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
 import { useLoginMutation } from "../store/AuthStore";
+import { ObjectSchema } from "yup";
 
 const Login = ({ removeLogin }: { removeLogin: VoidFunction }) => {
+  type LoginForm = LoginUser["request"]["user"];
   const { mutate, isPending, data } = useLoginMutation();
-  const schema: any = yup.object().shape({
+  const schema: ObjectSchema<LoginForm> = yup.object().shape({
     username: yup.string().required("Please enter your username."),
     password: yup.string().required("Please enter your password"),
   });
 
-  const form = useForm<LoginUser["request"]["user"]>({
+  const form = useForm<LoginForm>({
     mode: "onTouched",
     resolver: yupResolver(schema),
     defaultValues: {
