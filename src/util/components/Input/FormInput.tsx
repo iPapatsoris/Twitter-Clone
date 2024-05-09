@@ -94,10 +94,8 @@ const ActualComponent = <FormInput extends FieldValues>(
 
 // Workaround to have TS for a component that uses forwardRef and a generic type
 // at the same time
-const FormInput = React.forwardRef(ActualComponent) as <
-  FormInput extends FieldValues,
->(
-  props: FormInputProps<FormInput> & {
+const FormInput = React.forwardRef(ActualComponent) as <T extends FieldValues>(
+  props: FormInputProps<T> & {
     ref?: Ref<InputType>;
   }
 ) => ReactElement;

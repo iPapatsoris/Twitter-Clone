@@ -1,23 +1,15 @@
+import { HTMLProps } from "react";
 import styles from "./Checkbox.module.scss";
 
-interface CheckboxProps {
-  label: string;
-  id: number;
-  isChecked: boolean;
-  onChange: VoidFunction;
-}
+interface CheckboxProps extends Omit<HTMLProps<HTMLInputElement>, "type"> {}
 
-const Checkbox = ({ label, id, isChecked, onChange }: CheckboxProps) => {
+const Checkbox = (props: CheckboxProps) => {
   const prefix = "checkbox-";
+  const { id, label } = props;
   return (
-    <label htmlFor={prefix + id.toString()} className={styles.CheckboxArea}>
+    <label htmlFor={prefix + id?.toString()} className={styles.CheckboxArea}>
       <span>{label}</span>
-      <input
-        id={prefix + id}
-        type="checkbox"
-        checked={isChecked}
-        onChange={() => onChange()}
-      />
+      <input {...props} id={prefix + id} type="checkbox" />
     </label>
   );
 };
