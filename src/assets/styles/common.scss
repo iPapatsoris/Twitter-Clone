@@ -21,49 +21,51 @@ $box-shadow:
   rgb(101 119 134 / 20%) 0px 0px 15px,
   rgb(101 119 134 / 15%) 0px 0px 3px 1px;
 
-.Bold {
-  font-weight: 700;
-}
+:global {
+  .Bold {
+    font-weight: 700;
+  }
 
-.BiggestText {
-  font-size: $biggest-text;
-}
+  .BiggestText {
+    font-size: $biggest-text;
+  }
 
-.BigText {
-  font-size: $big-text;
-}
+  .BigText {
+    font-size: $big-text;
+  }
 
-.SmallText {
-  font-size: $small-text;
-}
+  .SmallText {
+    font-size: $small-text;
+  }
 
-.EllipsisOverlow {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+  .EllipsisOverlow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-.PushRight {
-  margin-left: auto;
-}
+  .PushRight {
+    margin-left: auto;
+  }
 
-.Semantic {
-  display: contents;
-}
+  .Semantic {
+    display: contents;
+  }
 
-.PrimaryColor {
-  color: $primary-color;
-}
+  .PrimaryColor {
+    color: $primary-color;
+  }
 
-.LightColor {
-  color: $light-color;
-}
+  .LightColor {
+    color: $light-color;
+  }
 
-.NoHighlighting {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently supported by Chrome,
+  .NoHighlighting {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome,
                         Edge, Opera and Firefox */
+  }
 }

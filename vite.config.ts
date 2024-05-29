@@ -13,6 +13,9 @@ const config = ({ mode }) => {
 
   return defineConfig({
     css: {
+      modules: {
+        exportGlobals: true,
+      },
       preprocessorOptions: {
         scss: {
           additionalData: `
