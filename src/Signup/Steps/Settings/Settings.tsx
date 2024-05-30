@@ -70,7 +70,6 @@ const Settings = ({
   if (!minipage) {
     return null;
   }
-  console.log("settings");
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
