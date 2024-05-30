@@ -117,6 +117,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
         useFollowMutation.mutate();
       }}
       {...circleButtonProps}
+      key={circleButtonKey}
     >
       Follow
     </Button>
@@ -129,6 +130,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
         hoverColor="red"
         hoverText="Unfollow"
         {...circleButtonProps}
+        key={circleButtonKey}
         extraClasses={[styles.FixedWidthButton]}
         onClick={(e) => {
           e.stopPropagation();
