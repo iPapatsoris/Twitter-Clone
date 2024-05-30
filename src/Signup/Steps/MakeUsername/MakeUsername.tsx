@@ -14,6 +14,7 @@ import yup, { yupSequentialStringSchema } from "../../../util/yup";
 import NextStepButton from "../NextStepButton";
 import styles from "./MakeUsername.module.scss";
 import { getData } from "../../../util/request";
+import { ObjectSchema } from "yup";
 
 interface MakeUsernameProps {
   stepper: ReturnType<typeof useStepper>;
@@ -44,7 +45,7 @@ const MakeUsername = ({
     enabled: false,
   });
 
-  const schema: any = yup.object().shape({
+  const schema: ObjectSchema<FormInput> = yup.object().shape({
     username: yupSequentialStringSchema([
       yup
         .string()
@@ -70,6 +71,7 @@ const MakeUsername = ({
         ),
       yup
         .string()
+        .required()
         .test(
           "usernameExists",
           "That username has been taken. Please choose another.",

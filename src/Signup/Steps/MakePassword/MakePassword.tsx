@@ -24,7 +24,7 @@ const MakePassword = ({
     password: string;
   };
 
-  const schema = yup.object().shape({
+  const schema: yup.ObjectSchema<FormInput> = yup.object().shape({
     password: yup
       .string()
       .required("Please enter a password.")
@@ -67,12 +67,14 @@ const MakePassword = ({
             <span className={styles.Info}>
               Make sure it's 8 characters or more.
             </span>
+            <input hidden autoComplete="username" />
             <FormInput
               autoFocus
               name="password"
               placeholder="Password"
               control={control}
               type="password"
+              autoComplete="new-password"
             />
           </div>
         ),

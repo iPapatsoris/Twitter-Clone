@@ -1,5 +1,4 @@
-import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { CreateUser } from "../../backend/src/api/user";
 import useStepper from "../util/hooks/useStepper";
@@ -120,8 +119,6 @@ const Signup = ({ removeSignup }: SignupProps) => {
       }),
     })
   );
-
-  console.log("signup");
 
   return stepsWithHeader[stepper.step];
 };

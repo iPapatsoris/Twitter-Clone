@@ -19,6 +19,7 @@ import Tweet from "../Tweet";
 import { useLoggedInUser } from "../../../../store/AuthStore";
 import useCreateTweetMutation from "./queries";
 import scssExports from "../../../../assets/styles/exports.module.scss";
+import { ObjectSchema } from "yup";
 
 interface CreateTweetProps {
   autoFocus?: boolean;
@@ -40,7 +41,7 @@ const CreateTweet = ({
   const isReply = referencedTweetID !== undefined;
   const isReplyInModal = isReply && asModalContent;
 
-  const schema: any = yup.object().shape({
+  const schema: ObjectSchema<CreateTweetForm> = yup.object().shape({
     tweet: yup.string().required().max(tweetCharLimit),
   });
 

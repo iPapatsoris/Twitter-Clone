@@ -1,4 +1,4 @@
-import React, { FormEvent, SetStateAction, useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import { MinipageProps } from "../../../util/layouts/Minipage/Minipage";
 import TextInput from "../../../util/components/Input/Input";
 import useStepper from "../../../util/hooks/useStepper";

@@ -15,6 +15,7 @@ import { charLimits } from "../../../../backend/src/api/user";
 import { getData } from "../../../util/request";
 import { MinipageProps } from "../../../util/layouts/Minipage/Minipage";
 import { AccountInfoT } from "../../useSignupState";
+import { ObjectSchema } from "yup";
 
 interface AccountInfoProps {
   accountInfo: AccountInfoT;
@@ -43,19 +44,24 @@ const AccountInfo = ({
     enabled: false,
   });
 
-  const schema: any = yup.object().shape({
-    name: yup.string().required("What's your name?").max(charLimits.name),
-    email: yupSequentialStringSchema([
-      yup.string().required("Please enter your email."),
-      yup.string().email("Please enter a valid email."),
-      yup
-        .string()
-        .test("checkEmail", "This email is already taken", async () => {
-          const res = await refetch();
-          return !res.data?.data?.emailExists;
-        }),
-    ]),
-  });
+  const schema: ObjectSchema<Omit<AccountInfoT, "birthDate">> = yup
+    .object()
+    .shape({
+      name: yup.string().required("What's your name?").max(charLimits.name),
+      email: yupSequentialStringSchema([
+        yup
+          .string()
+          .required("Please enter your email.")
+          .email("Please enter a valid email."),
+        yup
+          .string()
+          .required()
+          .test("checkEmail", "This email is already taken", async () => {
+            const res = await refetch();
+            return !res.data?.data?.emailExists;
+          }),
+      ]),
+    });
 
   const form = useForm<AccountInfoT>({
     defaultValues: {
