@@ -4,6 +4,8 @@
   min-width: 4rem;
   color: white;
   border-radius: 40px;
+  border-width: 1px;
+  border-style: solid;
   padding-inline: 1rem;
   padding-block: 0.5rem;
   transition: common.$transition-duration;
@@ -13,14 +15,14 @@
 
   &.Primary {
     background: common.$primary-color;
-    &:hover:not(.Disabled) {
+    &:hover:not(:disabled) {
       background-color: rgb(26, 140, 216);
     }
   }
 
   &.Black {
     background: rgb(15, 20, 25);
-    &:hover:not(.Disabled) {
+    &:hover:not(:disabled) {
       background: rgb(39, 44, 48);
     }
   }
@@ -28,24 +30,17 @@
   &.White {
     color: black;
     background: white;
-    border: 1px solid rgb(207, 217, 222);
-    &:hover:not(.Disabled) {
+    border-color: rgb(207, 217, 222);
+    &:hover:not(:disabled) {
       background: rgb(230, 230, 230);
     }
   }
 
-  @mixin Red {
+  &.Red,
+  &.HoverRed:hover {
     color: red;
     background: rgba(244, 33, 46, 0.2) !important;
-    border: 1px solid rgb(253, 201, 206);
-  }
-
-  &.Red {
-    @include Red;
-  }
-
-  &.HoverRed:hover {
-    @include Red;
+    border-color: rgb(253, 201, 206);
   }
 
   &.Small {
@@ -72,7 +67,7 @@
     font-size: 17px;
   }
 
-  &.Disabled {
+  &:disabled {
     cursor: initial;
     opacity: 50%;
   }

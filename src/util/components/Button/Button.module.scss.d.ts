@@ -2,7 +2,6 @@ import globalClassNames from "../../../assets/styles/common.d";
 declare const classNames: typeof globalClassNames & {
   readonly Button: "Button";
   readonly Primary: "Primary";
-  readonly Disabled: "Disabled";
   readonly Black: "Black";
   readonly White: "White";
   readonly Red: "Red";

@@ -1,44 +1,48 @@
-import React, { ButtonHTMLAttributes, forwardRef, useState } from "react";
+import React, { ComponentProps, forwardRef, useState } from "react";
 import { TailSpin } from "react-loader-spinner";
 import styles from "./Button.module.scss";
 import scssExports from "../../../assets/styles/exports.module.scss";
+import { getClassFieldsToArray } from "../../types";
 
-export interface ButtonProps {
-  type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
-  children: React.ReactNode;
-  hoverText?: string;
-  hoverColor?: "red" | undefined;
-  color?: "primary" | "black" | "white" | "red";
+class NonHTMLProps {
+  constructor(
+    readonly hoverText?: string,
+    readonly hoverColor?: "red" | undefined,
+    readonly round?: boolean,
+    readonly largeFont?: boolean,
+    readonly stretch?: boolean,
+    readonly extraClasses?: string[],
+    readonly isLoading?: boolean
+  ) {}
+}
+const nonHTMLProps = getClassFieldsToArray(NonHTMLProps);
+
+interface OverridenHTMLProps {
   size?: "small" | "medium" | "large";
-  round?: boolean;
-  largeFont?: boolean;
-  stretch?: boolean;
-  extraClasses?: string[];
-  onClick?: (e: React.MouseEvent) => void;
-  disabled?: boolean;
-  isLoading?: boolean;
-  title?: string;
+  color?: "primary" | "black" | "white" | "red";
 }
 
-const Button = forwardRef(
-  (
-    {
-      type = "button",
+export interface ButtonProps
+  extends Omit<ComponentProps<"button">, keyof OverridenHTMLProps>,
+    OverridenHTMLProps,
+    NonHTMLProps {}
+
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (props, ref: React.ForwardedRef<HTMLButtonElement>) => {
+    const {
       children,
-      hoverText = "",
+      hoverText,
       hoverColor,
       color = "primary",
       size = "medium",
-      largeFont = false,
-      stretch = false,
-      onClick = (e) => {},
+      largeFont,
+      stretch,
       extraClasses = [],
-      disabled = false,
-      isLoading = false,
-      title,
-    }: ButtonProps,
-    ref: React.ForwardedRef<HTMLButtonElement>
-  ) => {
+      isLoading,
+      onMouseEnter,
+      onMouseLeave,
+    } = props;
+
     const [content, setContent] = useState(children);
     const toggleHover = () => {
       if (content === children) {
@@ -75,21 +79,28 @@ const Button = forwardRef(
       sizeStyle,
       largeFont ? styles.LargeFont : "",
       stretch ? styles.Stretch : "",
-      disabled ? styles.Disabled : "",
       ...extraClasses,
     ].join(" ");
 
+    const buttonProps: ButtonProps = {
+      ...props,
+      type: props.type ?? "button",
+      ref,
+      className: classes,
+      onMouseEnter: (e) => {
+        hoverText && toggleHover();
+        onMouseEnter && onMouseEnter(e);
+      },
+      onMouseLeave: (e) => {
+        hoverText && toggleHover();
+        onMouseLeave && onMouseLeave(e);
+      },
+    };
+
+    nonHTMLProps.forEach((p) => delete buttonProps[p]);
+
     return (
-      <button
-        ref={ref}
-        type={type}
-        disabled={disabled}
-        className={classes}
-        title={title}
-        onClick={(e) => onClick(e)}
-        {...(hoverText && { onMouseEnter: toggleHover })}
-        {...(hoverText && { onMouseLeave: toggleHover })}
-      >
+      <button {...buttonProps}>
         {isLoading ? (
           <TailSpin
             height="30"
