@@ -14,6 +14,7 @@ import { ReactComponent as SuccessIcon } from "../../../assets/icons/success.svg
 import { ReactComponent as ErrorIcon } from "../../../assets/icons/error.svg";
 import Icon from "../Icon/Icon";
 import useForwardRef from "../../hooks/useForwardRef";
+import { getClassFieldsToArray } from "../../types";
 
 /* 
   Props that are passed to Input component but should NOT be passed to the
@@ -31,11 +32,7 @@ class NonHTMLProps {
     readonly leader?: ReactNode
   ) {}
 }
-
-// Generate nonHtmlProps array to prevent passing them to JSX input element later
-const nonHTMLProps = Object.keys(new NonHTMLProps()) as Array<
-  keyof NonHTMLProps
->;
+const nonHTMLProps = getClassFieldsToArray(NonHTMLProps);
 
 interface InputProps extends HTMLProps<InputType>, NonHTMLProps {
   type?: "text" | "password" | "textArea";
