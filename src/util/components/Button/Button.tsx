@@ -37,7 +37,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       size = "medium",
       largeFont,
       stretch,
-      extraClasses = [],
+      className,
       isLoading,
       onMouseEnter,
       onMouseLeave,
@@ -79,7 +79,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       sizeStyle,
       largeFont ? styles.LargeFont : "",
       stretch ? styles.Stretch : "",
-      ...extraClasses,
+      className,
     ].join(" ");
 
     const buttonProps: ButtonProps = {

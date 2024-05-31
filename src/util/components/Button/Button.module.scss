@@ -4,8 +4,6 @@
   min-width: 4rem;
   color: white;
   border-radius: 40px;
-  border-width: 1px;
-  border-style: solid;
   padding-inline: 1rem;
   padding-block: 0.5rem;
   transition: common.$transition-duration;
@@ -30,7 +28,7 @@
   &.White {
     color: black;
     background: white;
-    border-color: rgb(207, 217, 222);
+    border: 1px solid rgb(207, 217, 222);
     &:hover:not(:disabled) {
       background: rgb(230, 230, 230);
     }
@@ -40,7 +38,7 @@
   &.HoverRed:hover {
     color: red;
     background: rgba(244, 33, 46, 0.2) !important;
-    border-color: rgb(253, 201, 206);
+    border: 1px solid rgb(253, 201, 206);
   }
 
   &.Small {
