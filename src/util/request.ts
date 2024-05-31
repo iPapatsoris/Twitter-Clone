@@ -65,25 +65,29 @@ const request = async (
   return data as any;
 };
 
-export const getData = async <Res>(
+// prettier-ignore
+export const getData = async <Res,>(
   path: string,
   params: GetParams = {}
 ): Promise<Res> => {
   return request(path, "GET", params);
 };
 
-export const deleteData = async <Res>(
+// prettier-ignore
+export const deleteData = async <Res,>(
   path: string,
   params: GetParams = {}
 ): Promise<Res> => request(path, "DELETE", params);
 
-export const patchData = async <Res>(
+// prettier-ignore
+export const patchData = async <Res,>(
   path: string,
   body: any,
   params: GetParams = {}
 ): Promise<Res> => request(path, "PATCH", params, body);
 
-export const postData = async <Res>(
+// prettier-ignore
+export const postData = async <Res,>(
   path: string,
   body: any,
   params: GetParams = {}
