@@ -68,7 +68,7 @@ const EditProfileInfo = forwardRef<PhotoInputRefs, EditProfileInfoProps>(
           placeholder="Bio"
           control={control}
           maxLength={charLimits.bio}
-          type="textArea"
+          type="textarea"
         />
         <FormInput
           name="location"

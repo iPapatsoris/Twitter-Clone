@@ -24,7 +24,7 @@ const NextStepButton = ({
     disabled={isDisabled}
     isLoading={isLoading}
     onClick={onClick}
-    extraClasses={[styles.Button]}
+    className={styles.Button}
   >
     {children}
   </Button>

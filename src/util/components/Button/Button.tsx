@@ -2,30 +2,16 @@ import React, { ComponentProps, forwardRef, useState } from "react";
 import { TailSpin } from "react-loader-spinner";
 import styles from "./Button.module.scss";
 import scssExports from "../../../assets/styles/exports.module.scss";
-import { getClassFieldsToArray } from "../../types";
 
-class NonHTMLProps {
-  constructor(
-    readonly hoverText?: string,
-    readonly hoverColor?: "red" | undefined,
-    readonly round?: boolean,
-    readonly largeFont?: boolean,
-    readonly stretch?: boolean,
-    readonly extraClasses?: string[],
-    readonly isLoading?: boolean
-  ) {}
-}
-const nonHTMLProps = getClassFieldsToArray(NonHTMLProps);
-
-interface OverridenHTMLProps {
+type ButtonProps = ComponentProps<"button"> & {
+  hoverText?: string;
+  hoverColor?: "red" | undefined;
+  largeFont?: boolean;
+  stretch?: boolean;
+  isLoading?: boolean;
   size?: "small" | "medium" | "large";
   color?: "primary" | "black" | "white" | "red";
-}
-
-export interface ButtonProps
-  extends Omit<ComponentProps<"button">, keyof OverridenHTMLProps>,
-    OverridenHTMLProps,
-    NonHTMLProps {}
+};
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (props, ref: React.ForwardedRef<HTMLButtonElement>) => {
@@ -41,6 +27,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       isLoading,
       onMouseEnter,
       onMouseLeave,
+      ...nativeProps
     } = props;
 
     const [content, setContent] = useState(children);
@@ -52,38 +39,17 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       }
     };
 
-    let buttonColorStyle;
-    if (color === "primary") {
-      buttonColorStyle = styles.Primary;
-    } else if (color === "black") {
-      buttonColorStyle = styles.Black;
-    } else if (color === "white") {
-      buttonColorStyle = styles.White;
-    } else if (color === "red") {
-      buttonColorStyle = styles.Red;
-    }
-
-    const buttonHoverStyle = hoverColor === "red" ? styles.HoverRed : "";
-
-    let sizeStyle: keyof typeof styles = styles.Medium;
-    if (size === "small") {
-      sizeStyle = styles.Small;
-    } else if (size === "large") {
-      sizeStyle = styles.Large;
-    }
-
-    const classes = [
-      styles.Button,
-      buttonColorStyle,
-      buttonHoverStyle,
-      sizeStyle,
-      largeFont ? styles.LargeFont : "",
-      stretch ? styles.Stretch : "",
+    const classes = getStyles({
+      color,
+      hoverColor,
+      size,
+      largeFont,
       className,
-    ].join(" ");
+      stretch,
+    });
 
     const buttonProps: ButtonProps = {
-      ...props,
+      ...nativeProps,
       type: props.type ?? "button",
       ref,
       className: classes,
@@ -96,8 +62,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         onMouseLeave && onMouseLeave(e);
       },
     };
-
-    nonHTMLProps.forEach((p) => delete buttonProps[p]);
 
     return (
       <button {...buttonProps}>
@@ -115,5 +79,47 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
+
+const getStyles = ({
+  color,
+  hoverColor,
+  size,
+  largeFont,
+  className,
+  stretch,
+}: Pick<
+  ButtonProps,
+  "color" | "hoverColor" | "size" | "largeFont" | "className" | "stretch"
+>) => {
+  let buttonColorStyle;
+  if (color === "primary") {
+    buttonColorStyle = styles.Primary;
+  } else if (color === "black") {
+    buttonColorStyle = styles.Black;
+  } else if (color === "white") {
+    buttonColorStyle = styles.White;
+  } else if (color === "red") {
+    buttonColorStyle = styles.Red;
+  }
+
+  const buttonHoverStyle = hoverColor === "red" ? styles.HoverRed : "";
+
+  let sizeStyle: keyof typeof styles = styles.Medium;
+  if (size === "small") {
+    sizeStyle = styles.Small;
+  } else if (size === "large") {
+    sizeStyle = styles.Large;
+  }
+
+  return [
+    styles.Button,
+    buttonColorStyle,
+    buttonHoverStyle,
+    sizeStyle,
+    largeFont ? styles.LargeFont : "",
+    stretch ? styles.Stretch : "",
+    className,
+  ].join(" ");
+};
 
 export default Button;

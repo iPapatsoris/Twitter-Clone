@@ -104,7 +104,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
   const circleButtonProps: Partial<ComponentProps<typeof Button>> = {
     key: circleButtonKey,
     // extraClasses: [!preview ? styles.FixedWidthButton : ""],
-    extraClasses: [styles.FixedWidthButton],
+    className: styles.FixedWidthButton,
     ref: buttonRef,
   };
 
@@ -131,7 +131,7 @@ const ProfileFace = ({ preview }: ProfileProps) => {
         hoverText="Unfollow"
         {...circleButtonProps}
         key={circleButtonKey}
-        extraClasses={[styles.FixedWidthButton]}
+        className={styles.FixedWidthButton}
         onClick={(e) => {
           e.stopPropagation();
           useUnfollowMutation.mutate();

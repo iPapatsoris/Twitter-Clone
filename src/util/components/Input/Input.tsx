@@ -3,9 +3,11 @@ import {
   useRef,
   useState,
   ForwardedRef,
-  HTMLProps,
   ReactElement,
   ReactNode,
+  FocusEvent,
+  MouseEvent,
+  ComponentProps,
 } from "react";
 import styles from "./Input.module.scss";
 import { ReactComponent as EyeIcon } from "../../../assets/icons/eye.svg";
@@ -14,32 +16,27 @@ import { ReactComponent as SuccessIcon } from "../../../assets/icons/success.svg
 import { ReactComponent as ErrorIcon } from "../../../assets/icons/error.svg";
 import Icon from "../Icon/Icon";
 import useForwardRef from "../../hooks/useForwardRef";
-import { getClassFieldsToArray } from "../../types";
-
-/* 
-  Props that are passed to Input component but should NOT be passed to the
-  internal JSX element because they are not real input HTML attributes.
-  By defining them in a class, we maintain a single source of truth for TS
-  and can automatically bridge them into JS into "nonHTMLProps" array below.
-  Alternative methods would require typing them twice.
-*/
-class NonHTMLProps {
-  constructor(
-    readonly isValid?: boolean,
-    readonly showStatusIcon?: boolean,
-    readonly error?: string,
-    readonly helper?: ReactElement,
-    readonly leader?: ReactNode
-  ) {}
-}
-const nonHTMLProps = getClassFieldsToArray(NonHTMLProps);
-
-interface InputProps extends HTMLProps<InputType>, NonHTMLProps {
-  type?: "text" | "password" | "textArea";
-  value: string;
-}
 
 export type InputType = HTMLInputElement | HTMLTextAreaElement;
+type CustomProps = {
+  isValid?: boolean;
+  showStatusIcon?: boolean;
+  error?: string;
+  helper?: ReactElement;
+  leader?: ReactNode;
+};
+
+export type NormalInputProps = ComponentProps<"input"> &
+  CustomProps & {
+    type?: "text" | "password";
+  };
+export type TextareaInputProps = ComponentProps<"textarea"> &
+  CustomProps & {
+    type?: "textarea";
+  };
+
+type InputProps = NormalInputProps | TextareaInputProps;
+
 const Input = forwardRef<InputType, InputProps>((props, fref) => {
   const {
     placeholder,
@@ -55,6 +52,7 @@ const Input = forwardRef<InputType, InputProps>((props, fref) => {
     type: initialType = "text",
     showStatusIcon,
     leader,
+    ...nativeProps
   } = props;
 
   const inputRef = useRef<InputType>(null);
@@ -81,6 +79,8 @@ const Input = forwardRef<InputType, InputProps>((props, fref) => {
   };
 
   const wrapperStyles: Array<keyof typeof styles> = [styles.Wrapper];
+  const isEmpty =
+    value === undefined || (typeof value === "string" && !value.length);
 
   // UI states
   if (isFocused) {
@@ -89,7 +89,7 @@ const Input = forwardRef<InputType, InputProps>((props, fref) => {
   if (error) {
     wrapperStyles.push(styles.Error);
   }
-  if (!value.length) {
+  if (isEmpty) {
     wrapperStyles.push(styles.Empty);
   }
 
@@ -117,43 +117,46 @@ const Input = forwardRef<InputType, InputProps>((props, fref) => {
     }
   }
 
-  // Override some props
   const inputProps: InputProps = {
-    ...props,
-    type: inputType,
+    ...nativeProps,
     placeholder: "",
-    onFocus: (e) => {
+    onFocus: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setIsFocused(true);
-      onFocus && onFocus(e);
+      onFocus && onFocus(e as any);
+      /* Note on TS: using "any" for the event above results in cleaner code 
+         than conditionally choosing which "onFocus" to use based on "inputType". 
+         And we are not losing any realistic type safety. 
+      */
     },
-    onBlur: (e) => {
+    onBlur: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setIsFocused(false);
-      onBlur && onBlur(e);
+      onBlur && onBlur(e as any);
     },
-    onMouseDown: (e) => {
+    onMouseDown: (e: MouseEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       /* Parent Wrapper element calls preventDefault() on onMouseDown. We need 
            to stop propagation from child input element, because otherwise text 
            highlighting (mouse down default behavior) will not work.
         */
       e.stopPropagation();
-      onMouseDown && onMouseDown(e);
+      onMouseDown && onMouseDown(e as any);
     },
   };
 
-  // Remove wrapper exclusive props
-  nonHTMLProps.forEach((p) => delete inputProps[p]);
-
   let input;
-  if (inputType === "textArea") {
+  if (initialType === "textarea") {
     input = (
       <textarea
-        {...inputProps}
+        {...(inputProps as TextareaInputProps)}
         ref={ref as ForwardedRef<HTMLTextAreaElement>}
       />
     );
   } else {
     input = (
-      <input {...inputProps} ref={ref as ForwardedRef<HTMLInputElement>} />
+      <input
+        {...(inputProps as NormalInputProps)}
+        type={inputType}
+        ref={ref as ForwardedRef<HTMLInputElement>}
+      />
     );
   }
 
@@ -163,7 +166,7 @@ const Input = forwardRef<InputType, InputProps>((props, fref) => {
         className={wrapperStyles.join(" ")}
         onMouseDown={handleWrapperMousedown}
       >
-        {!isFocused && !value.length && (
+        {!isFocused && isEmpty && (
           <div className={styles.Placeholder}>
             <span>{placeholder}</span>
           </div>
@@ -173,9 +176,9 @@ const Input = forwardRef<InputType, InputProps>((props, fref) => {
             <label htmlFor="input" className={styles.Label}>
               {placeholder}
             </label>
-            {maxLength && (
+            {maxLength && typeof value === "string" && (
               <span className={styles.MaxCount}>
-                {value.length} / {maxLength}
+                {value?.length} / {maxLength}
               </span>
             )}
           </div>

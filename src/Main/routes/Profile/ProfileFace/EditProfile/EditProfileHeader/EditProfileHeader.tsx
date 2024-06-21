@@ -23,7 +23,7 @@ const EditProfileHeader = ({ disableUpdate }: EditProfileHeaderProps) => {
       <div className={styles.Header}>
         <h2 className={styles.BiggestText}>Edit profile</h2>
         <Button
-          extraClasses={[styles.Action]}
+          className={styles.Action}
           color="black"
           type="submit"
           disabled={disableUpdate}

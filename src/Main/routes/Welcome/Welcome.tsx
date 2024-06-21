@@ -55,7 +55,7 @@ const Welcome = () => {
         <div className={styles.JoinWrapper}>
           <Button
             onClick={() => setSignup(true)}
-            extraClasses={[styles.Button]}
+            className={styles.Button}
             color="primary"
           >
             Create account
@@ -71,7 +71,7 @@ const Welcome = () => {
           <span>Already have an account?</span>
           <Button
             onClick={() => setLogin(true)}
-            extraClasses={[styles.Button]}
+            className={styles.Button}
             color="white"
           >
             Sign in

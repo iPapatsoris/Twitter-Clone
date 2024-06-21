@@ -4,7 +4,11 @@ import {
   useController,
   UseFormReturn,
 } from "react-hook-form";
-import Input, { InputType } from "./Input";
+import Input, {
+  InputType,
+  NormalInputProps,
+  TextareaInputProps,
+} from "./Input";
 import React, {
   ComponentProps,
   MutableRefObject,
@@ -14,13 +18,17 @@ import React, {
   useState,
 } from "react";
 
-type FormInputProps<FormInput extends FieldValues> = Omit<
-  React.ComponentProps<typeof Input>,
-  "isValid" | "value" | "error"
-> & {
+type GenericFormInputProps<
+  InputTypeProps,
+  FormInput extends FieldValues,
+> = Omit<InputTypeProps, "isValid" | "value" | "error"> & {
   control: UseFormReturn<FormInput, any>["control"];
   name: Path<FormInput>;
 };
+
+type FormInputProps<FormInput extends FieldValues> =
+  | GenericFormInputProps<NormalInputProps, FormInput>
+  | GenericFormInputProps<TextareaInputProps, FormInput>;
 
 /**
  * react-hook-form wrapper for custom controller Input component.
@@ -33,6 +41,7 @@ const ActualComponent = <FormInput extends FieldValues>(
   ref: Ref<InputType>
 ) => {
   const {
+    type,
     name,
     control,
     onBlur: onBlurSideEffect,
@@ -58,7 +67,7 @@ const ActualComponent = <FormInput extends FieldValues>(
   }, [isDirty, hasBeenDirtied, setHasBeenDirtied]);
 
   const handleBlur = (e: React.FocusEvent<InputType>) => {
-    onBlurSideEffect && onBlurSideEffect(e);
+    onBlurSideEffect && onBlurSideEffect(e as any);
     onBlurFormController();
     if (hasBeenDirtied) {
       setShowErrors(true);
@@ -66,7 +75,7 @@ const ActualComponent = <FormInput extends FieldValues>(
   };
 
   const handleChange = (e: React.ChangeEvent<InputType>) => {
-    onChangeSideEffect && onChangeSideEffect(e);
+    onChangeSideEffect && onChangeSideEffect(e as any);
     onChangeFormController(e);
   };
 
@@ -79,9 +88,18 @@ const ActualComponent = <FormInput extends FieldValues>(
     }
   };
 
+  const inputProps: FormInputProps<FormInput> =
+    type === "textarea"
+      ? {
+          ...(props as GenericFormInputProps<TextareaInputProps, FormInput>),
+        }
+      : {
+          ...(props as GenericFormInputProps<NormalInputProps, FormInput>),
+        };
+
   return (
     <Input
-      {...props}
+      {...inputProps}
       value={value}
       onBlur={handleBlur}
       onChange={handleChange}
