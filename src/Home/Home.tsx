@@ -12,7 +12,7 @@ import "react-circular-progressbar/dist/styles.css";
 import useWindowDimensions from "../util/hooks/useWindowDimensions";
 import { TailSpin } from "react-loader-spinner";
 import styles from "./Home.module.scss";
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import useScrollNearBottom from "../util/hooks/useScrollNearBottom";
 import {
   useExtraTimelineTweets,
@@ -126,11 +126,11 @@ const Home = () => {
     },
   });
 
-  useSimulateNewTweetsInterval({
-    interval: 5000,
-    maxIntervals: 2,
-    maxTweetsPerInterval: 5,
-  });
+  // useSimulateNewTweetsInterval({
+  //   interval: 5000,
+  //   maxIntervals: 2,
+  //   maxTweetsPerInterval: 5,
+  // });
 
   if (!downTimelineIsSuccess) {
     return null;

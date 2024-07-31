@@ -2,6 +2,11 @@ import { GetParams, NormalResponse } from "../../backend/src/api/common";
 import { getNonReactiveAuthState } from "../store/AuthStore";
 import { buildURLBase } from "../../backend/src/url";
 
+export const URLBase = buildURLBase({
+  hostname: import.meta.env.VITE_SERVER_HOSTNAME,
+  port: import.meta.env.VITE_SERVER_PORT,
+});
+
 // Convert values to query parameters in the following way:
 // create an object with "valuelessFields" as keys with empty string values,
 // additionally add the key-value pairs of "params" but convert the values
@@ -25,11 +30,7 @@ export const addQueryParams = (
 };
 
 const buildURL = (path: string, params: GetParams) => {
-  const base = buildURLBase({
-    hostname: import.meta.env.VITE_SERVER_HOSTNAME,
-    port: import.meta.env.VITE_SERVER_PORT,
-  });
-  const url = new URL(path, base);
+  const url = new URL(path, URLBase);
   for (const [key, value] of Object.entries(params)) {
     url.searchParams.append(key, value);
   }
