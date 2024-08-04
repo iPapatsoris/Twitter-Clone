@@ -40,6 +40,9 @@ export const handlers = [
       });
     }
   ),
+  http.post(URLBase + "/tweet/timeline/down", () =>
+    HttpResponse.json({ ok: false })
+  ),
 ];
 
 export const ignoreUpTimelineHandler = http.get(

@@ -126,11 +126,11 @@ const Home = () => {
     },
   });
 
-  // useSimulateNewTweetsInterval({
-  //   interval: 5000,
-  //   maxIntervals: 2,
-  //   maxTweetsPerInterval: 5,
-  // });
+  useSimulateNewTweetsInterval({
+    interval: 5000,
+    maxIntervals: 2,
+    maxTweetsPerInterval: 5,
+  });
 
   if (!downTimelineIsSuccess) {
     return null;
