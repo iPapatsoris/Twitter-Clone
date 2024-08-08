@@ -14,6 +14,7 @@ declare module "vite" {
 
 const pathSrc = path.resolve(__dirname, "./src");
 const commonStylesPath = pathSrc + "/assets/styles/common";
+const globalStylesPath = pathSrc + "/assets/styles/global";
 const setupTestsPath = path.resolve(__dirname, "./src/mocks/setupTests");
 
 const viteConfig = ({ mode }) => {
@@ -45,8 +46,9 @@ const viteConfig = ({ mode }) => {
       eslint(),
     ],
     test: {
-      setupFiles: setupTestsPath,
+      setupFiles: [setupTestsPath, `${globalStylesPath}.scss`],
       environment: "jsdom",
+      css: true,
     },
     server: {
       host: true,

@@ -27,3 +27,4 @@ dist-ssr
 
 **/*.bak
 twitter-first-db
+.vitest-preview
