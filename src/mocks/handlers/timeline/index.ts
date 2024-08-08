@@ -14,7 +14,6 @@ export const handlers = [
     URLBase + "/tweet/timeline/down",
     ({ request }) => {
       const url = new URL(request.url);
-
       const getQueryParam =
         getQueryParamFunction<keyof PaginationQueryParamsBackEnd>();
       const pageSizeParam = getQueryParam(url, "pageSize");
@@ -45,7 +44,30 @@ export const handlers = [
   ),
 ];
 
-export const ignoreUpTimelineHandler = http.get(
-  URLBase + "/tweet/timeline/up",
-  () => HttpResponse.json({ ok: false })
+const ignoreUpTimelineHandler = http.get(URLBase + "/tweet/timeline/up", () =>
+  HttpResponse.json({ ok: false })
 );
+
+const timelineWithFewPosts = () =>
+  http.get<any, any, GetTimeline["response"]>(
+    URLBase + "/tweet/timeline/down",
+    () => {
+      const { mockedTimeline } = tweetTestData;
+
+      return HttpResponse.json({
+        ok: true,
+        data: {
+          pagination: { nextCursor: -1 },
+          tweetsAndRetweets: mockedTimeline
+            .slice(0, 2)
+            .map((t) => ({ tweet: t })),
+        },
+      });
+    },
+    { once: true }
+  );
+
+export const overrideHandlers = {
+  ignoreUpTimelineHandler,
+  timelineWithFewPosts,
+};

@@ -1,12 +1,12 @@
-import { render, screen, RenderResult } from "@testing-library/react";
+import { render, cleanup, screen, RenderResult } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import Home, { timelinePageSize } from "../Home";
 import { MemoryRouter } from "react-router-dom";
 import { getPagePath } from "../../util/paths";
 import { server } from "../../mocks/setupTests";
-import { ignoreUpTimelineHandler } from "../../mocks/handlers/timeline";
 import { tweetTestData } from "../../mocks/handlers/timeline/data";
+import { overrideHandlers } from "../../mocks/handlers/timeline";
 
 const createQueryClient = () =>
   new QueryClient({
@@ -21,19 +21,19 @@ const createQueryClient = () =>
 
 const renderWithClient = (
   ui: React.ReactElement,
-  queryClient?: QueryClient,
   options?: any
 ): RenderResult => {
-  const actualQueryClient = queryClient ?? createQueryClient();
   return render(
-    <QueryClientProvider client={actualQueryClient}>{ui}</QueryClientProvider>,
+    <QueryClientProvider client={createQueryClient()}>
+      {ui}
+    </QueryClientProvider>,
     options
   );
 };
 
 describe("down timeline", () => {
   beforeAll(() => {
-    server.use(ignoreUpTimelineHandler);
+    server.use(overrideHandlers.ignoreUpTimelineHandler);
   });
   afterAll(() => {
     server.resetHandlers();
@@ -54,6 +54,24 @@ describe("down timeline", () => {
     });
 
     expect(displayedTweets).toHaveLength(timelinePageSize);
+    displayedTweets.forEach((element, index) =>
+      expect(element.textContent).toBe(mockedTimeline[index].text)
+    );
+  });
+
+  test("ask for first 10 posts but show less because there aren't enough", async () => {
+    server.use(overrideHandlers.timelineWithFewPosts());
+    renderWithClient(
+      <MemoryRouter initialEntries={[getPagePath("home")]}>
+        <Home />
+      </MemoryRouter>
+    );
+    await screen.findByText(tweetTextFormat + startingTweetID);
+    const displayedTweets = screen.getAllByText(tweetTextFormat, {
+      exact: false,
+    });
+
+    expect(displayedTweets).toHaveLength(2);
     displayedTweets.forEach((element, index) =>
       expect(element.textContent).toBe(mockedTimeline[index].text)
     );
