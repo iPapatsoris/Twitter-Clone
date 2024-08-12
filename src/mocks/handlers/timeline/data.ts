@@ -1,7 +1,6 @@
 import moment, { Moment } from "moment";
 import { Tweet } from "../../../../backend/src/entities/tweet";
 
-// TODO: group exported variables into one
 const totalTweets = 55;
 const startingTweetID = 1000;
 let date = moment();

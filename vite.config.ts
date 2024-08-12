@@ -49,6 +49,7 @@ const viteConfig = ({ mode }) => {
       setupFiles: [setupTestsPath, `${globalStylesPath}.scss`],
       environment: "jsdom",
       css: true,
+      mockReset: true,
     },
     server: {
       host: true,

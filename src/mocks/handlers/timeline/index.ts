@@ -26,14 +26,27 @@ export const handlers = [
       const nextCursor = parseInt(nextCursorParam);
       const pageSize = parseInt(pageSizeParam);
       const { mockedTimeline } = tweetTestData;
-      const futureNextCursor = mockedTimeline[pageSize].id;
+
+      const startIndex =
+        nextCursor === -1
+          ? 0
+          : mockedTimeline.findIndex(({ id }) => id === nextCursor);
+      const numberOfItemsToReturn = Math.min(
+        mockedTimeline.length - startIndex,
+        pageSize
+      );
+      const endIndex = startIndex + numberOfItemsToReturn;
+      const futureNextCursor =
+        endIndex !== mockedTimeline.length
+          ? mockedTimeline[endIndex].id
+          : undefined;
 
       return HttpResponse.json({
         ok: true,
         data: {
           pagination: { nextCursor: futureNextCursor },
           tweetsAndRetweets: mockedTimeline
-            .slice(0, pageSize)
+            .slice(startIndex, endIndex)
             .map((t) => ({ tweet: t })),
         },
       });
