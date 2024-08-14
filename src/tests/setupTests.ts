@@ -1,5 +1,5 @@
 import { setupServer } from "msw/node";
-import { handlers } from "./handlers";
+import { handlers } from "./mocks/handlers";
 import { afterAll, beforeAll, beforeEach, onTestFailed } from "vitest";
 import { cleanup } from "@testing-library/react";
 import { debug } from "vitest-preview";

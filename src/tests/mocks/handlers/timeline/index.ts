@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
-import { URLBase } from "../../../util/request";
-import { PaginationQueryParamsBackEnd } from "../../../../backend/src/api/common";
-import { GetTimeline } from "../../../../backend/src/api/tweet";
+import { URLBase } from "../../../../util/request";
+import { PaginationQueryParamsBackEnd } from "../../../../../backend/src/api/common";
+import { GetTimeline } from "../../../../../backend/src/api/tweet";
 import { tweetTestData } from "./data";
 
 const getQueryParamFunction =
@@ -18,6 +18,7 @@ export const handlers = [
         getQueryParamFunction<keyof PaginationQueryParamsBackEnd>();
       const pageSizeParam = getQueryParam(url, "pageSize");
       let nextCursorParam = getQueryParam(url, "nextCursor");
+      console.log("In MSW ", nextCursorParam);
 
       if (!nextCursorParam || !pageSizeParam) {
         return HttpResponse.json({ ok: false });
@@ -66,6 +67,7 @@ const timelineWithFewPosts = () =>
     URLBase + "/tweet/timeline/down",
     () => {
       const { mockedTimeline } = tweetTestData;
+      console.log("In MSW override");
 
       return HttpResponse.json({
         ok: true,

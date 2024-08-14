@@ -1,66 +1,14 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { screen, waitFor } from "@testing-library/react";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import Home, { timelinePageSize } from "../Home";
-import {
-  createMemoryRouter,
-  RouteObject,
-  RouterProvider,
-} from "react-router-dom";
 import { getPagePath } from "../../util/paths";
-import { server } from "../../mocks/setupTests";
-import { tweetTestData } from "../../mocks/handlers/timeline/data";
-import { overrideHandlers } from "../../mocks/handlers/timeline";
-import userEvent from "@testing-library/user-event";
+import { server } from "../../tests/setupTests";
+import { tweetTestData } from "../../tests/mocks/handlers/timeline/data";
+import { overrideHandlers } from "../../tests/mocks/handlers/timeline";
 import * as useScrollNearBottom from "../../util/hooks/useScrollNearBottom";
 import { debug } from "vitest-preview";
 import { homeLoader } from "../queries";
-
-const createQueryClient = () =>
-  new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-        refetchOnWindowFocus: false,
-      },
-    },
-  });
-
-const renderWithOptions = (
-  component: JSX.Element,
-  options: {
-    queryClient?: QueryClient;
-    withUserEvents?: boolean;
-    router?: {
-      initialEntries?: string[];
-      routes: RouteObject[];
-    };
-  }
-) => {
-  const { queryClient, withUserEvents, router } = options;
-  let wrappedComponent = component;
-
-  if (router) {
-    wrappedComponent = (
-      <RouterProvider
-        router={createMemoryRouter(router.routes, {
-          initialEntries: router.initialEntries,
-        })}
-      />
-    );
-  }
-  wrappedComponent = (
-    <QueryClientProvider client={queryClient ?? createQueryClient()}>
-      {wrappedComponent}
-    </QueryClientProvider>
-  );
-
-  return {
-    user: withUserEvents ? userEvent.setup() : undefined,
-    queryClient: queryClient,
-    ...render(wrappedComponent),
-  };
-};
+import testUtil from "../../tests/util";
 
 describe("down timeline", () => {
   beforeAll(() => {
@@ -93,8 +41,8 @@ describe("down timeline", () => {
   };
 
   const renderHomeWithRouter = () => {
-    const queryClient = createQueryClient();
-    return renderWithOptions(<></>, {
+    const queryClient = testUtil.createQueryClient();
+    return testUtil.renderWithOptions(<></>, {
       queryClient,
       router: {
         initialEntries: [getPagePath("home")],
@@ -109,6 +57,7 @@ describe("down timeline", () => {
     });
   };
 
+  // Variable to store and manually trigger scroll handler passed to useScrollNearBottom
   let triggerScrollHandler;
   const mockScrollNearBottom = () =>
     vi

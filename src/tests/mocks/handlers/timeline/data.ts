@@ -1,5 +1,5 @@
 import moment, { Moment } from "moment";
-import { Tweet } from "../../../../backend/src/entities/tweet";
+import { Tweet } from "../../../../../backend/src/entities/tweet";
 
 const totalTweets = 55;
 const startingTweetID = 1000;
