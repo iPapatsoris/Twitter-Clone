@@ -70,7 +70,7 @@ const timelineWithFewPosts = () =>
       return HttpResponse.json({
         ok: true,
         data: {
-          pagination: { nextCursor: -1 },
+          pagination: {},
           tweetsAndRetweets: mockedTimeline
             .slice(0, 2)
             .map((t) => ({ tweet: t })),
