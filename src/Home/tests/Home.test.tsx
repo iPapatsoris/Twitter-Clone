@@ -1,13 +1,12 @@
 import { screen, waitFor } from "@testing-library/react";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
-import Home, { timelinePageSize } from "../Home";
+import { timelinePageSize } from "../Home";
 import { getPagePath } from "../../util/paths";
 import { server } from "../../tests/setupTests";
 import { tweetTestData } from "../../tests/mocks/handlers/timeline/data";
 import { overrideHandlers } from "../../tests/mocks/handlers/timeline";
 import * as useScrollNearBottom from "../../util/hooks/useScrollNearBottom";
 import { debug } from "vitest-preview";
-import { homeLoader } from "../queries";
 import testUtil from "../../tests/util";
 
 describe("down timeline", () => {
@@ -40,21 +39,15 @@ describe("down timeline", () => {
     );
   };
 
-  const renderHomeWithRouter = () => {
-    const queryClient = testUtil.createQueryClient();
-    return testUtil.renderWithOptions(<></>, {
-      queryClient,
-      router: {
-        initialEntries: [getPagePath("home")],
-        routes: [
-          {
-            element: <Home />,
-            path: getPagePath("home"),
-            loader: homeLoader(queryClient),
-          },
-        ],
-      },
-    });
+  const renderHomeWithRouter = async () => {
+    const homePath = getPagePath("home");
+    const { mockHandler: useLoggedInUserMockHandler } = testUtil.renderRouter(
+      { path: homePath, options: { initialEntries: [homePath] } },
+      {
+        isUserLoggedIn: true,
+      }
+    );
+    await waitFor(() => expect(useLoggedInUserMockHandler).toHaveBeenCalled());
   };
 
   // Variable to store and manually trigger scroll handler passed to useScrollNearBottom
@@ -67,19 +60,19 @@ describe("down timeline", () => {
       });
 
   test("first full page", async () => {
-    renderHomeWithRouter();
+    await renderHomeWithRouter();
     await testDisplayedTweets({ totalTweets: timelinePageSize });
   });
 
   test("first page but without enough tweets", async () => {
     server.use(overrideHandlers.timelineWithFewPosts());
-    renderHomeWithRouter();
+    await renderHomeWithRouter();
     await testDisplayedTweets({ totalTweets: 2 });
   });
 
   test("first page and scrolling to show second page", async () => {
     const mockHandler = mockScrollNearBottom();
-    renderHomeWithRouter();
+    await renderHomeWithRouter();
 
     // Because we use a route loader that fetches data before the route element
     // renders, it's required to await here instead of just assert.
@@ -94,12 +87,11 @@ describe("down timeline", () => {
     const mockHandler = mockScrollNearBottom();
     server.use(overrideHandlers.timelineWithFewPosts());
 
-    renderHomeWithRouter();
+    await renderHomeWithRouter();
     await waitFor(() => expect(mockHandler).toHaveBeenCalled());
     await testDisplayedTweets({ totalTweets: 2 });
 
     triggerScrollHandler!();
     await testDisplayedTweets({ totalTweets: 2 });
-    debug();
   });
 });

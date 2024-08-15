@@ -31,10 +31,16 @@ import { homeLoader } from "./Home/queries";
 import { ComponentProps } from "react";
 import Welcome from "./Main/routes/Welcome/Welcome";
 
-const Router = ({ queryClient }: { queryClient: QueryClient }) => {
-  const loggedInUser = useLoggedInUser();
-  const justSignedUp = useJustSignedUp();
-
+// Routes are exported so that tests can use specific ones in isolation
+export const getRoutes = ({
+  loggedInUser,
+  justSignedUp,
+  queryClient,
+}: {
+  queryClient: QueryClient;
+  loggedInUser: ReturnType<typeof useLoggedInUser>;
+  justSignedUp: ReturnType<typeof useJustSignedUp>;
+}) => {
   const protectedLoader = (
     loader: NonNullable<ComponentProps<typeof Route>["loader"]> = () => ({})
   ) =>
@@ -53,86 +59,88 @@ const Router = ({ queryClient }: { queryClient: QueryClient }) => {
     );
   }
 
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <>
-        <Route path="/" element={<App />}>
+  const routes = createRoutesFromElements(
+    <>
+      <Route path="/" element={<App />}>
+        <Route
+          path={getPagePath("home")}
+          loader={protectedLoader(homeLoader(queryClient))}
+          element={<Home />}
+        />
+        <Route path={getPagePath("explore")} element={<Explore />} />
+        <Route path={getPagePath("notifications")} loader={protectedLoader()} />
+        <Route
+          path={getPagePath("notificationsVerified")}
+          loader={protectedLoader()}
+        />
+        <Route
+          path={getPagePath("notificationsMentions")}
+          loader={protectedLoader()}
+        />
+        <Route path={getPagePath("messages")} loader={protectedLoader()} />
+        <Route path={getPagePath("bookmarks")} />
+        <Route path={getPagePath("lists")} />
+        <Route
+          path={getPagePath("profile")}
+          element={<Profile />}
+          id={getPagePath("profile")}
+          loader={profileLoader(queryClient)}
+          errorElement={<ErrorPage />} // Can ErrorPage be included globally?
+        >
           <Route
-            path={getPagePath("home")}
-            loader={protectedLoader(homeLoader(queryClient))}
-            element={<Home />}
-          />
-          <Route path={getPagePath("explore")} element={<Explore />} />
-          <Route
-            path={getPagePath("notifications")}
-            loader={protectedLoader()}
-          />
-          <Route
-            path={getPagePath("notificationsVerified")}
-            loader={protectedLoader()}
-          />
-          <Route
-            path={getPagePath("notificationsMentions")}
-            loader={protectedLoader()}
-          />
-          <Route path={getPagePath("messages")} loader={protectedLoader()} />
-          <Route path={getPagePath("bookmarks")} />
-          <Route path={getPagePath("lists")} />
-          <Route
-            path={getPagePath("profile")}
-            element={<Profile />}
-            id={getPagePath("profile")}
-            loader={profileLoader(queryClient)}
-            errorElement={<ErrorPage />} // Can ErrorPage be included globally?
-          >
-            <Route
-              index
-              loader={userTweetsLoader(queryClient)}
-              element={<Tweets />}
-              errorElement={<ErrorPage />}
-            />
-            <Route
-              path={getPagePath("profileWithReplies")}
-              loader={userRepliesLoader(queryClient)}
-              element={<TweetsWithReplies />}
-              errorElement={<ErrorPage />}
-            />
-            <Route
-              path={getPagePath("profileLikes")}
-              loader={userLikedTweetsLoader(queryClient)}
-              element={<LikedTweets />}
-              errorElement={<ErrorPage />}
-            />
-          </Route>
-          <Route
-            path={getPagePath("tweet")}
-            element={<TweetThread />}
-            id={getPagePath("tweet")}
-            loader={tweetThreadLoader(queryClient)}
+            index
+            loader={userTweetsLoader(queryClient)}
+            element={<Tweets />}
             errorElement={<ErrorPage />}
           />
           <Route
-            path={getPagePath("followers")}
-            element={<Circle />}
-            id={getPagePath("followers")}
-            loader={circleLoader(queryClient, "followers")}
+            path={getPagePath("profileWithReplies")}
+            loader={userRepliesLoader(queryClient)}
+            element={<TweetsWithReplies />}
             errorElement={<ErrorPage />}
           />
           <Route
-            path={getPagePath("following")}
-            element={<Circle />}
-            id={getPagePath("following")}
-            loader={circleLoader(queryClient, "followees")}
+            path={getPagePath("profileLikes")}
+            loader={userLikedTweetsLoader(queryClient)}
+            element={<LikedTweets />}
             errorElement={<ErrorPage />}
           />
-          <Route path="*" id={getPagePath("error")} element={<ErrorPage />} />
         </Route>
-        <Route index element={rootRedirect} />
-      </>
-    )
+        <Route
+          path={getPagePath("tweet")}
+          element={<TweetThread />}
+          id={getPagePath("tweet")}
+          loader={tweetThreadLoader(queryClient)}
+          errorElement={<ErrorPage />}
+        />
+        <Route
+          path={getPagePath("followers")}
+          element={<Circle />}
+          id={getPagePath("followers")}
+          loader={circleLoader(queryClient, "followers")}
+          errorElement={<ErrorPage />}
+        />
+        <Route
+          path={getPagePath("following")}
+          element={<Circle />}
+          id={getPagePath("following")}
+          loader={circleLoader(queryClient, "followees")}
+          errorElement={<ErrorPage />}
+        />
+        <Route path="*" id={getPagePath("error")} element={<ErrorPage />} />
+      </Route>
+      <Route index element={rootRedirect} />
+    </>
   );
 
-  return <RouterProvider router={router} />;
+  return routes;
+};
+const Router = ({ queryClient }: { queryClient: QueryClient }) => {
+  const loggedInUser = useLoggedInUser();
+  const justSignedUp = useJustSignedUp();
+  const routes = getRoutes({ loggedInUser, justSignedUp, queryClient });
+
+  return <RouterProvider router={createBrowserRouter(routes)} />;
 };
 
 export default Router;
