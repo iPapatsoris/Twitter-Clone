@@ -64,13 +64,13 @@ describe("down timeline", () => {
     await testDisplayedTweets({ totalTweets: timelinePageSize });
   });
 
-  test("first page but without enough tweets", async () => {
+  test("first page is the last page", async () => {
     server.use(overrideHandlers.timelineWithFewPosts());
     await renderHomeWithRouter();
     await testDisplayedTweets({ totalTweets: 2 });
   });
 
-  test("first page and scrolling to show second page", async () => {
+  test("first page and scrolling to show second and third pages", async () => {
     const mockHandler = mockScrollNearBottom();
     await renderHomeWithRouter();
 
@@ -81,6 +81,12 @@ describe("down timeline", () => {
     await testDisplayedTweets({ totalTweets: timelinePageSize });
     triggerScrollHandler!();
     await testDisplayedTweets({ totalTweets: 2 * timelinePageSize });
+
+    // Treat the third page as the last one
+    server.use(overrideHandlers.timelineWithFewPosts(2 * timelinePageSize));
+
+    triggerScrollHandler!();
+    await testDisplayedTweets({ totalTweets: 2 * timelinePageSize + 2 });
   });
 
   test("no fetch is performed when scrolling at the bottom of the last page", async () => {

@@ -62,7 +62,7 @@ const ignoreUpTimelineHandler = http.get(URLBase + "/tweet/timeline/up", () =>
   HttpResponse.json({ ok: false })
 );
 
-const timelineWithFewPosts = () =>
+const timelineWithFewPosts = (startingTweetIndex = 0) =>
   http.get<any, any, GetTimeline["response"]>(
     URLBase + "/tweet/timeline/down",
     () => {
@@ -74,7 +74,7 @@ const timelineWithFewPosts = () =>
         data: {
           pagination: {},
           tweetsAndRetweets: mockedTimeline
-            .slice(0, 2)
+            .slice(startingTweetIndex, startingTweetIndex + 2)
             .map((t) => ({ tweet: t })),
         },
       });
