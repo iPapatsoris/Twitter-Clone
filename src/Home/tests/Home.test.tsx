@@ -4,9 +4,11 @@ import { timelinePageSize } from "../Home";
 import { getPagePath } from "../../util/paths";
 import { server } from "../../tests/setupTests";
 import { tweetTestData } from "../../tests/mocks/handlers/timeline/data";
-import { overrideHandlers } from "../../tests/mocks/handlers/timeline";
+import {
+  downTimelineQuerySpy,
+  overrideHandlers,
+} from "../../tests/mocks/handlers/timeline";
 import * as useScrollNearBottom from "../../util/hooks/useScrollNearBottom";
-import { debug } from "vitest-preview";
 import testUtil from "../../tests/util";
 
 describe("down timeline", () => {
@@ -41,17 +43,19 @@ describe("down timeline", () => {
 
   const renderHomeWithRouter = async () => {
     const homePath = getPagePath("home");
-    const { mockHandler: useLoggedInUserMockHandler } = testUtil.renderRouter(
+    const { mockUseLoggedInUser } = testUtil.renderRouter(
       { path: homePath, options: { initialEntries: [homePath] } },
       {
         isUserLoggedIn: true,
       }
     );
-    await waitFor(() => expect(useLoggedInUserMockHandler).toHaveBeenCalled());
+    // Because we use a route loader that fetches data before the route element
+    // renders, it's required to await here instead of just assert.
+    await waitFor(() => expect(mockUseLoggedInUser).toHaveBeenCalled());
   };
 
   // Variable to store and manually trigger scroll handler passed to useScrollNearBottom
-  let triggerScrollHandler;
+  let triggerScrollHandler: VoidFunction;
   const mockScrollNearBottom = () =>
     vi
       .spyOn(useScrollNearBottom, "default")
@@ -71,33 +75,118 @@ describe("down timeline", () => {
   });
 
   test("first page and scrolling to show second and third pages", async () => {
-    const mockHandler = mockScrollNearBottom();
+    const mockScroll = mockScrollNearBottom();
     await renderHomeWithRouter();
+    await waitFor(() => expect(mockScroll).toHaveBeenCalled());
 
-    // Because we use a route loader that fetches data before the route element
-    // renders, it's required to await here instead of just assert.
-    await waitFor(() => expect(mockHandler).toHaveBeenCalled());
-
+    // Check first page
     await testDisplayedTweets({ totalTweets: timelinePageSize });
-    triggerScrollHandler!();
+
+    triggerScrollHandler();
+
+    // Check second page
     await testDisplayedTweets({ totalTweets: 2 * timelinePageSize });
 
     // Treat the third page as the last one
     server.use(overrideHandlers.timelineWithFewPosts(2 * timelinePageSize));
 
-    triggerScrollHandler!();
+    triggerScrollHandler();
+
+    // Check third page
     await testDisplayedTweets({ totalTweets: 2 * timelinePageSize + 2 });
   });
 
   test("no fetch is performed when scrolling at the bottom of the last page", async () => {
-    const mockHandler = mockScrollNearBottom();
+    const mockScroll = mockScrollNearBottom();
+
+    // Treat the first page as the last one
     server.use(overrideHandlers.timelineWithFewPosts());
 
     await renderHomeWithRouter();
-    await waitFor(() => expect(mockHandler).toHaveBeenCalled());
+    await waitFor(() => expect(mockScroll).toHaveBeenCalled());
+
+    // Check first page
     await testDisplayedTweets({ totalTweets: 2 });
 
-    triggerScrollHandler!();
+    triggerScrollHandler();
+
+    // Check that no more tweets are accidentally loaded
     await testDisplayedTweets({ totalTweets: 2 });
   });
+
+  test(
+    "cache is properly utilized in place of network calls when coming back to the timeline",
+    { timeout: 10000 },
+    async () => {
+      const homePath = getPagePath("home");
+      const mockScroll = mockScrollNearBottom();
+
+      // Render Home with the whole router context
+      const { mockUseLoggedInUser, user } = testUtil.renderRouter(
+        {
+          path: homePath,
+          parentRoutesToRender: 1,
+          options: { initialEntries: [homePath] },
+        },
+        {
+          isUserLoggedIn: true,
+          mockLayoutMethods: true,
+          withUserEvents: true,
+        }
+      );
+      await waitFor(() => expect(mockUseLoggedInUser).toHaveBeenCalled());
+      await waitFor(() => expect(mockScroll).toHaveBeenCalled());
+      await testDisplayedTweets({ totalTweets: 10 });
+
+      // Load second page
+      triggerScrollHandler();
+      await testDisplayedTweets({ totalTweets: 20 });
+      expect(downTimelineQuerySpy).toHaveBeenCalledTimes(2);
+      downTimelineQuerySpy.mockClear();
+
+      // Switch to another route and return to Home
+      const changeRouteAndReturn = () => {
+        const explorePage = screen.getByRole("link", { name: "Explore" });
+        user?.click(explorePage);
+        const homePage = screen.getByRole("link", { name: "Home" });
+        user?.click(homePage);
+      };
+
+      changeRouteAndReturn();
+
+      // Check that first page is loaded from the cache without network calls
+      await testDisplayedTweets({ totalTweets: 10 });
+      expect(downTimelineQuerySpy).not.toHaveBeenCalled();
+
+      triggerScrollHandler();
+
+      // Check that second page is loaded from the cache without network calls
+      await testDisplayedTweets({ totalTweets: 20 });
+      expect(downTimelineQuerySpy).not.toHaveBeenCalled();
+
+      triggerScrollHandler();
+
+      // Check that third page is loaded from the network
+      await testDisplayedTweets({ totalTweets: 30 });
+      expect(downTimelineQuerySpy).toHaveBeenCalled();
+      downTimelineQuerySpy.mockClear();
+
+      changeRouteAndReturn();
+
+      // Check that first three pages are loaded from the cache
+      await testDisplayedTweets({ totalTweets: 10 });
+      triggerScrollHandler();
+      await testDisplayedTweets({ totalTweets: 20 });
+      triggerScrollHandler();
+      await testDisplayedTweets({ totalTweets: 30 });
+      expect(downTimelineQuerySpy).not.toHaveBeenCalled();
+
+      // Check that fourth and fifth pages are loaded from the network
+      triggerScrollHandler();
+      await testDisplayedTweets({ totalTweets: 40 });
+      triggerScrollHandler();
+      await testDisplayedTweets({ totalTweets: 50 });
+      expect(downTimelineQuerySpy).toHaveBeenCalledTimes(2);
+    }
+  );
 });

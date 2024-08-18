@@ -10,6 +10,8 @@ import { vi, expect } from "vitest";
 import * as authStore from "../store/AuthStore";
 import { getRoutes } from "../Router";
 import userTestData from "../tests/mocks/handlers/user/data";
+import * as useDynamicSticky from "../util/hooks/useDynamicSticky";
+import * as useWindowDimensions from "../util/hooks/useWindowDimensions";
 
 const createQueryClient = () =>
   new QueryClient({
@@ -21,10 +23,15 @@ const createQueryClient = () =>
     },
   });
 
+type CommonOptions = {
+  withUserEvents?: boolean;
+  mockLayoutMethods?: boolean;
+};
+
 /* 
   Match a route path to the app router and render the appropriate components.
-  Can choose how many parent routes of a child route match should be rendered,
-  depending on the integration scope of each use case.
+  Can choose how many parent routes of a deeply nested child route match should 
+  be rendered, depending on the integration scope of each use case.
   Additionally specify extra setup options like mocking logged in user and 
   whether to enable React Testing Library user events.
 */
@@ -36,12 +43,11 @@ const renderRouter = (
     // deepest child. Defaults to 0.
     parentRoutesToRender?: number;
   },
-  options: {
+  options: CommonOptions & {
     isUserLoggedIn: boolean;
-    withUserEvents?: boolean;
   }
 ) => {
-  const { isUserLoggedIn, withUserEvents } = options;
+  const { isUserLoggedIn, ...restOptions } = options;
   const queryClient = createQueryClient();
 
   // Get all routes, controlling if the user is logged in or not
@@ -59,9 +65,15 @@ const renderRouter = (
   const parentRoutesToRender = router.parentRoutesToRender ?? 0;
   expect(
     parentRoutesToRender >= 0 && parentRoutesToRender < matchedRoutes!.length
-  );
+  ).toBeTruthy();
 
-  // Choose how many parent routes will be included
+  /*
+    The matching algorithm first returns the route that matches the earliest
+    portion of the URL (including its children), and subsequent elements in the 
+    array represent progressively deeper and more specific matches among its 
+    children. We default to the deepest isolated child match, and include parent 
+    matches depending on `parentRoutesToRender`. 
+  */
   const routesToRender = [
     matchedRoutes![matchedRoutes!.length - 1 - parentRoutesToRender].route,
   ];
@@ -75,7 +87,7 @@ const renderRouter = (
   );
 
   return renderComponent(component, {
-    withUserEvents,
+    ...restOptions,
     mockLoggedInUser: { isUserLoggedIn },
   });
 };
@@ -83,15 +95,19 @@ const renderRouter = (
 // Render a component with extra setup options depending on each test's needs
 const renderComponent = (
   component: JSX.Element,
-  options: {
+  options: CommonOptions & {
     withQueryClient?: boolean;
-    withUserEvents?: boolean;
     mockLoggedInUser?: {
       isUserLoggedIn: boolean;
     };
   }
 ) => {
-  const { withQueryClient, withUserEvents, mockLoggedInUser } = options;
+  const {
+    withQueryClient,
+    withUserEvents,
+    mockLayoutMethods,
+    mockLoggedInUser,
+  } = options;
   let wrappedComponent = component;
   let queryClient;
 
@@ -104,17 +120,31 @@ const renderComponent = (
     );
   }
 
-  let mockHandler;
+  let mockUseLoggedInUser;
   if (mockLoggedInUser) {
-    mockHandler = vi
+    mockUseLoggedInUser = vi
       .spyOn(authStore, "useLoggedInUser")
       .mockImplementation(() => userTestData.loggedInUser);
   }
 
+  if (mockLayoutMethods) {
+    window.scrollTo = vi.fn();
+    vi.spyOn(useDynamicSticky, "default").mockImplementation(() => {});
+    vi.spyOn(useWindowDimensions, "default").mockImplementation(() => ({
+      isMobile: false,
+      isPcBig: true,
+      isPcSmall: false,
+      isSmallScreen: false,
+      isTablet: false,
+      width: 0,
+      height: 0,
+    }));
+  }
+
   return {
     user: withUserEvents ? userEvent.setup() : undefined,
-    queryClient: queryClient,
-    mockHandler,
+    queryClient,
+    mockUseLoggedInUser,
     ...render(wrappedComponent),
   };
 };

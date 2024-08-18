@@ -3,16 +3,19 @@ import { URLBase } from "../../../../util/request";
 import { PaginationQueryParamsBackEnd } from "../../../../../backend/src/api/common";
 import { GetTimeline } from "../../../../../backend/src/api/tweet";
 import { tweetTestData } from "./data";
+import { vi } from "vitest";
 
 const getQueryParamFunction =
   <AllowedQueryParams extends string>() =>
   (url: URL, param: AllowedQueryParams) =>
     url.searchParams.get(param);
 
+export const downTimelineQuerySpy = vi.fn();
 export const handlers = [
   http.get<any, any, GetTimeline["response"]>(
     URLBase + "/tweet/timeline/down",
     ({ request }) => {
+      downTimelineQuerySpy();
       const url = new URL(request.url);
       const getQueryParam =
         getQueryParamFunction<keyof PaginationQueryParamsBackEnd>();
